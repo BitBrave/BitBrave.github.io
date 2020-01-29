@@ -816,6 +816,91 @@ Could you come up with a one-pass algorithm using only constant space?</code></p
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(756.%20Pyramid%20Transition%20Matrix)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(756.%20Pyramid%20Transition%20Matrix)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(756. Pyramid Transition Matrix)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-756-Pyramid-Transition-Matrix-题解"><a href="#LeetCode-756-Pyramid-Transition-Matrix-题解" class="headerlink" title="LeetCode(756. Pyramid Transition Matrix)题解"></a>LeetCode(756. Pyramid Transition Matrix)题解</h1><p>We are stacking blocks to form a pyramid. Each block has a color which is a one letter string.</p>
+<p>We are allowed to place any color block <code>C</code> on top of two adjacent blocks of colors <code>A</code> and <code>B</code>, if and only if <code>ABC</code> is an allowed triple.</p>
+<p>We start with a bottom row of <code>bottom</code>, represented as a single string. We also start with a list of allowed triples <code>allowed</code>. Each allowed triple is represented as a string of length 3.</p>
+<p>Return true if we can build the pyramid all the way to the top, otherwise false.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Input: bottom &#x3D; &quot;BCD&quot;, allowed &#x3D; [&quot;BCG&quot;, &quot;CDE&quot;, &quot;GEA&quot;, &quot;FFF&quot;]</span><br><span class="line">Output: true</span><br><span class="line">Explanation:</span><br><span class="line">We can stack the pyramid like this:</span><br><span class="line">    A</span><br><span class="line">   &#x2F; \</span><br><span class="line">  G   E</span><br><span class="line"> &#x2F; \ &#x2F; \</span><br><span class="line">B   C   D</span><br><span class="line"></span><br><span class="line">We are allowed to place G on top of B and C because BCG is an allowed triple.  Similarly, we can place E on top of C and D, then A on top of G and E.</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Input: bottom &#x3D; &quot;AABA&quot;, allowed &#x3D; [&quot;AAA&quot;, &quot;AAB&quot;, &quot;ABA&quot;, &quot;ABB&quot;, &quot;BAC&quot;]</span><br><span class="line">Output: false</span><br><span class="line">Explanation:</span><br><span class="line">We can&#39;t stack the pyramid to the top.</span><br><span class="line">Note that there could be allowed triples (A, B, C) and (A, B, D) with C !&#x3D; D.</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Note:</strong></p>
+<ol>
+<li><code>bottom</code> will be a string with length in range <code>[2, 8]</code>.</li>
+<li><code>allowed</code> will have length in range <code>[0, 200]</code>.</li>
+<li>Letters in all strings will be chosen from the set <code>{&#39;A&#39;, &#39;B&#39;, &#39;C&#39;, &#39;D&#39;, &#39;E&#39;, &#39;F&#39;, &#39;G&#39;}</code>.</li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>我们正在堆叠块以形成金字塔。每个块都有一个字母字符串的颜色。当且仅当ABC是允许的三元组时，我们才可以将任何颜色块C放置在两个相邻的颜色A和B块之上。我们从底部的底部一行开始，以单个字符串表示。我们还从允许的三元组列表开始。每个允许的三元组都表示为长度为3的字符串。如果我们可以一路建造金字塔，则返回true，否则返回false。</p>
+<p>这个题可以直接使用DFS，首先将允许的三元组变为一个set，然后每次遍历情况，使用DFS一层层往上填充，如果能填充到最后，则返回true，不能则返回false。</p>
+<p>代码如下，时间复杂度理论上为所有的可能情况。空间复杂度就O(n)。</p>
+<p><code>Runtime: 68 ms, faster than 6.33% of Python3 online submissions for Pyramid Transition Matrix.</code></p>
+<p><code>Memory Usage: 15.3 MB, less than 50.00% of Python3 online submissions for Pyramid Transition Matrix.</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    Set = set()</span><br><span class="line">    A = [<span class="string">'A'</span>, <span class="string">'B'</span>, <span class="string">'C'</span>, <span class="string">'D'</span>, <span class="string">'E'</span>, <span class="string">'F'</span>, <span class="string">'G'</span>]</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">DFS</span><span class="params">(self, S: str)</span> -&gt; bool:</span></span><br><span class="line">        <span class="keyword">if</span> len(S) == <span class="number">1</span>: <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">        ret = [<span class="string">""</span>]</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(len(S) - <span class="number">1</span>):</span><br><span class="line">            T = [a <span class="keyword">for</span> a <span class="keyword">in</span> self.A <span class="keyword">if</span> S[i] + S[i+<span class="number">1</span>] + a <span class="keyword">in</span> self.Set]</span><br><span class="line">            <span class="keyword">if</span> len(T) == <span class="number">0</span>: <span class="keyword">return</span> <span class="literal">False</span> </span><br><span class="line">            R = []</span><br><span class="line">            <span class="keyword">for</span> t <span class="keyword">in</span> T:</span><br><span class="line">                R += ([r + t <span class="keyword">for</span> r <span class="keyword">in</span> ret])</span><br><span class="line">            ret = R  </span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> r <span class="keyword">in</span> ret:</span><br><span class="line">            <span class="keyword">if</span> self.DFS(r): <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">pyramidTransition</span><span class="params">(self, bottom: str, allowed: List[str])</span> -&gt; bool:</span></span><br><span class="line">        self.Set = set(allowed)</span><br><span class="line">        <span class="keyword">return</span> self.DFS(bottom)</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-10-12</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(752.%20Open%20the%20Lock)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -894,91 +979,6 @@ Could you come up with a one-pass algorithm using only constant space?</code></p
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">Conv</span><span class="params">(self, S: str)</span> -&gt; List[str]:</span></span><br><span class="line">        res = []</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">4</span>):</span><br><span class="line">            res += [S[:i]+str((int(S[i])<span class="number">-1</span>)%<span class="number">10</span>)+S[i+<span class="number">1</span>:], S[:i]+str((int(S[i])+<span class="number">1</span>)%<span class="number">10</span>)+S[i+<span class="number">1</span>:]]</span><br><span class="line">        <span class="keyword">return</span> res</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">openLock</span><span class="params">(self, deadends: List[str], target: str)</span> -&gt; int:</span></span><br><span class="line">        D = set(deadends)</span><br><span class="line">        <span class="keyword">if</span> <span class="string">"0000"</span> <span class="keyword">in</span> D: <span class="keyword">return</span> <span class="number">-1</span></span><br><span class="line">        S = &#123;&#125;</span><br><span class="line">        Q = [<span class="string">"0000"</span>]</span><br><span class="line">        </span><br><span class="line">        res = <span class="number">0</span></span><br><span class="line">        M = set()</span><br><span class="line">        <span class="keyword">while</span> len(Q) &gt; <span class="number">0</span>:</span><br><span class="line">            res += <span class="number">1</span></span><br><span class="line">            lay = len(Q)</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(lay):</span><br><span class="line">                R = self.Conv(Q[i])</span><br><span class="line"></span><br><span class="line">                R = [i <span class="keyword">for</span> i <span class="keyword">in</span> R <span class="keyword">if</span> i <span class="keyword">not</span> <span class="keyword">in</span> D <span class="keyword">and</span> i <span class="keyword">not</span> <span class="keyword">in</span> M]</span><br><span class="line">                <span class="keyword">if</span> len([i <span class="keyword">for</span> i <span class="keyword">in</span> R <span class="keyword">if</span> i == target]): <span class="keyword">return</span> res</span><br><span class="line">                M.update(R)</span><br><span class="line">                Q += R</span><br><span class="line">            Q = Q[lay:]</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span></span><br></pre></td></tr></table></figure>
 
 <p>BitBrave, 2019-10-13</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(756.%20Pyramid%20Transition%20Matrix)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(756.%20Pyramid%20Transition%20Matrix)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(756. Pyramid Transition Matrix)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-756-Pyramid-Transition-Matrix-题解"><a href="#LeetCode-756-Pyramid-Transition-Matrix-题解" class="headerlink" title="LeetCode(756. Pyramid Transition Matrix)题解"></a>LeetCode(756. Pyramid Transition Matrix)题解</h1><p>We are stacking blocks to form a pyramid. Each block has a color which is a one letter string.</p>
-<p>We are allowed to place any color block <code>C</code> on top of two adjacent blocks of colors <code>A</code> and <code>B</code>, if and only if <code>ABC</code> is an allowed triple.</p>
-<p>We start with a bottom row of <code>bottom</code>, represented as a single string. We also start with a list of allowed triples <code>allowed</code>. Each allowed triple is represented as a string of length 3.</p>
-<p>Return true if we can build the pyramid all the way to the top, otherwise false.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Input: bottom &#x3D; &quot;BCD&quot;, allowed &#x3D; [&quot;BCG&quot;, &quot;CDE&quot;, &quot;GEA&quot;, &quot;FFF&quot;]</span><br><span class="line">Output: true</span><br><span class="line">Explanation:</span><br><span class="line">We can stack the pyramid like this:</span><br><span class="line">    A</span><br><span class="line">   &#x2F; \</span><br><span class="line">  G   E</span><br><span class="line"> &#x2F; \ &#x2F; \</span><br><span class="line">B   C   D</span><br><span class="line"></span><br><span class="line">We are allowed to place G on top of B and C because BCG is an allowed triple.  Similarly, we can place E on top of C and D, then A on top of G and E.</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Input: bottom &#x3D; &quot;AABA&quot;, allowed &#x3D; [&quot;AAA&quot;, &quot;AAB&quot;, &quot;ABA&quot;, &quot;ABB&quot;, &quot;BAC&quot;]</span><br><span class="line">Output: false</span><br><span class="line">Explanation:</span><br><span class="line">We can&#39;t stack the pyramid to the top.</span><br><span class="line">Note that there could be allowed triples (A, B, C) and (A, B, D) with C !&#x3D; D.</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Note:</strong></p>
-<ol>
-<li><code>bottom</code> will be a string with length in range <code>[2, 8]</code>.</li>
-<li><code>allowed</code> will have length in range <code>[0, 200]</code>.</li>
-<li>Letters in all strings will be chosen from the set <code>{&#39;A&#39;, &#39;B&#39;, &#39;C&#39;, &#39;D&#39;, &#39;E&#39;, &#39;F&#39;, &#39;G&#39;}</code>.</li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>我们正在堆叠块以形成金字塔。每个块都有一个字母字符串的颜色。当且仅当ABC是允许的三元组时，我们才可以将任何颜色块C放置在两个相邻的颜色A和B块之上。我们从底部的底部一行开始，以单个字符串表示。我们还从允许的三元组列表开始。每个允许的三元组都表示为长度为3的字符串。如果我们可以一路建造金字塔，则返回true，否则返回false。</p>
-<p>这个题可以直接使用DFS，首先将允许的三元组变为一个set，然后每次遍历情况，使用DFS一层层往上填充，如果能填充到最后，则返回true，不能则返回false。</p>
-<p>代码如下，时间复杂度理论上为所有的可能情况。空间复杂度就O(n)。</p>
-<p><code>Runtime: 68 ms, faster than 6.33% of Python3 online submissions for Pyramid Transition Matrix.</code></p>
-<p><code>Memory Usage: 15.3 MB, less than 50.00% of Python3 online submissions for Pyramid Transition Matrix.</code></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    Set = set()</span><br><span class="line">    A = [<span class="string">'A'</span>, <span class="string">'B'</span>, <span class="string">'C'</span>, <span class="string">'D'</span>, <span class="string">'E'</span>, <span class="string">'F'</span>, <span class="string">'G'</span>]</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">DFS</span><span class="params">(self, S: str)</span> -&gt; bool:</span></span><br><span class="line">        <span class="keyword">if</span> len(S) == <span class="number">1</span>: <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">        ret = [<span class="string">""</span>]</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(len(S) - <span class="number">1</span>):</span><br><span class="line">            T = [a <span class="keyword">for</span> a <span class="keyword">in</span> self.A <span class="keyword">if</span> S[i] + S[i+<span class="number">1</span>] + a <span class="keyword">in</span> self.Set]</span><br><span class="line">            <span class="keyword">if</span> len(T) == <span class="number">0</span>: <span class="keyword">return</span> <span class="literal">False</span> </span><br><span class="line">            R = []</span><br><span class="line">            <span class="keyword">for</span> t <span class="keyword">in</span> T:</span><br><span class="line">                R += ([r + t <span class="keyword">for</span> r <span class="keyword">in</span> ret])</span><br><span class="line">            ret = R  </span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> r <span class="keyword">in</span> ret:</span><br><span class="line">            <span class="keyword">if</span> self.DFS(r): <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">pyramidTransition</span><span class="params">(self, bottom: str, allowed: List[str])</span> -&gt; bool:</span></span><br><span class="line">        self.Set = set(allowed)</span><br><span class="line">        <span class="keyword">return</span> self.DFS(bottom)</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-10-12</p>
 
       
     </div>

@@ -343,6 +343,85 @@ Given binary tree [3,9,20,null,null,15,7],
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(1043.%20Partition%20Array%20for%20Maximum%20Sum)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(1043.%20Partition%20Array%20for%20Maximum%20Sum)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1043. Partition Array for Maximum Sum)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-1043-Partition-Array-for-Maximum-Sum-题解"><a href="#LeetCode-1043-Partition-Array-for-Maximum-Sum-题解" class="headerlink" title="LeetCode(\1043. Partition Array for Maximum Sum)题解"></a>LeetCode(\1043. Partition Array for Maximum Sum)题解</h1><p>Given an integer array <code>A</code>, you partition the array into (contiguous) subarrays of length at most <code>K</code>. After partitioning, each subarray has their values changed to become the maximum value of that subarray.</p>
+<p>Return the largest sum of the given array after partitioning.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: A &#x3D; [1,15,7,9,2,5,10], K &#x3D; 3</span><br><span class="line">Output: 84</span><br><span class="line">Explanation: A becomes [15,15,15,9,10,10,10]</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Note:</strong></p>
+<ol>
+<li><code>1 &lt;= K &lt;= A.length &lt;= 500</code></li>
+<li><code>0 &lt;= A[i] &lt;= 10^6</code></li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个数组A和整数K，将A分为长度不超过K的若干个子数组，将每个子数组内的元素变为其中最大的元素值，然后求所有的子数组元素之和，问最终能得到的最大和为多少。</p>
+<p>这个题可以使用DP解决，设定一个与A等长的数组dp，其中dp[i]表示A中0~i位置能得到的最大和，最终题目的答案就是dp[A.size()-1]。</p>
+<p>状态转移方程是什么呢，因为子数组长度最多为K长度，因此我们考虑最后一个子数组的长度即可。即：</p>
+<p>dp[i] = max(dp[i-j] + max(A[i-j+1], A[i-j+2], …, A[i])),    j = 1,2, …, K.</p>
+<p>代码如下，时间复杂度O(nk), 空间复杂度O(n).</p>
+<p><code>Runtime: 16 ms, faster than 72.94% of C++ online submissions for Partition Array for Maximum Sum.</code></p>
+<p><code>Memory Usage: 8.7 MB, less than 100.00% of C++ online submissions for Partition Array for Maximum Sum.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxSumAfterPartitioning</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A, <span class="keyword">int</span> K)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = A.<span class="built_in">size</span>();</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">dp</span><span class="params">(len + <span class="number">1</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">        <span class="comment">//dp[0] = A[0];</span></span><br><span class="line">            </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++) &#123;</span><br><span class="line">            <span class="keyword">int</span> m = A[i];</span><br><span class="line">            dp[i+<span class="number">1</span>] = dp[i] + m;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=i; j&gt;=<span class="number">0</span> <span class="keyword">and</span> j&gt;i-K; j--) &#123;</span><br><span class="line">                m = <span class="built_in">max</span>(m, A[j]);</span><br><span class="line">                dp[i+<span class="number">1</span>] = <span class="built_in">max</span>(dp[i+<span class="number">1</span>], dp[j] + m * (i-j+<span class="number">1</span>));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp[len];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2020-01-05</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(1038.%20Binary%20Search%20Tree%20to%20Greater%20Sum%20Tree)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -408,85 +487,6 @@ Given binary tree [3,9,20,null,null,15,7],
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">inOrder</span><span class="params">(TreeNode* root, <span class="keyword">int</span> val)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> tmp = root-&gt;val, r = inOrder(root-&gt;right, val);</span><br><span class="line">        root-&gt;val += r + val;</span><br><span class="line">        <span class="keyword">return</span> tmp + r + inOrder(root-&gt;left, root-&gt;val);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">TreeNode* <span class="title">bstToGst</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        inOrder(root, <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 <p>BitBrave，2019-11-22</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(1043.%20Partition%20Array%20for%20Maximum%20Sum)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(1043.%20Partition%20Array%20for%20Maximum%20Sum)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1043. Partition Array for Maximum Sum)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-1043-Partition-Array-for-Maximum-Sum-题解"><a href="#LeetCode-1043-Partition-Array-for-Maximum-Sum-题解" class="headerlink" title="LeetCode(\1043. Partition Array for Maximum Sum)题解"></a>LeetCode(\1043. Partition Array for Maximum Sum)题解</h1><p>Given an integer array <code>A</code>, you partition the array into (contiguous) subarrays of length at most <code>K</code>. After partitioning, each subarray has their values changed to become the maximum value of that subarray.</p>
-<p>Return the largest sum of the given array after partitioning.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: A &#x3D; [1,15,7,9,2,5,10], K &#x3D; 3</span><br><span class="line">Output: 84</span><br><span class="line">Explanation: A becomes [15,15,15,9,10,10,10]</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Note:</strong></p>
-<ol>
-<li><code>1 &lt;= K &lt;= A.length &lt;= 500</code></li>
-<li><code>0 &lt;= A[i] &lt;= 10^6</code></li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个数组A和整数K，将A分为长度不超过K的若干个子数组，将每个子数组内的元素变为其中最大的元素值，然后求所有的子数组元素之和，问最终能得到的最大和为多少。</p>
-<p>这个题可以使用DP解决，设定一个与A等长的数组dp，其中dp[i]表示A中0~i位置能得到的最大和，最终题目的答案就是dp[A.size()-1]。</p>
-<p>状态转移方程是什么呢，因为子数组长度最多为K长度，因此我们考虑最后一个子数组的长度即可。即：</p>
-<p>dp[i] = max(dp[i-j] + max(A[i-j+1], A[i-j+2], …, A[i])),    j = 1,2, …, K.</p>
-<p>代码如下，时间复杂度O(nk), 空间复杂度O(n).</p>
-<p><code>Runtime: 16 ms, faster than 72.94% of C++ online submissions for Partition Array for Maximum Sum.</code></p>
-<p><code>Memory Usage: 8.7 MB, less than 100.00% of C++ online submissions for Partition Array for Maximum Sum.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxSumAfterPartitioning</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A, <span class="keyword">int</span> K)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = A.<span class="built_in">size</span>();</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">dp</span><span class="params">(len + <span class="number">1</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">        <span class="comment">//dp[0] = A[0];</span></span><br><span class="line">            </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++) &#123;</span><br><span class="line">            <span class="keyword">int</span> m = A[i];</span><br><span class="line">            dp[i+<span class="number">1</span>] = dp[i] + m;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=i; j&gt;=<span class="number">0</span> <span class="keyword">and</span> j&gt;i-K; j--) &#123;</span><br><span class="line">                m = <span class="built_in">max</span>(m, A[j]);</span><br><span class="line">                dp[i+<span class="number">1</span>] = <span class="built_in">max</span>(dp[i+<span class="number">1</span>], dp[j] + m * (i-j+<span class="number">1</span>));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp[len];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2020-01-05</p>
 
       
     </div>
@@ -829,86 +829,6 @@ One possible answer is: [0,-3,9,-10,null,5], which represents the following heig
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(113.%20Path%20Sum%20II)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(113.%20Path%20Sum%20II)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(113. Path Sum II)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-113-Path-Sum-II-题解"><a href="#LeetCode-113-Path-Sum-II-题解" class="headerlink" title="LeetCode(113. Path Sum II)题解"></a>LeetCode(113. Path Sum II)题解</h1><hr>
-<p>Given a binary tree and a sum, find all root-to-leaf paths where each path’s sum equals the given sum.</p>
-<p>Note: A leaf is a node with no children.</p>
-<p>Example:</p>
-<pre><code>Given the below binary tree and sum = 22,
-
-       5
-      / \
-     4   8
-    /   / \
-   11  13  4
-  /  \    / \
- 7    2  5   1</code></pre><p>Return:</p>
-<pre><code>[
-    [5,4,11,2],
-    [5,8,4,5]
-]</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个二叉树，和一个值，从二叉树中找出所有从根节点出发向下走到叶子节点的路径，其节点之和为给定的值。</p>
-<p>可以使用递归的方法，使用vector记录一个路径，走到当前节点，看是否当前节点加上之前的和为给定的值。如果等于则存储，如果大于就放弃这条路，如果小于则加入，再继续向下走。</p>
-<p>代码如下：</p>
-<p>Runtime: 24 ms, faster than 39.82% of C++ online submissions for Path Sum II.<br>Memory Usage: 38.2 MB, less than 12.98% of C++ online submissions for Path Sum II.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; res;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">pathSum_</span><span class="params">(TreeNode* root, <span class="keyword">int</span> sum, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; tmp, <span class="keyword">int</span> lsum)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="literal">NULL</span>) <span class="keyword">return</span>;</span><br><span class="line">        tmp.push_back(root-&gt;val);</span><br><span class="line">        lsum += root-&gt;val;</span><br><span class="line">        <span class="keyword">if</span>(lsum == sum &amp;&amp; root-&gt;left == <span class="literal">NULL</span> &amp;&amp; root-&gt;right == <span class="literal">NULL</span>)&#123;</span><br><span class="line">            res.push_back(tmp);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        pathSum_(root-&gt;left, sum, tmp, lsum);</span><br><span class="line">        pathSum_(root-&gt;right, sum, tmp, lsum);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">pathSum</span><span class="params">(TreeNode* root, <span class="keyword">int</span> sum)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; tmp;</span><br><span class="line">        <span class="keyword">int</span> lsum = <span class="number">0</span>;</span><br><span class="line">        pathSum_(root, sum, tmp, lsum);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125; </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-06-30</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(11.%20Container%20With%20Most%20Water)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -970,6 +890,86 @@ i&lt;=p&lt;=j: M &lt;= min(abs(i-p)*min(ai, ap), abs(p-j)*min(aj, ap))。</code>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(<span class="keyword">const</span> <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;a, <span class="keyword">const</span> <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;b)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> a[<span class="number">1</span>] &gt; b[<span class="number">1</span>];</span><br><span class="line">    &#125;;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxArea</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; <span class="built_in">height</span>)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">height</span>.<span class="built_in">size</span>() &lt;= <span class="number">1</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">B</span><span class="params">(<span class="built_in">height</span>.<span class="built_in">size</span>(), <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(<span class="number">2</span>,<span class="number">0</span>))</span></span>;</span><br><span class="line">        <span class="comment">// O(n)</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="built_in">height</span>.<span class="built_in">size</span>(); i++) &#123;</span><br><span class="line">            B[i][<span class="number">0</span>] = i;</span><br><span class="line">            B[i][<span class="number">1</span>] = <span class="built_in">height</span>[i];</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="comment">// O(nlogn)</span></span><br><span class="line">        sort(B.<span class="built_in">begin</span>(), B.<span class="built_in">end</span>(), cmp);</span><br><span class="line">        <span class="comment">// O(n)</span></span><br><span class="line">        <span class="keyword">int</span> left = <span class="built_in">min</span>(B[<span class="number">0</span>][<span class="number">0</span>], B[<span class="number">1</span>][<span class="number">0</span>]), right = <span class="built_in">max</span>(B[<span class="number">0</span>][<span class="number">0</span>], B[<span class="number">1</span>][<span class="number">0</span>]), M;</span><br><span class="line">        M = (right - left) * <span class="built_in">min</span>(B[<span class="number">0</span>][<span class="number">1</span>], B[<span class="number">1</span>][<span class="number">1</span>]);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">2</span>; i&lt;B.<span class="built_in">size</span>(); i++)&#123;</span><br><span class="line">            <span class="keyword">int</span> pi = B[i][<span class="number">0</span>];</span><br><span class="line">            <span class="keyword">if</span>(left &lt; pi &amp;&amp; pi &lt; right) <span class="keyword">continue</span>;</span><br><span class="line">            </span><br><span class="line">            M = (pi &lt; left)? <span class="built_in">max</span>(M, (right - pi) * B[i][<span class="number">1</span>]) : <span class="built_in">max</span>(M, (pi - left) * B[i][<span class="number">1</span>]);</span><br><span class="line">            left = <span class="built_in">min</span>(left, pi);</span><br><span class="line">            right = <span class="built_in">max</span>(right, pi);</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">return</span> M;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 <p><strong>PS: 版权所有，翻版必究（所有的解法完全都是自己想出来的，很开心）。</strong><br>BitBrave, 2019-04-16</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(113.%20Path%20Sum%20II)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(113.%20Path%20Sum%20II)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(113. Path Sum II)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-113-Path-Sum-II-题解"><a href="#LeetCode-113-Path-Sum-II-题解" class="headerlink" title="LeetCode(113. Path Sum II)题解"></a>LeetCode(113. Path Sum II)题解</h1><hr>
+<p>Given a binary tree and a sum, find all root-to-leaf paths where each path’s sum equals the given sum.</p>
+<p>Note: A leaf is a node with no children.</p>
+<p>Example:</p>
+<pre><code>Given the below binary tree and sum = 22,
+
+       5
+      / \
+     4   8
+    /   / \
+   11  13  4
+  /  \    / \
+ 7    2  5   1</code></pre><p>Return:</p>
+<pre><code>[
+    [5,4,11,2],
+    [5,8,4,5]
+]</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个二叉树，和一个值，从二叉树中找出所有从根节点出发向下走到叶子节点的路径，其节点之和为给定的值。</p>
+<p>可以使用递归的方法，使用vector记录一个路径，走到当前节点，看是否当前节点加上之前的和为给定的值。如果等于则存储，如果大于就放弃这条路，如果小于则加入，再继续向下走。</p>
+<p>代码如下：</p>
+<p>Runtime: 24 ms, faster than 39.82% of C++ online submissions for Path Sum II.<br>Memory Usage: 38.2 MB, less than 12.98% of C++ online submissions for Path Sum II.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; res;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">pathSum_</span><span class="params">(TreeNode* root, <span class="keyword">int</span> sum, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; tmp, <span class="keyword">int</span> lsum)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="literal">NULL</span>) <span class="keyword">return</span>;</span><br><span class="line">        tmp.push_back(root-&gt;val);</span><br><span class="line">        lsum += root-&gt;val;</span><br><span class="line">        <span class="keyword">if</span>(lsum == sum &amp;&amp; root-&gt;left == <span class="literal">NULL</span> &amp;&amp; root-&gt;right == <span class="literal">NULL</span>)&#123;</span><br><span class="line">            res.push_back(tmp);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        pathSum_(root-&gt;left, sum, tmp, lsum);</span><br><span class="line">        pathSum_(root-&gt;right, sum, tmp, lsum);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">pathSum</span><span class="params">(TreeNode* root, <span class="keyword">int</span> sum)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; tmp;</span><br><span class="line">        <span class="keyword">int</span> lsum = <span class="number">0</span>;</span><br><span class="line">        pathSum_(root, sum, tmp, lsum);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125; </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-06-30</p>
 
       
     </div>
