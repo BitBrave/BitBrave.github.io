@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="LeetCode(885. Spiral Matrix III)题解On a 2 dimensional grid with R rows and C columns, we start at (r0, c0) facing east. Here, the north-west corner of the grid is at the first row and column, and the s">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LeetCode(885. Spiral Matrix III)题解">
+<meta property="og:url" content="http://yoursite.com/2019/10/06/LeetCode(885.%20Spiral%20Matrix%20III)%E9%A2%98%E8%A7%A3/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="LeetCode(885. Spiral Matrix III)题解On a 2 dimensional grid with R rows and C columns, we start at (r0, c0) facing east. Here, the north-west corner of the grid is at the first row and column, and the s">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/08/24/example_1.png">
+<meta property="og:image" content="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/08/24/example_2.png">
+<meta property="article:published_time" content="2019-10-06T10:41:14.938Z">
+<meta property="article:modified_time" content="2019-10-06T10:41:14.939Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/08/24/example_1.png">
+
+<link rel="canonical" href="http://yoursite.com/2019/10/06/LeetCode(885.%20Spiral%20Matrix%20III)%E9%A2%98%E8%A7%A3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>LeetCode(885. Spiral Matrix III)题解 | Hexo</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/06/LeetCode(885.%20Spiral%20Matrix%20III)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          LeetCode(885. Spiral Matrix III)题解
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-10-06 18:41:14" itemprop="dateCreated datePublished" datetime="2019-10-06T18:41:14+08:00">2019-10-06</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="LeetCode-885-Spiral-Matrix-III-题解"><a href="#LeetCode-885-Spiral-Matrix-III-题解" class="headerlink" title="LeetCode(885. Spiral Matrix III)题解"></a>LeetCode(885. Spiral Matrix III)题解</h1><p>On a 2 dimensional grid with <code>R</code> rows and <code>C</code> columns, we start at <code>(r0, c0)</code> facing east.</p>
+<p>Here, the north-west corner of the grid is at the first row and column, and the south-east corner of the grid is at the last row and column.</p>
+<p>Now, we walk in a clockwise spiral shape to visit every position in this grid. </p>
+<p>Whenever we would move outside the boundary of the grid, we continue our walk outside the grid (but may return to the grid boundary later.) </p>
+<p>Eventually, we reach all <code>R * C</code> spaces of the grid.</p>
+<p>Return a list of coordinates representing the positions of the grid in the order they were visited.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: R &#x3D; 1, C &#x3D; 4, r0 &#x3D; 0, c0 &#x3D; 0</span><br><span class="line">Output: [[0,0],[0,1],[0,2],[0,3]]</span><br></pre></td></tr></table></figure>
+
+<p>  <img src="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/08/24/example_1.png" alt=""></p>
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: R &#x3D; 5, C &#x3D; 6, r0 &#x3D; 1, c0 &#x3D; 4</span><br><span class="line">Output: [[1,4],[1,5],[2,5],[2,4],[2,3],[1,3],[0,3],[0,4],[0,5],[3,5],[3,4],[3,3],[3,2],[2,2],[1,2],[0,2],[4,5],[4,4],[4,3],[4,2],[4,1],[3,1],[2,1],[1,1],[0,1],[4,0],[3,0],[2,0],[1,0],[0,0]]</span><br></pre></td></tr></table></figure>
+
+<p> <img src="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/08/24/example_2.png" alt=""></p>
+<p><strong>Note:</strong></p>
+<ol>
+<li><code>1 &lt;= R &lt;= 100</code></li>
+<li><code>1 &lt;= C &lt;= 100</code></li>
+<li><code>0 &lt;= r0 &lt; R</code></li>
+<li><code>0 &lt;= c0 &lt; C</code></li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>在具有R行和C列的二维网格上，我们从（r0，c0）面向东开始。在这里，网格的西北角位于第一行和第一列，网格的东南角位于最后一行和最后一列。现在，我们以顺时针螺旋形状行走，以访问此网格中的每个位置。每当我们要移出网格边界时，我们都会继续走出网格边界（但稍后可能会返回到网格边界）。最终，我们到达了网格的所有R * C空间。返回以访问网格的顺序表示网格位置的坐标列表。返回这样走的顺序。</p>
+<p>这个题需要思考的难度倒是没有多大，主要是有点麻烦。</p>
+<p>首先就是如何进行遍历，一开始是给定的原点，然后就是顺时针螺旋遍历。分析可以发现，若不考虑原点，第一次是向右向下走一步，然后向上向右走两步，然后向左向下走三步，向上向右走4步···。即依次递增。而出界的情况可以判断。我们可以取max(R, C)*2的循环圈数，就一定可以遍历完整个数组，对于遍历到的每个位置，判断是否在原数组内，在就加入，否则放弃。</p>
+<p>代码如下，时间复杂度O(n2)，空间复杂度O(n2)。</p>
+<p><code>Runtime: 52 ms, faster than 97.29% of C++ online submissions for Spiral Matrix III.</code></p>
+<p><code>Memory Usage: 13.7 MB, less than 42.86% of C++ online submissions for Spiral Matrix III.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isValid</span><span class="params">(<span class="keyword">int</span> R, <span class="keyword">int</span> C, <span class="keyword">int</span> r, <span class="keyword">int</span> c)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> r&lt;R <span class="keyword">and</span> c&lt;C <span class="keyword">and</span> r&gt;=<span class="number">0</span> <span class="keyword">and</span> c&gt;=<span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">spiralMatrixIII</span><span class="params">(<span class="keyword">int</span> R, <span class="keyword">int</span> C, <span class="keyword">int</span> r0, <span class="keyword">int</span> c0)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = <span class="built_in">max</span>(R, C) * <span class="number">2</span>;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; res;</span><br><span class="line">        res.push_back(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(&#123;r0, c0&#125;));</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;=len; i++)&#123;</span><br><span class="line">            <span class="comment">// 向右向下走</span></span><br><span class="line">            <span class="keyword">int</span> j;</span><br><span class="line">            <span class="keyword">for</span>(j=<span class="number">1</span>; j&lt;=i; j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(<span class="built_in">isValid</span>(R, C, r0, c0+j)) res.push_back(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(&#123;r0, c0+j&#125;));</span><br><span class="line">            &#125;</span><br><span class="line">            c0 = c0 + j - <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">for</span>(j=<span class="number">1</span>; j&lt;=i; j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(<span class="built_in">isValid</span>(R, C, r0+j, c0)) res.push_back(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(&#123;r0+j, c0&#125;));</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// 向左向上走</span></span><br><span class="line">            r0 = r0 + j - <span class="number">1</span>;</span><br><span class="line">            i++;</span><br><span class="line">            <span class="keyword">for</span>(j=<span class="number">1</span>; j&lt;=i; j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(<span class="built_in">isValid</span>(R, C, r0, c0-j)) res.push_back(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(&#123;r0, c0-j&#125;));</span><br><span class="line">            &#125;</span><br><span class="line">            c0 = c0 - j + <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">for</span>(j=<span class="number">1</span>; j&lt;=i; j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(<span class="built_in">isValid</span>(R, C, r0-j, c0)) res.push_back(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(&#123;r0-j, c0&#125;));</span><br><span class="line">            &#125;</span><br><span class="line">            r0 = r0 - j + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-09-29</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/10/06/LeetCode(421.%20Maximum%20XOR%20of%20Two%20Numbers%20in%20an%20Array)%E9%A2%98%E8%A7%A3/" rel="prev" title="LeetCode(421. Maximum XOR of Two Numbers in an Array)题解">
+      <i class="fa fa-chevron-left"></i> LeetCode(421. Maximum XOR of Two Numbers in an Array)题解
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/10/06/LeetCode(877.%20Stone%20Game)%E9%A2%98%E8%A7%A3/" rel="next" title="LeetCode(877. Stone Game)题解">
+      LeetCode(877. Stone Game)题解 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#LeetCode-885-Spiral-Matrix-III-题解"><span class="nav-number">1.</span> <span class="nav-text">LeetCode(885. Spiral Matrix III)题解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#解题思路"><span class="nav-number">1.1.</span> <span class="nav-text">解题思路</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">207</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.7.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
