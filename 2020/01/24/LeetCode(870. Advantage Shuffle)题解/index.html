@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="LeetCode(870. Advantage Shuffle)题解Given two arrays A and B of equal size, the advantage of A with respect to B is the number of indices i for which A[i] &gt; B[i]. Return any permutation of A that max">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LeetCode(870. Advantage Shuffle)题解">
+<meta property="og:url" content="http://yoursite.com/2020/01/24/LeetCode(870.%20Advantage%20Shuffle)%E9%A2%98%E8%A7%A3/index.html">
+<meta property="og:site_name" content="BitBrave">
+<meta property="og:description" content="LeetCode(870. Advantage Shuffle)题解Given two arrays A and B of equal size, the advantage of A with respect to B is the number of indices i for which A[i] &gt; B[i]. Return any permutation of A that max">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-01-24T10:05:21.000Z">
+<meta property="article:modified_time" content="2020-01-24T10:05:21.000Z">
+<meta property="article:author" content="高级会所私人订制">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2020/01/24/LeetCode(870.%20Advantage%20Shuffle)%E9%A2%98%E8%A7%A3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>LeetCode(870. Advantage Shuffle)题解 | BitBrave</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7e6d55cf2fa14e729703953237f65413";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">BitBrave</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">IIE</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(870.%20Advantage%20Shuffle)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="高级会所私人订制">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          LeetCode(870. Advantage Shuffle)题解
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="LeetCode-870-Advantage-Shuffle-题解"><a href="#LeetCode-870-Advantage-Shuffle-题解" class="headerlink" title="LeetCode(870. Advantage Shuffle)题解"></a>LeetCode(870. Advantage Shuffle)题解</h2><p>Given two arrays <code>A</code> and <code>B</code> of equal size, the <em>advantage of A with respect to B</em> is the number of indices <code>i</code> for which <code>A[i] &gt; B[i]</code>.</p>
+<p>Return <strong>any</strong> permutation of <code>A</code> that maximizes its advantage with respect to <code>B</code>.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: A &#x3D; [2,7,11,15], B &#x3D; [1,10,4,11]</span><br><span class="line">Output: [2,11,7,15]</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: A &#x3D; [12,24,8,32], B &#x3D; [13,25,32,11]</span><br><span class="line">Output: [24,32,8,12]</span><br></pre></td></tr></table></figure>
+
+<p><strong>Note:</strong></p>
+<ol>
+<li><p><code>1 &lt;= A.length = B.length &lt;= 10000</code></p>
+</li>
+<li><p><code>0 &lt;= A[i] &lt;= 10^9</code></p>
+</li>
+<li><p><code>0 &lt;= B[i] &lt;= 10^9</code></p>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2></li>
+</ol>
+<p>给定两个等长的数组A和B，其中A的优势就是A中对应位置的元素大于B中对应位置的元素的数量。现在对A重排列，最大化A的优势。如果有多个答案，返回其中任意一个即可。</p>
+<p>这个题直观上就可以使用Greedy做，我们对于B中的一个元素B[i]，如果A中有比它大的元素，那么我们只选择比它大的元素中最小的那个即可，这样可以最大限度地保留A能覆盖其它B中元素的可能性。</p>
+<p>因此，算法如下，将A，B都升序排序。然后分别遍历AB中的元素，A中使用i，B中使用j。初始化i=0，j=0.</p>
+<p>然后如下判断——</p>
+<ul>
+<li><p>i==len(A)，表明已经遍历完成了，直接结束算法。</p>
+</li>
+<li><p>A[i]&gt;B[j]，表示此时可以覆盖，直接i = i+1，j = j+1.</p>
+</li>
+<li><p>A[i]&lt;=B[j]，表示此时不能覆盖，就在不超过len(A)的情况下不断增加i，判断A[i]是否可以大于B[j]，如果到最后都不能大于，则表明A中剩下的数已经都不能大于B中任何数了，就直接结束算法。如果走到一个i的值，有A[i]大于B[j]，就直接使用这个与最开始的i进行交换即可。然后i = i+1，j = j+1.</p>
+</li>
+</ul>
+<p>代码如下，排序时间复杂度O(nlogn)，加上判断的时间O(n)，总的时间复杂度为O(nlogn)，但是因为最后返回的数组要按照B的顺序，因此要把A重新排位置，这就需要一开始记住B原数组的位置，因此需要使用一个数组记录，空间复杂度O(n)。</p>
+<p><code>Runtime: 156 ms, faster than 90.29% of C++ online submissions for Advantage Shuffle.</code></p>
+<p><code>Memory Usage: 14.3 MB, less than 100.00% of C++ online submissions for Advantage Shuffle.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; B_;</span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> B_[a] &lt; B_[b];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">advantageCount</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; B)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = A.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> i, j, b = len - <span class="number">1</span>;</span><br><span class="line">        </span><br><span class="line">        vector&lt;int&gt; ret(len, -1), p(len, -1);</span><br><span class="line">        B_ = B;</span><br><span class="line">        <span class="keyword">for</span>(i=<span class="number">0</span>; i&lt;len; i++) p[i] = i;</span><br><span class="line">        sort(A.<span class="built_in">begin</span>(), A.<span class="built_in">end</span>());</span><br><span class="line">        sort(p.<span class="built_in">begin</span>(), p.<span class="built_in">end</span>(), cmp);</span><br><span class="line">        </span><br><span class="line">        i = j = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(i &lt; len)&#123;</span><br><span class="line">            <span class="keyword">while</span>(i &lt; len &amp;&amp; A[i] &lt;= B[p[j]]) ret[p[b--]] = A[i++];</span><br><span class="line">            <span class="keyword">if</span>(i &lt; len) ret[p[j++]] = A[i++];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave,2019-10-24</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/01/24/LeetCode(873.%20Length%20of%20Longest%20Fibonacci%20Subsequence)%E9%A2%98%E8%A7%A3/" rel="prev" title="LeetCode(873. Length of Longest Fibonacci Subsequence)题解">
+      <i class="fa fa-chevron-left"></i> LeetCode(873. Length of Longest Fibonacci Subsequence)题解
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/01/24/LeetCode(87.%20Scramble%20String)%E9%A2%98%E8%A7%A3/" rel="next" title="LeetCode(87. Scramble String)题解">
+      LeetCode(87. Scramble String)题解 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#LeetCode-870-Advantage-Shuffle-题解"><span class="nav-number">1.</span> <span class="nav-text">LeetCode(870. Advantage Shuffle)题解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解题思路"><span class="nav-number">2.</span> <span class="nav-text">解题思路</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="高级会所私人订制"
+      src="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+  <p class="site-author-name" itemprop="name">高级会所私人订制</p>
+  <div class="site-description" itemprop="description">幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">257</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">BitBrave, IIE</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
