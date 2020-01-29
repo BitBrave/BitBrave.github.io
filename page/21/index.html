@@ -165,7 +165,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/11/LeetCode(18.%204Sum)%E9%A2%98%E8%A7%A3/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/11/LeetCode(19.%20Remove%20Nth%20Node%20From%20End%20of%20List)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -179,7 +179,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/05/11/LeetCode(18.%204Sum)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(18. 4Sum)题解</a>
+            <a href="/2019/05/11/LeetCode(19.%20Remove%20Nth%20Node%20From%20End%20of%20List)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(19. Remove Nth Node From End of List)题解</a>
         </h1>
 
         <div class="post-meta">
@@ -203,104 +203,26 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="LeetCode-18-4Sum-题解"><a href="#LeetCode-18-4Sum-题解" class="headerlink" title="LeetCode(18. 4Sum)题解"></a>LeetCode(18. 4Sum)题解</h1><hr>
-<p>原文如下<br>Given an array nums of n integers and an integer target, are there elements a, b, c, and d in nums such that a + b + c + d = target? Find all unique quadruplets in the array which gives the sum of target.</p>
-<p>Note:</p>
-<p>The solution set must not contain duplicate quadruplets.</p>
-<p>Example:</p>
-<pre><code>Given array nums = [1, 0, -1, 0, -2, 2], and target = 0.
+          <h1 id="LeetCode-19-Remove-Nth-Node-From-End-of-List-题解"><a href="#LeetCode-19-Remove-Nth-Node-From-End-of-List-题解" class="headerlink" title="LeetCode(19. Remove Nth Node From End of List)题解"></a>LeetCode(19. Remove Nth Node From End of List)题解</h1><hr>
+<p>原文如下：</p>
+<p>Given a linked list, remove the n-th node from the end of list and return its head.</p>
+<p><strong>Example:</strong></p>
+<pre><code>Given linked list: 1-&gt;2-&gt;3-&gt;4-&gt;5, and n = 2.
 
-A solution set is:
-[
-[-1,  0, 0, 1],
-[-2, -1, 1, 2],
-[-2,  0, 0, 2]
-]</code></pre><h2 id="题目思路"><a href="#题目思路" class="headerlink" title="题目思路"></a>题目思路</h2><p>与15题类似，15题是3sum，要求三个数相加得到某一个特定的数，而本题则为4sum。直接在3sum的基础之上套一层循环即可。唯一要注意的就是，可能有的同学会疑问：遇到重复的数字要不要跳过，比如选定第一个数之后再剩下的数组中找寻其余几个数，找寻完毕之后，那么要是第二次选定数的时候选定的数与第一个数相同是否应该跳过。有没有可能以为追求独一性而漏掉了某些选择。答案是应该跳过，并且不会漏掉。因为我们将数组排序之后，从左到右依次选定第一个数第二个数，当前面的数和后面的数相同时，在选定前面的数为基准操作时，就已经把后面的数的所有情况都给遍历下来了。比如[1,1,a,b,c,…]，当选定第一个1作为4sum中的一个数寻找剩下的三个数时，已经把将第二个1作为4sum中的一个数的所有情况都给遍历了。</p>
-<p>代码如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">fourSum</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; res;</span><br><span class="line">        <span class="keyword">int</span> len = nums.<span class="built_in">size</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// sort O(nlogn)</span></span><br><span class="line">        sort(nums.<span class="built_in">begin</span>(), nums.<span class="built_in">end</span>());</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len<span class="number">-3</span>; i++)&#123;<span class="comment">// first number</span></span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=i+<span class="number">1</span>; j&lt;len<span class="number">-2</span>; j++)&#123;</span><br><span class="line">                <span class="keyword">int</span> l = j+<span class="number">1</span>, r = len<span class="number">-1</span>;</span><br><span class="line">                <span class="keyword">int</span> diff = target - nums[i] - nums[j];</span><br><span class="line">                <span class="keyword">while</span>(l &lt; r)&#123;</span><br><span class="line">                    <span class="keyword">if</span>(nums[l] + nums[l+<span class="number">1</span>] &gt; diff || nums[r] + nums[r<span class="number">-1</span>] &lt; diff) <span class="keyword">break</span>;</span><br><span class="line">                    </span><br><span class="line">                    <span class="keyword">if</span>(diff &gt; nums[l]+nums[r]) l++;</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span>(diff &lt; nums[l]+nums[r]) r--;</span><br><span class="line">                    <span class="keyword">else</span>&#123; <span class="comment">// equal</span></span><br><span class="line">                        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; a&#123;nums[i], nums[j], nums[l], nums[r]&#125;;</span><br><span class="line">                        res.push_back(a);</span><br><span class="line">                        l++;</span><br><span class="line">                        r--;</span><br><span class="line">                        <span class="keyword">while</span>(l &lt; r &amp;&amp; nums[l] == nums[l<span class="number">-1</span>]) l++;</span><br><span class="line">                        <span class="keyword">while</span>(r &gt; l &amp;&amp; nums[r] == nums[r+<span class="number">1</span>]) r--;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">while</span>(j + <span class="number">1</span> &lt; len - <span class="number">2</span> &amp;&amp; nums[j] == nums[j + <span class="number">1</span>]) j++; </span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">while</span>(i + <span class="number">1</span> &lt; len - <span class="number">3</span> &amp;&amp; nums[i] == nums[i + <span class="number">1</span>]) i++; </span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">return</span> res;   </span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-      
-    </div>
+After removing the second node from the end, the linked list becomes 1-&gt;2-&gt;3-&gt;5.</code></pre><p><strong>Note:</strong></p>
+<p>Given n will always be valid.</p>
+<p><strong>Follow up:</strong></p>
+<p>Could you do this in one pass?</p>
+<h2 id="题意理解"><a href="#题意理解" class="headerlink" title="题意理解"></a>题意理解</h2><p>这个题Medium，要求给定一个链表的头指针，删除这个链表内倒数第n个节点。一般来说很简单，最直观的方式就是我遍历两遍，第一遍找出总长度，计算倒数第n个节点的在顺数第几个，第二次遍历直接删除。或者遍历一次，每一步都记录下节点的值，最后找到对应的第n个删除，再用剩下的额值重新建立一个链表。这两种方法一个是加大了时间，一个增加了空间。况且题目建议一次遍历即可。</p>
+<p>那么如何做呢？可以使用递归的方式，利用函数天然的堆栈空间进行位置记录。具体采用如下策略：</p>
+<pre><code>1 从head进入，传入当前节点地址，pos位置参数（引用实参），和需要删除的节点参数n
+2 进入递归函数，直接走到最后一个，将pos=1，开始返回
+3 通过n是否等于pos来判断是否当前节点是需要删除的，如果不等于则返回当前节点，如果等于则直接返回当前节点的递归回来的节点（当前节点的下一个节点）
+4 递归结束后直接返回删除对应位置节点之后的链表的head节点</code></pre><p>代码如下，faster than 100% exampls。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode *next;</span></span><br><span class="line"><span class="comment"> *     ListNode(int x) : val(x), next(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">ListNode* <span class="title">recNode</span><span class="params">(ListNode* node, <span class="keyword">int</span> &amp;pos, <span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(node-&gt;next == <span class="literal">NULL</span>)&#123;</span><br><span class="line">            pos = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span>(n == pos)&#123;</span><br><span class="line">                pos = INT_MAX;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> node;</span><br><span class="line">        &#125;;</span><br><span class="line">        </span><br><span class="line">        ListNode* bnode = recNode(node-&gt;next, pos, n);</span><br><span class="line">        </span><br><span class="line">        pos = (INT_MAX==pos) ? pos : pos + <span class="number">1</span>;</span><br><span class="line">        node-&gt;next = bnode;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(n == pos) &#123;</span><br><span class="line">            pos = INT_MAX;</span><br><span class="line">            <span class="keyword">return</span> bnode;</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">return</span> node;    </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">ListNode* <span class="title">removeNthFromEnd</span><span class="params">(ListNode* head, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(head == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">int</span> pos = INT_MAX;</span><br><span class="line">        <span class="keyword">return</span> recNode(head, pos, n);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
+<p>BitBrave，2019-04-22</p>
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/11/LeetCode(100.%20Same%20Tree)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/05/11/LeetCode(100.%20Same%20Tree)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(100. Same Tree)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2019-05-11 10:09:03" itemprop="dateCreated datePublished" datetime="2019-05-11T10:09:03+08:00">2019-05-11</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-100-Same-Tree-题解"><a href="#LeetCode-100-Same-Tree-题解" class="headerlink" title="LeetCode(100. Same Tree)题解"></a>LeetCode(100. Same Tree)题解</h1><hr>
-<p>Given two binary trees, write a function to check if they are the same or not.</p>
-<p>Two binary trees are considered the same if they are structurally identical and the nodes have the same value.</p>
-<p>Example 1:</p>
-<pre><code>Input:     1         1
-        / \       / \
-        2   3     2   3
-
-        [1,2,3],   [1,2,3]
-
-Output: true</code></pre><p>Example 2:</p>
-<pre><code>Input:     1         1
-        /           \
-        2             2
-
-        [1,2],     [1,null,2]
-
-Output: false</code></pre><p>Example 3:</p>
-<pre><code>Input:     1         1
-        / \       / \
-        2   1     1   2
-
-        [1,2,1],   [1,1,2]
-
-Output: false</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Easy题，直接使用递归计算即可。首先比较根节点，然后比较左子树和右子树，只有都相同才能返回True，否则False。</p>
-<p>代码如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isSameTree</span><span class="params">(TreeNode* p, TreeNode* q)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(p==<span class="literal">NULL</span>) <span class="keyword">return</span> q==<span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">if</span>(q==<span class="literal">NULL</span>) <span class="keyword">return</span> p==<span class="literal">NULL</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> p-&gt;val==q-&gt;val &amp;&amp; isSameTree(p-&gt;left, q-&gt;left) &amp;&amp; isSameTree(p-&gt;right, q-&gt;right);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
       
     </div>
 
@@ -411,6 +333,89 @@ Output: false</code></pre><p>这题要求使用p去生成s，s是一串英文字
 3.  P[i][j] = P[i - 1][j] &amp;&amp; (s[i - 1] == p[j - 2] || p[j - 2] == &apos;.&apos;), if p[j - 1] == &apos;*&apos; and the pattern repeats for at least 1 times.</code></pre><p>链接在此：<a href="https://leetcode.com/problems/regular-expression-matching/discuss/5684/c-on-space-dp" target="_blank" rel="noopener">https://leetcode.com/problems/regular-expression-matching/discuss/5684/c-on-space-dp</a></p>
 <p>BitBrave, 2019-04-16.</p>
 
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/11/LeetCode(100.%20Same%20Tree)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/05/11/LeetCode(100.%20Same%20Tree)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(100. Same Tree)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-05-11 10:09:03" itemprop="dateCreated datePublished" datetime="2019-05-11T10:09:03+08:00">2019-05-11</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-100-Same-Tree-题解"><a href="#LeetCode-100-Same-Tree-题解" class="headerlink" title="LeetCode(100. Same Tree)题解"></a>LeetCode(100. Same Tree)题解</h1><hr>
+<p>Given two binary trees, write a function to check if they are the same or not.</p>
+<p>Two binary trees are considered the same if they are structurally identical and the nodes have the same value.</p>
+<p>Example 1:</p>
+<pre><code>Input:     1         1
+        / \       / \
+        2   3     2   3
+
+        [1,2,3],   [1,2,3]
+
+Output: true</code></pre><p>Example 2:</p>
+<pre><code>Input:     1         1
+        /           \
+        2             2
+
+        [1,2],     [1,null,2]
+
+Output: false</code></pre><p>Example 3:</p>
+<pre><code>Input:     1         1
+        / \       / \
+        2   1     1   2
+
+        [1,2,1],   [1,1,2]
+
+Output: false</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Easy题，直接使用递归计算即可。首先比较根节点，然后比较左子树和右子树，只有都相同才能返回True，否则False。</p>
+<p>代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isSameTree</span><span class="params">(TreeNode* p, TreeNode* q)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(p==<span class="literal">NULL</span>) <span class="keyword">return</span> q==<span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">if</span>(q==<span class="literal">NULL</span>) <span class="keyword">return</span> p==<span class="literal">NULL</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> p-&gt;val==q-&gt;val &amp;&amp; isSameTree(p-&gt;left, q-&gt;left) &amp;&amp; isSameTree(p-&gt;right, q-&gt;right);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
       
     </div>
 
