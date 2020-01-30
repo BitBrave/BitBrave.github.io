@@ -177,6 +177,97 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(856.%20Score%20of%20Parentheses)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(856.%20Score%20of%20Parentheses)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(856. Score of Parentheses)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-856-Score-of-Parentheses-题解"><a href="#LeetCode-856-Score-of-Parentheses-题解" class="headerlink" title="LeetCode(856. Score of Parentheses)题解"></a>LeetCode(856. Score of Parentheses)题解</h1><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个括号拓扑匹配的字符串，根据一定的规则计算其得分，单独的’()’得分1，挨着的(**)(****)表示就将其相加，包围着的((**))外部就乘以2.</p>
+<p>首先说说我的解法，就是遍历字符串，找出第一个(对应的右括号，然后判断这个字符串是不是全包围，如果是就用2乘以递归相同的函数，只不过输入的字符串变为S[1,len-1]的返回值，否则就分别前后相加即可。</p>
+<p>代码如下，时间复杂度O(n2)，空间复杂度O(1)。</p>
+<p><code>Runtime: 4 ms, faster than 56.50% of C++ online submissions for Score of Parentheses.</code></p>
+<p><code>Memory Usage: 9 MB, less than 12.50% of C++ online submissions for Score of Parentheses.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">scoreOfParentheses</span><span class="params">(<span class="built_in">string</span> S)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = S.<span class="built_in">size</span>(), left = <span class="number">0</span>, right = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span>(len == <span class="number">2</span>) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(S[i] == <span class="string">'('</span>) left++;</span><br><span class="line">            <span class="keyword">else</span> right++;</span><br><span class="line">            <span class="keyword">if</span>(left == right) <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(left + right == len) <span class="keyword">return</span> <span class="number">2</span> * scoreOfParentheses(S.substr(<span class="number">1</span>, len<span class="number">-2</span>));</span><br><span class="line">        <span class="keyword">return</span> scoreOfParentheses(S.substr(<span class="number">0</span>, left+right)) + scoreOfParentheses(S.substr(left + right));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>还有网络找到的。</p>
+<p>一种方法是直接通过栈来模拟操作，这样简单易懂，如果遇到“(”，就压入栈。如果遇到右括号，判断栈顶元素是什么，如果是“(”，证明出现了”()”的情况，那么把栈顶元素弹出，压入“1”。如果是其他情况，那么先判断栈顶是不是数字，如果是数字，证明是（()()）的结构，那么这时的栈情况是（1,1），所以应该把栈里的元素相加再压入栈，一直遇到左括号，这时情况是（2），所以应该把数字2乘以2。再压入栈，这样操作完栈里会有一堆数字，我们把数字相加即可。</p>
+<p>代码如下，时间复杂度O(n)，空间复杂度O(n)。</p>
+<p><code>Runtime: 0 ms, faster than 100.00% of C++ online submissions for Score of Parentheses.</code></p>
+<p><code>Memory Usage: 8.5 MB, less than 37.50% of C++ online submissions for Score of Parentheses.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">scoreOfParentheses</span><span class="params">(<span class="built_in">string</span> S)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = S.<span class="built_in">size</span>();</span><br><span class="line">        <span class="built_in">stack</span>&lt;<span class="keyword">int</span>&gt; ST; <span class="comment">// '(' = -2</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(S[i] == <span class="string">'('</span>) ST.push(<span class="number">-2</span>);</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="keyword">if</span>(ST.top() == <span class="number">-2</span>)&#123;</span><br><span class="line">                    ST.pop();</span><br><span class="line">                    ST.push(<span class="number">1</span>);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span>&#123;</span><br><span class="line">                    <span class="keyword">int</span> t = ST.top(); ST.pop();</span><br><span class="line">                    <span class="keyword">while</span>(ST.top() != <span class="number">-2</span>)&#123;</span><br><span class="line">                        t += ST.top(); ST.pop();</span><br><span class="line">                    &#125;</span><br><span class="line">                    ST.pop();</span><br><span class="line">                    ST.push(<span class="number">2</span> * t);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> res = ST.top(); ST.pop();</span><br><span class="line">        <span class="keyword">while</span>(!ST.empty())&#123;</span><br><span class="line">            res += ST.top(); ST.pop();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>还有一个办法也是用栈，但是思路不一样（不容易想，但是代码灰常简洁），</p>
+<p>字符串中的每个位置都有一个深度，围绕它的一些匹配括号。 例如：（（）（.（））中的点的深度为2，因为这些括号满足这个规律：（<strong>（.</strong>））</p>
+<p>我们的目标是将目前分数score保持在我们目前所处的深度。 当我们看到一个开括号时，我们增加了深度，我们在新深度的位置插入0。当我们看到一个结束括号时，我们将栈顶元素*2+下一个栈顶元素的的值加入新的栈。</p>
+<p>例如，当遇到（（）（（）））时，我们的堆栈将如下所示：</p>
+<ul>
+<li>[0, 0] 遇到 (</li>
+<li>[0, 0, 0] 遇到 (</li>
+<li>[0, 1] 遇到 )</li>
+<li>[0, 1, 0] 遇到 (</li>
+<li>[0, 1, 0, 0] 遇到 (</li>
+<li>[0, 1, 1] 遇到 )</li>
+<li>[0, 3] 遇到 )</li>
+<li>[6] 遇到 )</li>
+</ul>
+<p>代码如下，时间复杂度O(n)，空间复杂度O(n)。</p>
+<p><code>Runtime: 0 ms, faster than 100.00% of C++ online submissions for Score of Parentheses.</code></p>
+<p><code>Memory Usage: 8.3 MB, less than 100.00% of C++ online submissions for Score of Parentheses.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">scoreOfParentheses</span><span class="params">(<span class="built_in">string</span> S)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">stack</span>&lt;<span class="keyword">int</span>&gt; ST;</span><br><span class="line">        <span class="keyword">int</span> a, b;</span><br><span class="line">        </span><br><span class="line">        ST.push(<span class="number">0</span>);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> s : S)&#123;</span><br><span class="line">            <span class="keyword">if</span>(s == <span class="string">'('</span>) ST.push(<span class="number">0</span>);</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                a = ST.top(); ST.pop();</span><br><span class="line">                b = ST.top(); ST.pop();</span><br><span class="line">                ST.push(b + <span class="built_in">max</span>(a * <span class="number">2</span>, <span class="number">1</span>));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> ST.top();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave， 2019-10-09</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(858.%20Mirror%20Reflection)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -951,100 +1042,6 @@ Output: false</code></pre><h2 id="解题思路"><a href="#解题思路" class="h
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(873.%20Length%20of%20Longest%20Fibonacci%20Subsequence)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(873.%20Length%20of%20Longest%20Fibonacci%20Subsequence)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(873. Length of Longest Fibonacci Subsequence)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-873-Length-of-Longest-Fibonacci-Subsequence-题解"><a href="#LeetCode-873-Length-of-Longest-Fibonacci-Subsequence-题解" class="headerlink" title="LeetCode(873. Length of Longest Fibonacci Subsequence)题解"></a>LeetCode(873. Length of Longest Fibonacci Subsequence)题解</h1><p>A sequence <code>X_1, X_2, ..., X_n</code> is <em>fibonacci-like</em> if:</p>
-<ul>
-<li><code>n &gt;= 3</code></li>
-<li><code>X_i + X_{i+1} = X_{i+2}</code> for all <code>i + 2 &lt;= n</code></li>
-</ul>
-<p>Given a <strong>strictly increasing</strong> array <code>A</code> of positive integers forming a sequence, find the <strong>length</strong> of the longest fibonacci-like subsequence of <code>A</code>.  If one does not exist, return 0.</p>
-<p>(<em>Recall that a subsequence is derived from another sequence A by deleting any number of elements (including none) from A, without changing the order of the remaining elements.  For example, [3, 5, 8] is a subsequence of [3, 4, 5, 6, 7, 8].</em>)</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Input: [1,2,3,4,5,6,7,8]</span><br><span class="line">Output: 5</span><br><span class="line">Explanation:</span><br><span class="line">The longest subsequence that is fibonacci-like: [1,2,3,5,8].</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Input: [1,3,7,11,12,14,18]</span><br><span class="line">Output: 3</span><br><span class="line">Explanation:</span><br><span class="line">The longest subsequence that is fibonacci-like:</span><br><span class="line">[1,11,12], [3,11,14] or [7,11,18].</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Note:</strong></p>
-<ul>
-<li><code>3 &lt;= A.length &lt;= 1000</code></li>
-<li><code>1 &lt;= A[0] &lt; A[1] &lt; ... &lt; A[A.length - 1] &lt;= 10^9</code></li>
-<li><em>(The time limit has been reduced by 50% for submissions in Java, C, and C++.)</em></li>
-</ul>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个递增的数字序列，求出其中最长的斐波那契子序列。</p>
-<p>子序列不要求数据是挨着的，只要数据是保持顺序即可，因此我们可以首先使用最简单的办法。</p>
-<p>使用一个set，记录数组中每个数字。然后依次从头到尾随便选两个数，然后作为斐波那契数列的前两个，开始向后寻找，因为数据是递增的，所以只需要向后找即可。每次计算两个数相加，查看在不在set内，在就继续往下找，不在就再另外选一对，这个过程中记住最长的合法数列。</p>
-<p>一个小trick是，如果两个数相加大于A中最后一个数也就是最大的数，就没有必要再计算了，因为数据只会越来越大。</p>
-<p>这样时间复杂度是O(n3)，空间复杂度O(n)，代码如下。</p>
-<p><code>Runtime: 288 ms, faster than 17.09% of C++ online submissions for Length of Longest Fibonacci Subsequence.</code></p>
-<p><code>Memory Usage: 9.7 MB, less than 42.86% of C++ online submissions for Length of Longest Fibonacci Subsequence.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">lenLongestFibSubseq</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = A.<span class="built_in">size</span>(), ret = <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">set</span>&lt;<span class="keyword">int</span>&gt; S;</span><br><span class="line">        <span class="built_in">set</span>&lt;pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt;&gt; S_P;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> a : A) S.insert(a);</span><br><span class="line">        <span class="keyword">int</span> a, b, s;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=i+<span class="number">1</span>; j&lt;len; j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(A[i] + A[j] &gt; A[len<span class="number">-1</span>]) <span class="keyword">break</span>;</span><br><span class="line">                a = A[i];</span><br><span class="line">                b = A[j];</span><br><span class="line">                s = <span class="number">2</span>;</span><br><span class="line">                <span class="keyword">while</span>(b &lt;= A[len<span class="number">-1</span>] &amp;&amp; S.<span class="built_in">find</span>(a+b) != S.<span class="built_in">end</span>())&#123;</span><br><span class="line">                    s++;</span><br><span class="line">                    <span class="keyword">int</span> tmp = a;</span><br><span class="line">                    a = b;</span><br><span class="line">                    b = tmp + b;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span>(s &gt;= <span class="number">3</span>) ret = <span class="built_in">max</span>(ret, s);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>还有一种使用DP的办法，用一个二维数组DC,DC[i][j]表示以A[i]和A[j]j结尾的最长的斐波那契数列长度，那么久很容易构造一个DP方程出来。这样的时间复杂度就是O(n2)，但是也有一个小Trick就是如果A[j]-A[i]大于等于A[i]的话，第二层循环就不用再寻找了，因为我们要找的值必须要比A[i]小。</p>
-<p>代码如下，时间和空间复杂度理论上均为O(n2)，但加上Trick之后，效果提升很多。</p>
-<p><code>Runtime: 132 ms, faster than 76.28% of C++ online submissions for Length of Longest Fibonacci Subsequence.</code></p>
-<p><code>Memory Usage: 62.5 MB, less than 14.29% of C++ online submissions for Length of Longest Fibonacci Subsequence.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">lenLongestFibSubseq</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = A.<span class="built_in">size</span>(), ret = <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">map</span>&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; M;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">DC</span><span class="params">(len, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(len, <span class="number">0</span>))</span></span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++) M[A[i]] = i;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=i+<span class="number">1</span>; j&lt;len; j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(A[j]-A[i] &gt;= A[i]) <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">if</span>(M.<span class="built_in">find</span>(A[j]-A[i]) == M.<span class="built_in">end</span>() || M[A[j]-A[i]]&gt;=i) <span class="keyword">continue</span>;</span><br><span class="line">                DC[i][j] = <span class="built_in">max</span>(<span class="number">3</span>, DC[M[A[j]-A[i]]][i] + <span class="number">1</span>);</span><br><span class="line">                ret = <span class="built_in">max</span>(ret, DC[i][j]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2019-11-04</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1117,7 +1114,7 @@ Output: false</code></pre><h2 id="解题思路"><a href="#解题思路" class="h
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">257</span>
+          <span class="site-state-item-count">258</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

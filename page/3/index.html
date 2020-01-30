@@ -177,6 +177,86 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(113.%20Path%20Sum%20II)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(113.%20Path%20Sum%20II)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(113. Path Sum II)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-113-Path-Sum-II-题解"><a href="#LeetCode-113-Path-Sum-II-题解" class="headerlink" title="LeetCode(113. Path Sum II)题解"></a>LeetCode(113. Path Sum II)题解</h1><hr>
+<p>Given a binary tree and a sum, find all root-to-leaf paths where each path’s sum equals the given sum.</p>
+<p>Note: A leaf is a node with no children.</p>
+<p>Example:</p>
+<pre><code>Given the below binary tree and sum = 22,
+
+       5
+      / \
+     4   8
+    /   / \
+   11  13  4
+  /  \    / \
+ 7    2  5   1</code></pre><p>Return:</p>
+<pre><code>[
+    [5,4,11,2],
+    [5,8,4,5]
+]</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个二叉树，和一个值，从二叉树中找出所有从根节点出发向下走到叶子节点的路径，其节点之和为给定的值。</p>
+<p>可以使用递归的方法，使用vector记录一个路径，走到当前节点，看是否当前节点加上之前的和为给定的值。如果等于则存储，如果大于就放弃这条路，如果小于则加入，再继续向下走。</p>
+<p>代码如下：</p>
+<p>Runtime: 24 ms, faster than 39.82% of C++ online submissions for Path Sum II.<br>Memory Usage: 38.2 MB, less than 12.98% of C++ online submissions for Path Sum II.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; res;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">pathSum_</span><span class="params">(TreeNode* root, <span class="keyword">int</span> sum, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; tmp, <span class="keyword">int</span> lsum)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="literal">NULL</span>) <span class="keyword">return</span>;</span><br><span class="line">        tmp.push_back(root-&gt;val);</span><br><span class="line">        lsum += root-&gt;val;</span><br><span class="line">        <span class="keyword">if</span>(lsum == sum &amp;&amp; root-&gt;left == <span class="literal">NULL</span> &amp;&amp; root-&gt;right == <span class="literal">NULL</span>)&#123;</span><br><span class="line">            res.push_back(tmp);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        pathSum_(root-&gt;left, sum, tmp, lsum);</span><br><span class="line">        pathSum_(root-&gt;right, sum, tmp, lsum);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">pathSum</span><span class="params">(TreeNode* root, <span class="keyword">int</span> sum)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; tmp;</span><br><span class="line">        <span class="keyword">int</span> lsum = <span class="number">0</span>;</span><br><span class="line">        pathSum_(root, sum, tmp, lsum);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125; </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-06-30</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(1139.%20Largest%201-Bordered%20Square)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -947,104 +1027,6 @@ Output: [1,3,3,1]</code></pre><p>Follow up:</p>
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(12.%20Integer%20to%20Roman)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(12.%20Integer%20to%20Roman)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(12. Integer to Roman)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-12-Integer-to-Roman-题解"><a href="#LeetCode-12-Integer-to-Roman-题解" class="headerlink" title="LeetCode(12. Integer to Roman)题解"></a>LeetCode(12. Integer to Roman)题解</h1><hr>
-<p>原文如下：<br>Roman numerals are represented by seven different symbols: I, V, X, L, C, D and M.</p>
-<pre><code>Symbol       Value
-I             1
-V             5
-X             10
-L             50
-C             100
-D             500
-M             1000</code></pre><p>For example, two is written as II in Roman numeral, just two one’s added together. Twelve is written as, XII, which is simply X + II. The number twenty seven is written as XXVII, which is XX + V + II.</p>
-<p>Roman numerals are usually written largest to smallest from left to right. However, the numeral for four is not IIII. Instead, the number four is written as IV. Because the one is before the five we subtract it making four. The same principle applies to the number nine, which is written as IX. There are six instances where subtraction is used:</p>
-<pre><code>I can be placed before V (5) and X (10) to make 4 and 9. 
-X can be placed before L (50) and C (100) to make 40 and 90. 
-C can be placed before D (500) and M (1000) to make 400 and 900.
-Given an integer, convert it to a roman numeral. Input is guaranteed to be within the range from 1 to 3999.
-
-Example 1:
-
-Input: 3
-Output: &quot;III&quot;
-Example 2:
-
-Input: 4
-Output: &quot;IV&quot;
-Example 3:
-
-Input: 9
-Output: &quot;IX&quot;
-Example 4:
-
-Input: 58
-Output: &quot;LVIII&quot;
-Explanation: L = 50, V = 5, III = 3.
-Example 5:
-
-Input: 1994
-Output: &quot;MCMXCIV&quot;
-Explanation: M = 1000, CM = 900, XC = 90 and IV = 4.</code></pre><h2 id="题目思路"><a href="#题目思路" class="headerlink" title="题目思路"></a>题目思路</h2><p>这是一个Medium的题目，但其实很简单。只是将数字转为对应的罗马字符而已，数字大小在1～3999之间。因此可以从左到右分别取对应位数上的数，然后转为对应的Roman字符即可。因为确实很简单，就不过多分析了。代码如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">string</span> <span class="title">transNumToSym</span><span class="params">(<span class="keyword">int</span> num, <span class="built_in">string</span> a, <span class="built_in">string</span> b, <span class="built_in">string</span> c)</span></span>&#123;</span><br><span class="line">        <span class="keyword">switch</span>(num)&#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">0</span>: <span class="keyword">return</span> <span class="string">""</span>; </span><br><span class="line">            <span class="keyword">case</span> <span class="number">1</span>: <span class="keyword">return</span> c; </span><br><span class="line">            <span class="keyword">case</span> <span class="number">2</span>: <span class="keyword">return</span> c+c; </span><br><span class="line">            <span class="keyword">case</span> <span class="number">3</span>: <span class="keyword">return</span> c+c+c; </span><br><span class="line">            <span class="keyword">case</span> <span class="number">4</span>: <span class="keyword">return</span> c+b; </span><br><span class="line">            <span class="keyword">case</span> <span class="number">5</span>: <span class="keyword">return</span> b;     </span><br><span class="line">            <span class="keyword">case</span> <span class="number">6</span>: <span class="keyword">return</span> b+c; </span><br><span class="line">            <span class="keyword">case</span> <span class="number">7</span>: <span class="keyword">return</span> b+c+c; </span><br><span class="line">            <span class="keyword">case</span> <span class="number">8</span>: <span class="keyword">return</span> b+c+c+c; </span><br><span class="line">            <span class="keyword">case</span> <span class="number">9</span>: <span class="keyword">return</span> c+a; </span><br><span class="line">            <span class="keyword">default</span>:</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">""</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="built_in">string</span> <span class="title">intToRoman</span><span class="params">(<span class="keyword">int</span> num)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">string</span> symbol = <span class="string">""</span>;</span><br><span class="line">        symbol += transNumToSym(num / <span class="number">1000</span>, <span class="string">"M"</span>, <span class="string">"M"</span>, <span class="string">"M"</span>); <span class="comment">// 1994-&gt;1=M</span></span><br><span class="line">        num %= <span class="number">1000</span>;</span><br><span class="line">        symbol += transNumToSym(num / <span class="number">100</span>, <span class="string">"M"</span>, <span class="string">"D"</span>,<span class="string">"C"</span>); <span class="comment">// 994-&gt;9=CM</span></span><br><span class="line">        num %= <span class="number">100</span>;</span><br><span class="line">        symbol += transNumToSym(num / <span class="number">10</span>, <span class="string">"C"</span>, <span class="string">"L"</span>,<span class="string">"X"</span>); <span class="comment">// 94-&gt;9=XC</span></span><br><span class="line">        num %= <span class="number">10</span>;</span><br><span class="line">        symbol += transNumToSym(num, <span class="string">"X"</span>, <span class="string">"V"</span>, <span class="string">"I"</span>); <span class="comment">// 4-&gt;4=IV</span></span><br><span class="line">        <span class="keyword">return</span> symbol; <span class="comment">// MCMXCIV</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-04-18</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1117,7 +1099,7 @@ Explanation: M = 1000, CM = 900, XC = 90 and IV = 4.</code></pre><h2 id="题目�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">257</span>
+          <span class="site-state-item-count">258</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
