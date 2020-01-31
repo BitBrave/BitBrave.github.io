@@ -177,6 +177,101 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(979.%20Distribute%20Coins%20in%20Binary%20Tree%20Medium)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(979.%20Distribute%20Coins%20in%20Binary%20Tree%20Medium)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(979. Distribute Coins in Binary Tree Medium)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-979-Distribute-Coins-in-Binary-Tree-Medium-题解"><a href="#LeetCode-979-Distribute-Coins-in-Binary-Tree-Medium-题解" class="headerlink" title="LeetCode(\979. Distribute Coins in Binary Tree Medium)题解"></a>LeetCode(\979. Distribute Coins in Binary Tree Medium)题解</h1><p>Given the <code>root</code> of a binary tree with <code>N</code> nodes, each <code>node</code> in the tree has <code>node.val</code> coins, and there are <code>N</code> coins total.</p>
+<p>In one move, we may choose two adjacent nodes and move one coin from one node to another.  (The move may be from parent to child, or from child to parent.)</p>
+<p>Return the number of moves required to make every node have exactly one coin.</p>
+<p><strong>Example 1:</strong></p>
+<p><strong><img src="https://assets.leetcode.com/uploads/2019/01/18/tree1.png" alt="img"></strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: [3,0,0]</span><br><span class="line">Output: 2</span><br><span class="line">Explanation: From the root of the tree, we move one coin to its left child, and one coin to its right child.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<p><strong><img src="https://assets.leetcode.com/uploads/2019/01/18/tree2.png" alt="img"></strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: [0,3,0]</span><br><span class="line">Output: 3</span><br><span class="line">Explanation: From the left child of the root, we move two coins to the root [taking two moves].  Then, we move one coin from the root of the tree to the right child.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 3:</strong></p>
+<p><strong><img src="https://assets.leetcode.com/uploads/2019/01/18/tree3.png" alt="img"></strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: [1,0,2]</span><br><span class="line">Output: 2</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 4:</strong></p>
+<p><strong><img src="https://assets.leetcode.com/uploads/2019/01/18/tree4.png" alt="img"></strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: [1,0,0,null,3]</span><br><span class="line">Output: 4</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Note:</strong></p>
+<ol>
+<li><code>1&lt;= N &lt;= 100</code></li>
+<li><code>0 &lt;= node.val &lt;= N</code></li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出了一个二叉树，每个节点都有个数字代表当前节点有多少个金币，保证所有节点的金币数量之和等于节点个数。现在要求把金币平分到每个节点，使得每个节点都只放1个金币。问需要的移动次数是多少？</p>
+<p>首先，给定了一个二叉树的状态，只要不做重复移动，那么可以证明，移动是无状态的。也就是说，最终的移动次数不会因为先给谁后给谁，或者先移动几个再移动几个，再或者把某些金币移动到近的节点把另外一些金币移动到远的节点而有所不同。</p>
+<p>一开始我的思路就是分别统计左右子树缺少的金币个数，然后把每个节点和其子树总体的金币分配到位。累计所有节点和其子树所需要的移动次数就是结果。</p>
+<p>但是这个题可以使用更简单的办法做。因为从叶子到跟寻找，对于每个节点，只能剩下一个。多了的值肯定要全给父亲，少的值全问父亲要，统计一下就好了。</p>
+<p>因此我们建立一个DFS，输入根节点，返回这个二叉树的缺少或多余的金币，如果大于0说明多了，小于说明少了，等于则刚刚好。那么对于当前的节点来说，假设我们把左右都DFS完毕，那么这时候根据左边和右边的情况，假设我们已经将缺少或者多余的金币的需求都放在了左右子根节点上（就是我们只需要再移动一次就可以了）。我们还需要将金币进行移动，根据推算这个移动从次数就是abs(DFS(left))+abs(DFS(right))。可以检验不管是什么情况，最后都是这个表达式。而DFS返回的值应该为DFS(left)+DFS(right)+root-&gt;val-1，表示当前根节点所代表的子树需要从根节点的父节点拿多少金币或给出多少金币。</p>
+<p>因此，我们在DFS的过程中，每次到达一个节点，都计算左子树上传或下载多少个金币，右子树需要上传或下载多少个金币，将二者相加即可。</p>
+<p>代码如下，时间复杂度O(n)，空间复杂度O(1)。</p>
+<p><code>Runtime: 4 ms, faster than 91.60% of C++ online submissions for Distribute Coins in Binary Tree.</code></p>
+<p><code>Memory Usage: 13.1 MB, less than 94.44% of C++ online submissions for Distribute Coins in Binary Tree.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> ret;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">DFS</span><span class="params">(TreeNode* root)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> l = DFS(root-&gt;left), r = DFS(root-&gt;right);</span><br><span class="line">        ret += <span class="built_in">abs</span>(l) + <span class="built_in">abs</span>(r);</span><br><span class="line">        <span class="keyword">return</span> root-&gt;val - <span class="number">1</span> + l + r;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">distributeCoins</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        ret = <span class="number">0</span>;</span><br><span class="line">        DFS(root);</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2019-11-20</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(98.%20Validate%20Binary%20Search%20Tree)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -975,7 +1070,7 @@ The median is (2 + 3)/2 = 2.5</code></pre><p>这道题让我们求两个有序�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">258</span>
+          <span class="site-state-item-count">259</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
