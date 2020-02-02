@@ -177,6 +177,94 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(89.%20Gray%20Code)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(89.%20Gray%20Code)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(89. Gray Code)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-89-Gray-Code-题解"><a href="#LeetCode-89-Gray-Code-题解" class="headerlink" title="LeetCode(89. Gray Code)题解"></a>LeetCode(89. Gray Code)题解</h1><hr>
+<p>The gray code is a binary numeral system where two successive values differ in only one bit.</p>
+<p>Given a non-negative integer n representing the total number of bits in the code, print the sequence of gray code. A gray code sequence must begin with 0.</p>
+<p>Example 1:</p>
+<pre><code>Input: 2
+Output: [0,1,3,2]
+Explanation:
+00 - 0
+01 - 1
+11 - 3
+10 - 2
+
+For a given n, a gray code sequence may not be uniquely defined.
+For example, [0,2,3,1] is also a valid gray code sequence.
+
+00 - 0
+10 - 2
+11 - 3
+01 - 1</code></pre><p>Example 2:</p>
+<pre><code>Input: 0
+Output: [0]
+Explanation: We define the gray code sequence to begin with 0.
+            A gray code sequence of n has size = 2n, which for n = 0 the size is 20 = 1.
+            Therefore, for n = 0 the gray code sequence is [0].</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>灰色代码是一个二进制数字系统，其中两个连续的值只相差一位。给定一个非负整数n表示代码中的总比特数，打印灰色代码序列。灰色代码序列必须以0开头。</p>
+<p>直白的解释就是，对给定的n，设计n个01组成的序列，一共2的n次方个，一次排列，使得每个序列之间只相差一个字符。</p>
+<p>可以使用类似于递归的办法解决（一个for循环就可以）。假设n-1的情况下有2的n-1次方个序列已经排好了，那个扩展到n的时候。首先将0加到所有序列之上，形成一个2的n-1次方个的序列集，按顺序存储。然后将所有开头的0换成1，倒顺序存储到序列集内。如此即完成了2的n次方的组合。</p>
+<p>代码如下：</p>
+<p>Runtime: 4 ms, faster than 92.85% of C++ online submissions for Gray Code.<br>Memory Usage: 8.6 MB, less than 57.17% of C++ online submissions for Gray Code.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">grayCode</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; res;</span><br><span class="line">        <span class="keyword">int</span> len = <span class="number">1</span>, t = <span class="number">0</span>;</span><br><span class="line">        res.push_back(<span class="number">0</span>);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;n; i++)&#123;</span><br><span class="line">            t = <span class="built_in">pow</span>(<span class="number">2</span>, i);</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=len<span class="number">-1</span>; j&gt;<span class="number">-1</span>; j--) res.push_back(t + res[j]);</span><br><span class="line">            len *= <span class="number">2</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BItBrave，2019-06-19</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(890.%20Find%20and%20Replace%20Pattern)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -952,79 +1040,11 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(92.%20Reverse%20Linked%20List%20II)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(92.%20Reverse%20Linked%20List%20II)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(92. Reverse Linked List II)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-92-Reverse-Linked-List-II-题解"><a href="#LeetCode-92-Reverse-Linked-List-II-题解" class="headerlink" title="LeetCode(92. Reverse Linked List II)题解"></a>LeetCode(92. Reverse Linked List II)题解</h1><hr>
-<p>Reverse a linked list from position m to n. Do it in one-pass.</p>
-<p>Note: 1 ≤ m ≤ n ≤ length of list.</p>
-<p>Example:</p>
-<pre><code>Input: 1-&gt;2-&gt;3-&gt;4-&gt;5-&gt;NULL, m = 2, n = 4
-Output: 1-&gt;4-&gt;3-&gt;2-&gt;5-&gt;NULL</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>一次遍历的过程中，将一个链表的从m到n位置之间的链表进行反转。</p>
-<p>可以使用一个for循环的办法，用一个数C记录遍历到的位置。在C开始的时候返回的正常的节点下一个指针，在C在m和n之中的时候开始进行反向。</p>
-<p>具体代码如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode *next;</span></span><br><span class="line"><span class="comment"> *     ListNode(int x) : val(x), next(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">ListNode* <span class="title">reverseBetween</span><span class="params">(ListNode* head, <span class="keyword">int</span> m, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(m == n) <span class="keyword">return</span> head;</span><br><span class="line">        <span class="keyword">int</span> c = <span class="number">1</span>;</span><br><span class="line">        ListNode *fore = head, *back = head, *Fore = <span class="literal">NULL</span>, *h;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span>(c &lt; m)&#123;</span><br><span class="line">            Fore = fore;</span><br><span class="line">            fore = fore-&gt;next;</span><br><span class="line">            c++;</span><br><span class="line">        &#125;</span><br><span class="line">        back = fore-&gt;next;</span><br><span class="line">        h = fore;</span><br><span class="line">        <span class="keyword">while</span>(c &lt; n)&#123;</span><br><span class="line">            fore-&gt;next = back-&gt;next;</span><br><span class="line">            back-&gt;next = h;</span><br><span class="line">            h = back;</span><br><span class="line">            back = fore-&gt;next;</span><br><span class="line">            c++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(Fore == <span class="literal">NULL</span>) <span class="keyword">return</span> h;</span><br><span class="line">        </span><br><span class="line">        Fore-&gt;next = h;</span><br><span class="line">        <span class="keyword">return</span> head; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-06-23</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/22/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/22/">22</a><span class="page-number current">23</span><a class="page-number" href="/page/24/">24</a><span class="space">&hellip;</span><a class="page-number" href="/page/26/">26</a><a class="extend next" rel="next" href="/page/24/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/22/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/22/">22</a><span class="page-number current">23</span><a class="page-number" href="/page/24/">24</a><span class="space">&hellip;</span><a class="page-number" href="/page/27/">27</a><a class="extend next" rel="next" href="/page/24/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1092,7 +1112,7 @@ Output: 1-&gt;4-&gt;3-&gt;2-&gt;5-&gt;NULL</code></pre><h2 id="解题思路"><a 
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">260</span>
+          <span class="site-state-item-count">261</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

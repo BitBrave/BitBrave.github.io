@@ -177,6 +177,85 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(79.%20Word%20Search)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(79.%20Word%20Search)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(79. Word Search)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-79-Word-Search-题解"><a href="#LeetCode-79-Word-Search-题解" class="headerlink" title="LeetCode(79. Word Search)题解"></a>LeetCode(79. Word Search)题解</h1><hr>
+<p>Given a 2D board and a word, find if the word exists in the grid.</p>
+<p>The word can be constructed from letters of sequentially adjacent cell, where “adjacent” cells are those horizontally or vertically neighboring. The same letter cell may not be used more than once.</p>
+<p>Example:</p>
+<pre><code>board =
+[
+[&apos;A&apos;,&apos;B&apos;,&apos;C&apos;,&apos;E&apos;],
+[&apos;S&apos;,&apos;F&apos;,&apos;C&apos;,&apos;S&apos;],
+[&apos;A&apos;,&apos;D&apos;,&apos;E&apos;,&apos;E&apos;]
+]
+
+Given word = &quot;ABCCED&quot;, return true.
+Given word = &quot;SEE&quot;, return true.
+Given word = &quot;ABCB&quot;, return false.</code></pre><h1 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h1><p>给一个记录多个字符的二维矩阵，再给出一个字符串，从矩阵中任意一个位置开始搜索，上下左右皆可，每个位置只能走一遍最多。查看是否可以在矩阵中找到这样一个字符串，找到返回true，没有返回false。</p>
+<p>使用DFS，当前位置不符合返回true，否则从上下左右中继续寻找下一个。比如设置一个函数，传入参数矩阵，一个对应的位置矩阵，当前要比较的矩阵的位置，当前要比较的字符。有以下几种情况。</p>
+<p>位置已经遍历过了，返回false。</p>
+<p>位置还没有被遍历：</p>
+<p>1 字符不合适，返回false<br>2 向上走，能OK就返回true。否则向下走，能OK就返回true，向左走，能OK就返回true，向右走，能OK就返回true，否则返回false。</p>
+<p>代码如如下：<br>Runtime: 296 ms, faster than 26.74% of C++ online submissions for Word Search.<br>Memory Usage: 159.2 MB, less than 11.37% of C++ online submissions for Word Search.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">dfs</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">char</span>&gt;&gt;&amp; board, <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">bool</span>&gt;&gt;&amp; pos, <span class="keyword">int</span> row, <span class="keyword">int</span> col, <span class="keyword">int</span> i, <span class="keyword">int</span> j, <span class="built_in">string</span> <span class="keyword">word</span>, <span class="keyword">int</span> sta, <span class="keyword">int</span> len)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(sta&gt;=len) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">if</span>(i&lt;<span class="number">0</span> || i&gt;=row) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">if</span>(j&lt;<span class="number">0</span> || j&gt;=col) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">if</span>(pos[i][j] == <span class="literal">false</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">if</span>(board[i][j]!=<span class="keyword">word</span>[sta]) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        </span><br><span class="line">        pos[i][j] = <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">if</span>(dfs(board, pos, row, col, i<span class="number">-1</span>, j, <span class="keyword">word</span>, sta+<span class="number">1</span>, len)) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">if</span>(dfs(board, pos, row, col, i, j<span class="number">-1</span>, <span class="keyword">word</span>, sta+<span class="number">1</span>, len)) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">if</span>(dfs(board, pos, row, col, i+<span class="number">1</span>, j, <span class="keyword">word</span>, sta+<span class="number">1</span>, len)) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">if</span>(dfs(board, pos, row, col, i, j+<span class="number">1</span>, <span class="keyword">word</span>, sta+<span class="number">1</span>, len)) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        pos[i][j] = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">exist</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">char</span>&gt;&gt;&amp; board, <span class="built_in">string</span> <span class="keyword">word</span>)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> row = board.<span class="built_in">size</span>(), col = board[<span class="number">0</span>].<span class="built_in">size</span>(), len = <span class="keyword">word</span>.<span class="built_in">size</span>();</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">bool</span>&gt;&gt; <span class="title">pos</span><span class="params">(row, <span class="built_in">vector</span>&lt;<span class="keyword">bool</span>&gt;(col, <span class="literal">true</span>))</span></span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;row; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;col; j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(dfs(board, pos, row, col, i, j, <span class="keyword">word</span>, <span class="number">0</span>, len)) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-06-017</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(791.%20Custom%20Sort%20String)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -915,95 +994,11 @@ S and all words in words consist only of lowercase letters</code></pre><h2 id="�
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(81.%20Search%20in%20Rotated%20Sorted%20Array%20II)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(81.%20Search%20in%20Rotated%20Sorted%20Array%20II)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(81. Search in Rotated Sorted Array II)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-81-Search-in-Rotated-Sorted-Array-II-题解"><a href="#LeetCode-81-Search-in-Rotated-Sorted-Array-II-题解" class="headerlink" title="LeetCode(81. Search in Rotated Sorted Array II)题解"></a>LeetCode(81. Search in Rotated Sorted Array II)题解</h1><hr>
-<p>Suppose an array sorted in ascending order is rotated at some pivot unknown to you beforehand.</p>
-<p>(i.e., [0,0,1,2,2,5,6] might become [2,5,6,0,0,1,2]).</p>
-<p>You are given a target value to search. If found in the array return true, otherwise return false.</p>
-<p>Example 1:</p>
-<pre><code>Input: nums = [2,5,6,0,0,1,2], target = 0
-Output: true</code></pre><p>Example 2:</p>
-<pre><code>Input: nums = [2,5,6,0,0,1,2], target = 3
-Output: false</code></pre><p>Follow up:</p>
-<pre><code>This is a follow up problem to Search in Rotated Sorted Array, where nums may contain duplicates.
-Would this affect the run-time complexity? How and why?</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个在某处旋转了的包含重复数的升序序列，从中查看是否存在特定的数。</p>
-<p>使用二分法，每次比较中间的数。出现以下几种情况</p>
-<p>中间的数小于右边的数，表示旋转的数组的旋转点在中间数左边</p>
-<p>1 等于中间数，返回true</p>
-<p>2 小于中间数，从左边数组中寻找。</p>
-<p>3 大于中间数但小于右边数，在右边数组中寻找，若大于左边数则在左边数组寻找</p>
-<p>中间的数大于右边的数，表示旋转的数组的旋转点在中间数右边</p>
-<p>1 等于中间数，返回true</p>
-<p>2 大于中间数，从右边数组中寻找。</p>
-<p>3 小于中间数但大于右边数，在左边数组中寻找，若小于右边数则在右边数组寻找</p>
-<p>中间的数等于右边的数，表示旋转的数组的旋转点在中间数右边或左边都有可能</p>
-<p>1 等于中间数，返回true</p>
-<p>2 直接二叉树，两边都寻找</p>
-<p>代码如下：<br>Runtime: 4 ms, faster than 99.77% of C++ online submissions for Search in Rotated Sorted Array II.<br>Memory Usage: 8.9 MB, less than 6.02% of C++ online submissions for Search in Rotated Sorted Array II.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">findindex</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> left, <span class="keyword">int</span> right, <span class="keyword">int</span> target)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(left&gt;right) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">if</span>(left==right) <span class="keyword">return</span> nums[left]==target;</span><br><span class="line">        <span class="keyword">int</span> med = (left+right)/<span class="number">2</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(nums[med]==nums[right])&#123;</span><br><span class="line">            <span class="keyword">if</span>(target==nums[med]) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            <span class="keyword">return</span> findindex(nums, med+<span class="number">1</span>, right<span class="number">-1</span>, target) || findindex(nums, left, med<span class="number">-1</span>, target);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(nums[med]&lt;nums[right])&#123;</span><br><span class="line">            <span class="keyword">if</span>(target==nums[med]) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            <span class="keyword">if</span>(target==nums[right]) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            <span class="keyword">if</span>(target&lt;nums[med]) <span class="keyword">return</span> findindex(nums, left, med<span class="number">-1</span>, target);</span><br><span class="line">            <span class="keyword">if</span>(target&gt;nums[right]) <span class="keyword">return</span> findindex(nums, left, med<span class="number">-1</span>, target);</span><br><span class="line">            <span class="keyword">return</span> findindex(nums, med+<span class="number">1</span>, right<span class="number">-1</span>, target);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//nums[med]&gt;nums[right])&#123;</span></span><br><span class="line">        <span class="keyword">if</span>(nums[med]&gt;nums[right])&#123;        </span><br><span class="line">            <span class="keyword">if</span>(target==nums[med]) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            <span class="keyword">if</span>(target==nums[right]) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            <span class="keyword">if</span>(target&gt;nums[med]) <span class="keyword">return</span> findindex(nums, med+<span class="number">1</span>, right<span class="number">-1</span>, target);</span><br><span class="line">            <span class="keyword">if</span>(target&lt;nums[right]) <span class="keyword">return</span> findindex(nums, med+<span class="number">1</span>, right<span class="number">-1</span>, target);</span><br><span class="line">            <span class="keyword">return</span> findindex(nums, left, med<span class="number">-1</span>, target);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">search</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span>(len==<span class="number">0</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> findindex(nums, <span class="number">0</span>, len<span class="number">-1</span>, target);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-06-18</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/17/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><span class="page-number current">18</span><a class="page-number" href="/page/19/">19</a><span class="space">&hellip;</span><a class="page-number" href="/page/26/">26</a><a class="extend next" rel="next" href="/page/19/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/17/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><span class="page-number current">18</span><a class="page-number" href="/page/19/">19</a><span class="space">&hellip;</span><a class="page-number" href="/page/27/">27</a><a class="extend next" rel="next" href="/page/19/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1071,7 +1066,7 @@ Would this affect the run-time complexity? How and why?</code></pre><h2 id="解�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">260</span>
+          <span class="site-state-item-count">261</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
