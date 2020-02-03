@@ -177,6 +177,79 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(137.%20Single%20Number%20II)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(137.%20Single%20Number%20II)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(137. Single Number II)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-137-Single-Number-II-题解"><a href="#LeetCode-137-Single-Number-II-题解" class="headerlink" title="LeetCode(137. Single Number II)题解"></a>LeetCode(137. Single Number II)题解</h1><hr>
+<p>Given a non-empty array of integers, every element appears three times except for one, which appears exactly once. Find that single one.</p>
+<p>Note:</p>
+<pre><code>Your algorithm should have a linear runtime complexity. Could you implement it without using extra memory?</code></pre><p>Example 1:</p>
+<pre><code>Input: [2,2,3,2]
+Output: 3</code></pre><p>Example 2:</p>
+<pre><code>Input: [0,1,0,1,0,1,99]
+Output: 99</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出一个数组，其中一个数出现了1次，其余所有数出现了三次，要求找出出现1次的数。并且尽量在线性时间和常量空间内得到结果。</p>
+<p>这个题是136的升级版，原来是其余数出现两次，可以使用异或的办法，因为相同数异或为0，而0异或任何数都等于原来的数。这个题变成了有三个一样的数，因此就不能简单的使用异或问题了。</p>
+<p>可以这样思考，把所有数都想象成二进制形式。那么对于每一位二进制位数上的数，假设出现只考虑出现三次的数，那么对应位置上的数一定一样，即如果是1就出现3次，是0页出现3次。因此位数上的值之和一定可以整除3. 现在加入只出现1次的，如果对应位上为1而别的数对应为0，那么肯定不能整除3，如果别的位置上为1，那么对应为之和也不能整除3，如果对应位上为0，那么不管别的数对应位上是什么，其和一定是可以整除3的。</p>
+<p>因此，结论如下，数组中所有数，对应二进制位上之和如果能整除3，表示只出现1次的数在对应位上为0，如果对应二进制位上之和不能整除3，表示只出现1次的数在对应为上为1. 这个结论同样适用于，其余数出现N次，只有一个数出现1次的情况。</p>
+<p>代码如下：</p>
+<p>Runtime: 8 ms, faster than 97.53% of C++ online submissions for Single Number II.<br>Memory Usage: 9.5 MB, less than 89.74% of C++ online submissions for Single Number II.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">singleNumber</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">bits</span><span class="params">(<span class="number">32</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>, count = <span class="number">0</span>, len = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;<span class="number">32</span>; j++)&#123;</span><br><span class="line">                bits[j] += (nums[i] &gt;&gt; j) &amp; <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">32</span>; i++)&#123;</span><br><span class="line">            res += (bits[i]%<span class="number">3</span> == <span class="number">0</span>) ? <span class="number">0</span> : (<span class="number">1</span> &lt;&lt; i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-07-16</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(138.%20Copy%20List%20with%20Random%20Pointer)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -852,82 +925,6 @@ Follow up: Recursive solution is trivial, could you do it iteratively?</code></p
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(147.%20Insertion%20Sort%20List)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(147.%20Insertion%20Sort%20List)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(147. Insertion Sort List)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-147-Insertion-Sort-List-题解"><a href="#LeetCode-147-Insertion-Sort-List-题解" class="headerlink" title="LeetCode(147. Insertion Sort List)题解"></a>LeetCode(147. Insertion Sort List)题解</h1><hr>
-<p>Sort a linked list using insertion sort.</p>
-<p><img src="https://upload.wikimedia.org/wikipedia/commons/0/0f/Insertion-sort-example-300px.gif" alt=""></p>
-<p>A graphical example of insertion sort. The partial sorted list (black) initially contains only the first element in the list.<br>With each iteration one element (red) is removed from the input data and inserted in-place into the sorted list</p>
-<p>Algorithm of Insertion Sort:</p>
-<pre><code>Insertion sort iterates, consuming one input element each repetition, and growing a sorted output list.
-At each iteration, insertion sort removes one element from the input data, finds the location it belongs within the sorted list, and inserts it there.
-It repeats until no input elements remain.</code></pre><p>Example 1:</p>
-<pre><code>Input: 4-&gt;2-&gt;1-&gt;3
-Output: 1-&gt;2-&gt;3-&gt;4</code></pre><p>Example 2:</p>
-<pre><code>Input: -1-&gt;5-&gt;3-&gt;4-&gt;0
-Output: -1-&gt;0-&gt;3-&gt;4-&gt;5</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>实现链表的插入排序。</p>
-<p>没什么好说的，民工题。每次插入从头到尾找到位置交换就可以了。</p>
-<p>代码如下</p>
-<p>Runtime: 52 ms, faster than 50.23% of C++ online submissions for Insertion Sort List.<br>Memory Usage: 9.5 MB, less than 67.84% of C++ online submissions for Insertion Sort List.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode *next;</span></span><br><span class="line"><span class="comment"> *     ListNode(int x) : val(x), next(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">ListNode* <span class="title">insertionSortList</span><span class="params">(ListNode* head)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(head == <span class="literal">NULL</span> || head-&gt;next == <span class="literal">NULL</span>) <span class="keyword">return</span> head;</span><br><span class="line">        </span><br><span class="line">        ListNode *fore = head;</span><br><span class="line">        ListNode *tmp;</span><br><span class="line">        <span class="keyword">while</span>(fore-&gt;next != <span class="literal">NULL</span>)&#123;</span><br><span class="line">            tmp = head;</span><br><span class="line">            <span class="keyword">if</span>(tmp-&gt;val &gt;= fore-&gt;next-&gt;val)&#123;</span><br><span class="line">                ListNode* t = fore-&gt;next-&gt;next;</span><br><span class="line">                head = fore-&gt;next;</span><br><span class="line">                head-&gt;next = tmp;</span><br><span class="line">                fore-&gt;next = t;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(tmp-&gt;next == fore-&gt;next)&#123;</span><br><span class="line">                fore = fore-&gt;next;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">while</span>(tmp-&gt;next != <span class="literal">NULL</span> &amp;&amp; tmp-&gt;next != fore-&gt;next)&#123;</span><br><span class="line">                <span class="keyword">if</span>(tmp-&gt;next-&gt;val &lt; fore-&gt;next-&gt;val)&#123;</span><br><span class="line">                    tmp = tmp-&gt;next;</span><br><span class="line">                    <span class="keyword">if</span>(tmp-&gt;next == fore-&gt;next)&#123;</span><br><span class="line">                        fore = fore-&gt;next;</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                </span><br><span class="line">                ListNode* t = tmp-&gt;next;</span><br><span class="line">                tmp-&gt;next = fore-&gt;next;</span><br><span class="line">                fore-&gt;next = fore-&gt;next-&gt;next;</span><br><span class="line">                tmp-&gt;next-&gt;next = t;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> head;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>指针真的，太恶心了。</p>
-<p>BitBrave, 2019-07-11</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1000,7 +997,7 @@ Output: -1-&gt;0-&gt;3-&gt;4-&gt;5</code></pre><h2 id="解题思路"><a href="#�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">261</span>
+          <span class="site-state-item-count">262</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

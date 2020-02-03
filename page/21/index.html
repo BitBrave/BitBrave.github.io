@@ -177,6 +177,91 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(85.%20Maximal%20Rectangle)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(85.%20Maximal%20Rectangle)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(85. Maximal Rectangle)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-85-Maximal-Rectangle-题解"><a href="#LeetCode-85-Maximal-Rectangle-题解" class="headerlink" title="LeetCode(85. Maximal Rectangle)题解"></a>LeetCode(85. Maximal Rectangle)题解</h1><hr>
+<p>Given a 2D binary matrix filled with 0’s and 1’s, find the largest rectangle containing only 1’s and return its area.</p>
+<p>Example:</p>
+<pre><code>Input:
+[
+[&quot;1&quot;,&quot;0&quot;,&quot;1&quot;,&quot;0&quot;,&quot;0&quot;],
+[&quot;1&quot;,&quot;0&quot;,&quot;1&quot;,&quot;1&quot;,&quot;1&quot;],
+[&quot;1&quot;,&quot;1&quot;,&quot;1&quot;,&quot;1&quot;,&quot;1&quot;],
+[&quot;1&quot;,&quot;0&quot;,&quot;0&quot;,&quot;1&quot;,&quot;0&quot;]
+]
+Output: 6</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出一个矩阵，里面有的为1有的为0，求出全部为1的公共矩阵最大面积。</p>
+<p>实在是想不出来。于是网上搜了搜解法，这里给各位大佬跪了。</p>
+<p><a href="https://www.cnblogs.com/lupx/archive/2015/10/20/leetcode-85.html" target="_blank" rel="noopener">详细解答</a></p>
+<p>上述的帖子内，DP的left和right的解释有些问题，因为会无法处理像漏斗状的1的形状的面积。改进如下：</p>
+<h3 id="DP-理论时间复杂度O-n2-，空间复杂度O-n-。"><a href="#DP-理论时间复杂度O-n2-，空间复杂度O-n-。" class="headerlink" title="[DP]理论时间复杂度O(n2)，空间复杂度O(n)。"></a>[DP]理论时间复杂度O(n2)，空间复杂度O(n)。</h3><p>这个并不算是常规普通的DP，他用了三个数组，然后每次按行遍历。height记录遍历到当前行上时，每一列的1的个数（必须到当前行时1连续的数目，比如如果当前行的对应列的值为0，那么height记录为0），left记录遍历到当前行时对应列的值在所有行中从0列到当前位置的最后一个第一次遇到的1的位置。right记录遍历到当前行时对应列的值在所有行中从最后一列到当前位置的最后一个第一次遇到的0的位置。</p>
+<p>一行遍历完成后，计算height[j]*(right[j]-left[j])的最大值记录即可。</p>
+<p>这里left和right的赋值需要斟酌，在计算时，如果查到对应的height为0，即当前遇到了0，那么之前的左边界右边界就全部作废了。将设置left[j] = 0; right[j] = COL;意味着一切重新开始。(我真是优秀)</p>
+<p>代码如下：</p>
+<p>Runtime: 20 ms, faster than 95.62% of C++ online submissions for Maximal Rectangle.<br>Memory Usage: 10.4 MB, less than 96.17% of C++ online submissions for Maximal Rectangle.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maximalRectangle</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">char</span>&gt;&gt;&amp; matrix)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(matrix.<span class="built_in">size</span>() == <span class="number">0</span> || matrix[<span class="number">0</span>].<span class="built_in">size</span>() == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> row = matrix.<span class="built_in">size</span>(), col = matrix[<span class="number">0</span>].<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>, leftBound, rightBound = <span class="number">0</span>;</span><br><span class="line">        vector&lt;int&gt; height(col, 0), left(col, 0), right(col, col);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;row; i++)&#123;</span><br><span class="line">            leftBound = <span class="number">0</span>;</span><br><span class="line">            rightBound = col;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;col; j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(matrix[i][j]==<span class="string">'1'</span>) &#123;</span><br><span class="line">                    <span class="built_in">height</span>[j]++;</span><br><span class="line">                    left[j] = <span class="built_in">max</span>(left[j], leftBound);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span>&#123;</span><br><span class="line">                    <span class="built_in">height</span>[j] = <span class="number">0</span>;</span><br><span class="line">                    left[j] = <span class="number">0</span>; right[j] = col;</span><br><span class="line">                    leftBound = j + <span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=col<span class="number">-1</span>; j&gt;=<span class="number">0</span>; j--)&#123;</span><br><span class="line">                <span class="keyword">if</span>(matrix[i][j]==<span class="string">'1'</span>) right[j] = <span class="built_in">min</span>(right[j], rightBound);</span><br><span class="line">                <span class="keyword">else</span> rightBound = j;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=col<span class="number">-1</span>; j&gt;=<span class="number">0</span>; j--) res = <span class="built_in">max</span>(res, <span class="built_in">height</span>[j] * (right[j] - left[j]));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="递增栈法-，时间复杂度O-n2-，空间复杂度O-n-。"><a href="#递增栈法-，时间复杂度O-n2-，空间复杂度O-n-。" class="headerlink" title="[递增栈法]，时间复杂度O(n2)，空间复杂度O(n)。"></a>[递增栈法]，时间复杂度O(n2)，空间复杂度O(n)。</h3><p>这一题跟84题放一块是有道理。如果只看一行的话，这其实就是一个简化版的84题，可以直接使用84题的解法。</p>
+<p>因此，还是按行遍历，同样使用height数组记录遍历到当前行时每一列在当前连续的1的个数，然后使用84题的解法即可。</p>
+<p>代码如下(速度稍慢，因为有入栈出栈)：</p>
+<p>Runtime: 24 ms, faster than 84.22% of C++ online submissions for Maximal Rectangle.<br>Memory Usage: 13 MB, less than 8.15% of C++ online submissions for Maximal Rectangle.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">//84</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">largestRectangleArea</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="built_in">height</span>)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">height</span>.push_back(<span class="number">0</span>);</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>, len = <span class="built_in">height</span>.<span class="built_in">size</span>(), tmp;</span><br><span class="line">        <span class="built_in">stack</span>&lt;<span class="keyword">int</span>&gt; s;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(s.empty() || <span class="built_in">height</span>[s.top()]&lt;=<span class="built_in">height</span>[i]) s.push(i);</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                tmp = s.top(); s.pop();</span><br><span class="line">                res = <span class="built_in">max</span>(res, <span class="built_in">height</span>[tmp]*(s.empty() ? i : i - s.top() - <span class="number">1</span>));</span><br><span class="line">                i--;</span><br><span class="line">            &#125;   </span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//85</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maximalRectangle</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">char</span>&gt;&gt;&amp; matrix)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(matrix.<span class="built_in">size</span>() == <span class="number">0</span> || matrix[<span class="number">0</span>].<span class="built_in">size</span>() == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> row = matrix.<span class="built_in">size</span>(), col = matrix[<span class="number">0</span>].<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">height</span><span class="params">(col, <span class="number">0</span>)</span></span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;row; i++)&#123;            </span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;col; j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(matrix[i][j]==<span class="string">'1'</span>) <span class="built_in">height</span>[j]++;</span><br><span class="line">                <span class="keyword">else</span> <span class="built_in">height</span>[j] = <span class="number">0</span>;       </span><br><span class="line">            &#125;</span><br><span class="line">            res = <span class="built_in">max</span>(res, largestRectangleArea(<span class="built_in">height</span>));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BItBrave，2019-06-22</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(850.%20Rectangle%20Area%20II)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -921,94 +1006,6 @@ Output: 1-&gt;2-&gt;2-&gt;4-&gt;3-&gt;5</code></pre><h2 id="解题思路"><a hre
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(869.%20Reordered%20Power%20of%202)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(869.%20Reordered%20Power%20of%202)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(869. Reordered Power of 2)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-869-Reordered-Power-of-2-题解"><a href="#LeetCode-869-Reordered-Power-of-2-题解" class="headerlink" title="LeetCode(869. Reordered Power of 2)题解"></a>LeetCode(869. Reordered Power of 2)题解</h1><p>Starting with a positive integer <code>N</code>, we reorder the digits in any order (including the original order) such that the leading digit is not zero.</p>
-<p>Return <code>true</code> if and only if we can do this in a way such that the resulting number is a power of 2.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: 1</span><br><span class="line">Output: true</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: 10</span><br><span class="line">Output: false</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 3:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: 16</span><br><span class="line">Output: true</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 4:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: 24</span><br><span class="line">Output: false</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 5:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: 46</span><br><span class="line">Output: true</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Note:</strong></p>
-<ol>
-<li><code>1 &lt;= N &lt;= 10^9</code></li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给你一个数N（1 &lt;= N &lt;= 10^9），你可以对这个数中的每个数字进行重排组成另外一个数字，只要存在一个使得这个数是2的幂，则返回True；例如N=46,你可以重组为64，这样64就是2的幂了，则返回True。</p>
-<p>因为1 &lt;= N &lt;= 10^9，而2^{32}&gt;10^{9}，因此，最多只有2^{0}，2^{1}，2^{2}…..2^{31}共32个数，每个数都是不相同的，因此，我们只要判断N中每个数字的个数是否和之前的32个数中某一个数中的每一个数字的个数是否相同，只要相同数字的个数相同，那么就可以重新组合成那个数。因此，我们可以把N中的每个数字分解出来，存在一个长度为10的数组里面，然后将这个数组与前面32个数字分解的数组去对比，只要相等，就符合；<br>但是，两个数组是否相等比较麻烦，这样，我们又可以把每个数字设为10的多少次方，这样就没必要去比较整个数组是否相等，直接把这组数字用10的多少次方表示出来；比如N=4654，其中有2个4，1个5，1个6，因此可以表示为：10^{4}+10^{4}+10^{5}+10^{6}，这样出来的结果是唯一的，因此可以比较.</p>
-<p>代码如下，时间复杂度O(n)，空间复杂度O(1)。</p>
-<p><code>Runtime: 4 ms, faster than 73.32% of C++ online submissions for Reordered Power of 2.</code></p>
-<p><code>Memory Usage: 9.4 MB, less than 50.00% of C++ online submissions for Reordered Power of 2.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">long</span> <span class="title">hash_</span><span class="params">(<span class="keyword">long</span> N)</span></span>&#123;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">long</span>&gt; <span class="title">V</span><span class="params">(<span class="number">10</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span>(N)&#123;</span><br><span class="line">            V[N % <span class="number">10</span>]++;</span><br><span class="line">            N /= <span class="number">10</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">long</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">10</span>; i++) res += V[i] * (<span class="keyword">long</span>)<span class="built_in">pow</span>(<span class="number">10</span>, i);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">reorderedPowerOf2</span><span class="params">(<span class="keyword">int</span> N)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">set</span>&lt;<span class="keyword">long</span>&gt; S;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">32</span>; i++) S.insert(hash_(<span class="built_in">pow</span>(<span class="number">2</span>, i)));</span><br><span class="line">        <span class="keyword">if</span>(S.<span class="built_in">find</span>(hash_(N)) == S.<span class="built_in">end</span>()) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-09-30</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1081,7 +1078,7 @@ Output: 1-&gt;2-&gt;2-&gt;4-&gt;3-&gt;5</code></pre><h2 id="解题思路"><a hre
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">261</span>
+          <span class="site-state-item-count">262</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
