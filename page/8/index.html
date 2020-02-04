@@ -177,6 +177,82 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(19.%20Remove%20Nth%20Node%20From%20End%20of%20List)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(19.%20Remove%20Nth%20Node%20From%20End%20of%20List)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(19. Remove Nth Node From End of List)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-19-Remove-Nth-Node-From-End-of-List-题解"><a href="#LeetCode-19-Remove-Nth-Node-From-End-of-List-题解" class="headerlink" title="LeetCode(19. Remove Nth Node From End of List)题解"></a>LeetCode(19. Remove Nth Node From End of List)题解</h1><hr>
+<p>原文如下：</p>
+<p>Given a linked list, remove the n-th node from the end of list and return its head.</p>
+<p><strong>Example:</strong></p>
+<pre><code>Given linked list: 1-&gt;2-&gt;3-&gt;4-&gt;5, and n = 2.
+
+After removing the second node from the end, the linked list becomes 1-&gt;2-&gt;3-&gt;5.</code></pre><p><strong>Note:</strong></p>
+<p>Given n will always be valid.</p>
+<p><strong>Follow up:</strong></p>
+<p>Could you do this in one pass?</p>
+<h2 id="题意理解"><a href="#题意理解" class="headerlink" title="题意理解"></a>题意理解</h2><p>这个题Medium，要求给定一个链表的头指针，删除这个链表内倒数第n个节点。一般来说很简单，最直观的方式就是我遍历两遍，第一遍找出总长度，计算倒数第n个节点的在顺数第几个，第二次遍历直接删除。或者遍历一次，每一步都记录下节点的值，最后找到对应的第n个删除，再用剩下的额值重新建立一个链表。这两种方法一个是加大了时间，一个增加了空间。况且题目建议一次遍历即可。</p>
+<p>那么如何做呢？可以使用递归的方式，利用函数天然的堆栈空间进行位置记录。具体采用如下策略：</p>
+<pre><code>1 从head进入，传入当前节点地址，pos位置参数（引用实参），和需要删除的节点参数n
+2 进入递归函数，直接走到最后一个，将pos=1，开始返回
+3 通过n是否等于pos来判断是否当前节点是需要删除的，如果不等于则返回当前节点，如果等于则直接返回当前节点的递归回来的节点（当前节点的下一个节点）
+4 递归结束后直接返回删除对应位置节点之后的链表的head节点</code></pre><p>代码如下，faster than 100% exampls。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode *next;</span></span><br><span class="line"><span class="comment"> *     ListNode(int x) : val(x), next(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">ListNode* <span class="title">recNode</span><span class="params">(ListNode* node, <span class="keyword">int</span> &amp;pos, <span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(node-&gt;next == <span class="literal">NULL</span>)&#123;</span><br><span class="line">            pos = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span>(n == pos)&#123;</span><br><span class="line">                pos = INT_MAX;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> node;</span><br><span class="line">        &#125;;</span><br><span class="line">        </span><br><span class="line">        ListNode* bnode = recNode(node-&gt;next, pos, n);</span><br><span class="line">        </span><br><span class="line">        pos = (INT_MAX==pos) ? pos : pos + <span class="number">1</span>;</span><br><span class="line">        node-&gt;next = bnode;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(n == pos) &#123;</span><br><span class="line">            pos = INT_MAX;</span><br><span class="line">            <span class="keyword">return</span> bnode;</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">return</span> node;    </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">ListNode* <span class="title">removeNthFromEnd</span><span class="params">(ListNode* head, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(head == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">int</span> pos = INT_MAX;</span><br><span class="line">        <span class="keyword">return</span> recNode(head, pos, n);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2019-04-22</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(18.%204Sum)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -845,77 +921,6 @@ Output: 4</code></pre><h2 id="解题思路"><a href="#解题思路" class="heade
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(228.%20Summary%20Ranges)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(228.%20Summary%20Ranges)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(228. Summary Ranges)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-228-Summary-Ranges-题解"><a href="#LeetCode-228-Summary-Ranges-题解" class="headerlink" title="LeetCode(228. Summary Ranges)题解"></a>LeetCode(228. Summary Ranges)题解</h1><p>Given a sorted integer array without duplicates, return the summary of its ranges.</p>
-<p>Example 1:</p>
-<pre><code>Input:  [0,1,2,4,5,7]
-Output: [&quot;0-&gt;2&quot;,&quot;4-&gt;5&quot;,&quot;7&quot;]
-Explanation: 0,1,2 form a continuous range; 4,5 form a continuous range.</code></pre><p>Example 2:</p>
-<pre><code>Input:  [0,2,3,4,6,8,9]
-Output: [&quot;0&quot;,&quot;2-&gt;4&quot;,&quot;6&quot;,&quot;8-&gt;9&quot;]
-Explanation: 2,3,4 form a continuous range; 8,9 form a continuous range.</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个升序的数组，将其中连续的数组用区间表示出来，用字符串表示。</p>
-<p>很简单的题，直接遍历，如果满足+1就一直往后走，不满足了就表示找到了一个区间，直接转换过来就行了。</p>
-<p>代码如下：</p>
-<p>Runtime: 4 ms, faster than 53.61% of C++ online submissions for Summary Ranges.<br>Memory Usage: 8.5 MB, less than 84.62% of C++ online submissions for Summary Ranges.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; <span class="title">summaryRanges</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; res;</span><br><span class="line">        <span class="keyword">if</span>(len == <span class="number">0</span>) <span class="keyword">return</span> res;</span><br><span class="line">        <span class="keyword">int</span> lasti = <span class="number">0</span>, i;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(i=<span class="number">1</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(nums[i] - <span class="number">1</span> == nums[i<span class="number">-1</span>]) <span class="keyword">continue</span>;</span><br><span class="line">            <span class="built_in">stringstream</span> ss1, ss2;</span><br><span class="line">            ss1&lt;&lt;nums[lasti];</span><br><span class="line">            ss2&lt;&lt;nums[i<span class="number">-1</span>];</span><br><span class="line">            <span class="keyword">if</span>(lasti &lt; i<span class="number">-1</span>) res.push_back(ss1.str()+<span class="string">"-&gt;"</span>+ss2.str());</span><br><span class="line">            <span class="keyword">else</span> res.push_back(ss1.str());</span><br><span class="line">            lasti = i;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">stringstream</span> ss1, ss2;</span><br><span class="line">        ss1&lt;&lt;nums[lasti];</span><br><span class="line">        ss2&lt;&lt;nums[i<span class="number">-1</span>];</span><br><span class="line">        <span class="keyword">if</span>(lasti &lt; i<span class="number">-1</span>) res.push_back(ss1.str()+<span class="string">"-&gt;"</span>+ss2.str());</span><br><span class="line">        <span class="keyword">else</span> res.push_back(ss1.str());</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave， 2019-08-14</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -988,7 +993,7 @@ Explanation: 2,3,4 form a continuous range; 8,9 form a continuous range.</code><
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">262</span>
+          <span class="site-state-item-count">263</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

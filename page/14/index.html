@@ -177,6 +177,89 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(51.%20N-Queens)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(51.%20N-Queens)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(51. N-Queens)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-51-N-Queens-题解"><a href="#LeetCode-51-N-Queens-题解" class="headerlink" title="LeetCode(51. N-Queens)题解"></a>LeetCode(51. N-Queens)题解</h1><hr>
+<p>The n-queens puzzle is the problem of placing n queens on an n×n chessboard such that no two queens attack each other.</p>
+<p><img src="https://assets.leetcode.com/uploads/2018/10/12/8-queens.png" alt=""></p>
+<p>Given an integer n, return all distinct solutions to the n-queens puzzle.</p>
+<p>Each solution contains a distinct board configuration of the n-queens’ placement, where ‘Q’ and ‘.’ both indicate a queen and an empty space respectively.</p>
+<p>Example:</p>
+<pre><code>Input: 4
+Output: [
+[&quot;.Q..&quot;,  // Solution 1
+&quot;...Q&quot;,
+&quot;Q...&quot;,
+&quot;..Q.&quot;],
+
+[&quot;..Q.&quot;,  // Solution 2
+&quot;Q...&quot;,
+&quot;...Q&quot;,
+&quot;.Q..&quot;]
+]
+Explanation: There exist two distinct solutions to the 4-queens puzzle as shown above.</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Hard，这道题的要求是N皇后问题：放置n的皇后在n*n的棋盘上，使其任意两个皇后不能相互攻击。给定整数n，返回所有可能情况，其中‘Q’表示皇后，‘.’表示空位置。</p>
+<p>两个皇后不能相互攻击，即要求这两个皇后不在同一行、同一列及同一斜线上。</p>
+<p>可以使用一个N维数组记录每一行上的皇后位置，使用递归计算。递归到当前行时，从1到n查看是否可以放皇后，放置的条件就是不能与前面的皇后在同一列（可以比较值是否相同，相同就在同一列），不能在同一个斜线上（当前行与当前列的差值相同则在同一个\斜线，当前行与当前值的和相同则在同一个/斜线）。</p>
+<p>代码如下，速度有点慢，懒得优化了：</p>
+<p>Runtime: 28 ms, faster than 22.24% of C++ online submissions for N-Queens.<br>Memory Usage: 18.4 MB, less than 12.82% of C++ online submissions for N-Queens.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isValid</span><span class="params">( <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; tmp, <span class="keyword">int</span> pos, <span class="keyword">int</span> len, <span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(tmp[i]==pos) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            <span class="keyword">if</span>((len-pos) == (i-tmp[i])) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            <span class="keyword">if</span>((len+pos) == (i+tmp[i])) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">solveNQueens_</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&gt;&amp; res, <span class="keyword">int</span> n, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; tmp, <span class="keyword">int</span> len)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(len==n)&#123;</span><br><span class="line">            <span class="function"><span class="built_in">string</span> <span class="title">s</span><span class="params">(n, <span class="string">'.'</span>)</span></span>;</span><br><span class="line">            <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; <span class="title">v</span><span class="params">(n)</span></span>;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;n; i++)&#123;</span><br><span class="line">                s[tmp[i]] = <span class="string">'Q'</span>;</span><br><span class="line">                v[i] = s;</span><br><span class="line">                s[tmp[i]] = <span class="string">'.'</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            res.push_back(v);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;n; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(!<span class="built_in">isValid</span>(tmp, i, len, n)) <span class="keyword">continue</span>;</span><br><span class="line">            tmp[len] = i;</span><br><span class="line">            solveNQueens_(res, n, tmp, len+<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&gt; <span class="title">solveNQueens</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&gt; res;</span><br><span class="line">        <span class="keyword">if</span>(n==<span class="number">0</span>) <span class="keyword">return</span> res;</span><br><span class="line">        </span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">tmp</span><span class="params">(n)</span></span>;</span><br><span class="line">        </span><br><span class="line">        solveNQueens_(res, n, tmp, <span class="number">0</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2019-05-29.</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(516.%20Longest%20Palindromic%20Subsequence)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -854,78 +937,6 @@ Output: 5</code></pre><h2 id="解题思路"><a href="#解题思路" class="heade
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(59.%20Spiral%20Matrix%20II)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(59.%20Spiral%20Matrix%20II)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(59. Spiral Matrix II)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-59-Spiral-Matrix-II-题解"><a href="#LeetCode-59-Spiral-Matrix-II-题解" class="headerlink" title="LeetCode(59. Spiral Matrix II)题解"></a>LeetCode(59. Spiral Matrix II)题解</h1><hr>
-<p>Given a positive integer n, generate a square matrix filled with elements from 1 to n2 in spiral order.</p>
-<p>Example:</p>
-<pre><code>Input: 3
-Output:
-[
-[ 1, 2, 3 ],
-[ 8, 9, 4 ],
-[ 7, 6, 5 ]
-]</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Medium，就是建立一个n<em>n的二维矩阵。顺时针由外而内插入1到n</em>2这些数。可以直接首先插入第一行，然后最后一列，然后最后一行，然后第一列，然后数组的整体减少2.直到最后达到只剩一行或一列，直接插入即可。</p>
-<p>代码如下：</p>
-<p>Runtime: 0 ms, faster than 100.00% of C++ online submissions for Spiral Matrix II.<br>Memory Usage: 9.1 MB, less than 29.22% of C++ online submissions for Spiral Matrix II.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">generateMatrix</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &gt; <span class="title">res</span><span class="params">(n, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(n))</span></span>;</span><br><span class="line">        <span class="keyword">int</span> l = <span class="number">0</span>, c = <span class="number">1</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span>(l&lt;n<span class="number">-1</span>)&#123;</span><br><span class="line">            <span class="comment">// first row</span></span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=l; j&lt;n; j++) res[l][j] = c++;</span><br><span class="line">            <span class="comment">// last col</span></span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=l+<span class="number">1</span>; i&lt;n; i++) res[i][n<span class="number">-1</span>] = c++;</span><br><span class="line">            <span class="comment">// last row</span></span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=n<span class="number">-2</span>; j&gt;=l; j--) res[n<span class="number">-1</span>][j] = c++;</span><br><span class="line">            <span class="comment">// first col</span></span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=n<span class="number">-2</span>; i&gt;l; i--) res[i][l] = c++;</span><br><span class="line">            </span><br><span class="line">            l++;</span><br><span class="line">            n--;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(l==n<span class="number">-1</span>) res[l][l] = c;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-06-01</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -998,7 +1009,7 @@ Output:
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">262</span>
+          <span class="site-state-item-count">263</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
