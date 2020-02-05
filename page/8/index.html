@@ -177,6 +177,68 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(17.%20Letter%20Combinations%20of%20a%20Phone%20Number)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(17.%20Letter%20Combinations%20of%20a%20Phone%20Number)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(17. Letter Combinations of a Phone Number)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-17-Letter-Combinations-of-a-Phone-Number-题解"><a href="#LeetCode-17-Letter-Combinations-of-a-Phone-Number-题解" class="headerlink" title="LeetCode(17. Letter Combinations of a Phone Number)题解"></a>LeetCode(17. Letter Combinations of a Phone Number)题解</h1><hr>
+<h2 id="题意理解"><a href="#题意理解" class="headerlink" title="题意理解"></a>题意理解</h2><p>这是一个Medium的题目，比较简单，但是我也花了一些时间才理解怎么做，特意记录下来。题目要求是给出几个数字，然后就想拼音九键一样，每个数字对应几个字母，现在输入几个数字，再输出对应的数字代表的字母的组合。比如假如2=”abc”,3=”de”,那么2代表了三个字母，3代表了两个字母。组合就有”ad”,”ae”,”bd”,”be”,”cd”,”ce”六种组合。就是一个乘法操作。</p>
+<p><strong>但是我一开始做的时候觉得很简单，很快就写出来了。但是如何遍历所有的字母的组合再将其存到vecto&lt;string&gt;内让我卡壳了很久。</strong>一开始想的直接for循环就可以了，每个数字来一个对应字母的for循环，但是真的写的时候发觉数字的个数决定了for循环的数目，而数字的个数是不确定的。所以这个困扰了我一会儿，最后想到可以用递归去做，但是也没有再深入细想了。</p>
+<p>另一个思路就是，每检测到一个数字，就在结果vector里面记录下这个字符。每个数字到来就意味着当前结果数组内的vector量多上了几倍，这样不断迭代下去，也可以做到，并且只需要两个for循环。举个例子：输入的数据是234,2=’abc’,3=’def’,4=’gh’，那么一开始检测到2，就在结果数组内存入[a,b,c]，然后检测到3，就在结果数组每个元素后面轮流加上字符，形成新的更大的，首先加入d形成[ad,bd,cd],然后加入e，成为[ad,bd,cd, <strong>ae,be,ce</strong>]，然后加入f，形成[ad,bd,cd,ad,bd,cd,<strong>af,bf,cf</strong>],依次类推，检测到4时加入gh，将结果数组扩大2倍。</p>
+<p>代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">char</span>&gt; <span class="title">numToletter</span><span class="params">(<span class="keyword">char</span> ch)</span></span>&#123;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">char</span>&gt; le;</span><br><span class="line">        <span class="keyword">switch</span>(ch)&#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'1'</span>: <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'2'</span>: le.push_back(<span class="string">'a'</span>); le.push_back(<span class="string">'b'</span>); le.push_back(<span class="string">'c'</span>); <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'3'</span>: le.push_back(<span class="string">'d'</span>); le.push_back(<span class="string">'e'</span>); le.push_back(<span class="string">'f'</span>); <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'4'</span>: le.push_back(<span class="string">'g'</span>); le.push_back(<span class="string">'h'</span>); le.push_back(<span class="string">'i'</span>); <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'5'</span>: le.push_back(<span class="string">'j'</span>); le.push_back(<span class="string">'k'</span>); le.push_back(<span class="string">'l'</span>); <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'6'</span>: le.push_back(<span class="string">'m'</span>); le.push_back(<span class="string">'n'</span>); le.push_back(<span class="string">'o'</span>); <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'7'</span>: le.push_back(<span class="string">'p'</span>); le.push_back(<span class="string">'q'</span>); le.push_back(<span class="string">'r'</span>);  le.push_back(<span class="string">'s'</span>); <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'8'</span>: le.push_back(<span class="string">'t'</span>); le.push_back(<span class="string">'u'</span>); le.push_back(<span class="string">'v'</span>); <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'9'</span>: le.push_back(<span class="string">'w'</span>); le.push_back(<span class="string">'x'</span>); le.push_back(<span class="string">'y'</span>); le.push_back(<span class="string">'z'</span>); <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> le;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; <span class="title">letterCombinations</span><span class="params">(<span class="built_in">string</span> digits)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; res;</span><br><span class="line">        <span class="built_in">vector</span>&lt; <span class="built_in">vector</span>&lt;<span class="keyword">char</span>&gt;&gt; R;</span><br><span class="line">        <span class="keyword">int</span> len = digits.<span class="built_in">size</span>();</span><br><span class="line">        <span class="built_in">string</span> st;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(len == <span class="number">0</span>) <span class="keyword">return</span> res;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; len; i++) R.push_back(numToletter(digits[i]));</span><br><span class="line"></span><br><span class="line">        <span class="built_in">string</span> ss; </span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; R[<span class="number">0</span>].<span class="built_in">size</span>(); j++) &#123;</span><br><span class="line">            ss = <span class="string">""</span>;</span><br><span class="line">            ss.push_back(R[<span class="number">0</span>][j]);</span><br><span class="line">            res.push_back(ss);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; len; i++)&#123;</span><br><span class="line">            <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; t_res = res;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; R[i].<span class="built_in">size</span>(); j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(j == <span class="number">0</span>)&#123;</span><br><span class="line">                    <span class="keyword">for</span>(<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; t_res.<span class="built_in">size</span>(); k++) res[k] += R[i][j];</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                &#125;;</span><br><span class="line">                </span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; t_res.<span class="built_in">size</span>(); k++)&#123;</span><br><span class="line">                    res.push_back(t_res[k] + R[i][j]);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; </span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(162.%20Find%20Peak%20Element)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -852,82 +914,6 @@ c）到了这一步表示s还可以继续增加符号用来匹配，那我在里
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(221.%20Maximal%20Square)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(221.%20Maximal%20Square)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(221. Maximal Square)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-221-Maximal-Square-题解"><a href="#LeetCode-221-Maximal-Square-题解" class="headerlink" title="LeetCode(221. Maximal Square)题解"></a>LeetCode(221. Maximal Square)题解</h1><hr>
-<pre><code>Given a 2D binary matrix filled with 0&apos;s and 1&apos;s, find the largest square containing only 1&apos;s and return its area.</code></pre><p>Example:</p>
-<p>Input: </p>
-<pre><code>1 0 1 0 0
-1 0 1 1 1
-1 1 1 1 1
-1 0 0 1 0
-
-Output: 4</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>从二维数组中找出最大的全由1组成的正方形面积。</p>
-<p>这种求极值的题一般都使用DP。这里注意，使用DP的时候，有时候可以在中间状态求得最优值。这里我们用相同大小的二维数组来D记录转移状态。其中D[i][j]表示matrix中matrix[i][j]为左下角的情况下最大的全1组成的正方形的边长。那么状态转移方程就可以如下：</p>
-<p>对于matrix[i][j],如果为0，则D[i][j]=0；</p>
-<p>如果为1，那么首先是新的高，应该是1+min(D[i-1][j], D[i-1][j-1]), 而宽应该为1+min(D[i][j-1], D[i-1][j-1])。这二者应该取最小值，得新的全1正方形的长度应该为1+min(D[i-1][j], D[i][j-1], D[i-1][j-1]).</p>
-<p>在上述过程中，每次计算都记录res值，最后返回res值即可。</p>
-<p>这里状态转移方程可以看出，使用一个X*2的矩阵就可以，可以节省内存。</p>
-<p>代码如下</p>
-<p>Runtime: 16 ms, faster than 96.13% of C++ online submissions for Maximal Square.<br>Memory Usage: 10.6 MB, less than 85.19% of C++ online submissions for Maximal Square.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maximalSquare</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">char</span>&gt;&gt;&amp; matrix)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> row = matrix.<span class="built_in">size</span>(), col, res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span>(row == <span class="number">0</span>) <span class="keyword">return</span> res;</span><br><span class="line">        col = matrix[<span class="number">0</span>].<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span>(col == <span class="number">0</span>) <span class="keyword">return</span> res;</span><br><span class="line">        </span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">D</span><span class="params">(<span class="number">2</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(col+<span class="number">1</span>, <span class="number">0</span>))</span></span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;row; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;col; j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(matrix[i][j] == <span class="string">'0'</span>) D[<span class="number">1</span>][j+<span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">                <span class="keyword">else</span> D[<span class="number">1</span>][j+<span class="number">1</span>] = <span class="number">1</span> + <span class="built_in">min</span>(D[<span class="number">0</span>][j], <span class="built_in">min</span>(D[<span class="number">1</span>][j], D[<span class="number">0</span>][j+<span class="number">1</span>]));</span><br><span class="line">                res = <span class="built_in">max</span>(res, D[<span class="number">1</span>][j+<span class="number">1</span>]*D[<span class="number">1</span>][j+<span class="number">1</span>]);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>; j&lt;=col; j++) D[<span class="number">0</span>][j] = D[<span class="number">1</span>][j];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-08-17</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1000,7 +986,7 @@ Output: 4</code></pre><h2 id="解题思路"><a href="#解题思路" class="heade
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">264</span>
+          <span class="site-state-item-count">265</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
