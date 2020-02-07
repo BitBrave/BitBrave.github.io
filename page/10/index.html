@@ -423,83 +423,6 @@ for (int i = 0; i &lt; len; i++) {
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(264.%20Ugly%20Number%20II)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(264.%20Ugly%20Number%20II)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(264. Ugly Number II)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-264-Ugly-Number-II-题解"><a href="#LeetCode-264-Ugly-Number-II-题解" class="headerlink" title="LeetCode(\264. Ugly Number II)题解"></a>LeetCode(\264. Ugly Number II)题解</h1><p>Write a program to find the <code>n</code>-th ugly number.</p>
-<p>Ugly numbers are <strong>positive numbers</strong> whose prime factors only include <code>2, 3, 5</code>. </p>
-<p><strong>Example:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: n &#x3D; 10</span><br><span class="line">Output: 12</span><br><span class="line">Explanation: 1, 2, 3, 4, 5, 6, 8, 9, 10, 12 is the sequence of the first 10 ugly numbers.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Note:</strong> </p>
-<ol>
-<li><code>1</code> is typically treated as an ugly number.</li>
-<li><code>n</code> <strong>does not exceed 1690</strong>.</li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>寻找第N个丑陋数，丑陋数的定义就是1和因子只有2,3,5,的整数。</p>
-<p>最暴力的解法就是从1开始不断遍历，判断当前数是不是丑陋数，直到找到第N个。但是这样会超时，因为有很多冗余的操作，很多数不是丑陋数。</p>
-<p>这个题给出了很多hint，通过分析可以发现丑陋数的出现是可以计算出来的：假设我们现在从1开始已经依次从小到大有了M个丑陋数，那么如何计算出第M+1个丑陋数呢？我们可以把当前所有元素都分别乘2、乘3、乘5，然后取所有的值中，比当前第M个丑陋数大的最小的值。</p>
-<p>但是其实我们不必将所有的数都乘上2,3,5，只需要找到最小的乘以2，3,5的大于当前丑陋数的几个数，然后取乘之后的三个值中的最小的值即可。然后将最小值对应地原始的丑陋数所在位置更新一下即可。</p>
-<p>代码如下，时间复杂度O(N)，空间复杂度O(N)。</p>
-<p><code>Runtime: 8 ms, faster than 75.06% of C++ online submissions for Ugly Number II.</code></p>
-<p><code>Memory Usage: 9.8 MB, less than 100.00% of C++ online submissions for Ugly Number II.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">nthUglyNumber</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">ret</span><span class="params">(n, <span class="number">1</span>)</span></span>;</span><br><span class="line">        <span class="keyword">int</span> i2 = <span class="number">0</span>, i3 = <span class="number">0</span>, i5 = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;n; i++)&#123;</span><br><span class="line">            ret[i] = <span class="built_in">min</span>(ret[i2]*<span class="number">2</span>, <span class="built_in">min</span>(ret[i3]*<span class="number">3</span>, ret[i5]*<span class="number">5</span>));</span><br><span class="line">            <span class="keyword">if</span>(ret[i] == ret[i2]*<span class="number">2</span>) i2++;</span><br><span class="line">            <span class="keyword">if</span>(ret[i] == ret[i3]*<span class="number">3</span>) i3++;</span><br><span class="line">            <span class="keyword">if</span>(ret[i] == ret[i5]*<span class="number">5</span>) i5++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret[n<span class="number">-1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2019-12-04</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(27.%20Remove%20Element)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -566,6 +489,83 @@ for (int i = 0; i &lt; len; i++) {
 <h2 id="解法二"><a href="#解法二" class="headerlink" title="解法二"></a>解法二</h2><p>根据题意我们只要将vector前面正确length内的容器内放入正确的数就可以了，因此可以用一个位置来记录，当发现与一样的数的时候，将后面的数直接覆盖前面的就可以了。</p>
 <p>代码如下(4ms)：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">removeElement</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> val)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;len; j++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(nums[j]!=val) nums[i++] = nums[j];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> i;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(264.%20Ugly%20Number%20II)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(264.%20Ugly%20Number%20II)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(264. Ugly Number II)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-264-Ugly-Number-II-题解"><a href="#LeetCode-264-Ugly-Number-II-题解" class="headerlink" title="LeetCode(\264. Ugly Number II)题解"></a>LeetCode(\264. Ugly Number II)题解</h1><p>Write a program to find the <code>n</code>-th ugly number.</p>
+<p>Ugly numbers are <strong>positive numbers</strong> whose prime factors only include <code>2, 3, 5</code>. </p>
+<p><strong>Example:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: n &#x3D; 10</span><br><span class="line">Output: 12</span><br><span class="line">Explanation: 1, 2, 3, 4, 5, 6, 8, 9, 10, 12 is the sequence of the first 10 ugly numbers.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Note:</strong> </p>
+<ol>
+<li><code>1</code> is typically treated as an ugly number.</li>
+<li><code>n</code> <strong>does not exceed 1690</strong>.</li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>寻找第N个丑陋数，丑陋数的定义就是1和因子只有2,3,5,的整数。</p>
+<p>最暴力的解法就是从1开始不断遍历，判断当前数是不是丑陋数，直到找到第N个。但是这样会超时，因为有很多冗余的操作，很多数不是丑陋数。</p>
+<p>这个题给出了很多hint，通过分析可以发现丑陋数的出现是可以计算出来的：假设我们现在从1开始已经依次从小到大有了M个丑陋数，那么如何计算出第M+1个丑陋数呢？我们可以把当前所有元素都分别乘2、乘3、乘5，然后取所有的值中，比当前第M个丑陋数大的最小的值。</p>
+<p>但是其实我们不必将所有的数都乘上2,3,5，只需要找到最小的乘以2，3,5的大于当前丑陋数的几个数，然后取乘之后的三个值中的最小的值即可。然后将最小值对应地原始的丑陋数所在位置更新一下即可。</p>
+<p>代码如下，时间复杂度O(N)，空间复杂度O(N)。</p>
+<p><code>Runtime: 8 ms, faster than 75.06% of C++ online submissions for Ugly Number II.</code></p>
+<p><code>Memory Usage: 9.8 MB, less than 100.00% of C++ online submissions for Ugly Number II.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">nthUglyNumber</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">ret</span><span class="params">(n, <span class="number">1</span>)</span></span>;</span><br><span class="line">        <span class="keyword">int</span> i2 = <span class="number">0</span>, i3 = <span class="number">0</span>, i5 = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;n; i++)&#123;</span><br><span class="line">            ret[i] = <span class="built_in">min</span>(ret[i2]*<span class="number">2</span>, <span class="built_in">min</span>(ret[i3]*<span class="number">3</span>, ret[i5]*<span class="number">5</span>));</span><br><span class="line">            <span class="keyword">if</span>(ret[i] == ret[i2]*<span class="number">2</span>) i2++;</span><br><span class="line">            <span class="keyword">if</span>(ret[i] == ret[i3]*<span class="number">3</span>) i3++;</span><br><span class="line">            <span class="keyword">if</span>(ret[i] == ret[i5]*<span class="number">5</span>) i5++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret[n<span class="number">-1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2019-12-04</p>
+
       
     </div>
 
@@ -657,80 +657,6 @@ Explanation: 13 = 4 + 9.</code></pre><h2 id="解题思路"><a href="#解题思�
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(28.%20Implement%20strStr())%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(28.%20Implement%20strStr())%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(28. Implement strStr())题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-28-Implement-strStr-题解"><a href="#LeetCode-28-Implement-strStr-题解" class="headerlink" title="LeetCode(28. Implement strStr())题解"></a>LeetCode(28. Implement strStr())题解</h1><hr>
-<p>原文如下：<br>Implement strStr().</p>
-<p>Return the index of the first occurrence of needle in haystack, or -1 if needle is not part of haystack.</p>
-<p>Example 1:</p>
-<pre><code>Input: haystack = &quot;hello&quot;, needle = &quot;ll&quot;
-Output: 2</code></pre><p>Example 2:</p>
-<pre><code>Input: haystack = &quot;aaaaa&quot;, needle = &quot;bba&quot;
-Output: -1</code></pre><p>Clarification:</p>
-<p>What should we return when needle is an empty string? This is a great question to ask during an interview.</p>
-<p>For the purpose of this problem, we will return 0 when needle is an empty string. This is consistent to C’s strstr() and Java’s indexOf().</p>
-<h2 id="题意思路"><a href="#题意思路" class="headerlink" title="题意思路"></a>题意思路</h2><p>Easy题。第一次想得有点多，还是老思路，不应该自己造轮子。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isMatch</span><span class="params">(<span class="keyword">int</span> sta, <span class="built_in">string</span> h, <span class="keyword">int</span> hl, <span class="built_in">string</span> n, <span class="keyword">int</span> nl)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> j = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(sta&lt;hl &amp;&amp; j&lt;nl &amp;&amp; h[sta++]==n[j++]);</span><br><span class="line">        <span class="keyword">return</span> j==nl &amp;&amp; h[sta<span class="number">-1</span>]==n[j<span class="number">-1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">strStr</span><span class="params">(<span class="built_in">string</span> haystack, <span class="built_in">string</span> needle)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> hl = haystack.<span class="built_in">size</span>(), nl = needle.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;=hl-nl; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(isMatch(i, haystack, hl, needle, nl)) <span class="keyword">return</span> i;</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>其实有个更简单方式，利用string的substr。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">strStr</span><span class="params">(<span class="built_in">string</span> haystack, <span class="built_in">string</span> needle)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> hl = haystack.<span class="built_in">size</span>(), nl = needle.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;=hl-nl; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(haystack.substr(i, nl)==needle) <span class="keyword">return</span> i;</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-04-24。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(29.%20Divide%20Two%20Integers)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -791,6 +717,80 @@ Assume we are dealing with an environment which could only store integers within
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">divide</span><span class="params">(<span class="keyword">int</span> dividend, <span class="keyword">int</span> divisor)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(dividend==-<span class="built_in">pow</span>(<span class="number">2</span>,<span class="number">31</span>) &amp;&amp; divisor==<span class="number">-1</span>) <span class="keyword">return</span> <span class="built_in">pow</span>(<span class="number">2</span>,<span class="number">31</span>)<span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">if</span>(dividend==-<span class="built_in">pow</span>(<span class="number">2</span>,<span class="number">31</span>) &amp;&amp; divisor==<span class="number">1</span>) <span class="keyword">return</span> -<span class="built_in">pow</span>(<span class="number">2</span>,<span class="number">31</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">bool</span> s = ((dividend&lt;<span class="number">0</span> &amp;&amp; divisor&lt;<span class="number">0</span>)||(dividend&gt;<span class="number">0</span> &amp;&amp; divisor&gt;<span class="number">0</span>)) ? <span class="literal">true</span>:<span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">if</span>(dividend!=-<span class="built_in">pow</span>(<span class="number">2</span>,<span class="number">31</span>))</span><br><span class="line">            dividend = dividend&gt;<span class="number">0</span> ? -dividend:dividend;</span><br><span class="line">        <span class="keyword">if</span>(divisor!=-<span class="built_in">pow</span>(<span class="number">2</span>,<span class="number">31</span>))        </span><br><span class="line">            divisor = divisor&gt;<span class="number">0</span> ? -divisor:divisor;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> temp;</span><br><span class="line">        <span class="keyword">int</span> fore = <span class="number">1</span>, back = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> fore_div = divisor, back_div = <span class="number">0</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span>(!(fore_div+back_div &lt; dividend &amp;&amp; back &lt;= <span class="number">0</span>))&#123;</span><br><span class="line">            <span class="keyword">if</span>(fore_div+back_div &gt;= dividend)&#123;</span><br><span class="line">                res += fore + back;</span><br><span class="line">                dividend -= fore_div + back_div;</span><br><span class="line">                </span><br><span class="line">                <span class="keyword">if</span>(-<span class="built_in">pow</span>(<span class="number">2</span>,<span class="number">31</span>)-fore_div &gt; fore_div+back_div) <span class="keyword">continue</span>;</span><br><span class="line">                temp = fore;</span><br><span class="line">                fore = fore + back;</span><br><span class="line">                back = temp;</span><br><span class="line">                </span><br><span class="line">                temp = fore_div;</span><br><span class="line">                fore_div = fore_div + back_div;</span><br><span class="line">                back_div = temp;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                temp = fore;</span><br><span class="line">                fore = back;</span><br><span class="line">                back = temp - back;</span><br><span class="line">                </span><br><span class="line">                temp = fore_div;</span><br><span class="line">                fore_div = back_div;</span><br><span class="line">                back_div = temp - back_div;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(s) <span class="keyword">return</span> res;</span><br><span class="line">        <span class="keyword">return</span> -res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 <p>BitBrave, 2019-04-30</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(28.%20Implement%20strStr())%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(28.%20Implement%20strStr())%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(28. Implement strStr())题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-28-Implement-strStr-题解"><a href="#LeetCode-28-Implement-strStr-题解" class="headerlink" title="LeetCode(28. Implement strStr())题解"></a>LeetCode(28. Implement strStr())题解</h1><hr>
+<p>原文如下：<br>Implement strStr().</p>
+<p>Return the index of the first occurrence of needle in haystack, or -1 if needle is not part of haystack.</p>
+<p>Example 1:</p>
+<pre><code>Input: haystack = &quot;hello&quot;, needle = &quot;ll&quot;
+Output: 2</code></pre><p>Example 2:</p>
+<pre><code>Input: haystack = &quot;aaaaa&quot;, needle = &quot;bba&quot;
+Output: -1</code></pre><p>Clarification:</p>
+<p>What should we return when needle is an empty string? This is a great question to ask during an interview.</p>
+<p>For the purpose of this problem, we will return 0 when needle is an empty string. This is consistent to C’s strstr() and Java’s indexOf().</p>
+<h2 id="题意思路"><a href="#题意思路" class="headerlink" title="题意思路"></a>题意思路</h2><p>Easy题。第一次想得有点多，还是老思路，不应该自己造轮子。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isMatch</span><span class="params">(<span class="keyword">int</span> sta, <span class="built_in">string</span> h, <span class="keyword">int</span> hl, <span class="built_in">string</span> n, <span class="keyword">int</span> nl)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> j = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(sta&lt;hl &amp;&amp; j&lt;nl &amp;&amp; h[sta++]==n[j++]);</span><br><span class="line">        <span class="keyword">return</span> j==nl &amp;&amp; h[sta<span class="number">-1</span>]==n[j<span class="number">-1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">strStr</span><span class="params">(<span class="built_in">string</span> haystack, <span class="built_in">string</span> needle)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> hl = haystack.<span class="built_in">size</span>(), nl = needle.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;=hl-nl; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(isMatch(i, haystack, hl, needle, nl)) <span class="keyword">return</span> i;</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>其实有个更简单方式，利用string的substr。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">strStr</span><span class="params">(<span class="built_in">string</span> haystack, <span class="built_in">string</span> needle)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> hl = haystack.<span class="built_in">size</span>(), nl = needle.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;=hl-nl; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(haystack.substr(i, nl)==needle) <span class="keyword">return</span> i;</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-04-24。</p>
 
       
     </div>
