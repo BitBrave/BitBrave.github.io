@@ -272,7 +272,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(797.%20All%20Paths%20From%20Source%20to%20Target)%E9%A2%98%E8%A7%A3/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(802.%20Find%20Eventual%20Safe%20States)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
@@ -286,7 +286,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2020/01/24/LeetCode(797.%20All%20Paths%20From%20Source%20to%20Target)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(797. All Paths From Source to Target)题解</a>
+            <a href="/2020/01/24/LeetCode(802.%20Find%20Eventual%20Safe%20States)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(802. Find Eventual Safe States)题解</a>
         </h1>
 
         <div class="post-meta">
@@ -310,22 +310,107 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="LeetCode-797-All-Paths-From-Source-to-Target-题解"><a href="#LeetCode-797-All-Paths-From-Source-to-Target-题解" class="headerlink" title="LeetCode(797. All Paths From Source to Target)题解"></a>LeetCode(797. All Paths From Source to Target)题解</h1><p>Given a directed, acyclic graph of <code>N</code> nodes.  Find all possible paths from node <code>0</code> to node <code>N-1</code>, and return them in any order.</p>
-<p>The graph is given as follows:  the nodes are 0, 1, …, graph.length - 1.  graph[i] is a list of all nodes j for which the edge (i, j) exists.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Example:</span><br><span class="line">Input: [[1,2], [3], [3], []] </span><br><span class="line">Output: [[0,1,3],[0,2,3]] </span><br><span class="line">Explanation: The graph looks like this:</span><br><span class="line">0---&gt;1</span><br><span class="line">|    |</span><br><span class="line">v    v</span><br><span class="line">2---&gt;3</span><br><span class="line">There are two paths: 0 -&gt; 1 -&gt; 3 and 0 -&gt; 2 -&gt; 3.</span><br></pre></td></tr></table></figure>
+          <h1 id="LeetCode-802-Find-Eventual-Safe-States-题解"><a href="#LeetCode-802-Find-Eventual-Safe-States-题解" class="headerlink" title="LeetCode(802. Find Eventual Safe States)题解"></a>LeetCode(802. Find Eventual Safe States)题解</h1><hr>
+<p>In a directed graph, we start at some node and every turn, walk along a directed edge of the graph.  If we reach a node that is terminal (that is, it has no outgoing directed edges), we stop.</p>
+<p>Now, say our starting node is eventually safe if and only if we must eventually walk to a terminal node.  More specifically, there exists a natural number K so that for any choice of where to walk, we must have stopped at a terminal node in less than K steps.</p>
+<p>Which nodes are eventually safe?  Return them as an array in sorted order.</p>
+<p>The directed graph has N nodes with labels 0, 1, …, N-1, where N is the length of graph.  The graph is given in the following form: graph[i] is a list of labels j such that (i, j) is a directed edge of the graph.</p>
+<pre><code>Example:
+Input: graph = [[1,2],[2,3],[5],[0],[5],[],[]]
+Output: [2,4,5,6]
+Here is a diagram of the above graph.</code></pre><p><img src="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/03/17/picture1.png" alt=""></p>
+<p>Note:</p>
+<pre><code>graph will have length at most 10000.
+The number of edges in the graph will not exceed 32000.
+Each graph[i] will be a sorted list of different integers, chosen within the range [0, graph.length - 1].</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>在一个有向图中，如果从一个节点出发走过很多步之后到达了终点(出度为0的节点，无路可走了)，则认为这个节点是最终安全的节点。如果根本停不下来，那就是在一个环上，就是不安全节点。要在自然数K步内停止，到达安全节点，返回满足要求的排序好的所有安全节点的索引值。实质是在一个有向图中找出不在环路上的节点。</p>
+<p>使用DFS，在遍历的过程中，可以这样想，一个节点要是走到了一个确定在环路上的节点，那么这个节点肯定无法达到最终状态，因此这个节点就可以判定为环路。同样，如果中途遍历的一个节点已经被判定为可以到达最终状态，那么就不需要后续判断了，直接返回这条路可达即可。</p>
+<p>代码如下, 时间复杂度O(n), 空间复杂度O(n).</p>
+<p>Runtime: 180 ms, faster than 53.05% of C++ online submissions for Find Eventual Safe States.<br>Memory Usage: 39.3 MB, less than 23.08% of C++ online submissions for Find Eventual Safe States.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; G;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; H; <span class="comment">// 记录目前已经判定的节点,0表示还未判定，1表示可达停止态，2表示环路</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isHoop</span><span class="params">(<span class="keyword">int</span> i, <span class="keyword">int</span> len)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(H[i] == <span class="number">1</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">if</span>(H[i] == <span class="number">2</span>) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        H[i] = <span class="number">2</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">0</span>; k&lt;len; k++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(isHoop(G[i][k], G[G[i][k]].<span class="built_in">size</span>())) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        H[i] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">eventualSafeNodes</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; graph)</span> </span>&#123;</span><br><span class="line">        G = graph;</span><br><span class="line">        <span class="keyword">int</span> len = G.<span class="built_in">size</span>();</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; res;</span><br><span class="line">        H = <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(len, <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            isHoop(i, G[i].<span class="built_in">size</span>());</span><br><span class="line">            <span class="keyword">if</span>(H[i] == <span class="number">1</span>) res.push_back(i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
-<p><strong>Note:</strong></p>
-<ul>
-<li>The number of nodes in the graph will be in the range <code>[2, 15]</code>.</li>
-<li>You can print different paths in any order, but you should keep the order of nodes inside one path.</li>
-</ul>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个有向无环图，找出其中所有的源点到汇点的路径。</p>
-<p>从原点出发，使用DFS，记录所有的路径即可，时间复杂度O(n)。</p>
-<p><code>Runtime: 196 ms, faster than 5.58% of Python3 online submissions for All Paths From Source to Target.</code></p>
-<p><code>Memory Usage: 16.3 MB, less than 20.00% of Python3 online submissions for All Paths From Source to Target.</code></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span><span class="params">(object)</span>:</span></span><br><span class="line">    Path = []</span><br><span class="line">    path = []</span><br><span class="line">    Sta = <span class="number">0</span></span><br><span class="line">    End = <span class="number">-1</span></span><br><span class="line">    G = []</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">findPath</span><span class="params">(self, node)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> node == self.End:</span><br><span class="line">            self.Path.append([i <span class="keyword">for</span> i <span class="keyword">in</span> self.path])</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        </span><br><span class="line">        self.path.append(<span class="string">""</span>)</span><br><span class="line">        <span class="keyword">for</span> next_node <span class="keyword">in</span> self.G[node]:</span><br><span class="line">            self.path[<span class="number">-1</span>] = next_node</span><br><span class="line">            self.findPath(next_node)</span><br><span class="line">        </span><br><span class="line">        self.path = self.path[:<span class="number">-1</span>]</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">allPathsSourceTarget</span><span class="params">(self, graph)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :type graph: List[List[int]]</span></span><br><span class="line"><span class="string">        :rtype: List[List[int]]</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        </span><br><span class="line">        self.G = graph</span><br><span class="line">        self.End = len(graph) - <span class="number">1</span></span><br><span class="line">      </span><br><span class="line">        self.path = [self.Sta]</span><br><span class="line">        self.findPath(self.Sta)</span><br><span class="line">        <span class="keyword">import</span> copy</span><br><span class="line">        Paths = copy.deepcopy(self.Path)</span><br><span class="line">        self.Path.clear()</span><br><span class="line">        <span class="keyword">return</span> Paths</span><br></pre></td></tr></table></figure>
+<p>BitBrave, 2019-08-29</p>
 
-<p>BitBrave, 2019-10-07</p>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(80.%20Remove%20Duplicates%20from%20Sorted%20Array%20II)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(80.%20Remove%20Duplicates%20from%20Sorted%20Array%20II)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(80. Remove Duplicates from Sorted Array II)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-80-Remove-Duplicates-from-Sorted-Array-II-题解"><a href="#LeetCode-80-Remove-Duplicates-from-Sorted-Array-II-题解" class="headerlink" title="LeetCode(80. Remove Duplicates from Sorted Array II)题解"></a>LeetCode(80. Remove Duplicates from Sorted Array II)题解</h1><hr>
+<p>Given a sorted array nums, remove the duplicates in-place such that duplicates appeared at most twice and return the new length.</p>
+<p>Do not allocate extra space for another array, you must do this by modifying the input array in-place with O(1) extra memory.</p>
+<p>Example 1:</p>
+<pre><code>Given nums = [1,1,1,2,2,3],
+
+Your function should return length = 5, with the first five elements of nums being 1, 1, 2, 2 and 3 respectively.</code></pre><p>It doesn’t matter what you leave beyond the returned length.<br>Example 2:</p>
+<pre><code>Given nums = [0,0,1,1,1,1,2,3,3],
+
+Your function should return length = 7, with the first seven elements of nums being modified to 0, 0, 1, 1, 2, 3 and 3 respectively.</code></pre><p>It doesn’t matter what values are set beyond the returned length.<br>Clarification:</p>
+<p>Confused why the returned value is an integer but your answer is an array?</p>
+<pre><code>Note that the input array is passed in by reference, which means modification to the input array will be known to the caller as well.</code></pre><p>Internally you can think of this:</p>
+<pre><code>// nums is passed in by reference. (i.e., without making a copy)
+int len = removeDuplicates(nums);
+
+// any modification to nums in your function would be known by the caller.
+// using the length returned by your function, it prints the first len elements.
+for (int i = 0; i &lt; len; i++) {
+    print(nums[i]);
+}</code></pre><h1 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h1><p>要求给定一个数组，已经排序好的。将其中重复的去掉，每个数字最多重复两次。不能使用额外的内存，只能在O(1)的空间复杂度内完成。</p>
+<p>可以使用一个变量c记录当前数字重复的次数。从左到右遍历数组。当前遇到的若和前面的数字不一样，表示没有重复，c=1.如果和前面一样则c++。如果此时c&gt;2表示重复超过了两次，则将此数删掉。</p>
+<p>代码如如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">removeDuplicates</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> c = <span class="number">1</span>, len = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(nums[i]!=nums[i<span class="number">-1</span>])&#123;</span><br><span class="line">                c = <span class="number">1</span>;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            c++;</span><br><span class="line">            <span class="keyword">if</span>(c&gt;<span class="number">2</span>)&#123;</span><br><span class="line">                nums.erase(nums.<span class="built_in">begin</span>()+i);</span><br><span class="line">                i--;</span><br><span class="line">                c--;</span><br><span class="line">                len--;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> nums.<span class="built_in">size</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-06-017</p>
 
       
     </div>
@@ -428,82 +513,6 @@ A[i], B[i] are integer values in the range [0, 2000].</code></pre><h2 id="解题
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(802.%20Find%20Eventual%20Safe%20States)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(802.%20Find%20Eventual%20Safe%20States)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(802. Find Eventual Safe States)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-802-Find-Eventual-Safe-States-题解"><a href="#LeetCode-802-Find-Eventual-Safe-States-题解" class="headerlink" title="LeetCode(802. Find Eventual Safe States)题解"></a>LeetCode(802. Find Eventual Safe States)题解</h1><hr>
-<p>In a directed graph, we start at some node and every turn, walk along a directed edge of the graph.  If we reach a node that is terminal (that is, it has no outgoing directed edges), we stop.</p>
-<p>Now, say our starting node is eventually safe if and only if we must eventually walk to a terminal node.  More specifically, there exists a natural number K so that for any choice of where to walk, we must have stopped at a terminal node in less than K steps.</p>
-<p>Which nodes are eventually safe?  Return them as an array in sorted order.</p>
-<p>The directed graph has N nodes with labels 0, 1, …, N-1, where N is the length of graph.  The graph is given in the following form: graph[i] is a list of labels j such that (i, j) is a directed edge of the graph.</p>
-<pre><code>Example:
-Input: graph = [[1,2],[2,3],[5],[0],[5],[],[]]
-Output: [2,4,5,6]
-Here is a diagram of the above graph.</code></pre><p><img src="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/03/17/picture1.png" alt=""></p>
-<p>Note:</p>
-<pre><code>graph will have length at most 10000.
-The number of edges in the graph will not exceed 32000.
-Each graph[i] will be a sorted list of different integers, chosen within the range [0, graph.length - 1].</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>在一个有向图中，如果从一个节点出发走过很多步之后到达了终点(出度为0的节点，无路可走了)，则认为这个节点是最终安全的节点。如果根本停不下来，那就是在一个环上，就是不安全节点。要在自然数K步内停止，到达安全节点，返回满足要求的排序好的所有安全节点的索引值。实质是在一个有向图中找出不在环路上的节点。</p>
-<p>使用DFS，在遍历的过程中，可以这样想，一个节点要是走到了一个确定在环路上的节点，那么这个节点肯定无法达到最终状态，因此这个节点就可以判定为环路。同样，如果中途遍历的一个节点已经被判定为可以到达最终状态，那么就不需要后续判断了，直接返回这条路可达即可。</p>
-<p>代码如下, 时间复杂度O(n), 空间复杂度O(n).</p>
-<p>Runtime: 180 ms, faster than 53.05% of C++ online submissions for Find Eventual Safe States.<br>Memory Usage: 39.3 MB, less than 23.08% of C++ online submissions for Find Eventual Safe States.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; G;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; H; <span class="comment">// 记录目前已经判定的节点,0表示还未判定，1表示可达停止态，2表示环路</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isHoop</span><span class="params">(<span class="keyword">int</span> i, <span class="keyword">int</span> len)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(H[i] == <span class="number">1</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">if</span>(H[i] == <span class="number">2</span>) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        H[i] = <span class="number">2</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">0</span>; k&lt;len; k++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(isHoop(G[i][k], G[G[i][k]].<span class="built_in">size</span>())) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        H[i] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">eventualSafeNodes</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; graph)</span> </span>&#123;</span><br><span class="line">        G = graph;</span><br><span class="line">        <span class="keyword">int</span> len = G.<span class="built_in">size</span>();</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; res;</span><br><span class="line">        H = <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(len, <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            isHoop(i, G[i].<span class="built_in">size</span>());</span><br><span class="line">            <span class="keyword">if</span>(H[i] == <span class="number">1</span>) res.push_back(i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-08-29</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(807.%20Max%20Increase%20to%20Keep%20City%20Skyline)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -574,92 +583,6 @@ All buildings in grid[i][j] occupy the entire grid cell: that is, they are a 1 x
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxIncreaseKeepingSkyline</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; grid)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> rl = grid.<span class="built_in">size</span>(), cl = grid[<span class="number">0</span>].<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        vector&lt;int&gt; row(rl, 0), col(cl, 0);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;rl; i++)</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;cl; j++) row[i] = <span class="built_in">max</span>(row[i], grid[i][j]);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;cl; j++)</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;rl; i++) col[j] = <span class="built_in">max</span>(col[j], grid[i][j]);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;rl; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;cl; j++)&#123;</span><br><span class="line">                res += <span class="built_in">min</span>(row[i], col[j]) - grid[i][j];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 <p>BitBrave, 2019-08-27</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(808.%20Soup%20Servings)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(808.%20Soup%20Servings)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(808. Soup Servings)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-808-Soup-Servings-题解"><a href="#LeetCode-808-Soup-Servings-题解" class="headerlink" title="LeetCode(808. Soup Servings)题解"></a>LeetCode(808. Soup Servings)题解</h1><hr>
-<p>There are two types of soup: type A and type B. Initially we have N ml of each type of soup. There are four kinds of operations:</p>
-<pre><code>Serve 100 ml of soup A and 0 ml of soup B
-Serve 75 ml of soup A and 25 ml of soup B
-Serve 50 ml of soup A and 50 ml of soup B
-Serve 25 ml of soup A and 75 ml of soup B</code></pre><p>When we serve some soup, we give it to someone and we no longer have it.  Each turn, we will choose from the four operations with equal probability 0.25. If the remaining volume of soup is not enough to complete the operation, we will serve as much as we can.  We stop once we no longer have some quantity of both types of soup.</p>
-<p>Note that we do not have the operation where all 100 ml’s of soup B are used first.  </p>
-<p>Return the probability that soup A will be empty first, plus half the probability that A and B become empty at the same time.</p>
-<pre><code>Example:
-Input: N = 50
-Output: 0.625
-Explanation: </code></pre><p>If we choose the first two operations, A will become empty first. For the third operation, A and B will become empty at the same time. For the fourth operation, B will become empty first. So the total probability of A becoming empty first plus half the probability that A and B become empty at the same time, is 0.25 * (1 + 1 + 0.5 + 0) = 0.625.</p>
-<p>Notes:</p>
-<pre><code>0 &lt;= N &lt;= 10^9. 
-Answers within 10^-6 of the true value will be accepted as correct.</code></pre><h2 id="阶梯思路"><a href="#阶梯思路" class="headerlink" title="阶梯思路"></a>阶梯思路</h2><p>有A，B两种汤。初始每种汤各有N毫升，现有4种操作：</p>
-<ol>
-<li>A倒出100ml，B倒出0ml</li>
-<li>A倒出75ml， B倒出25ml</li>
-<li>A倒出50ml， B倒出50ml</li>
-<li>A倒出25ml， B倒出75ml</li>
-</ol>
-<p>每种操作的概率均等为0.25。如果汤的剩余容量不足完成某次操作，则有多少倒多少。当每一种汤都倒完时停止操作。</p>
-<p>求A先倒完的概率，加上A和B同时倒完的概率。</p>
-<p>这个可以用DP，DP[i][j]分别表示A中的为i和B中为j时满足题目的概率。这题关键其实是返回1的trick，因为Notes里说了可以容忍一定的数据错误，那么当N足够大的时候，概率足够接近1，就直接返回1就可了。</p>
-<p>代码如下,时间复杂度O(n2)，空间复杂度O(n2).(其实都是O(1)):</p>
-<p>Runtime: 4 ms, faster than 81.50% of C++ online submissions for Soup Servings.<br>Memory Usage: 9 MB, less than 100.00% of C++ online submissions for Soup Servings.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">soupServings</span><span class="params">(<span class="keyword">int</span> N)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(N &gt; <span class="number">5000</span>) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        N = <span class="built_in">ceil</span>(N/<span class="number">25.0</span>);</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">double</span>&gt;&gt; V;</span><br><span class="line">        <span class="keyword">if</span>(N == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0.5</span>;</span><br><span class="line">        V = <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">double</span>&gt;&gt;(N+<span class="number">1</span>, <span class="built_in">vector</span>&lt;<span class="keyword">double</span>&gt;(N+<span class="number">1</span>, <span class="number">1</span>));</span><br><span class="line">        V[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">0.5</span>;</span><br><span class="line">        <span class="keyword">if</span>(N&gt;<span class="number">0</span>) V[<span class="number">0</span>][<span class="number">1</span>] = <span class="number">5</span>/<span class="number">8.0</span>;</span><br><span class="line">        <span class="keyword">if</span>(N&gt;<span class="number">1</span>) V[<span class="number">0</span>][<span class="number">2</span>] = <span class="number">6</span>/<span class="number">8.0</span>;</span><br><span class="line">        <span class="keyword">if</span>(N&gt;<span class="number">2</span>) V[<span class="number">0</span>][<span class="number">3</span>] = <span class="number">7</span>/<span class="number">8.0</span>;</span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;V[<span class="number">0</span>][<span class="number">1</span>]&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> a=<span class="number">1</span>; a&lt;=N; a++)&#123;</span><br><span class="line">            V[a][<span class="number">0</span>] = <span class="number">0.0</span>;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> b=<span class="number">1</span>; b&lt;=N; b++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(a==<span class="number">1</span>)&#123;</span><br><span class="line">                    <span class="keyword">if</span>(b==<span class="number">1</span>) V[a][b] = <span class="number">5</span>/<span class="number">8.0</span>;</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span>(b==<span class="number">2</span>) V[a][b] = <span class="number">6</span>/<span class="number">8.0</span>;</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span>(b==<span class="number">3</span>) V[a][b] = <span class="number">7</span>/<span class="number">8.0</span>;</span><br><span class="line">                    <span class="keyword">else</span>  V[a][b] = <span class="number">1.0</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span>(a==<span class="number">2</span>)&#123;</span><br><span class="line">                    <span class="keyword">if</span>(b==<span class="number">1</span>) V[a][b] = <span class="number">4</span>/<span class="number">8.0</span>;</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span>(b==<span class="number">2</span>) V[a][b] = <span class="number">5</span>/<span class="number">8.0</span>;</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span>(b==<span class="number">3</span>) V[a][b] = <span class="number">6</span>/<span class="number">8.0</span>;</span><br><span class="line">                    <span class="keyword">else</span>  V[a][b] = <span class="number">6</span>/<span class="number">8.0</span> + <span class="number">0.25</span> * V[a<span class="number">-1</span>][b<span class="number">-3</span>];</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span>(a==<span class="number">3</span>)&#123;</span><br><span class="line">                    <span class="keyword">if</span>(b==<span class="number">1</span>) V[a][b] = <span class="number">3</span>/<span class="number">8.0</span>;</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span>(b==<span class="number">2</span>) V[a][b] = <span class="number">4</span>/<span class="number">8.0</span>;</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span>(b==<span class="number">3</span>) V[a][b] = <span class="number">4</span>/<span class="number">8.0</span> +  <span class="number">0.25</span> * V[a<span class="number">-2</span>][b<span class="number">-2</span>];</span><br><span class="line">                    <span class="keyword">else</span>  V[a][b] = <span class="number">4</span>/<span class="number">8.0</span> + <span class="number">0.25</span> * (V[a<span class="number">-2</span>][b<span class="number">-2</span>] + V[a<span class="number">-1</span>][b<span class="number">-3</span>]);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span>(a==<span class="number">4</span>)&#123;</span><br><span class="line">                    <span class="keyword">if</span>(b==<span class="number">1</span>) V[a][b] = <span class="number">2</span>/<span class="number">8.0</span>;</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span>(b==<span class="number">2</span>) V[a][b] = <span class="number">2</span>/<span class="number">8.0</span> + <span class="number">0.25</span> * V[a<span class="number">-3</span>][b<span class="number">-1</span>];</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span>(b==<span class="number">3</span>) V[a][b] = <span class="number">2</span>/<span class="number">8.0</span> +  <span class="number">0.25</span> * (V[a<span class="number">-3</span>][b<span class="number">-1</span>] + V[a<span class="number">-2</span>][b<span class="number">-2</span>]);</span><br><span class="line">                    <span class="keyword">else</span>  V[a][b] = <span class="number">2</span>/<span class="number">8.0</span> + <span class="number">0.25</span> * (V[a<span class="number">-3</span>][b<span class="number">-1</span>] + V[a<span class="number">-2</span>][b<span class="number">-2</span>] + V[a<span class="number">-1</span>][b<span class="number">-3</span>]);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span>&#123;</span><br><span class="line">                    <span class="keyword">if</span>(b==<span class="number">1</span>) V[a][b] = <span class="number">0.25</span> * V[a<span class="number">-4</span>][b];</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span>(b==<span class="number">2</span>) V[a][b] = <span class="number">0.25</span> * (V[a<span class="number">-4</span>][b]+ V[a<span class="number">-3</span>][b<span class="number">-1</span>]);</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span>(b==<span class="number">3</span>) V[a][b] = <span class="number">0.25</span> * (V[a<span class="number">-4</span>][b]+ V[a<span class="number">-3</span>][b<span class="number">-1</span>] + V[a<span class="number">-2</span>][b<span class="number">-2</span>]);</span><br><span class="line">                    <span class="keyword">else</span>  V[a][b] = <span class="number">0.25</span> * (V[a<span class="number">-4</span>][b] + V[a<span class="number">-3</span>][b<span class="number">-1</span>] + V[a<span class="number">-2</span>][b<span class="number">-2</span>] + V[a<span class="number">-1</span>][b<span class="number">-3</span>]);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> V[N][N];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-08-31</p>
 
       
     </div>
@@ -843,7 +766,7 @@ Would this affect the run-time complexity? How and why?</code></pre><h2 id="解�
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(813.%20Largest%20Sum%20of%20Averages)%E9%A2%98%E8%A7%A3/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(808.%20Soup%20Servings)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
@@ -857,7 +780,7 @@ Would this affect the run-time complexity? How and why?</code></pre><h2 id="解�
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2020/01/24/LeetCode(813.%20Largest%20Sum%20of%20Averages)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(813. Largest Sum of Averages)题解</a>
+            <a href="/2020/01/24/LeetCode(808.%20Soup%20Servings)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(808. Soup Servings)题解</a>
         </h1>
 
         <div class="post-meta">
@@ -881,36 +804,35 @@ Would this affect the run-time complexity? How and why?</code></pre><h2 id="解�
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="LeetCode-813-Largest-Sum-of-Averages-题解"><a href="#LeetCode-813-Largest-Sum-of-Averages-题解" class="headerlink" title="LeetCode(813. Largest Sum of Averages)题解"></a>LeetCode(813. Largest Sum of Averages)题解</h1><hr>
-<p>We partition a row of numbers A into at most K adjacent (non-empty) groups, then our score is the sum of the average of each group. What is the largest score we can achieve?</p>
-<p>Note that our partition must use every number in A, and that scores are not necessarily integers.</p>
+          <h1 id="LeetCode-808-Soup-Servings-题解"><a href="#LeetCode-808-Soup-Servings-题解" class="headerlink" title="LeetCode(808. Soup Servings)题解"></a>LeetCode(808. Soup Servings)题解</h1><hr>
+<p>There are two types of soup: type A and type B. Initially we have N ml of each type of soup. There are four kinds of operations:</p>
+<pre><code>Serve 100 ml of soup A and 0 ml of soup B
+Serve 75 ml of soup A and 25 ml of soup B
+Serve 50 ml of soup A and 50 ml of soup B
+Serve 25 ml of soup A and 75 ml of soup B</code></pre><p>When we serve some soup, we give it to someone and we no longer have it.  Each turn, we will choose from the four operations with equal probability 0.25. If the remaining volume of soup is not enough to complete the operation, we will serve as much as we can.  We stop once we no longer have some quantity of both types of soup.</p>
+<p>Note that we do not have the operation where all 100 ml’s of soup B are used first.  </p>
+<p>Return the probability that soup A will be empty first, plus half the probability that A and B become empty at the same time.</p>
 <pre><code>Example:
-Input: 
-A = [9,1,2,3,9]
-K = 3
-Output: 20
-Explanation: 
-The best choice is to partition A into [9], [1, 2, 3], [9]. The answer is 9 + (1 + 2 + 3) / 3 + 9 = 20.
-We could have also partitioned A into [9, 1], [2], [3, 9], for example.
-That partition would lead to a score of 5 + 2 + 6 = 13, which is worse.</code></pre><p>Note:</p>
-<pre><code>1 &lt;= A.length &lt;= 100.
-1 &lt;= A[i] &lt;= 10000.
-1 &lt;= K &lt;= A.length.
-Answers within 10^-6 of the correct answer will be accepted as correct.</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>这道题给了我们一个数组，说是让我们将数组分成至多K个非空组，然后说需要统计的分数是各组的平均数之和，让我们求一个分割方法，使得这个分数值最大，当然这个分数值不一定是整型数。这道题限制了分割的组必须为非空组，至多分成K组。</p>
-<p>首先可以想到，如果K 大于等于数组的长度，那么根本无需分组，因为这样才不会损失数据。如果K小于数组长度就需要进行分组. 而对于这种情况如何做呢。可以使用DP。</p>
-<p>假设数组A的长度为lenA，要求分为K组，那么用大小为lenA*K的DP记录最优值，DP[i][k]表示A中1到i的元素中，最多分为k+1组时所得到的最优值。当i==0时，表示不分组</p>
-<p>那么状态转移方程就是如下——</p>
-<p>DP[i][k] = max(DP[i][k], DP[j][k-1]+sum(j, i-1, A)/(i-j));</p>
-<p>代码如下，时间复杂度O(n4), 空间复杂度O(n2):</p>
-<p>Runtime: 96 ms, faster than 5.08% of C++ online submissions for Largest Sum of Averages.<br>Memory Usage: 9.4 MB, less than 50.00% of C++ online submissions for Largest Sum of Averages.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">sum</span><span class="params">(<span class="keyword">int</span> sta, <span class="keyword">int</span> <span class="built_in">end</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(sta&lt;=<span class="built_in">end</span>) res += A[sta++];</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">largestSumOfAverages</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A, <span class="keyword">int</span> K)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = A.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span>(len&lt;=K) <span class="keyword">return</span> sum(<span class="number">0</span>, len<span class="number">-1</span>, A);</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">double</span>&gt;&gt; <span class="title">DP</span><span class="params">(len+<span class="number">1</span>, <span class="built_in">vector</span>&lt;<span class="keyword">double</span>&gt;(K+<span class="number">1</span>, <span class="number">0</span>))</span></span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;=len; i++) DP[i][<span class="number">0</span>] = sum(<span class="number">0</span>, i<span class="number">-1</span>, A)/i;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;=len; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">1</span>; k&lt;K; k++)&#123;</span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;=i; j++)&#123;</span><br><span class="line">                    DP[i][k] = <span class="built_in">max</span>(DP[i][k], DP[j][k<span class="number">-1</span>]+sum(j, i<span class="number">-1</span>, A)/(i-j));</span><br><span class="line">                    <span class="comment">//cout&lt;&lt;j&lt;&lt;" DP["&lt;&lt;i&lt;&lt;","&lt;&lt;k&lt;&lt;"]"&lt;&lt;": "&lt;&lt;DP[i][k]&lt;&lt;endl;</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> DP[len][K<span class="number">-1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+Input: N = 50
+Output: 0.625
+Explanation: </code></pre><p>If we choose the first two operations, A will become empty first. For the third operation, A and B will become empty at the same time. For the fourth operation, B will become empty first. So the total probability of A becoming empty first plus half the probability that A and B become empty at the same time, is 0.25 * (1 + 1 + 0.5 + 0) = 0.625.</p>
+<p>Notes:</p>
+<pre><code>0 &lt;= N &lt;= 10^9. 
+Answers within 10^-6 of the true value will be accepted as correct.</code></pre><h2 id="阶梯思路"><a href="#阶梯思路" class="headerlink" title="阶梯思路"></a>阶梯思路</h2><p>有A，B两种汤。初始每种汤各有N毫升，现有4种操作：</p>
+<ol>
+<li>A倒出100ml，B倒出0ml</li>
+<li>A倒出75ml， B倒出25ml</li>
+<li>A倒出50ml， B倒出50ml</li>
+<li>A倒出25ml， B倒出75ml</li>
+</ol>
+<p>每种操作的概率均等为0.25。如果汤的剩余容量不足完成某次操作，则有多少倒多少。当每一种汤都倒完时停止操作。</p>
+<p>求A先倒完的概率，加上A和B同时倒完的概率。</p>
+<p>这个可以用DP，DP[i][j]分别表示A中的为i和B中为j时满足题目的概率。这题关键其实是返回1的trick，因为Notes里说了可以容忍一定的数据错误，那么当N足够大的时候，概率足够接近1，就直接返回1就可了。</p>
+<p>代码如下,时间复杂度O(n2)，空间复杂度O(n2).(其实都是O(1)):</p>
+<p>Runtime: 4 ms, faster than 81.50% of C++ online submissions for Soup Servings.<br>Memory Usage: 9 MB, less than 100.00% of C++ online submissions for Soup Servings.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">soupServings</span><span class="params">(<span class="keyword">int</span> N)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(N &gt; <span class="number">5000</span>) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        N = <span class="built_in">ceil</span>(N/<span class="number">25.0</span>);</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">double</span>&gt;&gt; V;</span><br><span class="line">        <span class="keyword">if</span>(N == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0.5</span>;</span><br><span class="line">        V = <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">double</span>&gt;&gt;(N+<span class="number">1</span>, <span class="built_in">vector</span>&lt;<span class="keyword">double</span>&gt;(N+<span class="number">1</span>, <span class="number">1</span>));</span><br><span class="line">        V[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">0.5</span>;</span><br><span class="line">        <span class="keyword">if</span>(N&gt;<span class="number">0</span>) V[<span class="number">0</span>][<span class="number">1</span>] = <span class="number">5</span>/<span class="number">8.0</span>;</span><br><span class="line">        <span class="keyword">if</span>(N&gt;<span class="number">1</span>) V[<span class="number">0</span>][<span class="number">2</span>] = <span class="number">6</span>/<span class="number">8.0</span>;</span><br><span class="line">        <span class="keyword">if</span>(N&gt;<span class="number">2</span>) V[<span class="number">0</span>][<span class="number">3</span>] = <span class="number">7</span>/<span class="number">8.0</span>;</span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;V[<span class="number">0</span>][<span class="number">1</span>]&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> a=<span class="number">1</span>; a&lt;=N; a++)&#123;</span><br><span class="line">            V[a][<span class="number">0</span>] = <span class="number">0.0</span>;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> b=<span class="number">1</span>; b&lt;=N; b++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(a==<span class="number">1</span>)&#123;</span><br><span class="line">                    <span class="keyword">if</span>(b==<span class="number">1</span>) V[a][b] = <span class="number">5</span>/<span class="number">8.0</span>;</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span>(b==<span class="number">2</span>) V[a][b] = <span class="number">6</span>/<span class="number">8.0</span>;</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span>(b==<span class="number">3</span>) V[a][b] = <span class="number">7</span>/<span class="number">8.0</span>;</span><br><span class="line">                    <span class="keyword">else</span>  V[a][b] = <span class="number">1.0</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span>(a==<span class="number">2</span>)&#123;</span><br><span class="line">                    <span class="keyword">if</span>(b==<span class="number">1</span>) V[a][b] = <span class="number">4</span>/<span class="number">8.0</span>;</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span>(b==<span class="number">2</span>) V[a][b] = <span class="number">5</span>/<span class="number">8.0</span>;</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span>(b==<span class="number">3</span>) V[a][b] = <span class="number">6</span>/<span class="number">8.0</span>;</span><br><span class="line">                    <span class="keyword">else</span>  V[a][b] = <span class="number">6</span>/<span class="number">8.0</span> + <span class="number">0.25</span> * V[a<span class="number">-1</span>][b<span class="number">-3</span>];</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span>(a==<span class="number">3</span>)&#123;</span><br><span class="line">                    <span class="keyword">if</span>(b==<span class="number">1</span>) V[a][b] = <span class="number">3</span>/<span class="number">8.0</span>;</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span>(b==<span class="number">2</span>) V[a][b] = <span class="number">4</span>/<span class="number">8.0</span>;</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span>(b==<span class="number">3</span>) V[a][b] = <span class="number">4</span>/<span class="number">8.0</span> +  <span class="number">0.25</span> * V[a<span class="number">-2</span>][b<span class="number">-2</span>];</span><br><span class="line">                    <span class="keyword">else</span>  V[a][b] = <span class="number">4</span>/<span class="number">8.0</span> + <span class="number">0.25</span> * (V[a<span class="number">-2</span>][b<span class="number">-2</span>] + V[a<span class="number">-1</span>][b<span class="number">-3</span>]);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span>(a==<span class="number">4</span>)&#123;</span><br><span class="line">                    <span class="keyword">if</span>(b==<span class="number">1</span>) V[a][b] = <span class="number">2</span>/<span class="number">8.0</span>;</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span>(b==<span class="number">2</span>) V[a][b] = <span class="number">2</span>/<span class="number">8.0</span> + <span class="number">0.25</span> * V[a<span class="number">-3</span>][b<span class="number">-1</span>];</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span>(b==<span class="number">3</span>) V[a][b] = <span class="number">2</span>/<span class="number">8.0</span> +  <span class="number">0.25</span> * (V[a<span class="number">-3</span>][b<span class="number">-1</span>] + V[a<span class="number">-2</span>][b<span class="number">-2</span>]);</span><br><span class="line">                    <span class="keyword">else</span>  V[a][b] = <span class="number">2</span>/<span class="number">8.0</span> + <span class="number">0.25</span> * (V[a<span class="number">-3</span>][b<span class="number">-1</span>] + V[a<span class="number">-2</span>][b<span class="number">-2</span>] + V[a<span class="number">-1</span>][b<span class="number">-3</span>]);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span>&#123;</span><br><span class="line">                    <span class="keyword">if</span>(b==<span class="number">1</span>) V[a][b] = <span class="number">0.25</span> * V[a<span class="number">-4</span>][b];</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span>(b==<span class="number">2</span>) V[a][b] = <span class="number">0.25</span> * (V[a<span class="number">-4</span>][b]+ V[a<span class="number">-3</span>][b<span class="number">-1</span>]);</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span>(b==<span class="number">3</span>) V[a][b] = <span class="number">0.25</span> * (V[a<span class="number">-4</span>][b]+ V[a<span class="number">-3</span>][b<span class="number">-1</span>] + V[a<span class="number">-2</span>][b<span class="number">-2</span>]);</span><br><span class="line">                    <span class="keyword">else</span>  V[a][b] = <span class="number">0.25</span> * (V[a<span class="number">-4</span>][b] + V[a<span class="number">-3</span>][b<span class="number">-1</span>] + V[a<span class="number">-2</span>][b<span class="number">-2</span>] + V[a<span class="number">-1</span>][b<span class="number">-3</span>]);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> V[N][N];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
-<p>可以观察到，在K上，每次状态更新都只使用到了上一个K-1行的数据，因此可以将数组缩减为一维数组，同时，Sum可以用一个数组存储，从而避免重复计算。</p>
-<p>代码如下，时间复杂度O(n3),空间复杂度O(n):</p>
-<p>Runtime: 12 ms, faster than 63.89% of C++ online submissions for Largest Sum of Averages.<br>Memory Usage: 8.6 MB, less than 100.00% of C++ online submissions for Largest Sum of Averages.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">largestSumOfAverages</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A, <span class="keyword">int</span> K)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = A.<span class="built_in">size</span>();  </span><br><span class="line">        vector&lt;double&gt; DP(len+1, 0), Sum(len+1, 0);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;=len; i++)&#123;</span><br><span class="line">            Sum[i] = Sum[i<span class="number">-1</span>] + A[i<span class="number">-1</span>]; </span><br><span class="line">            DP[i] = Sum[i] / i;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(len&lt;=K) <span class="keyword">return</span> Sum[len];</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">1</span>; k &lt; K; k++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = len; i &gt;= <span class="number">1</span>; i--) &#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> j = i; j &gt;=<span class="number">0</span>; j--) &#123;</span><br><span class="line">                    DP[i] = <span class="built_in">max</span>(DP[i], DP[j]+(Sum[i]-Sum[j])/(i-j)); </span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> DP[len];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-09-03</p>
+<p>BitBrave, 2019-08-31</p>
 
       
     </div>
@@ -988,6 +910,89 @@ Answers within 10^-6 of the correct answer will be accepted as correct.</code></
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">xorGame</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i:nums) res ^= i;</span><br><span class="line">        <span class="keyword">return</span> res == <span class="number">0</span> || (nums.<span class="built_in">size</span>() &amp; <span class="number">1</span>) == <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 <p>BitBrave, 2019-09-11</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(814.%20Binary%20Tree%20Pruning)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(814.%20Binary%20Tree%20Pruning)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(814. Binary Tree Pruning)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-814-Binary-Tree-Pruning-题解"><a href="#LeetCode-814-Binary-Tree-Pruning-题解" class="headerlink" title="LeetCode(814. Binary Tree Pruning)题解"></a>LeetCode(814. Binary Tree Pruning)题解</h1><hr>
+<p>We are given the head node root of a binary tree, where additionally every node’s value is either a 0 or a 1.</p>
+<p>Return the same tree where every subtree (of the given tree) not containing a 1 has been removed.</p>
+<p>(Recall that the subtree of a node X is X, plus every node that is a descendant of X.)</p>
+<pre><code>Example 1:
+Input: [1,null,0,0,1]
+Output: [1,null,0,null,1]
+
+Explanation: 
+Only the red nodes satisfy the property &quot;every subtree not containing a 1&quot;.
+The diagram on the right represents the answer.</code></pre><p><img src="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/04/06/1028_2.png" alt=""></p>
+<pre><code>Example 2:
+Input: [1,0,1,0,0,0,1]
+Output: [1,null,1,null,1]</code></pre><p><img src="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/04/06/1028_1.png" alt=""></p>
+<pre><code>Example 3:
+Input: [1,1,0,1,1,0,1,0]
+Output: [1,1,0,1,1,null,1]</code></pre><p><img src="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/04/05/1028.png" alt=""></p>
+<p>Note:</p>
+<pre><code>The binary tree will have at most 100 nodes.
+The value of each node will only be 0 or 1.</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>除去二叉树中所有元素为0的子树。</p>
+<p>这个使用遍历的办法可以达到，使用Map遍历遇到的节点，记录该节点及其子树是否全部为0组成，如果全部为0，那么久表示这颗树需要删除，否则就不用删除。</p>
+<p>代码如下，时间复杂度O(n), 空间复杂度O(n):</p>
+<p>Runtime: 8 ms, faster than 5.19% of C++ online submissions for Binary Tree Pruning.<br>Memory Usage: 11.1 MB, less than 7.14% of C++ online submissions for Binary Tree Pruning.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">    <span class="built_in">map</span>&lt;TreeNode*, <span class="keyword">bool</span>&gt; M;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isAll0</span><span class="params">(TreeNode* root)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(M.<span class="built_in">find</span>(root) != M.<span class="built_in">end</span>()) <span class="keyword">return</span> M[root];</span><br><span class="line">        <span class="keyword">bool</span> l = isAll0(root-&gt;left), r = isAll0(root-&gt;right);</span><br><span class="line">        <span class="keyword">if</span>(l &amp;&amp; r)&#123;</span><br><span class="line">            M[root] = <span class="literal">true</span> &amp;&amp; root-&gt;val == <span class="number">0</span>;</span><br><span class="line">            root-&gt;left = <span class="literal">NULL</span>;</span><br><span class="line">            root-&gt;right = <span class="literal">NULL</span>;</span><br><span class="line">            <span class="keyword">return</span> M[root];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(l) root-&gt;left = <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">if</span>(r) root-&gt;right = <span class="literal">NULL</span>;</span><br><span class="line">        M[root] = <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">TreeNode* <span class="title">pruneTree</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        M[<span class="literal">NULL</span>] = <span class="literal">true</span>;</span><br><span class="line">        isAll0(root);</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-08-27</p>
 
       
     </div>
@@ -1163,6 +1168,54 @@ Answers within 10^-6 of the correct answer will be accepted as correct.</code></
   
 
   
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
 
   
 

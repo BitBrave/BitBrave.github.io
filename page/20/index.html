@@ -177,7 +177,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(814.%20Binary%20Tree%20Pruning)%E9%A2%98%E8%A7%A3/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(813.%20Largest%20Sum%20of%20Averages)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
@@ -191,7 +191,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2020/01/24/LeetCode(814.%20Binary%20Tree%20Pruning)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(814. Binary Tree Pruning)题解</a>
+            <a href="/2020/01/24/LeetCode(813.%20Largest%20Sum%20of%20Averages)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(813. Largest Sum of Averages)题解</a>
         </h1>
 
         <div class="post-meta">
@@ -215,32 +215,114 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="LeetCode-814-Binary-Tree-Pruning-题解"><a href="#LeetCode-814-Binary-Tree-Pruning-题解" class="headerlink" title="LeetCode(814. Binary Tree Pruning)题解"></a>LeetCode(814. Binary Tree Pruning)题解</h1><hr>
-<p>We are given the head node root of a binary tree, where additionally every node’s value is either a 0 or a 1.</p>
-<p>Return the same tree where every subtree (of the given tree) not containing a 1 has been removed.</p>
-<p>(Recall that the subtree of a node X is X, plus every node that is a descendant of X.)</p>
-<pre><code>Example 1:
-Input: [1,null,0,0,1]
-Output: [1,null,0,null,1]
-
+          <h1 id="LeetCode-813-Largest-Sum-of-Averages-题解"><a href="#LeetCode-813-Largest-Sum-of-Averages-题解" class="headerlink" title="LeetCode(813. Largest Sum of Averages)题解"></a>LeetCode(813. Largest Sum of Averages)题解</h1><hr>
+<p>We partition a row of numbers A into at most K adjacent (non-empty) groups, then our score is the sum of the average of each group. What is the largest score we can achieve?</p>
+<p>Note that our partition must use every number in A, and that scores are not necessarily integers.</p>
+<pre><code>Example:
+Input: 
+A = [9,1,2,3,9]
+K = 3
+Output: 20
 Explanation: 
-Only the red nodes satisfy the property &quot;every subtree not containing a 1&quot;.
-The diagram on the right represents the answer.</code></pre><p><img src="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/04/06/1028_2.png" alt=""></p>
-<pre><code>Example 2:
-Input: [1,0,1,0,0,0,1]
-Output: [1,null,1,null,1]</code></pre><p><img src="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/04/06/1028_1.png" alt=""></p>
-<pre><code>Example 3:
-Input: [1,1,0,1,1,0,1,0]
-Output: [1,1,0,1,1,null,1]</code></pre><p><img src="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/04/05/1028.png" alt=""></p>
-<p>Note:</p>
-<pre><code>The binary tree will have at most 100 nodes.
-The value of each node will only be 0 or 1.</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>除去二叉树中所有元素为0的子树。</p>
-<p>这个使用遍历的办法可以达到，使用Map遍历遇到的节点，记录该节点及其子树是否全部为0组成，如果全部为0，那么久表示这颗树需要删除，否则就不用删除。</p>
-<p>代码如下，时间复杂度O(n), 空间复杂度O(n):</p>
-<p>Runtime: 8 ms, faster than 5.19% of C++ online submissions for Binary Tree Pruning.<br>Memory Usage: 11.1 MB, less than 7.14% of C++ online submissions for Binary Tree Pruning.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">    <span class="built_in">map</span>&lt;TreeNode*, <span class="keyword">bool</span>&gt; M;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isAll0</span><span class="params">(TreeNode* root)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(M.<span class="built_in">find</span>(root) != M.<span class="built_in">end</span>()) <span class="keyword">return</span> M[root];</span><br><span class="line">        <span class="keyword">bool</span> l = isAll0(root-&gt;left), r = isAll0(root-&gt;right);</span><br><span class="line">        <span class="keyword">if</span>(l &amp;&amp; r)&#123;</span><br><span class="line">            M[root] = <span class="literal">true</span> &amp;&amp; root-&gt;val == <span class="number">0</span>;</span><br><span class="line">            root-&gt;left = <span class="literal">NULL</span>;</span><br><span class="line">            root-&gt;right = <span class="literal">NULL</span>;</span><br><span class="line">            <span class="keyword">return</span> M[root];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(l) root-&gt;left = <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">if</span>(r) root-&gt;right = <span class="literal">NULL</span>;</span><br><span class="line">        M[root] = <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">TreeNode* <span class="title">pruneTree</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        M[<span class="literal">NULL</span>] = <span class="literal">true</span>;</span><br><span class="line">        isAll0(root);</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+The best choice is to partition A into [9], [1, 2, 3], [9]. The answer is 9 + (1 + 2 + 3) / 3 + 9 = 20.
+We could have also partitioned A into [9, 1], [2], [3, 9], for example.
+That partition would lead to a score of 5 + 2 + 6 = 13, which is worse.</code></pre><p>Note:</p>
+<pre><code>1 &lt;= A.length &lt;= 100.
+1 &lt;= A[i] &lt;= 10000.
+1 &lt;= K &lt;= A.length.
+Answers within 10^-6 of the correct answer will be accepted as correct.</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>这道题给了我们一个数组，说是让我们将数组分成至多K个非空组，然后说需要统计的分数是各组的平均数之和，让我们求一个分割方法，使得这个分数值最大，当然这个分数值不一定是整型数。这道题限制了分割的组必须为非空组，至多分成K组。</p>
+<p>首先可以想到，如果K 大于等于数组的长度，那么根本无需分组，因为这样才不会损失数据。如果K小于数组长度就需要进行分组. 而对于这种情况如何做呢。可以使用DP。</p>
+<p>假设数组A的长度为lenA，要求分为K组，那么用大小为lenA*K的DP记录最优值，DP[i][k]表示A中1到i的元素中，最多分为k+1组时所得到的最优值。当i==0时，表示不分组</p>
+<p>那么状态转移方程就是如下——</p>
+<p>DP[i][k] = max(DP[i][k], DP[j][k-1]+sum(j, i-1, A)/(i-j));</p>
+<p>代码如下，时间复杂度O(n4), 空间复杂度O(n2):</p>
+<p>Runtime: 96 ms, faster than 5.08% of C++ online submissions for Largest Sum of Averages.<br>Memory Usage: 9.4 MB, less than 50.00% of C++ online submissions for Largest Sum of Averages.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">sum</span><span class="params">(<span class="keyword">int</span> sta, <span class="keyword">int</span> <span class="built_in">end</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(sta&lt;=<span class="built_in">end</span>) res += A[sta++];</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">largestSumOfAverages</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A, <span class="keyword">int</span> K)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = A.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span>(len&lt;=K) <span class="keyword">return</span> sum(<span class="number">0</span>, len<span class="number">-1</span>, A);</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">double</span>&gt;&gt; <span class="title">DP</span><span class="params">(len+<span class="number">1</span>, <span class="built_in">vector</span>&lt;<span class="keyword">double</span>&gt;(K+<span class="number">1</span>, <span class="number">0</span>))</span></span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;=len; i++) DP[i][<span class="number">0</span>] = sum(<span class="number">0</span>, i<span class="number">-1</span>, A)/i;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;=len; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">1</span>; k&lt;K; k++)&#123;</span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;=i; j++)&#123;</span><br><span class="line">                    DP[i][k] = <span class="built_in">max</span>(DP[i][k], DP[j][k<span class="number">-1</span>]+sum(j, i<span class="number">-1</span>, A)/(i-j));</span><br><span class="line">                    <span class="comment">//cout&lt;&lt;j&lt;&lt;" DP["&lt;&lt;i&lt;&lt;","&lt;&lt;k&lt;&lt;"]"&lt;&lt;": "&lt;&lt;DP[i][k]&lt;&lt;endl;</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> DP[len][K<span class="number">-1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
-<p>BitBrave, 2019-08-27</p>
+<p>可以观察到，在K上，每次状态更新都只使用到了上一个K-1行的数据，因此可以将数组缩减为一维数组，同时，Sum可以用一个数组存储，从而避免重复计算。</p>
+<p>代码如下，时间复杂度O(n3),空间复杂度O(n):</p>
+<p>Runtime: 12 ms, faster than 63.89% of C++ online submissions for Largest Sum of Averages.<br>Memory Usage: 8.6 MB, less than 100.00% of C++ online submissions for Largest Sum of Averages.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">largestSumOfAverages</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A, <span class="keyword">int</span> K)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = A.<span class="built_in">size</span>();  </span><br><span class="line">        vector&lt;double&gt; DP(len+1, 0), Sum(len+1, 0);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;=len; i++)&#123;</span><br><span class="line">            Sum[i] = Sum[i<span class="number">-1</span>] + A[i<span class="number">-1</span>]; </span><br><span class="line">            DP[i] = Sum[i] / i;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(len&lt;=K) <span class="keyword">return</span> Sum[len];</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">1</span>; k &lt; K; k++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = len; i &gt;= <span class="number">1</span>; i--) &#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> j = i; j &gt;=<span class="number">0</span>; j--) &#123;</span><br><span class="line">                    DP[i] = <span class="built_in">max</span>(DP[i], DP[j]+(Sum[i]-Sum[j])/(i-j)); </span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> DP[len];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-09-03</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(815.%20Bus%20Routes)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(815.%20Bus%20Routes)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(815. Bus Routes)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-815-Bus-Routes-题解"><a href="#LeetCode-815-Bus-Routes-题解" class="headerlink" title="LeetCode(815. Bus Routes)题解"></a>LeetCode(815. Bus Routes)题解</h1><hr>
+<p>We have a list of bus routes. Each routes[i] is a bus route that the i-th bus repeats forever. For example if routes[0] = [1, 5, 7], this means that the first bus (0-th indexed) travels in the sequence 1-&gt;5-&gt;7-&gt;1-&gt;5-&gt;7-&gt;1-&gt;… forever.</p>
+<p>We start at bus stop S (initially not on a bus), and we want to go to bus stop T. Travelling by buses only, what is the least number of buses we must take to reach our destination? Return -1 if it is not possible.</p>
+<pre><code>Example:
+Input: 
+routes = [[1, 2, 7], [3, 6, 7]]
+S = 1
+T = 6
+Output: 2
+Explanation: 
+The best strategy is take the first bus to the bus stop 7, then take the second bus to the bus stop 6.</code></pre><p>Note:</p>
+<pre><code>1 &lt;= routes.length &lt;= 500.
+1 &lt;= routes[i].length &lt;= 500.
+0 &lt;= routes[i][j] &lt; 10 ^ 6.</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>有一些公交，每个公交有固定的循环线路，现在给出一个起点站台和结束站台，求出最少的换乘公交数。</p>
+<p>这个题可以使用DFS，首先建立一个graph，节点代表一个公交，两个节点间有边表示这两个公交的线路有交叉的地方即意味着可以换乘。建立结束之后可以建立一个源点，从起点站台，所有经过这个站台的公交都与之加上一条边。然后建立一个汇点，所有经过这个站台的公交节点也与之相连。那么这个题就变成了求源点到汇点的最短路径，可使用DFS求得。</p>
+<p>如何构建graph呢，可是用一个Map，以站台为key，一个list记录经过这个站台的公交，Map构建完毕之后，每个元素内的value内的公交，两两之间即可换乘。</p>
+<p>代码如下，时间复杂度O(n2), 空间复杂度O(n2):</p>
+<p>Runtime: 344 ms, faster than 25.12% of C++ online submissions for Bus Routes.<br>Memory Usage: 35.9 MB, less than 100.00% of C++ online submissions for Bus Routes.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">    <span class="built_in">map</span>&lt;<span class="keyword">int</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; M;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; G;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">fillMap</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; routes, <span class="keyword">int</span> len)</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">int</span> rlen = routes[i].<span class="built_in">size</span>();</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;rlen; j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(M.<span class="built_in">find</span>(routes[i][j]) == M.<span class="built_in">end</span>()) M[routes[i][j]] = <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(<span class="number">1</span>, i+<span class="number">1</span>);</span><br><span class="line">                <span class="keyword">else</span> M[routes[i][j]].push_back(i+<span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">createGraph</span><span class="params">(<span class="keyword">int</span> len, <span class="keyword">int</span> S, <span class="keyword">int</span> T)</span></span>&#123;</span><br><span class="line">        <span class="built_in">map</span>&lt;<span class="keyword">int</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;::iterator iter;</span><br><span class="line">        iter = M.<span class="built_in">begin</span>();</span><br><span class="line">        <span class="keyword">for</span>(iter = M.<span class="built_in">begin</span>(); iter != M.<span class="built_in">end</span>(); iter++) &#123;</span><br><span class="line">            <span class="keyword">int</span> rlen = iter-&gt;second.<span class="built_in">size</span>();</span><br><span class="line">            <span class="keyword">if</span>(iter-&gt;first == S)&#123;</span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;rlen; i++) G[<span class="number">0</span>][iter-&gt;second[i]] = G[iter-&gt;second[i]][<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(iter-&gt;first == T)&#123;</span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;rlen; i++) G[len+<span class="number">1</span>][iter-&gt;second[i]] = G[iter-&gt;second[i]][len+<span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;rlen; i++)&#123;</span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;i; j++) G[iter-&gt;second[i]][iter-&gt;second[j]] = G[iter-&gt;second[j]][iter-&gt;second[i]] = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; G, <span class="keyword">int</span> len)</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;len; j++)&#123;</span><br><span class="line">                <span class="built_in">cout</span>&lt;&lt;G[i][j]&lt;&lt;<span class="string">" "</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="built_in">cout</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">numBusesToDestination</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; routes, <span class="keyword">int</span> S, <span class="keyword">int</span> T)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(S == T) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">-1</span>, len = routes.<span class="built_in">size</span>();</span><br><span class="line">        G = <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;(len+<span class="number">2</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(len+<span class="number">2</span>, <span class="number">0</span>));</span><br><span class="line">        fillMap(routes, len);</span><br><span class="line">        createGraph(len, S, T);</span><br><span class="line">        <span class="comment">//print(G, len+2);</span></span><br><span class="line">        <span class="comment">/************************/</span></span><br><span class="line">        <span class="built_in">queue</span>&lt;<span class="keyword">int</span>&gt; Q;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">bool</span>&gt; <span class="title">V</span><span class="params">(len+<span class="number">2</span>, <span class="literal">false</span>)</span></span>;</span><br><span class="line">        Q.push(<span class="number">0</span>);</span><br><span class="line">        V[<span class="number">0</span>] = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">while</span>(!Q.empty())&#123;</span><br><span class="line">            <span class="keyword">int</span> qlen = Q.<span class="built_in">size</span>();</span><br><span class="line">            <span class="keyword">while</span>(qlen-- &gt; <span class="number">0</span>)&#123;</span><br><span class="line">                <span class="keyword">int</span> bus = Q.front(); Q.pop();</span><br><span class="line">                <span class="comment">//cout&lt;&lt;"check "&lt;&lt;bus&lt;&lt;endl;</span></span><br><span class="line">                <span class="keyword">if</span>(bus == len+<span class="number">1</span>) <span class="keyword">return</span> res;</span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len+<span class="number">2</span>; i++)&#123;</span><br><span class="line">                    <span class="keyword">if</span>(V[i] || G[bus][i] == <span class="number">0</span>) <span class="keyword">continue</span>;</span><br><span class="line">                    V[i] = <span class="literal">true</span>;</span><br><span class="line">                    Q.push(i);</span><br><span class="line">                    <span class="comment">//cout&lt;&lt;"push "&lt;&lt;i&lt;&lt;endl;</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            res += <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-09-03</p>
 
       
     </div>
@@ -549,84 +631,6 @@ Output: 2-&gt;3</code></pre><h2 id="解题思路"><a href="#解题思路" class=
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">flipgame</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; fronts, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; backs)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = fronts.<span class="built_in">size</span>(), res = INT_MAX;</span><br><span class="line">        <span class="built_in">set</span>&lt;<span class="keyword">int</span>&gt; S;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(fronts[i] == backs[i]) S.insert(backs[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(fronts[i] == backs[i]) <span class="keyword">continue</span>;</span><br><span class="line">            <span class="keyword">if</span>(S.<span class="built_in">find</span>(fronts[i]) == S.<span class="built_in">end</span>()) res = <span class="built_in">min</span>(res, fronts[i]);</span><br><span class="line">            <span class="keyword">if</span>(S.<span class="built_in">find</span>(backs[i]) == S.<span class="built_in">end</span>()) res = <span class="built_in">min</span>(res, backs[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res == INT_MAX ? <span class="number">0</span> : res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 <p>BitBrave，2019-09-15</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(815.%20Bus%20Routes)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(815.%20Bus%20Routes)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(815. Bus Routes)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-815-Bus-Routes-题解"><a href="#LeetCode-815-Bus-Routes-题解" class="headerlink" title="LeetCode(815. Bus Routes)题解"></a>LeetCode(815. Bus Routes)题解</h1><hr>
-<p>We have a list of bus routes. Each routes[i] is a bus route that the i-th bus repeats forever. For example if routes[0] = [1, 5, 7], this means that the first bus (0-th indexed) travels in the sequence 1-&gt;5-&gt;7-&gt;1-&gt;5-&gt;7-&gt;1-&gt;… forever.</p>
-<p>We start at bus stop S (initially not on a bus), and we want to go to bus stop T. Travelling by buses only, what is the least number of buses we must take to reach our destination? Return -1 if it is not possible.</p>
-<pre><code>Example:
-Input: 
-routes = [[1, 2, 7], [3, 6, 7]]
-S = 1
-T = 6
-Output: 2
-Explanation: 
-The best strategy is take the first bus to the bus stop 7, then take the second bus to the bus stop 6.</code></pre><p>Note:</p>
-<pre><code>1 &lt;= routes.length &lt;= 500.
-1 &lt;= routes[i].length &lt;= 500.
-0 &lt;= routes[i][j] &lt; 10 ^ 6.</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>有一些公交，每个公交有固定的循环线路，现在给出一个起点站台和结束站台，求出最少的换乘公交数。</p>
-<p>这个题可以使用DFS，首先建立一个graph，节点代表一个公交，两个节点间有边表示这两个公交的线路有交叉的地方即意味着可以换乘。建立结束之后可以建立一个源点，从起点站台，所有经过这个站台的公交都与之加上一条边。然后建立一个汇点，所有经过这个站台的公交节点也与之相连。那么这个题就变成了求源点到汇点的最短路径，可使用DFS求得。</p>
-<p>如何构建graph呢，可是用一个Map，以站台为key，一个list记录经过这个站台的公交，Map构建完毕之后，每个元素内的value内的公交，两两之间即可换乘。</p>
-<p>代码如下，时间复杂度O(n2), 空间复杂度O(n2):</p>
-<p>Runtime: 344 ms, faster than 25.12% of C++ online submissions for Bus Routes.<br>Memory Usage: 35.9 MB, less than 100.00% of C++ online submissions for Bus Routes.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">    <span class="built_in">map</span>&lt;<span class="keyword">int</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; M;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; G;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">fillMap</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; routes, <span class="keyword">int</span> len)</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">int</span> rlen = routes[i].<span class="built_in">size</span>();</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;rlen; j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(M.<span class="built_in">find</span>(routes[i][j]) == M.<span class="built_in">end</span>()) M[routes[i][j]] = <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(<span class="number">1</span>, i+<span class="number">1</span>);</span><br><span class="line">                <span class="keyword">else</span> M[routes[i][j]].push_back(i+<span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">createGraph</span><span class="params">(<span class="keyword">int</span> len, <span class="keyword">int</span> S, <span class="keyword">int</span> T)</span></span>&#123;</span><br><span class="line">        <span class="built_in">map</span>&lt;<span class="keyword">int</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;::iterator iter;</span><br><span class="line">        iter = M.<span class="built_in">begin</span>();</span><br><span class="line">        <span class="keyword">for</span>(iter = M.<span class="built_in">begin</span>(); iter != M.<span class="built_in">end</span>(); iter++) &#123;</span><br><span class="line">            <span class="keyword">int</span> rlen = iter-&gt;second.<span class="built_in">size</span>();</span><br><span class="line">            <span class="keyword">if</span>(iter-&gt;first == S)&#123;</span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;rlen; i++) G[<span class="number">0</span>][iter-&gt;second[i]] = G[iter-&gt;second[i]][<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(iter-&gt;first == T)&#123;</span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;rlen; i++) G[len+<span class="number">1</span>][iter-&gt;second[i]] = G[iter-&gt;second[i]][len+<span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;rlen; i++)&#123;</span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;i; j++) G[iter-&gt;second[i]][iter-&gt;second[j]] = G[iter-&gt;second[j]][iter-&gt;second[i]] = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; G, <span class="keyword">int</span> len)</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;len; j++)&#123;</span><br><span class="line">                <span class="built_in">cout</span>&lt;&lt;G[i][j]&lt;&lt;<span class="string">" "</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="built_in">cout</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">numBusesToDestination</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; routes, <span class="keyword">int</span> S, <span class="keyword">int</span> T)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(S == T) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">-1</span>, len = routes.<span class="built_in">size</span>();</span><br><span class="line">        G = <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;(len+<span class="number">2</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(len+<span class="number">2</span>, <span class="number">0</span>));</span><br><span class="line">        fillMap(routes, len);</span><br><span class="line">        createGraph(len, S, T);</span><br><span class="line">        <span class="comment">//print(G, len+2);</span></span><br><span class="line">        <span class="comment">/************************/</span></span><br><span class="line">        <span class="built_in">queue</span>&lt;<span class="keyword">int</span>&gt; Q;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">bool</span>&gt; <span class="title">V</span><span class="params">(len+<span class="number">2</span>, <span class="literal">false</span>)</span></span>;</span><br><span class="line">        Q.push(<span class="number">0</span>);</span><br><span class="line">        V[<span class="number">0</span>] = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">while</span>(!Q.empty())&#123;</span><br><span class="line">            <span class="keyword">int</span> qlen = Q.<span class="built_in">size</span>();</span><br><span class="line">            <span class="keyword">while</span>(qlen-- &gt; <span class="number">0</span>)&#123;</span><br><span class="line">                <span class="keyword">int</span> bus = Q.front(); Q.pop();</span><br><span class="line">                <span class="comment">//cout&lt;&lt;"check "&lt;&lt;bus&lt;&lt;endl;</span></span><br><span class="line">                <span class="keyword">if</span>(bus == len+<span class="number">1</span>) <span class="keyword">return</span> res;</span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len+<span class="number">2</span>; i++)&#123;</span><br><span class="line">                    <span class="keyword">if</span>(V[i] || G[bus][i] == <span class="number">0</span>) <span class="keyword">continue</span>;</span><br><span class="line">                    V[i] = <span class="literal">true</span>;</span><br><span class="line">                    Q.push(i);</span><br><span class="line">                    <span class="comment">//cout&lt;&lt;"push "&lt;&lt;i&lt;&lt;endl;</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            res += <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-09-03</p>
 
       
     </div>
@@ -1121,6 +1125,54 @@ The best strategy is take the first bus to the bus stop 7, then take the second 
   
 
   
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
 
   
 
