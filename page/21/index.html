@@ -177,6 +177,256 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(837.%20New%2021%20Game)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(837.%20New%2021%20Game)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(837. New 21 Game)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-837-New-21-Game-题解"><a href="#LeetCode-837-New-21-Game-题解" class="headerlink" title="LeetCode(837. New 21 Game)题解"></a>LeetCode(837. New 21 Game)题解</h1><p>Alice plays the following game, loosely based on the card game “21”.</p>
+<p>Alice starts with <code>0</code> points, and draws numbers while she has less than <code>K</code> points.  During each draw, she gains an integer number of points randomly from the range <code>[1, W]</code>, where <code>W</code> is an integer.  Each draw is independent and the outcomes have equal probabilities.</p>
+<p>Alice stops drawing numbers when she gets <code>K</code> or more points.  What is the probability that she has <code>N</code>or less points?</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: N &#x3D; 10, K &#x3D; 1, W &#x3D; 10</span><br><span class="line">Output: 1.00000</span><br><span class="line">Explanation:  Alice gets a single card, then stops.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Input: N &#x3D; 6, K &#x3D; 1, W &#x3D; 10</span><br><span class="line">Output: 0.60000</span><br><span class="line">Explanation:  Alice gets a single card, then stops.</span><br><span class="line">In 6 out of W &#x3D; 10 possibilities, she is at or below N &#x3D; 6 points.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 3:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: N &#x3D; 21, K &#x3D; 17, W &#x3D; 10</span><br><span class="line">Output: 0.73278</span><br></pre></td></tr></table></figure>
+
+<p><strong>Note:</strong></p>
+<ol>
+<li><code>0 &lt;= K &lt;= N &lt;= 10000</code></li>
+<li><code>1 &lt;= W &lt;= 10000</code></li>
+<li>Answers will be accepted as correct if they are within <code>10^-5</code> of the correct answer.</li>
+<li>The judging time limit has been reduced for this question.</li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>新21点，给定三个数N，W，K，其中N小于等于K。每次从[1,W]中随机选一个数，累积的超过或者等于K时就停止，这时候求对应的和小于等于N的概率。</p>
+<p>可以知道，当K大于N时，概率一定是0。</p>
+<p>这个题可以用DP的方法求解：我们维护一个一维数组dp，其中dp[i]表示当目标为i时的概率，由于最后一次的选择的排数的范围为[i-w,i-1]，这时可选的牌有[1,w]，所以最后的点数和是[i,w+i-1]，对应我们是要求大于等于K的数，所以最后的累加范围是[K,K+W-1]，所以我们的结果便是返回dp[i]（K&lt;=i&lt;=K+W-1）的和。最后还有一个小技巧，由于最后的范围是[K,K+W-1]，如果N&gt;=K+W-1（意味着在最后一次累加和[K-W,K-1]选择时，无论选择[1,W]中的任何数，最后的累加和一定在[K,N]范围内，在这种条件下[K,K+W-1]是[K,N]的子集，所以直接返回1，如果N&lt;K+W-1，那么我们最后的答案就只用累加[K,N]的dp值即可，所以申请长度为N+1的数组即可）。</p>
+<p>而DP的计算，按照正常的思路，代码如下：时间复杂度$O(n^2)$，空间复杂度$O(n)$:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">new21Game</span><span class="params">(<span class="keyword">int</span> N, <span class="keyword">int</span> K, <span class="keyword">int</span> W)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(N&gt;=K+W<span class="number">-1</span> || K==<span class="number">0</span>) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">double</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">double</span>&gt; <span class="title">D</span><span class="params">(N+<span class="number">1</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">        D[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;=K; i++)&#123;</span><br><span class="line">            <span class="comment">//if(i&lt;=W) D[i] = 1.0/W;</span></span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=i<span class="number">-1</span>; j&gt;=<span class="number">0</span> &amp;&amp; i-j&lt;=W; j--) D[i] += <span class="number">1.0</span>/W * D[j];</span><br><span class="line">        &#125;</span><br><span class="line">        res = D[K];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=K+<span class="number">1</span>; i&lt;=N; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=K<span class="number">-1</span>; j&gt;=<span class="number">0</span> &amp;&amp; i-j&lt;=W; j--) D[i] += <span class="number">1.0</span>/W * D[j];</span><br><span class="line">            res += D[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>但是上述代码会超时，因为重复了很多无意义的计算，仔细观察第二个for循环，发现可以使用一个sum_维持最多W长度的局部概率值和，可以替代掉第二个for循环。</p>
+<p>因此优化的代码如下，时间复杂度$O(n)$，空间复杂度$O(n)$:</p>
+<p><code>Runtime: 4 ms, faster than 82.13% of C++ online submissions for New 21 Game. Memory Usage: 11.6 MB, less than 100.00% of C++ online submissions for New 21 Game.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">new21Game</span><span class="params">(<span class="keyword">int</span> N, <span class="keyword">int</span> K, <span class="keyword">int</span> W)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(N&gt;=K+W<span class="number">-1</span> || K==<span class="number">0</span>) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">double</span> res = <span class="number">0</span>, sum_ = <span class="number">0</span>;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">double</span>&gt; <span class="title">D</span><span class="params">(N+<span class="number">1</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;=N; i++)&#123;</span><br><span class="line">            D[i] = i&lt;=W ? sum_/W + <span class="number">1.0</span>/W : sum_/W;</span><br><span class="line">            <span class="keyword">if</span>(i&lt;K) sum_ += D[i];</span><br><span class="line">            <span class="keyword">else</span> res += D[i];</span><br><span class="line">            <span class="keyword">if</span>(i&gt;W) sum_ -= D[i-W];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-09-13</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(84.%20Largest%20Rectangle%20in%20Histogram)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(84.%20Largest%20Rectangle%20in%20Histogram)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(84. Largest Rectangle in Histogram)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-84-Largest-Rectangle-in-Histogram-题解"><a href="#LeetCode-84-Largest-Rectangle-in-Histogram-题解" class="headerlink" title="LeetCode(84. Largest Rectangle in Histogram)题解"></a>LeetCode(84. Largest Rectangle in Histogram)题解</h1><hr>
+<p>Given n non-negative integers representing the histogram’s bar height where the width of each bar is 1, find the area of largest rectangle in the histogram.</p>
+<p><img src="https://assets.leetcode.com/uploads/2018/10/12/histogram_area.png" alt="Above is a histogram where width of each bar is 1, given height = [2,1,5,6,2,3]."></p>
+<p><img src="https://assets.leetcode.com/uploads/2018/10/12/histogram_area.png" alt="The largest rectangle is shown in the shaded area, which has area = 10 unit."></p>
+<p>Example:</p>
+<pre><code>Input: [2,1,5,6,2,3]
+Output: 10</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>求给定的矩形集合内，在宽都为1，依次排列在一起，得到的最大的公共矩阵面积。</p>
+<p>我能想到的就是一个O(n2)的暴力枚举，果然不出意外的TLE了。</p>
+<p>然后上网搜了搜别人的解法。</p>
+<h3 id="局部峰值法理论时间复杂度O-n2-，空间复杂度O-1-。但进行了优化。"><a href="#局部峰值法理论时间复杂度O-n2-，空间复杂度O-1-。但进行了优化。" class="headerlink" title="局部峰值法理论时间复杂度O(n2)，空间复杂度O(1)。但进行了优化。"></a><a href="http://fisherlei.blogspot.com/2012/12/leetcode-largest-rectangle-in-histogram.html" target="_blank" rel="noopener">局部峰值法</a>理论时间复杂度O(n2)，空间复杂度O(1)。但进行了优化。</h3><p>从左到右遍历数组M，到达位置i，如果当前值大于接下来的一个，就求出当前数组在包含i在内的矩阵的公共最大面积。否则直接跳过。这是为什么可以AC呢？首先就是这个肯定可以得到正确答案，因为一个最优的答案中，边界值相邻的矩阵一定是低于边界的矩阵的或者就在矩阵集合的边界上。而局部峰值就涵盖了前面较低矩阵的时候的计算，因为其值一定小于加上后面高的矩阵的值。因此等于兼枝。但是如果数组是递减的，就只能老老实实一个个试了。</p>
+<p>代码如下：</p>
+<p>Runtime: 8 ms, faster than 99.77% of C++ online submissions for Largest Rectangle in Histogram.<br>Memory Usage: 9.9 MB, less than 92.71% of C++ online submissions for Largest Rectangle in Histogram.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">largestRectangleArea</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;<span class="built_in">height</span>)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>, len = <span class="built_in">height</span>.<span class="built_in">size</span>(), s;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;;</span><br><span class="line">            <span class="keyword">if</span>((i+<span class="number">1</span>)&lt;len &amp;&amp; <span class="built_in">height</span>[i]&lt;=<span class="built_in">height</span>[i+<span class="number">1</span>]) <span class="keyword">continue</span>;</span><br><span class="line">            s = <span class="built_in">height</span>[i];</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=i; j&gt;=<span class="number">0</span>; j--)&#123;</span><br><span class="line">                s = <span class="built_in">min</span>(s, <span class="built_in">height</span>[j]);</span><br><span class="line">                res = <span class="built_in">max</span>(res, s*(i-j+<span class="number">1</span>));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="递增栈，时间复杂度O-n-，空间复杂度O-n-。"><a href="#递增栈，时间复杂度O-n-，空间复杂度O-n-。" class="headerlink" title="递增栈，时间复杂度O(n)，空间复杂度O(n)。"></a><a href="http://www.cnblogs.com/lichen782/p/leetcode_Largest_Rectangle_in_Histogram.html" target="_blank" rel="noopener">递增栈</a>，时间复杂度O(n)，空间复杂度O(n)。</h3><p>从左到右遍历矩阵数组M，设计一个stack存储位置元素，遇到当前位置i，查看M[i]，栈空，就入栈，如果不空查看M[i]是否比栈顶元素对应的矩阵小。如果大于，就i入栈，如果小于就出栈直到剩下的栈顶元素k对应的矩阵值M[k]小于M[i]。然后以最后退出的栈顶元素乘上(i-k-1)，这个过程中总是记录对应乘积的最大值.</p>
+<p>正确定证明：可以知道这个栈是递增栈。每次遇到需要出栈的情况，第一次一定是栈顶元素的位置和当前遍历到的元素位置相邻，因为如果不相邻，那么这个栈顶元素应早就需要出栈了。然后一直出栈到栈顶元素比当前元素低，那么这个过程中一直计算的最大值实际上是矩阵均比M[i]高的矩阵形成的最大面积。出栈之后如果栈不为空，表示从栈顶元素对应的位置和当前遍历的位置之间都是大于这两个的矩阵，宽就为这样之差再减1。如果栈空，表示当前遍历的值得矩阵比前面所有的都小，宽为当前位置。就这样一直到最后。因为低的围成的面积一定是小于高的围成的面积。但是也不一定，如果低的很远，那么靠宽也有可能得到。因此，需要在最后矩阵后面的元素内再添加0。这样原本的最后一个元素可以入栈然后出栈，从而将矮的也能够计算出来。因为所有的元素只会操作一次，因此时间复杂度是O(n)。</p>
+<p>代码如下：</p>
+<p>Runtime: 16 ms, faster than 68.22% of C++ online submissions for Largest Rectangle in Histogram.<br>Memory Usage: 10.7 MB, less than 21.35% of C++ online submissions for Largest Rectangle in Histogram.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">largestRectangleArea</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;<span class="built_in">height</span>)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">height</span>.push_back(<span class="number">0</span>);</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>, len = <span class="built_in">height</span>.<span class="built_in">size</span>(), tmp;</span><br><span class="line">        <span class="built_in">stack</span>&lt;<span class="keyword">int</span>&gt; s;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(s.empty() || <span class="built_in">height</span>[s.top()]&lt;=<span class="built_in">height</span>[i]) s.push(i);</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                tmp = s.top(); s.pop();</span><br><span class="line">                res = <span class="built_in">max</span>(res, <span class="built_in">height</span>[tmp]*(s.empty() ? i : i - s.top() - <span class="number">1</span>));</span><br><span class="line">                i--;</span><br><span class="line">            &#125;   </span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BItBrave，2019-06-19</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(841.%20Keys%20and%20Rooms)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(841.%20Keys%20and%20Rooms)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(841. Keys and Rooms)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-841-Keys-and-Rooms-题解"><a href="#LeetCode-841-Keys-and-Rooms-题解" class="headerlink" title="LeetCode(841. Keys and Rooms)题解"></a>LeetCode(841. Keys and Rooms)题解</h1><hr>
+<p>There are N rooms and you start in room 0.  Each room has a distinct number in 0, 1, 2, …, N-1, and each room may have some keys to access the next room. </p>
+<p>Formally, each room i has a list of keys rooms[i], and each key rooms[i][j] is an integer in [0, 1, …, N-1] where N = rooms.length.  A key rooms[i][j] = v opens the room with number v.</p>
+<p>Initially, all the rooms start locked (except for room 0). </p>
+<p>You can walk back and forth between rooms freely.</p>
+<p>Return true if and only if you can enter every room.</p>
+<p>Example 1:</p>
+<pre><code>Input: [[1],[2],[3],[]]
+Output: true
+Explanation:  
+We start in room 0, and pick up key 1.
+We then go to room 1, and pick up key 2.
+We then go to room 2, and pick up key 3.
+We then go to room 3.  Since we were able to go to every room, we return true.</code></pre><p>Example 2:</p>
+<pre><code>Input: [[1,3],[3,0,1],[2],[0]]
+Output: false
+Explanation: We can&apos;t enter the room with number 2.</code></pre><p>Note:</p>
+<pre><code>1 &lt;= rooms.length &lt;= 1000
+0 &lt;= rooms[i].length &lt;= 1000
+The number of keys in all rooms combined is at most 3000.</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>有一些房间，每个房间有一些可以打开其他房间的钥匙。从0号房间进入，判断能不能通过钥匙进入所有的房间。</p>
+<p>这是个很简单的BFS或者DFS题目。房间之间可以通过是否一个有另一个的钥匙而建一个单向边，最后使用便利搜索判断即可，如果能遍历整个图就返回true，否则返回false。</p>
+<p>这里我使用了DFS，使用队列记录找到的钥匙，并且建立一个等大的数组，防止将重复的钥匙放入队列。</p>
+<h3 id="时间复杂度O-n-空间复杂度O-n"><a href="#时间复杂度O-n-空间复杂度O-n" class="headerlink" title="时间复杂度O(n), 空间复杂度O(n)."></a>时间复杂度O(n), 空间复杂度O(n).</h3><p>代码如下</p>
+<p>Runtime: 12 ms, faster than 67.50% of C++ online submissions for Keys and Rooms.<br>Memory Usage: 10.6 MB, less than 100.00% of C++ online submissions for Keys and Rooms.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">canVisitAllRooms</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; rooms)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = rooms.<span class="built_in">size</span>(), res = <span class="number">0</span>;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">bool</span>&gt; <span class="title">V</span><span class="params">(len, <span class="literal">false</span>)</span></span>;</span><br><span class="line">        <span class="built_in">queue</span>&lt;<span class="keyword">int</span>&gt; Q;</span><br><span class="line">        </span><br><span class="line">        Q.push(<span class="number">0</span>);</span><br><span class="line">        V[<span class="number">0</span>] = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">while</span>(!Q.empty())&#123;</span><br><span class="line">            <span class="keyword">int</span> nr = Q.front(); Q.pop();</span><br><span class="line">            res += <span class="number">1</span>;</span><br><span class="line">            <span class="comment">//if(res == len) return true;</span></span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;rooms[nr].<span class="built_in">size</span>(); i++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(V[rooms[nr][i]]) <span class="keyword">continue</span>;</span><br><span class="line">                Q.push(rooms[nr][i]);</span><br><span class="line">                V[rooms[nr][i]] = <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> len == res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-08-24</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(842.%20Split%20Array%20into%20Fibonacci%20Sequence)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -763,259 +1013,6 @@ Output: 6</code></pre><h2 id="解题思路"><a href="#解题思路" class="heade
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(856.%20Score%20of%20Parentheses)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(856.%20Score%20of%20Parentheses)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(856. Score of Parentheses)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-856-Score-of-Parentheses-题解"><a href="#LeetCode-856-Score-of-Parentheses-题解" class="headerlink" title="LeetCode(856. Score of Parentheses)题解"></a>LeetCode(856. Score of Parentheses)题解</h1><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个括号拓扑匹配的字符串，根据一定的规则计算其得分，单独的’()’得分1，挨着的(**)(****)表示就将其相加，包围着的((**))外部就乘以2.</p>
-<p>首先说说我的解法，就是遍历字符串，找出第一个(对应的右括号，然后判断这个字符串是不是全包围，如果是就用2乘以递归相同的函数，只不过输入的字符串变为S[1,len-1]的返回值，否则就分别前后相加即可。</p>
-<p>代码如下，时间复杂度O(n2)，空间复杂度O(1)。</p>
-<p><code>Runtime: 4 ms, faster than 56.50% of C++ online submissions for Score of Parentheses.</code></p>
-<p><code>Memory Usage: 9 MB, less than 12.50% of C++ online submissions for Score of Parentheses.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">scoreOfParentheses</span><span class="params">(<span class="built_in">string</span> S)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = S.<span class="built_in">size</span>(), left = <span class="number">0</span>, right = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span>(len == <span class="number">2</span>) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(S[i] == <span class="string">'('</span>) left++;</span><br><span class="line">            <span class="keyword">else</span> right++;</span><br><span class="line">            <span class="keyword">if</span>(left == right) <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(left + right == len) <span class="keyword">return</span> <span class="number">2</span> * scoreOfParentheses(S.substr(<span class="number">1</span>, len<span class="number">-2</span>));</span><br><span class="line">        <span class="keyword">return</span> scoreOfParentheses(S.substr(<span class="number">0</span>, left+right)) + scoreOfParentheses(S.substr(left + right));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>还有网络找到的。</p>
-<p>一种方法是直接通过栈来模拟操作，这样简单易懂，如果遇到“(”，就压入栈。如果遇到右括号，判断栈顶元素是什么，如果是“(”，证明出现了”()”的情况，那么把栈顶元素弹出，压入“1”。如果是其他情况，那么先判断栈顶是不是数字，如果是数字，证明是（()()）的结构，那么这时的栈情况是（1,1），所以应该把栈里的元素相加再压入栈，一直遇到左括号，这时情况是（2），所以应该把数字2乘以2。再压入栈，这样操作完栈里会有一堆数字，我们把数字相加即可。</p>
-<p>代码如下，时间复杂度O(n)，空间复杂度O(n)。</p>
-<p><code>Runtime: 0 ms, faster than 100.00% of C++ online submissions for Score of Parentheses.</code></p>
-<p><code>Memory Usage: 8.5 MB, less than 37.50% of C++ online submissions for Score of Parentheses.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">scoreOfParentheses</span><span class="params">(<span class="built_in">string</span> S)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = S.<span class="built_in">size</span>();</span><br><span class="line">        <span class="built_in">stack</span>&lt;<span class="keyword">int</span>&gt; ST; <span class="comment">// '(' = -2</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(S[i] == <span class="string">'('</span>) ST.push(<span class="number">-2</span>);</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="keyword">if</span>(ST.top() == <span class="number">-2</span>)&#123;</span><br><span class="line">                    ST.pop();</span><br><span class="line">                    ST.push(<span class="number">1</span>);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span>&#123;</span><br><span class="line">                    <span class="keyword">int</span> t = ST.top(); ST.pop();</span><br><span class="line">                    <span class="keyword">while</span>(ST.top() != <span class="number">-2</span>)&#123;</span><br><span class="line">                        t += ST.top(); ST.pop();</span><br><span class="line">                    &#125;</span><br><span class="line">                    ST.pop();</span><br><span class="line">                    ST.push(<span class="number">2</span> * t);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> res = ST.top(); ST.pop();</span><br><span class="line">        <span class="keyword">while</span>(!ST.empty())&#123;</span><br><span class="line">            res += ST.top(); ST.pop();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>还有一个办法也是用栈，但是思路不一样（不容易想，但是代码灰常简洁），</p>
-<p>字符串中的每个位置都有一个深度，围绕它的一些匹配括号。 例如：（（）（.（））中的点的深度为2，因为这些括号满足这个规律：（<strong>（.</strong>））</p>
-<p>我们的目标是将目前分数score保持在我们目前所处的深度。 当我们看到一个开括号时，我们增加了深度，我们在新深度的位置插入0。当我们看到一个结束括号时，我们将栈顶元素*2+下一个栈顶元素的的值加入新的栈。</p>
-<p>例如，当遇到（（）（（）））时，我们的堆栈将如下所示：</p>
-<ul>
-<li>[0, 0] 遇到 (</li>
-<li>[0, 0, 0] 遇到 (</li>
-<li>[0, 1] 遇到 )</li>
-<li>[0, 1, 0] 遇到 (</li>
-<li>[0, 1, 0, 0] 遇到 (</li>
-<li>[0, 1, 1] 遇到 )</li>
-<li>[0, 3] 遇到 )</li>
-<li>[6] 遇到 )</li>
-</ul>
-<p>代码如下，时间复杂度O(n)，空间复杂度O(n)。</p>
-<p><code>Runtime: 0 ms, faster than 100.00% of C++ online submissions for Score of Parentheses.</code></p>
-<p><code>Memory Usage: 8.3 MB, less than 100.00% of C++ online submissions for Score of Parentheses.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">scoreOfParentheses</span><span class="params">(<span class="built_in">string</span> S)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">stack</span>&lt;<span class="keyword">int</span>&gt; ST;</span><br><span class="line">        <span class="keyword">int</span> a, b;</span><br><span class="line">        </span><br><span class="line">        ST.push(<span class="number">0</span>);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> s : S)&#123;</span><br><span class="line">            <span class="keyword">if</span>(s == <span class="string">'('</span>) ST.push(<span class="number">0</span>);</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                a = ST.top(); ST.pop();</span><br><span class="line">                b = ST.top(); ST.pop();</span><br><span class="line">                ST.push(b + <span class="built_in">max</span>(a * <span class="number">2</span>, <span class="number">1</span>));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> ST.top();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave， 2019-10-09</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(858.%20Mirror%20Reflection)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(858.%20Mirror%20Reflection)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(858. Mirror Reflection)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-858-Mirror-Reflection-题解"><a href="#LeetCode-858-Mirror-Reflection-题解" class="headerlink" title="LeetCode(858. Mirror Reflection)题解"></a>LeetCode(858. Mirror Reflection)题解</h1><p>There is a special square room with mirrors on each of the four walls.  Except for the southwest corner, there are receptors on each of the remaining corners, numbered <code>0</code>, <code>1</code>, and <code>2</code>.</p>
-<p>The square room has walls of length <code>p</code>, and a laser ray from the southwest corner first meets the east wall at a distance <code>q</code> from the <code>0</code>th receptor.</p>
-<p>Return the number of the receptor that the ray meets first.  (It is guaranteed that the ray will meet a receptor eventually.)</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: p &#x3D; 2, q &#x3D; 1</span><br><span class="line">Output: 2</span><br><span class="line">Explanation: The ray meets receptor 2 the first time it gets reflected back to the left wall.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Note:</strong></p>
-<ol>
-<li><code>1 &lt;= p &lt;= 1000</code></li>
-<li><code>0 &lt;= q &lt;= p</code></li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>有一个正方形的房间，有一束光从左下角射入，保证最后一定会到达其余三个角中的一个，求出能到达的第一个角的位置编号。</p>
-<p>先说说我的解法，完全是最死板的方法，计算每一次反射的落点，可以知道光线在传播的过程中与正方形的边形成的三角形是相似的，并且光线无论何时都与正方形的横边的夹角是一样的，与竖边的夹角也是始终不变的。因此在知道光线的前两个在墙壁上的落点，就可以知道其下一个落点。</p>
-<p>就这样，使用一个函数，输入前两个落点，返回光线第三个落点，然后判断这个落点是不是角。</p>
-<p>特别注意，特别注意，特别注意！用C++或者python实现的时候，因为数据精度的问题，明明正确答案，总是会因为精度限制导致不能相等，从而不能AC，我花了好多时间在这上面debug。最后用python用一个比较笨的法子，使用round函数四舍五入，当然在这之前要扩大范围。最后算是AC了。</p>
-<p><code>Runtime: 52 ms, faster than 6.06% of Python3 online submissions for Mirror Reflection.</code></p>
-<p><code>Memory Usage: 13.8 MB, less than 6.67% of Python3 online submissions for Mirror Reflection.</code></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># my solution algorithm</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span><span class="params">(object)</span>:</span></span><br><span class="line">    p = <span class="number">0.0</span></span><br><span class="line">    x, y = <span class="number">0.0</span>, <span class="number">0.0</span></span><br><span class="line">    tan_a, tan_b = <span class="number">0.0</span>, <span class="number">0.0</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">findNextPoint</span><span class="params">(self, a, b, c, d)</span>:</span></span><br><span class="line">        <span class="keyword">global</span> p, x, y, tan_a, tan_b</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">if</span> d == <span class="number">0</span>: </span><br><span class="line">            <span class="keyword">if</span> a &lt; c:</span><br><span class="line">                <span class="keyword">if</span> (p-c)*tan_a &lt; p:  x = p; y = (p-c) * tan_a</span><br><span class="line">                <span class="keyword">else</span>: x = c + p * tan_b; y = p</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">if</span> c*tan_a &lt; p: x = <span class="number">0</span>; y = c * tan_a</span><br><span class="line">                <span class="keyword">else</span>: x = c - p * tan_b; y = p</span><br><span class="line">        <span class="keyword">elif</span> d == p:</span><br><span class="line">            <span class="keyword">if</span> a &lt; c:</span><br><span class="line">                <span class="keyword">if</span> (p-c)*tan_a &lt; p: x = p; y = p - (p-c) * tan_a</span><br><span class="line">                <span class="keyword">else</span>: x = c + p * tan_b; y = <span class="number">0</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">if</span> c*tan_a &lt; p: x = <span class="number">0</span>; y = p - c * tan_a</span><br><span class="line">                <span class="keyword">else</span>: x = c - p * tan_b; y = <span class="number">0</span></span><br><span class="line">        <span class="keyword">elif</span> c == <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">if</span> b &lt; d:</span><br><span class="line">                <span class="keyword">if</span> (p-d)*tan_b &lt; p: x = (p-d)*tan_b; y = p</span><br><span class="line">                <span class="keyword">else</span>: x = p; y = d + p * tan_a</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">if</span> d*tan_b &lt; p: x = d * tan_b; y = <span class="number">0</span></span><br><span class="line">                <span class="keyword">else</span>: x = p; y = d - p * tan_a</span><br><span class="line">        <span class="keyword">elif</span> c == p: </span><br><span class="line">            <span class="keyword">if</span> b &lt; d:</span><br><span class="line">                <span class="keyword">if</span> (p-d)*tan_b &lt; p: x = p - (p-d) * tan_b; y = p </span><br><span class="line">                <span class="keyword">else</span>: x = <span class="number">0</span>; y = d + p * tan_a </span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">if</span> d*tan_b &lt; p: x = p - d * tan_b; y = <span class="number">0</span></span><br><span class="line">                <span class="keyword">else</span>: x = <span class="number">0</span>; y = d - p * tan_a</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">mirrorReflection</span><span class="params">(self, p_, q)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :type p: int</span></span><br><span class="line"><span class="string">        :type q: int</span></span><br><span class="line"><span class="string">        :rtype: int</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="keyword">global</span> p, x, y, tan_a, tan_b</span><br><span class="line">        a, b, c, d = <span class="number">0</span>, <span class="number">0</span>, p_, q</span><br><span class="line">        <span class="keyword">if</span> d == p_: <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line"></span><br><span class="line">        p = p_</span><br><span class="line">        tan_a = q / p</span><br><span class="line">        tan_b = p / q; </span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            self.findNextPoint(a, b, c, d)</span><br><span class="line"></span><br><span class="line">            x = round(x*<span class="number">10000000</span>) / <span class="number">10000000.0</span></span><br><span class="line">            y = round(y*<span class="number">10000000</span>) / <span class="number">10000000.0</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> x == p <span class="keyword">and</span> y == <span class="number">0</span>: <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">            <span class="keyword">elif</span> x == p <span class="keyword">and</span> y == p: <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">            <span class="keyword">elif</span> x == <span class="number">0</span> <span class="keyword">and</span> y == p: <span class="keyword">return</span> <span class="number">2</span></span><br><span class="line">            a, b, c, d = c, d, x, y</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span></span><br></pre></td></tr></table></figure>
-
-<p>以上我用笨办法一步步做出来的，后来参考网上的资料发现这个题有更简单的办法。一般来说，数学算法题都是可以使用比较精妙的办法解决的。参考资料在此，<a href="https://www.cnblogs.com/grandyang/p/10646040.html" target="_blank" rel="noopener">点击链接</a>。</p>
-<p>思路就是，翻转光线太麻烦，直接翻转房间，偶数房间翻转是与原始房间镜面对称的，而奇数房间翻转是与原始房间相同的。同时，根据p/q的比值（要进行化简），分别确定正方形像右和向上的翻转次数，从而确保光线可以直接沿直线到达右上角。然后根据此时右上角的房间的角编号确定是角。</p>
-<p>总体来说如下：</p>
-<p>​    1、p为奇数，q为奇数，右上角编号为1；</p>
-<p>​    2、p为奇数，q为偶数，右上角编号为0；</p>
-<p>​    3、p为偶数，q为奇数，右上角编号为2；</p>
-<p>这里要注意，是没有q和p同时为偶数的，这是因为同时为偶数的时候，p和q可以化简，直到两个不全为偶数。比如4和2与2和1其实是一样的，因此，可以先得到p和q的最大公约数，然后各自除去这个公约数，再按照上述判断。</p>
-<p>这样优化之后，时间复杂度O(1), 空间复杂度O(1)，代码如下。</p>
-<p><code>Runtime: 0 ms, faster than 100.00% of C++ online submissions for Mirror Reflection.</code></p>
-<p><code>Memory Usage: 8.1 MB, less than 100.00% of C++ online submissions for Mirror Reflection.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span>   </span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">gcd</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (a % b == <span class="number">0</span>) ? b : gcd(b, a % b);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">mirrorReflection</span><span class="params">(<span class="keyword">int</span> p, <span class="keyword">int</span> q)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> r = gcd(p, q);</span><br><span class="line">        p = p / r;</span><br><span class="line">        q = q / r;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span> - p % <span class="number">2</span> + q % <span class="number">2</span>; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2019-10-08</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(86.%20Partition%20List)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(86.%20Partition%20List)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(86. Partition List)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-86-Partition-List-题解"><a href="#LeetCode-86-Partition-List-题解" class="headerlink" title="LeetCode(86. Partition List)题解"></a>LeetCode(86. Partition List)题解</h1><hr>
-<p>Given a linked list and a value x, partition it such that all nodes less than x come before nodes greater than or equal to x.</p>
-<p>You should preserve the original relative order of the nodes in each of the two partitions.</p>
-<p>Example:</p>
-<pre><code>Input: head = 1-&gt;4-&gt;3-&gt;2-&gt;5-&gt;2, x = 3
-Output: 1-&gt;2-&gt;2-&gt;4-&gt;3-&gt;5</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给定一个链表和一个值X，将链表中节点值小于X的都排在节点大于等于X的节点的前面。在此基础上，各个节点保持相应的原始次序。</p>
-<p>使用两个指针A和B，分别记录小于X和大于等于X的节点的链表的开始。一开始都为NULL。</p>
-<p>从左到右遍历链表，如果当前节点S的值小于X，然后判断A，如果A为NULL，则表示这是第一个小于X的节点。直接A = S，如果A不为空则A-&gt;next = S; A = A-&gt;next;</p>
-<p>反之，如果当前节点S的值大于等于X，然后判断B，如果B为NULL，则表示这是第一个大于等于X的节点。直接B = S，如果B不为空则B-&gt;next = S; B = B-&gt;next;</p>
-<p>最后遍历完成之后，如果AB都为空，返回NULL。如果A为空，B-&gt;next = NULL,返回B对应的头链表指针。如果B为空，A-&gt;next=NULL, 返回A对应的头指针。都不为空格则，A-&gt;next = B的头指针，B-&gt;next = NULL;</p>
-<p>因此在使用A，B的时候，要记录下对应链表的头指针。</p>
-<p>代码如下：</p>
-<p>Runtime: 4 ms, faster than 98.82% of C++ online submissions for Partition List.<br>Memory Usage: 8.7 MB, less than 22.67% of C++ online submissions for Partition List.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode *next;</span></span><br><span class="line"><span class="comment"> *     ListNode(int x) : val(x), next(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">ListNode* <span class="title">partition</span><span class="params">(ListNode* head, <span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (head == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">        ListNode *A = <span class="literal">NULL</span>, *A1 = <span class="literal">NULL</span>, *B = <span class="literal">NULL</span>, *B1 = <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">while</span> (head != <span class="literal">NULL</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span>(head-&gt;val &lt; x)&#123;</span><br><span class="line">                <span class="keyword">if</span>(A == <span class="literal">NULL</span>)&#123;</span><br><span class="line">                    A = head;</span><br><span class="line">                    A1 = A;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> &#123;</span><br><span class="line">                    A-&gt;next = head;</span><br><span class="line">                    A = A-&gt;next;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">if</span>(B == <span class="literal">NULL</span>)&#123;</span><br><span class="line">                    B = head;</span><br><span class="line">                    B1 = B;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> &#123;</span><br><span class="line">                    B-&gt;next = head;</span><br><span class="line">                    B = B-&gt;next;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            head = head-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(A == <span class="literal">NULL</span>)&#123;</span><br><span class="line">            B-&gt;next = <span class="literal">NULL</span>;</span><br><span class="line">            <span class="keyword">return</span> B1;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(B == <span class="literal">NULL</span>)&#123;</span><br><span class="line">            A-&gt;next = <span class="literal">NULL</span>;</span><br><span class="line">            <span class="keyword">return</span> A1;</span><br><span class="line">        &#125;</span><br><span class="line">        A-&gt;next = B1;</span><br><span class="line">        B-&gt;next = <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">return</span> A1;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-06-21</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1088,7 +1085,7 @@ Output: 1-&gt;2-&gt;2-&gt;4-&gt;3-&gt;5</code></pre><h2 id="解题思路"><a hre
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">265</span>
+          <span class="site-state-item-count">268</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
