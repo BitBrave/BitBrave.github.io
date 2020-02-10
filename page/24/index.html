@@ -177,6 +177,90 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(881.%20Boats%20to%20Save%20People)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(881.%20Boats%20to%20Save%20People)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(881. Boats to Save People)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-881-Boats-to-Save-People-题解"><a href="#LeetCode-881-Boats-to-Save-People-题解" class="headerlink" title="LeetCode(881. Boats to Save People)题解"></a>LeetCode(881. Boats to Save People)题解</h1><p>The <code>i</code>-th person has weight <code>people[i]</code>, and each boat can carry a maximum weight of <code>limit</code>.</p>
+<p>Each boat carries at most 2 people at the same time, provided the sum of the weight of those people is at most <code>limit</code>.</p>
+<p>Return the minimum number of boats to carry every given person.  (It is guaranteed each person can be carried by a boat.)</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: people &#x3D; [1,2], limit &#x3D; 3</span><br><span class="line">Output: 1</span><br><span class="line">Explanation: 1 boat (1, 2)</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: people &#x3D; [3,2,2,1], limit &#x3D; 3</span><br><span class="line">Output: 3</span><br><span class="line">Explanation: 3 boats (1, 2), (2) and (3)</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 3:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: people &#x3D; [3,5,3,4], limit &#x3D; 5</span><br><span class="line">Output: 4</span><br><span class="line">Explanation: 4 boats (3), (3), (4), (5)</span><br></pre></td></tr></table></figure>
+
+<p><strong>Note</strong>:</p>
+<ul>
+<li><code>1 &lt;= people.length &lt;= 50000</code></li>
+<li><code>1 &lt;= people[i] &lt;= limit &lt;= 30000</code></li>
+</ul>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>有一些人倍困在岛上，每个人有不同的体重，现在有一条船，每条船最多可以装两个人，且两个人的体重之和不能超过一定的限制。要求计算出最少的船只，可以将这些人都运走。</p>
+<p>最暴力的办法就是求出所有人两两组合的情况，但是这样时间复杂度肯定不能接受。因此我们可以考虑使用贪心的办法。</p>
+<p>假设有N个人，并且已经组好了对就是最优解，a1和a2，b1和b2等等。不妨假设a1&lt;=a2，b1&lt;=b2，a2&lt;=b2。这时候如果a1&lt;=b1，我们肯定可以将a1和b1相交换，因为max(b1+a2, a1+b2)&lt;=max(a1+a2, b1+b2)。因此对于任意两个队，如果存在一个船上的人每个人的体重都比另一个船的人轻，那这个可以进行交换，同时不必增加船的数目。</p>
+<p>因此，我们可以使用这样一种策略，每次最重和最轻的人组队，如果能上一条船就分配到一条船，否则就给最大的单独一条船。然后在剩下的人中执行相同的策略。这样得出来的船的数量一定是最少的。因为假设有一个最优解，那么按照之前的描述，也一定可以转变成我们的这种分配方式从而不用增加船的数目。</p>
+<p>代码如下，因为需要排序，时间复杂度O(nlogn)，空间复杂度O(1)。</p>
+<p><code>Runtime: 116 ms, faster than 58.98% of C++ online submissions for Boats to Save People.</code></p>
+<p><code>Memory Usage: 13.7 MB, less than 100.00% of C++ online submissions for Boats to Save People.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">numRescueBoats</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; people, <span class="keyword">int</span> limit)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> sta = <span class="number">0</span>, <span class="built_in">end</span> = people.<span class="built_in">size</span>() - <span class="number">1</span>, ret = <span class="number">0</span>;</span><br><span class="line">        sort(people.<span class="built_in">begin</span>(), people.<span class="built_in">end</span>());</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span>(sta &lt; <span class="built_in">end</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(people[sta] + people[<span class="built_in">end</span>] &lt;= limit) sta++;</span><br><span class="line">            <span class="built_in">end</span>--;</span><br><span class="line">            ret++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(sta == <span class="built_in">end</span>) <span class="keyword">return</span> ret + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2019-10-30</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(889.%20Construct%20Binary%20Tree%20from%20Preorder%20and%20Postorder%20Traversal)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -938,103 +1022,6 @@ Explanation: We define the gray code sequence to begin with 0.
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(916.%20Word%20Subsets)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(916.%20Word%20Subsets)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(916. Word Subsets)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-916-Word-Subsets-题解"><a href="#LeetCode-916-Word-Subsets-题解" class="headerlink" title="LeetCode(916. Word Subsets)题解"></a>LeetCode(916. Word Subsets)题解</h1><p>We are given two arrays <code>A</code> and <code>B</code> of words.  Each word is a string of lowercase letters.</p>
-<p>Now, say that word <code>b</code> is a subset of word <code>a</code> if every letter in <code>b</code> occurs in <code>a</code>, <strong>including multiplicity</strong>.  For example, <code>&quot;wrr&quot;</code> is a subset of <code>&quot;warrior&quot;</code>, but is not a subset of <code>&quot;world&quot;</code>.</p>
-<p>Now say a word <code>a</code> from <code>A</code> is <em>universal</em> if for every <code>b</code> in <code>B</code>, <code>b</code> is a subset of <code>a</code>. </p>
-<p>Return a list of all universal words in <code>A</code>.  You can return the words in any order.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: A &#x3D; [&quot;amazon&quot;,&quot;apple&quot;,&quot;facebook&quot;,&quot;google&quot;,&quot;leetcode&quot;], B &#x3D; [&quot;e&quot;,&quot;o&quot;]</span><br><span class="line">Output: [&quot;facebook&quot;,&quot;google&quot;,&quot;leetcode&quot;]</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: A &#x3D; [&quot;amazon&quot;,&quot;apple&quot;,&quot;facebook&quot;,&quot;google&quot;,&quot;leetcode&quot;], B &#x3D; [&quot;l&quot;,&quot;e&quot;]</span><br><span class="line">Output: [&quot;apple&quot;,&quot;google&quot;,&quot;leetcode&quot;]</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 3:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: A &#x3D; [&quot;amazon&quot;,&quot;apple&quot;,&quot;facebook&quot;,&quot;google&quot;,&quot;leetcode&quot;], B &#x3D; [&quot;e&quot;,&quot;oo&quot;]</span><br><span class="line">Output: [&quot;facebook&quot;,&quot;google&quot;]</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 4:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: A &#x3D; [&quot;amazon&quot;,&quot;apple&quot;,&quot;facebook&quot;,&quot;google&quot;,&quot;leetcode&quot;], B &#x3D; [&quot;lo&quot;,&quot;eo&quot;]</span><br><span class="line">Output: [&quot;google&quot;,&quot;leetcode&quot;]</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 5:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: A &#x3D; [&quot;amazon&quot;,&quot;apple&quot;,&quot;facebook&quot;,&quot;google&quot;,&quot;leetcode&quot;], B &#x3D; [&quot;ec&quot;,&quot;oc&quot;,&quot;ceo&quot;]</span><br><span class="line">Output: [&quot;facebook&quot;,&quot;leetcode&quot;]</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Note:</strong></p>
-<ol>
-<li><code>1 &lt;= A.length, B.length &lt;= 10000</code></li>
-<li><code>1 &lt;= A[i].length, B[i].length &lt;= 10</code></li>
-<li><code>A[i]</code> and <code>B[i]</code> consist only of lowercase letters.</li>
-<li>All words in <code>A[i]</code> are unique: there isn’t <code>i != j</code> with <code>A[i] == A[j]</code>.</li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出两个字符串数组A和B，对于B中每个字符串，如果A中的某个字符串的组成元素和对应的个数均大于等于B中任意一个字符串的组成元素和对应个数，就表示A中这个字符串是宇宙字符串。要求找出所有的字符串。</p>
-<p>这个可以使用暴力枚举，使用python中的Counter类，将B中所有字符串建立一个dict，其中存储出现的每个字符和其在某个字符串中出现的最大次数，然后对A中每个字符串也单独做这样的处理，然后对比这两个dict，如果A中的全包围B中，表示A中的这个字符串是我们想要的结果。</p>
-<p>设A中字符串数目为N，B中为M，每个字符串长度为K，那么时间复杂度为O(N*26)=O(N)，空间复杂度O(1)。因为最多26个字母。</p>
-<p>最普通的代码如下。</p>
-<p><code>Runtime: 884 ms, faster than 70.83% of Python3 online submissions for Word Subsets.</code></p>
-<p><code>Memory Usage: 16.4 MB, less than 50.00% of Python3 online submissions for Word Subsets.</code></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">isUniversal</span><span class="params">(self, A, B)</span>:</span></span><br><span class="line">        <span class="comment">#print(A)</span></span><br><span class="line">        <span class="keyword">for</span> b <span class="keyword">in</span> B.keys():</span><br><span class="line">            <span class="keyword">if</span> (b <span class="keyword">not</span> <span class="keyword">in</span> A) <span class="keyword">or</span> (A[b] &lt; B[b]): <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wordSubsets</span><span class="params">(self, A: List[str], B: List[str])</span> -&gt; List[str]:</span></span><br><span class="line">        dicB = &#123;&#125;</span><br><span class="line">        <span class="keyword">for</span> b <span class="keyword">in</span> B:</span><br><span class="line">            b = dict(Counter(b))</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> b.keys():</span><br><span class="line">                <span class="keyword">if</span> i <span class="keyword">in</span> dicB: dicB[i] = max(dicB[i], b[i])</span><br><span class="line">                <span class="keyword">else</span>: dicB[i] = b[i]</span><br><span class="line">        <span class="comment">#print(dicB)   </span></span><br><span class="line">        ret = [a <span class="keyword">for</span> a <span class="keyword">in</span> A <span class="keyword">if</span> self.isUniversal(dict(Counter(a)), dicB)]</span><br><span class="line">        <span class="keyword">return</span> ret</span><br></pre></td></tr></table></figure>
-
-<p>如果精简一点，就如下。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">isUniversal</span><span class="params">(self, A, B)</span>:</span></span><br><span class="line">        <span class="comment">#print(A)</span></span><br><span class="line">        <span class="keyword">for</span> b <span class="keyword">in</span> B.keys():</span><br><span class="line">            <span class="keyword">if</span> A.get(b, <span class="number">0</span>) &lt; B[b]: <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        <span class="comment">#return False if sum([int(True if B[b] &gt; A.get(b, 0) else False) for b in B]) else True</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wordSubsets</span><span class="params">(self, A: List[str], B: List[str])</span> -&gt; List[str]:</span></span><br><span class="line">        dicB = &#123;&#125;</span><br><span class="line">        <span class="keyword">for</span> b <span class="keyword">in</span> [dict(Counter(b)) <span class="keyword">for</span> b <span class="keyword">in</span> B]:</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> b.keys():</span><br><span class="line">                dicB[i] = max(dicB.get(i,<span class="number">0</span>), b[i])</span><br><span class="line">        <span class="comment">#print(dicB)   </span></span><br><span class="line">        <span class="keyword">return</span> [a <span class="keyword">for</span> a <span class="keyword">in</span> A <span class="keyword">if</span> self.isUniversal(dict(Counter(a)), dicB)]</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2019-11-09</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1107,7 +1094,7 @@ Explanation: We define the gray code sequence to begin with 0.
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">272</span>
+          <span class="site-state-item-count">273</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
