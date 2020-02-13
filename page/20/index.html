@@ -177,6 +177,178 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(801.%20Minimum%20Swaps%20To%20Make%20Sequences%20Increasing)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(801.%20Minimum%20Swaps%20To%20Make%20Sequences%20Increasing)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(801. Minimum Swaps To Make Sequences Increasing)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-801-Minimum-Swaps-To-Make-Sequences-Increasing-题解"><a href="#LeetCode-801-Minimum-Swaps-To-Make-Sequences-Increasing-题解" class="headerlink" title="LeetCode(801. Minimum Swaps To Make Sequences Increasing)题解"></a>LeetCode(801. Minimum Swaps To Make Sequences Increasing)题解</h1><hr>
+<p>We have two integer sequences A and B of the same non-zero length.</p>
+<p>We are allowed to swap elements A[i] and B[i].  Note that both elements are in the same index position in their respective sequences.</p>
+<p>At the end of some number of swaps, A and B are both strictly increasing.  (A sequence is strictly increasing if and only if A[0] &lt; A[1] &lt; A[2] &lt; … &lt; A[A.length - 1].)</p>
+<p>Given A and B, return the minimum number of swaps to make both sequences strictly increasing.  It is guaranteed that the given input always makes it possible.</p>
+<p>Example:</p>
+<pre><code>Input: A = [1,3,5,4], B = [1,2,3,7]
+Output: 1
+Explanation: 
+Swap A[3] and B[3].  Then the sequences are:
+A = [1, 3, 5, 7] and B = [1, 2, 3, 4]
+which are both strictly increasing.</code></pre><p>Note:</p>
+<pre><code>A, B are arrays with the same length, and that length will be in the range [1, 1000].
+A[i], B[i] are integer values in the range [0, 2000].</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>要求交换最少的次数，将两个数组变为递增数组。</p>
+<p>这个使用DP，dp[i][0]表示不交换i，使得[0, i]严格递增的最小swap数。dp[i][1]表示交换i，使得[0, i]严格递增的最小swap数。</p>
+<p>可以逐步判定。但是因为给定数据的特殊性，因此可以简化为下面的代码，很容易读懂。</p>
+<p>代码如下，时间复杂度O(n), 空间复杂度O(n):</p>
+<p>Runtime: 16 ms, faster than 18.40% of C++ online submissions for Minimum Swaps To Make Sequences Increasing.<br>Memory Usage: 10.7 MB, less than 10.00% of C++ online submissions for Minimum Swaps To Make Sequences Increasing.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minSwap</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; B)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = A.<span class="built_in">size</span>();</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">res</span><span class="params">(len, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(<span class="number">2</span>, <span class="number">2000</span>))</span></span>;</span><br><span class="line">        res[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">        res[<span class="number">0</span>][<span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(A[i]&gt;A[i<span class="number">-1</span>] &amp;&amp; B[i]&gt;B[i<span class="number">-1</span>])&#123;</span><br><span class="line">                res[i][<span class="number">0</span>] = <span class="built_in">min</span>(res[i<span class="number">-1</span>][<span class="number">0</span>], res[i][<span class="number">0</span>]);</span><br><span class="line">                res[i][<span class="number">1</span>] = <span class="built_in">min</span>(res[i<span class="number">-1</span>][<span class="number">1</span>]+<span class="number">1</span>, res[i][<span class="number">1</span>]);</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span>(A[i]&gt;B[i<span class="number">-1</span>] &amp;&amp; B[i]&gt;A[i<span class="number">-1</span>])&#123;</span><br><span class="line">                res[i][<span class="number">0</span>] = <span class="built_in">min</span>(res[i<span class="number">-1</span>][<span class="number">1</span>], res[i][<span class="number">0</span>]);</span><br><span class="line">                res[i][<span class="number">1</span>] = <span class="built_in">min</span>(res[i<span class="number">-1</span>][<span class="number">0</span>]+<span class="number">1</span>, res[i][<span class="number">1</span>]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">min</span>(res[len<span class="number">-1</span>][<span class="number">0</span>], res[len<span class="number">-1</span>][<span class="number">1</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">or</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minSwap</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; B)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = A.<span class="built_in">size</span>();</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">res</span><span class="params">(len, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(<span class="number">2</span>, <span class="number">2000</span>))</span></span>;</span><br><span class="line">        res[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">        res[<span class="number">0</span>][<span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(A[i]&gt;A[i<span class="number">-1</span>] &amp;&amp; B[i]&gt;B[i<span class="number">-1</span>])&#123;</span><br><span class="line">                res[i][<span class="number">0</span>] = res[i<span class="number">-1</span>][<span class="number">0</span>];</span><br><span class="line">                res[i][<span class="number">1</span>] = res[i<span class="number">-1</span>][<span class="number">1</span>]+<span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span>(A[i]&gt;B[i<span class="number">-1</span>] &amp;&amp; B[i]&gt;A[i<span class="number">-1</span>])&#123;</span><br><span class="line">                res[i][<span class="number">0</span>] = <span class="built_in">min</span>(res[i<span class="number">-1</span>][<span class="number">1</span>], res[i][<span class="number">0</span>]);</span><br><span class="line">                res[i][<span class="number">1</span>] = <span class="built_in">min</span>(res[i<span class="number">-1</span>][<span class="number">0</span>]+<span class="number">1</span>, res[i][<span class="number">1</span>]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">min</span>(res[len<span class="number">-1</span>][<span class="number">0</span>], res[len<span class="number">-1</span>][<span class="number">1</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>根据目前的代码可以看到，每次使用只使用了相邻的数据，因此可以将空间优化到常量空间。</p>
+<p>代码如下，时间复杂度O(n), 空间复杂度O(1):</p>
+<p>Runtime: 12 ms, faster than 68.53% of C++ online submissions for Minimum Swaps To Make Sequences Increasing.<br>Memory Usage: 9.1 MB, less than 90.00% of C++ online submissions for Minimum Swaps To Make Sequences Increasing.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minSwap</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; B)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = A.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> res0 = <span class="number">0</span>, res1 = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> t0, t1;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;len; i++)&#123;</span><br><span class="line">            t0 = <span class="number">2000</span>;</span><br><span class="line">            t1 = <span class="number">2000</span>;</span><br><span class="line">            <span class="keyword">if</span>(A[i]&gt;A[i<span class="number">-1</span>] &amp;&amp; B[i]&gt;B[i<span class="number">-1</span>])&#123;</span><br><span class="line">                t0 = res0;</span><br><span class="line">                t1 = res1 + <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span>(A[i]&gt;B[i<span class="number">-1</span>] &amp;&amp; B[i]&gt;A[i<span class="number">-1</span>])&#123;</span><br><span class="line">                t0 = <span class="built_in">min</span>(t0, res1);</span><br><span class="line">                t1 = <span class="built_in">min</span>(t1, res0+<span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            res0 = t0;</span><br><span class="line">            res1 = t1;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">min</span>(res0, res1);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-08-26</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(807.%20Max%20Increase%20to%20Keep%20City%20Skyline)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(807.%20Max%20Increase%20to%20Keep%20City%20Skyline)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(807. Max Increase to Keep City Skyline)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-807-Max-Increase-to-Keep-City-Skyline-题解"><a href="#LeetCode-807-Max-Increase-to-Keep-City-Skyline-题解" class="headerlink" title="LeetCode(807. Max Increase to Keep City Skyline)题解"></a>LeetCode(807. Max Increase to Keep City Skyline)题解</h1><hr>
+<p>In a 2 dimensional array grid, each value grid[i][j] represents the height of a building located there. We are allowed to increase the height of any number of buildings, by any amount (the amounts can be different for different buildings). Height 0 is considered to be a building as well. </p>
+<p>At the end, the “skyline” when viewed from all four directions of the grid, i.e. top, bottom, left, and right, must be the same as the skyline of the original grid. A city’s skyline is the outer contour of the rectangles formed by all the buildings when viewed from a distance. See the following example.</p>
+<p>What is the maximum total sum that the height of the buildings can be increased?</p>
+<p>Example:</p>
+<pre><code>Input: grid = [[3,0,8,4],[2,4,5,7],[9,2,6,3],[0,3,1,0]]
+Output: 35
+Explanation: 
+The grid is:
+[ [3, 0, 8, 4], 
+[2, 4, 5, 7],
+[9, 2, 6, 3],
+[0, 3, 1, 0] ]
+
+The skyline viewed from top or bottom is: [9, 4, 8, 7]
+The skyline viewed from left or right is: [8, 7, 9, 3]
+
+The grid after increasing the height of buildings without affecting skylines is:
+
+gridNew = [ [8, 4, 8, 7],
+            [7, 4, 7, 7],
+            [9, 4, 8, 7],
+            [3, 3, 3, 3] ]</code></pre><p>Notes:</p>
+<pre><code>1 &lt; grid.length = grid[0].length &lt;= 50.
+All heights grid[i][j] are in the range [0, 100].
+All buildings in grid[i][j] occupy the entire grid cell: that is, they are a 1 x 1 x grid[i][j] rectangular prism.</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>一个二维的城市群，每个值表示该位置上的建筑物高，现在要尽可能增加每个建筑的高度，但是不能超过其所在位置的上下左右的天际线的高度。求出可以增加高度的总和。</p>
+<p>理解题意之后，就是对每个值进行增加，但是不能超过所在的行的最大值，和所在的列的最大值。这样就直接遍历操作即可，没有什么技巧。</p>
+<p>代码如下，时间复杂度O(n2)，空间复杂度O(n):</p>
+<p>Runtime: 8 ms, faster than 75.14% of C++ online submissions for Max Increase to Keep City Skyline.<br>Memory Usage: 9.2 MB, less than 93.55% of C++ online submissions for Max Increase to Keep City Skyline.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxIncreaseKeepingSkyline</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; grid)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> rl = grid.<span class="built_in">size</span>(), cl = grid[<span class="number">0</span>].<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        vector&lt;int&gt; row(rl, 0), col(cl, 0);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;rl; i++)</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;cl; j++) row[i] = <span class="built_in">max</span>(row[i], grid[i][j]);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;cl; j++)</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;rl; i++) col[j] = <span class="built_in">max</span>(col[j], grid[i][j]);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;rl; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;cl; j++)&#123;</span><br><span class="line">                res += <span class="built_in">min</span>(row[i], col[j]) - grid[i][j];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-08-27</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(809.%20Expressive%20Words)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -829,153 +1001,6 @@ G is a subset of all values in the linked list.</code></pre><h2 id="解题思路
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(82.%20Remove%20Duplicates%20from%20Sorted%20List%20II)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(82.%20Remove%20Duplicates%20from%20Sorted%20List%20II)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(82. Remove Duplicates from Sorted List II)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-82-Remove-Duplicates-from-Sorted-List-II-题解"><a href="#LeetCode-82-Remove-Duplicates-from-Sorted-List-II-题解" class="headerlink" title="LeetCode(82. Remove Duplicates from Sorted List II)题解"></a>LeetCode(82. Remove Duplicates from Sorted List II)题解</h1><hr>
-<p>Given a sorted linked list, delete all nodes that have duplicate numbers, leaving only distinct numbers from the original list.</p>
-<p>Example 1:</p>
-<pre><code>Input: 1-&gt;2-&gt;3-&gt;3-&gt;4-&gt;4-&gt;5
-Output: 1-&gt;2-&gt;5</code></pre><p>Example 2:</p>
-<pre><code>Input: 1-&gt;1-&gt;1-&gt;2-&gt;3
-Output: 2-&gt;3</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个链表，删除其中所有重复的节点，对应节点全部删除</p>
-<p>单次遍历即可，使用两个指针，一个指向当前节点的上一个值不同的节点，一个指向当前节点，查看下一个节点，如果与当前节点一样，就删除这两个节点，指针指向当前节点的下下个节点。如果不同，则当前节点指针都向前移动一个，直到指针为空。</p>
-<p>初始化则用一个指针指向head，一个指向NULL，如果Head的下一个和Head一样，则指向Head的指向Head的下下个，以此类推，如果不一样，则用两个指针分别指向这两个。达到了上述的要求，递归下去即可。</p>
-<p>代码如下：<br>Runtime: 8 ms, faster than 92.93% of C++ online submissions for Remove Duplicates from Sorted List II.<br>Memory Usage: 9.4 MB, less than 8.37% of C++ online submissions for Remove Duplicates from Sorted List II</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode *next;</span></span><br><span class="line"><span class="comment"> *     ListNode(int x) : val(x), next(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">ListNode* <span class="title">deleteDuplicates</span><span class="params">(ListNode* head)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(head==<span class="literal">NULL</span>) <span class="keyword">return</span> head;</span><br><span class="line">        ListNode *back = <span class="literal">NULL</span>, *fore = head;</span><br><span class="line">        <span class="keyword">int</span> c = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(fore-&gt;next!=<span class="literal">NULL</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(fore-&gt;val != fore-&gt;next-&gt;val)&#123;</span><br><span class="line">                <span class="keyword">if</span>(c==<span class="number">0</span>) <span class="keyword">break</span>;</span><br><span class="line">                fore = fore-&gt;next;</span><br><span class="line">                c = <span class="number">0</span>;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            c = <span class="number">-1</span>;</span><br><span class="line">            fore = fore-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(c==<span class="number">-1</span>) <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">        head = fore;</span><br><span class="line">        back = fore-&gt;next;</span><br><span class="line">        fore-&gt;next = <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">while</span>(back!=<span class="literal">NULL</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(back-&gt;next==<span class="literal">NULL</span>) <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">while</span>(back-&gt;next!=<span class="literal">NULL</span>)&#123;</span><br><span class="line">                <span class="keyword">if</span>(back-&gt;val != back-&gt;next-&gt;val) &#123;</span><br><span class="line">                    <span class="keyword">if</span>(c==<span class="number">0</span>) <span class="keyword">break</span>;</span><br><span class="line">                    back = back-&gt;next;</span><br><span class="line">                    c = <span class="number">0</span>;</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                c = <span class="number">-1</span>;</span><br><span class="line">                back = back-&gt;next;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(c==<span class="number">-1</span>) <span class="keyword">return</span> head;</span><br><span class="line">            fore-&gt;next = back;</span><br><span class="line">            fore = back;</span><br><span class="line">            back = back-&gt;next; </span><br><span class="line">            fore-&gt;next = <span class="literal">NULL</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(c==<span class="number">-1</span>) <span class="keyword">return</span> head;</span><br><span class="line">        fore-&gt;next = back;</span><br><span class="line">        <span class="keyword">return</span> head;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-06-18</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(820.%20Short%20Encoding%20of%20Words)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(820.%20Short%20Encoding%20of%20Words)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(820. Short Encoding of Words)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-820-Short-Encoding-of-Words-题解"><a href="#LeetCode-820-Short-Encoding-of-Words-题解" class="headerlink" title="LeetCode(820. Short Encoding of Words)题解"></a>LeetCode(820. Short Encoding of Words)题解</h1><p>Given a list of words, we may encode it by writing a reference string <code>S</code> and a list of indexes <code>A</code>.</p>
-<p>For example, if the list of words is <code>[&quot;time&quot;, &quot;me&quot;, &quot;bell&quot;]</code>, we can write it as <code>S = &quot;time#bell#&quot;</code> and <code>indexes = [0, 2, 5]</code>.</p>
-<p>Then for each index, we will recover the word by reading from the reference string from that index until we reach a <code>&quot;#&quot;</code> character.</p>
-<p>What is the length of the shortest reference string S possible that encodes the given words?</p>
-<p><strong>Example:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: words &#x3D; [&quot;time&quot;, &quot;me&quot;, &quot;bell&quot;]</span><br><span class="line">Output: 10</span><br><span class="line">Explanation: S &#x3D; &quot;time#bell#&quot; and indexes &#x3D; [0, 2, 5].</span><br></pre></td></tr></table></figure>
-
-<p><strong>Note:</strong></p>
-<ol>
-<li><code>1 &lt;= words.length &lt;= 2000</code>.</li>
-<li><code>1 &lt;= words[i].length &lt;= 7</code>.</li>
-<li><code>Each word has only lowercase letters.</code></li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出一个字符串列表，用一个大的字符串去表示这些字符串，给出一个等长的列表，然后每个字符串对应一个索引，这个索引到“#”之间的字符 就是原有的对应的字符串。求这样的字符串的最短是多少。</p>
-<p>可以知道，如果我们将每个字符串依次排列就以“#”链接，可以得到一个长字符串，可以表示每个字符串。但是这样并不是最短的，就和example一样，字符串之间有公共的字母。但是可以注意到的是，字符串之间如果公用一个“#”，那么这两个字符串之间一定是一个是另一个的后缀。那么我们可以用一个set来记录这些字符串。然后查看每个字符串的后缀，如果在set内，就删除这个。遍历完成之后，将set内所有字符串用“#”即可满足条件了。</p>
-<p>代码如下，时间复杂度$O(n^2)$,空间复杂度$O(n)$：</p>
-<p><code>Runtime: 124 ms, faster than 30.03% of C++ online submissions for Short Encoding of Words. Memory Usage: 16.6 MB, less than 100.00% of C++ online submissions for Short Encoding of Words.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minimumLengthEncoding</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&amp; words)</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="built_in">set</span>&lt;<span class="built_in">string</span>&gt; <span class="title">S</span><span class="params">(words.<span class="built_in">begin</span>(), words.<span class="built_in">end</span>())</span></span>;</span><br><span class="line">        <span class="built_in">string</span> t;</span><br><span class="line">        <span class="keyword">int</span> l, res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="built_in">string</span> s:words)&#123;</span><br><span class="line">            l = s.<span class="built_in">size</span>();</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;l; i++)&#123;</span><br><span class="line">                t = s.substr(i);</span><br><span class="line">                <span class="keyword">if</span>(S.<span class="built_in">find</span>(t) != S.<span class="built_in">end</span>()) S.erase(t);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="built_in">string</span> s:S) res += s.<span class="built_in">size</span>() + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-09-08</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1048,7 +1073,7 @@ Output: 2-&gt;3</code></pre><h2 id="解题思路"><a href="#解题思路" class=
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">273</span>
+          <span class="site-state-item-count">275</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
