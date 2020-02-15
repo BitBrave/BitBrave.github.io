@@ -177,6 +177,79 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(56.%20Merge%20Intervals)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(56.%20Merge%20Intervals)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(56. Merge Intervals)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-56-Merge-Intervals-题解"><a href="#LeetCode-56-Merge-Intervals-题解" class="headerlink" title="LeetCode(56. Merge Intervals)题解"></a>LeetCode(56. Merge Intervals)题解</h1><hr>
+<p>Given a collection of intervals, merge all overlapping intervals.</p>
+<p>Example 1:</p>
+<pre><code>Input: [[1,3],[2,6],[8,10],[15,18]]
+Output: [[1,6],[8,10],[15,18]]
+Explanation: Since intervals [1,3] and [2,6] overlaps, merge them into [1,6].</code></pre><p>Example 2:</p>
+<pre><code>Input: [[1,4],[4,5]]
+Output: [[1,5]]
+Explanation: Intervals [1,4] and [4,5] are considered overlapping.</code></pre><p>NOTE: input types have been changed on April 15, 2019. Please reset to default code definition to get new method signature.</p>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Medium，将一个不同的区间求并集。</p>
+<p>我的方法很简单，首先将数组按照区间的左边值升序排序，再逐个遍历，根据策略进行合并或单独加入结果。</p>
+<p>代码如下（很慢，懒得优化了）：</p>
+<p>Runtime: 64 ms, faster than 16.99% of C++ online submissions for Merge Intervals.<br>Memory Usage: 26.6 MB, less than 5.00% of C++ online submissions for Merge Intervals.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(<span class="keyword">const</span> <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; a, <span class="keyword">const</span> <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; b)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> a[<span class="number">0</span>]&lt;b[<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">merge</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; intervals)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; res;</span><br><span class="line">        <span class="keyword">int</span> len = intervals.<span class="built_in">size</span>(), rlen = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span>(len == <span class="number">0</span>) <span class="keyword">return</span> res;</span><br><span class="line">        </span><br><span class="line">        sort(intervals.<span class="built_in">begin</span>(), intervals.<span class="built_in">end</span>(), cmp);</span><br><span class="line"></span><br><span class="line">        res.push_back(intervals[<span class="number">0</span>]);</span><br><span class="line">        rlen = <span class="number">1</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(res[rlen<span class="number">-1</span>][<span class="number">1</span>]&gt;=intervals[i][<span class="number">0</span>]) res[rlen<span class="number">-1</span>][<span class="number">1</span>] = intervals[i][<span class="number">1</span>]&gt;res[rlen - <span class="number">1</span>][<span class="number">1</span>] ? intervals[i][<span class="number">1</span>]:res[rlen - <span class="number">1</span>][<span class="number">1</span>];</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                res.push_back(intervals[i]);</span><br><span class="line">                rlen++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-05-30</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(58.%20Length%20of%20Last%20Word)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -856,77 +929,6 @@ Explanation: Because the path 1→3→1→1→1 minimizes the sum.</code></pre><
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(67.%20Add%20Binary)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(67.%20Add%20Binary)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(67. Add Binary)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-67-Add-Binary-题解"><a href="#LeetCode-67-Add-Binary-题解" class="headerlink" title="LeetCode(67. Add Binary)题解"></a>LeetCode(67. Add Binary)题解</h1><hr>
-<p>Given two binary strings, return their sum (also a binary string).</p>
-<p>The input strings are both non-empty and contains only characters 1 or 0.</p>
-<p>Example 1:</p>
-<pre><code>Input: a = &quot;11&quot;, b = &quot;1&quot;
-Output: &quot;100&quot;</code></pre><p>Example 2:</p>
-<pre><code>Input: a = &quot;1010&quot;, b = &quot;1011&quot;
-Output: &quot;10101&quot;</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Easy， 对两个二进制进行相加而已。</p>
-<p>直接使用加法，记录进位，从右到左遍历即可。</p>
-<p>代码如下：</p>
-<p>Runtime: 8 ms, faster than 51.93% of C++ online submissions for Add Binary.<br>Memory Usage: 9.3 MB, less than 15.35% of C++ online submissions for Add Binary.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">string</span> <span class="title">addBinary</span><span class="params">(<span class="built_in">string</span> a, <span class="built_in">string</span> b)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">string</span> res = <span class="string">""</span>;</span><br><span class="line">        <span class="keyword">int</span> alen = a.<span class="built_in">size</span>(), blen = b.<span class="built_in">size</span>(), e = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(alen&gt;<span class="number">0</span> &amp;&amp; blen&gt;<span class="number">0</span>)&#123;</span><br><span class="line">            e = e + a[alen<span class="number">-1</span>] - <span class="string">'0'</span> + b[blen<span class="number">-1</span>] - <span class="string">'0'</span>;</span><br><span class="line">            <span class="keyword">if</span>(e==<span class="number">3</span>)&#123;</span><br><span class="line">                res = <span class="string">'1'</span> + res;</span><br><span class="line">                e = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(e==<span class="number">2</span>)&#123;</span><br><span class="line">                res = <span class="string">'0'</span> + res;</span><br><span class="line">                e = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(e==<span class="number">1</span>)&#123;</span><br><span class="line">                res = <span class="string">'1'</span> + res;</span><br><span class="line">                e = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                res = <span class="string">'0'</span> + res;</span><br><span class="line">                e = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            alen--;</span><br><span class="line">            blen--;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">while</span>(alen&gt;<span class="number">0</span>)&#123;</span><br><span class="line">            e = e + a[alen<span class="number">-1</span>] - <span class="string">'0'</span>;</span><br><span class="line">            <span class="keyword">if</span>(e==<span class="number">2</span>)&#123;</span><br><span class="line">                res = <span class="string">'0'</span> + res;</span><br><span class="line">                e = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(e==<span class="number">1</span>)&#123;</span><br><span class="line">                res = <span class="string">'1'</span> + res;</span><br><span class="line">                e = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                res = <span class="string">'0'</span> + res;</span><br><span class="line">                e = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            alen--;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">while</span>(blen&gt;<span class="number">0</span>)&#123;</span><br><span class="line">            e = e + b[blen<span class="number">-1</span>] - <span class="string">'0'</span>;</span><br><span class="line">            <span class="keyword">if</span>(e==<span class="number">2</span>)&#123;</span><br><span class="line">                res = <span class="string">'0'</span> + res;</span><br><span class="line">                e = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(e==<span class="number">1</span>)&#123;</span><br><span class="line">                res = <span class="string">'1'</span> + res;</span><br><span class="line">                e = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                res = <span class="string">'0'</span> + res;</span><br><span class="line">                e = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            blen--;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(e==<span class="number">1</span>) res = <span class="string">"1"</span> + res;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-06-05</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -999,7 +1001,7 @@ Output: &quot;10101&quot;</code></pre><h2 id="解题思路"><a href="#解题思�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">276</span>
+          <span class="site-state-item-count">277</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
