@@ -177,6 +177,171 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(923.%203Sum%20With%20Multiplicity)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(923.%203Sum%20With%20Multiplicity)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(923. 3Sum With Multiplicity)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-923-3Sum-With-Multiplicity-题解"><a href="#LeetCode-923-3Sum-With-Multiplicity-题解" class="headerlink" title="LeetCode(923. 3Sum With Multiplicity)题解"></a>LeetCode(923. 3Sum With Multiplicity)题解</h1><p>Given an integer array <code>A</code>, and an integer <code>target</code>, return the number of tuples <code>i, j, k</code>  such that <code>i &lt; j &lt; k</code> and <code>A[i] + A[j] + A[k] == target</code>.</p>
+<p><strong>As the answer can be very large, return it modulo 10^9 + 7</strong>.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Input: A &#x3D; [1,1,2,2,3,3,4,4,5,5], target &#x3D; 8</span><br><span class="line">Output: 20</span><br><span class="line">Explanation: </span><br><span class="line">Enumerating by the values (A[i], A[j], A[k]):</span><br><span class="line">(1, 2, 5) occurs 8 times;</span><br><span class="line">(1, 3, 4) occurs 8 times;</span><br><span class="line">(2, 2, 4) occurs 2 times;</span><br><span class="line">(2, 3, 3) occurs 2 times.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Input: A &#x3D; [1,1,2,2,2,2], target &#x3D; 5</span><br><span class="line">Output: 12</span><br><span class="line">Explanation: </span><br><span class="line">A[i] &#x3D; 1, A[j] &#x3D; A[k] &#x3D; 2 occurs 12 times:</span><br><span class="line">We choose one 1 from [1,1] in 2 ways,</span><br><span class="line">and two 2s from [2,2,2,2] in 6 ways.</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Note:</strong></p>
+<ol>
+<li><code>3 &lt;= A.length &lt;= 3000</code></li>
+<li><code>0 &lt;= A[i] &lt;= 100</code></li>
+<li><code>0 &lt;= target &lt;= 300</code></li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个数组，数组中有重复元素，现在要求找出三个不同位置的元素（值可以一样），其和为一个固定值target。问有多少个这样的组合。</p>
+<p>这个题很明显就是使用双指针法，将数组升序排序，然后从左到右遍历一个元素，选定一个元素后，从其右边维护一个双指针，如果相加的和大于目标值则右指针左移，如果小于目标值则左指针右移。这里因为有重复元素，所以可以用一个字典记录重复元素出现的次数，而排序的就只排序不同的元素即可。</p>
+<p>代码如下，时间复杂度O(n2)，空间复杂度O(n)。</p>
+<p><code>Runtime: 68 ms, faster than 99.06% of Python3 online submissions for 3Sum With Multiplicity.</code></p>
+<p><code>Memory Usage: 12.7 MB, less than 100.00% of Python3 online submissions for 3Sum With Multiplicity.</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">threeSumMulti</span><span class="params">(self, A: List[int], target: int)</span> -&gt; int:</span></span><br><span class="line">        ret = <span class="number">0</span></span><br><span class="line">        dicA = Counter(A)</span><br><span class="line">        uA = sorted(list(dicA))</span><br><span class="line">        l, r, size, mod = <span class="number">0</span>, <span class="number">0</span>, len(uA), pow(<span class="number">10</span>, <span class="number">9</span>) + <span class="number">7</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(size):</span><br><span class="line">            l, r = i, size - <span class="number">1</span></span><br><span class="line">            s = target - uA[i]</span><br><span class="line">            <span class="keyword">while</span> l &lt;= r:</span><br><span class="line">                <span class="keyword">if</span> uA[l] + uA[r] &gt; s: r -= <span class="number">1</span> </span><br><span class="line">                <span class="keyword">elif</span> uA[l] + uA[r] &lt; s: l += <span class="number">1</span></span><br><span class="line">                <span class="keyword">elif</span> i != l <span class="keyword">and</span> l != r: ret = (ret + dicA[uA[i]]*dicA[uA[l]]*dicA[uA[r]]) % mod; l += <span class="number">1</span>; r -= <span class="number">1</span></span><br><span class="line">                <span class="keyword">elif</span> i == l <span class="keyword">and</span> l != r: ret = (ret + dicA[uA[i]]*(dicA[uA[i]]<span class="number">-1</span>)*dicA[uA[r]]/<span class="number">2</span>) % mod; l += <span class="number">1</span>; r -= <span class="number">1</span></span><br><span class="line">                <span class="keyword">elif</span> i != l <span class="keyword">and</span> l == r: ret = (ret + dicA[uA[i]]*dicA[uA[r]]*(dicA[uA[r]]<span class="number">-1</span>)/<span class="number">2</span>) % mod; l += <span class="number">1</span>; r -= <span class="number">1</span></span><br><span class="line">                <span class="keyword">else</span>: ret = (ret + dicA[uA[i]]*(dicA[uA[i]]<span class="number">-1</span>)*(dicA[uA[i]]<span class="number">-2</span>)/<span class="number">6</span>) % mod; l += <span class="number">1</span>; r -= <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> int(ret)</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2019-11-19</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(931.%20Minimum%20Falling%20Path%20Sum)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(931.%20Minimum%20Falling%20Path%20Sum)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(931. Minimum Falling Path Sum)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-931-Minimum-Falling-Path-Sum-题解"><a href="#LeetCode-931-Minimum-Falling-Path-Sum-题解" class="headerlink" title="LeetCode(931. Minimum Falling Path Sum)题解"></a>LeetCode(931. Minimum Falling Path Sum)题解</h1><p>Given a <strong>square</strong> array of integers <code>A</code>, we want the <strong>minimum</strong> sum of a <em>falling path</em> through <code>A</code>.</p>
+<p>A falling path starts at any element in the first row, and chooses one element from each row.  The next row’s choice must be in a column that is different from the previous row’s column by at most one.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Input: [[1,2,3],[4,5,6],[7,8,9]]</span><br><span class="line">Output: 12</span><br><span class="line">Explanation: </span><br><span class="line">The possible falling paths are:</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>[1,4,7], [1,4,8], [1,5,7], [1,5,8], [1,5,9]</code></li>
+<li><code>[2,4,7], [2,4,8], [2,5,7], [2,5,8], [2,5,9], [2,6,8], [2,6,9]</code></li>
+<li><code>[3,5,7], [3,5,8], [3,5,9], [3,6,8], [3,6,9]</code></li>
+</ul>
+<p>The falling path with the smallest sum is <code>[1,4,7]</code>, so the answer is <code>12</code>.</p>
+<p><strong>Note:</strong></p>
+<ol>
+<li><code>1 &lt;= A.length == A[0].length &lt;= 100</code></li>
+<li><code>-100 &lt;= A[i][j] &lt;= 100</code></li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给定一个二维数组A，每个元素都是整数，现在从第一行选定一个位置下降到最后一行，每个值表示选定这个位置的代价。选路的时候，下一行的位置和上一行的位置列之间相差最多一个。现在计算返回一条最短路径。</p>
+<p>这个明显就是DP。我们维护一个和A同等大小的数组，DP[i][j]表示第i行以第j列位置为终点的最短路径代价。最后只需要遍历最后一行的数据，选择最小的即可。</p>
+<p>那么初始状态为，DP[0][i] = A[0][i].</p>
+<p>转移方程为，DP[\i][j] = A[i][j]+min(DP[\i-1][j-1], DP[\i-1][j], DP[\i-1][j+1]).</p>
+<p>可知，转移只用到了上一层结果，因此可以使用一个2*col的数组记录。</p>
+<p>代码如下，数组大小N2，时间复杂度O(N2)，空间复杂度O(N)。</p>
+<p><code>Runtime: 8 ms, faster than 99.60% of C++ online submissions for Minimum Falling Path Sum.</code></p>
+<p><code>Memory Usage: 9.7 MB, less than 100.00% of C++ online submissions for Minimum Falling Path Sum.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minFallingPathSum</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; A)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> row = A.<span class="built_in">size</span>(), col = A[<span class="number">0</span>].<span class="built_in">size</span>();</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">ret</span><span class="params">(<span class="number">2</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(col + <span class="number">2</span>, INT_MAX))</span></span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;col; j++) ret[<span class="number">0</span>][j+<span class="number">1</span>] = A[<span class="number">0</span>][j];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;row; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;col; j++)&#123;</span><br><span class="line">                ret[<span class="number">1</span>][j+<span class="number">1</span>] = A[i][j] + <span class="built_in">min</span>(ret[<span class="number">0</span>][j], <span class="built_in">min</span>(ret[<span class="number">0</span>][j+<span class="number">1</span>], ret[<span class="number">0</span>][j+<span class="number">2</span>]));</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;col+<span class="number">2</span>; j++) ret[<span class="number">0</span>][j] = ret[<span class="number">1</span>][j];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> *min_element(ret[<span class="number">0</span>].<span class="built_in">begin</span>(), ret[<span class="number">0</span>].<span class="built_in">end</span>());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2019-11-09</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(93.%20Restore%20IP%20Addresses)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -832,181 +997,6 @@ Output: [&quot;255.255.11.135&quot;, &quot;255.255.111.35&quot;]</code></pre><h2
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(954.%20Array%20of%20Doubled%20Pairs)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(954.%20Array%20of%20Doubled%20Pairs)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(954. Array of Doubled Pairs)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-954-Array-of-Doubled-Pairs-题解"><a href="#LeetCode-954-Array-of-Doubled-Pairs-题解" class="headerlink" title="LeetCode(954. Array of Doubled Pairs)题解"></a>LeetCode(954. Array of Doubled Pairs)题解</h1><p>Given an array of integers <code>A</code> with even length, return <code>true</code> if and only if it is possible to reorder it such that <code>A[2 * i + 1] = 2 * A[2 * i]</code> for every <code>0 &lt;= i &lt; len(A) / 2</code>.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: [3,1,3,6]</span><br><span class="line">Output: false</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: [2,1,2,6]</span><br><span class="line">Output: false</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 3:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: [4,-2,2,-4]</span><br><span class="line">Output: true</span><br><span class="line">Explanation: We can take two groups, [-2,-4] and [2,4] to form [-2,-4,2,4] or [2,4,-2,-4].</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 4:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: [1,2,4,16,8,4]</span><br><span class="line">Output: false</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Note:</strong></p>
-<ol>
-<li><code>0 &lt;= A.length &lt;= 30000</code></li>
-<li><code>A.length</code> is even</li>
-<li><code>-100000 &lt;= A[i] &lt;= 100000</code></li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个偶数个元素的数组，判断其是否能组成一个有如下规则的数组：每个偶数位置的元素都是前面一个奇数位置元素的两倍，如果可以就返回True，否则False。</p>
-<p>这个题可以使用Map或者字典解决。使用一个字典记录数组每个元素出现的元素。然后对索引值即不同的元素进行排序，小的在前面。这样查看第一个元素，因为最小的，所以只能找放在奇数位置，然后查看是否存在对应到额偶数位置的元素值，如果不存在算法就结束了。如果存在就判断这个元素值是不是比最小的值多，如果少的话表示不够配对，算法也结束返回False。反之就将这个元素值的个数减去最小值的个数，同时更新字典。这时候等于最小值已经配对完成了且只能这样配对，而接下来的问题和初始问题一致，只是问题规模变小了。因此按照这种方法就可以判断数组是否符合要求，如果走到最后都没有不能配对，算法就返回True。</p>
-<p>因为要建立字典和排序，使用python方便一些。代码如下，时间复杂度O(nlogn)，空间复杂度O(n)。</p>
-<p><code>Runtime: 628 ms, faster than 96.71% of Python3 online submissions for Array of Doubled Pairs.</code></p>
-<p><code>Memory Usage: 15.1 MB, less than 50.00% of Python3 online submissions for Array of Doubled Pairs.</code></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span>  collections <span class="keyword">import</span> Counter</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">canReorderDoubled</span><span class="params">(self, A: List[int])</span> -&gt; bool:</span></span><br><span class="line">        A = [abs(a) <span class="keyword">for</span> a <span class="keyword">in</span> A]</span><br><span class="line">        C = Counter(A)</span><br><span class="line">        L = sorted(C)</span><br><span class="line">        <span class="keyword">for</span> l <span class="keyword">in</span> L:</span><br><span class="line">            <span class="keyword">if</span> C[l] == <span class="number">0</span>: <span class="keyword">continue</span> <span class="comment"># 可注释掉</span></span><br><span class="line">            <span class="keyword">if</span> C.get(<span class="number">2</span>*l, <span class="number">0</span>) &lt; C[l]: <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">            C[<span class="number">2</span>*l] -= C[l]</span><br><span class="line">            </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2019-11-28</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(957.%20Prison%20Cells%20After%20N%20Days)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(957.%20Prison%20Cells%20After%20N%20Days)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(957. Prison Cells After N Days)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-957-Prison-Cells-After-N-Days-题解"><a href="#LeetCode-957-Prison-Cells-After-N-Days-题解" class="headerlink" title="LeetCode(\957. Prison Cells After N Days)题解"></a>LeetCode(\957. Prison Cells After N Days)题解</h1><p>There are 8 prison cells in a row, and each cell is either occupied or vacant.</p>
-<p>Each day, whether the cell is occupied or vacant changes according to the following rules:</p>
-<ul>
-<li>If a cell has two adjacent neighbors that are both occupied or both vacant, then the cell becomes occupied.</li>
-<li>Otherwise, it becomes vacant.</li>
-</ul>
-<p>(Note that because the prison is a row, the first and the last cells in the row can’t have two adjacent neighbors.)</p>
-<p>We describe the current state of the prison in the following way: <code>cells[i] == 1</code> if the <code>i</code>-th cell is occupied, else <code>cells[i] == 0</code>.</p>
-<p>Given the initial state of the prison, return the state of the prison after <code>N</code> days (and <code>N</code> such changes described above.)</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Input: cells &#x3D; [0,1,0,1,1,0,0,1], N &#x3D; 7</span><br><span class="line">Output: [0,0,1,1,0,0,0,0]</span><br><span class="line">Explanation: </span><br><span class="line">The following table summarizes the state of the prison on each day:</span><br><span class="line">Day 0: [0, 1, 0, 1, 1, 0, 0, 1]</span><br><span class="line">Day 1: [0, 1, 1, 0, 0, 0, 0, 0]</span><br><span class="line">Day 2: [0, 0, 0, 0, 1, 1, 1, 0]</span><br><span class="line">Day 3: [0, 1, 1, 0, 0, 1, 0, 0]</span><br><span class="line">Day 4: [0, 0, 0, 0, 0, 1, 0, 0]</span><br><span class="line">Day 5: [0, 1, 1, 1, 0, 1, 0, 0]</span><br><span class="line">Day 6: [0, 0, 1, 0, 1, 1, 0, 0]</span><br><span class="line">Day 7: [0, 0, 1, 1, 0, 0, 0, 0]</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: cells &#x3D; [1,0,0,1,0,0,1,0], N &#x3D; 1000000000</span><br><span class="line">Output: [0,0,1,1,1,1,1,0]</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Note:</strong></p>
-<ol>
-<li><code>cells.length == 8</code></li>
-<li><code>cells[i]</code> is in <code>{0, 1}</code></li>
-<li><code>1 &lt;= N &lt;= 10^9</code></li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给有一个长度为8由0和1组成的数组，对其中的数，一个数如果两边都是1或者0，那么就将其变为1，否则变为0。求这样计算若干次之后序列是多少。</p>
-<p>这个题肯定不能用纯暴力的办法，因为变化的次数上限是10亿次，肯定会TLE。我们可以分析，一个长度为8的01数组，那么总的组合最多只有256种，而且因为序列变化的缘故，首尾必然变换之后一直保持为0.那就必然只有最多32+1为33种，因此序列一定会以一个序列重复出现，N一定是可以缩减的。</p>
-<p>我们使用一个Map记录变幻的序列的所处的变换次数，后边每次变换都判断这个序列是否出现过，没有就记录，出现了就表示后面的都是重复的，直接就可以通过求余得到最后答案。</p>
-<p>代码如下，时间复杂度O(1)，空间复杂度O(1)。</p>
-<p><code>Runtime: 4 ms, faster than 89.38% of C++ online submissions for Prison Cells After N Days.</code></p>
-<p><code>Memory Usage: 9.8 MB, less than 7.14% of C++ online submissions for Prison Cells After N Days.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">string</span> <span class="title">toString</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; cells)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">string</span> res = <span class="string">""</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> c : cells) res += (<span class="keyword">char</span>)(c + <span class="number">48</span>);</span><br><span class="line">        <span class="comment">//cout&lt;&lt;res&lt;&lt;endl;</span></span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">prisonAfterNDays</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; cells, <span class="keyword">int</span> N)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (N == <span class="number">0</span>) <span class="keyword">return</span> cells;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">V</span><span class="params">(<span class="number">33</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(<span class="number">8</span>, <span class="number">0</span>))</span></span>;</span><br><span class="line">        <span class="built_in">map</span>&lt;<span class="built_in">string</span>, <span class="keyword">int</span>&gt; M;</span><br><span class="line">        <span class="keyword">int</span> pos = <span class="number">0</span>;</span><br><span class="line">        </span><br><span class="line">        M[toString(cells)] = <span class="number">0</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">8</span>; i++) V[<span class="number">0</span>][i] = cells[i];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> n=<span class="number">1</span>; n&lt;=<span class="built_in">min</span>(<span class="number">33</span>, N); n++) &#123;</span><br><span class="line">            pos = n;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;<span class="number">7</span>; i++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (V[n<span class="number">-1</span>][i<span class="number">-1</span>] == V[n<span class="number">-1</span>][i+<span class="number">1</span>]) V[n][i] = <span class="number">1</span>;</span><br><span class="line">                <span class="keyword">else</span> V[n][i] = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            V[n][<span class="number">0</span>] = V[n][<span class="number">7</span>] = <span class="number">0</span>;</span><br><span class="line">            <span class="built_in">string</span> tmp = toString(V[n]);</span><br><span class="line">            <span class="keyword">if</span> (M.<span class="built_in">find</span>(tmp) == M.<span class="built_in">end</span>()) M[tmp] = n;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                pos = (N - M[tmp]) % (n - M[tmp]) + M[tmp];</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> V[pos];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave， 2020-01-07</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1079,7 +1069,7 @@ Output: [&quot;255.255.11.135&quot;, &quot;255.255.111.35&quot;]</code></pre><h2
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">277</span>
+          <span class="site-state-item-count">279</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
