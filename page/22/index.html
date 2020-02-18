@@ -177,6 +177,94 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(826.%20Most%20Profit%20Assigning%20Work)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(826.%20Most%20Profit%20Assigning%20Work)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(826. Most Profit Assigning Work)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-826-Most-Profit-Assigning-Work-题解"><a href="#LeetCode-826-Most-Profit-Assigning-Work-题解" class="headerlink" title="LeetCode(826. Most Profit Assigning Work)题解"></a>LeetCode(826. Most Profit Assigning Work)题解</h1><p>We have jobs: <code>difficulty[i]</code> is the difficulty of the <code>i</code>th job, and <code>profit[i]</code> is the profit of the <code>i</code>th job. </p>
+<p>Now we have some workers. <code>worker[i]</code> is the ability of the <code>i</code>th worker, which means that this worker can only complete a job with difficulty at most <code>worker[i]</code>. </p>
+<p>Every worker can be assigned at most one job, but one job can be completed multiple times.</p>
+<p>For example, if 3 people attempt the same job that pays $1, then the total profit will be $3.  If a worker cannot complete any job, his profit is $0.</p>
+<p>What is the most profit we can make?</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: difficulty &#x3D; [2,4,6,8,10], profit &#x3D; [10,20,30,40,50], worker &#x3D; [4,5,6,7]</span><br><span class="line">Output: 100 </span><br><span class="line">Explanation: Workers are assigned jobs of difficulty [4,4,6,6] and they get profit of [20,20,30,30] seperately.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Notes:</strong></p>
+<ul>
+<li><code>1 &lt;= difficulty.length = profit.length &lt;= 10000</code></li>
+<li><code>1 &lt;= worker.length &lt;= 10000</code></li>
+<li><code>difficulty[i], profit[i], worker[i]</code>  are in range <code>[1, 10^5]</code></li>
+</ul>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>现在有一些工作，每个工作有不同的困难度，比如工作1的困难度3，工作2困难度4.然后每个工作有各自不同的收益。一些工人有自己的能力值，每个工人只能完成困难度不能高于自己能力值的工作，完成一个工作得到一份收益。一个工人只能完成一份工作，但是一个工作可以被多个人完成。求这种情况下，这些工人可以获得的最大收益是多少。</p>
+<p>我们可以这样想，一个工人需要在自己能力范围内完成尽可能高收益的工作。因此直接把工人可以完成的工作中，最高收益的工作完成即可。针对每个工人，对工作进行全搜索当然可以行。但是这样会花费O(N)的时间。</p>
+<p>因此，可以构建一个数组S，将工作W[i]按照困难度排序之后的i作为S的key，低于这个困难度的工作中最大收益作为value，这样只需要使用O(logn).就可以得到一名工人可以得到的最大收益了。但是其实也有一个Trick，可以将工人也按照能力值排序，比如从小到大，然后利用双指针法，平均花费O(1)的时间就可以得到一名工人的收益。</p>
+<p>如何构建这个数组呢？可以先将工作按照困难度排序，然后遍历工作，从小到大，将每个元素换成小于等于这个困难度的工作中的最大收益即可，时间复杂度O(nlogn).这里有一个Trick，不要直接对困难度排序，而是建一个数组，存储各个工作的编号，对编号进行排序。</p>
+<p>但是上述因为C++的Sort排序必须静态，我懒得自己写Sort函数。因此采用如下策略。<br>将任务按照difficult 从小到大排</p>
+<p>将worker 从小到大排</p>
+<p>对于当前的worker遍历它力所能及的工作并取最大利润</p>
+<p>那么下一个worker在上一个worker利润基础上，继续遍历力所能及的范围</p>
+<p>排序后one pass即可</p>
+<p>这道题的基本逻辑是，如果workerA 比workerB能力大，那么B能获得的利润肯定比A高。</p>
+<p>时间复杂度不变，空间复杂度反而还降低了，但是还是需要自己写排序函数，因此我选择Python。</p>
+<p>代码如下，设工人数量M，工作数N。则空间复杂度O(1)，时间复杂度O(NlogN+MlogM+N+M)。</p>
+<p><code>Runtime: 336 ms, faster than 70.70% of Python online submissions for Most Profit Assigning Work.</code></p>
+<p><code>Memory Usage: 14.3 MB, less than 100.00% of Python online submissions for Most Profit Assigning Work.</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">maxProfitAssignment</span><span class="params">(self, difficulty, profit, worker)</span>:</span></span><br><span class="line">        jobs = sorted(zip(difficulty, profit))</span><br><span class="line">        worker.sort()</span><br><span class="line">        index, cur_max, res = <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> ability <span class="keyword">in</span> worker:</span><br><span class="line">            <span class="keyword">while</span>(index &lt; len(difficulty) <span class="keyword">and</span> ability &gt;= jobs[index][<span class="number">0</span>]):</span><br><span class="line">                cur_max = max(cur_max, jobs[index][<span class="number">1</span>])</span><br><span class="line">                index += <span class="number">1</span></span><br><span class="line">                </span><br><span class="line">            res += cur_max</span><br><span class="line">        <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2019-09-24.</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(835.%20Image%20Overlap)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -920,91 +1008,6 @@ Output: 6</code></pre><h2 id="解题思路"><a href="#解题思路" class="heade
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(853.%20Car%20Fleet)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(853.%20Car%20Fleet)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(853. Car Fleet)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-853-Car-Fleet-题解"><a href="#LeetCode-853-Car-Fleet-题解" class="headerlink" title="LeetCode(853. Car Fleet)题解"></a>LeetCode(853. Car Fleet)题解</h1><p><code>N</code> cars are going to the same destination along a one lane road.  The destination is <code>target</code> miles away.</p>
-<p>Each car <code>i</code> has a constant speed <code>speed[i]</code> (in miles per hour), and initial position <code>position[i]</code> miles towards the target along the road.</p>
-<p>A car can never pass another car ahead of it, but it can catch up to it, and drive bumper to bumper at the same speed.</p>
-<p>The distance between these two cars is ignored - they are assumed to have the same position.</p>
-<p>A <em>car fleet</em> is some non-empty set of cars driving at the same position and same speed.  Note that a single car is also a car fleet.</p>
-<p>If a car catches up to a car fleet right at the destination point, it will still be considered as one car fleet.</p>
-<p>How many car fleets will arrive at the destination?</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Input: target &#x3D; 12, position &#x3D; [10,8,0,5,3], speed &#x3D; [2,4,1,1,3]</span><br><span class="line">Output: 3</span><br><span class="line">Explanation:</span><br><span class="line">The cars starting at 10 and 8 become a fleet, meeting each other at 12.</span><br><span class="line">The car starting at 0 doesn&#39;t catch up to any other car, so it is a fleet by itself.</span><br><span class="line">The cars starting at 5 and 3 become a fleet, meeting each other at 6.</span><br><span class="line">Note that no other cars meet these fleets before the destination, so the answer is 3.</span><br></pre></td></tr></table></figure>
-
-
-<p><strong>Note:</strong></p>
-<ol>
-<li><code>0 &lt;= N &lt;= 10 ^ 4</code></li>
-<li><code>0 &lt; target &lt;= 10 ^ 6</code></li>
-<li><code>0 &lt; speed[i] &lt;= 10 ^ 6</code></li>
-<li><code>0 &lt;= position[i] &lt; target</code></li>
-<li>All initial positions are different.</li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>N辆车沿着一条车道行驶到同一目的地。目的地是目标英里。每辆汽车均具有恒定的speed[i]（以英里/小时为单位），初始位置position[i]沿道路朝向目标。一辆汽车永远无法超越前面的另一辆汽车，但它可以追上它，并以相同的速度驾驶。忽略这两辆车之间的距离-假定它们具有相同的位置。车队是在相同位置和相同速度下行驶的一些非空车组。请注意，单车也是车队。如果汽车正好赶上目的地的车队，它将仍被视为一个车队。多少车队将到达目的地？</p>
-<p>我们可以这样理解，以时间为横轴，路程为纵轴画一个平面直角坐标系，那么每辆车的行驶就对应这个坐标中的一条直线。与y轴的交点就是车的出发位置，斜率就是车的速度。那么在到达target（y轴target位置与X轴平行的直线）之前，所有后来居上超过先前直线的直线都表示超车，根据题意就可以删除这条直线。因此，每遇到相交的两条直线，就删除与y轴相交更低的那条线。最后坐标系中的所有直线在target之下都不相交，直线的数量就是问题的解。</p>
-<p>因此，这道题可以使用排序的方法来做，将车辆按照出发距离排序，然后从头到尾遍历，对于每一辆车，看后续的车是否在target之前有超过的，有就将其删除。</p>
-<p>代码如下，时间复杂度O(n)，空间复杂度O(n)。</p>
-<p><code>Runtime: 48 ms, faster than 73.22% of C++ online submissions for Car Fleet.</code></p>
-<p><code>Memory Usage: 10.5 MB, less than 100.00% of C++ online submissions for Car Fleet.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; P;</span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> P[a] &gt; P[b];</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">carFleet</span><span class="params">(<span class="keyword">int</span> target, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; <span class="built_in">position</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; speed)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = <span class="built_in">position</span>.<span class="built_in">size</span>();</span><br><span class="line">        P = <span class="built_in">position</span>;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">car</span><span class="params">(len)</span></span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++) car[i] = i;</span><br><span class="line">        sort(car.<span class="built_in">begin</span>(), car.<span class="built_in">end</span>(), cmp);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(car[i] == <span class="number">-1</span>) <span class="keyword">continue</span>;</span><br><span class="line">            <span class="keyword">double</span> X = (target - <span class="built_in">position</span>[car[i]])*<span class="number">1.0</span> / speed[car[i]];</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=i+<span class="number">1</span>; j&lt;len; j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(car[j] == <span class="number">-1</span>) <span class="keyword">continue</span>;</span><br><span class="line">                <span class="keyword">if</span>(X*speed[car[j]] + <span class="built_in">position</span>[car[j]] &gt;= target) car[j] = <span class="number">-1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> c : car)&#123;</span><br><span class="line">            <span class="keyword">if</span>(c != <span class="number">-1</span>) res++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2019-10-14</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1077,7 +1080,7 @@ Output: 6</code></pre><h2 id="解题思路"><a href="#解题思路" class="heade
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">279</span>
+          <span class="site-state-item-count">280</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

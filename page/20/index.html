@@ -177,6 +177,84 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(791.%20Custom%20Sort%20String)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(791.%20Custom%20Sort%20String)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(791. Custom Sort String)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id=""><a href="#" class="headerlink" title=""></a></h1><h1 id="LeetCode-791-Custom-Sort-String-题解"><a href="#LeetCode-791-Custom-Sort-String-题解" class="headerlink" title="LeetCode(791. Custom Sort String)题解"></a>LeetCode(791. Custom Sort String)题解</h1><p><code>S</code> and <code>T</code> are strings composed of lowercase letters. In <code>S</code>, no letter occurs more than once.</p>
+<p><code>S</code> was sorted in some custom order previously. We want to permute the characters of <code>T</code> so that they match the order that <code>S</code> was sorted. More specifically, if <code>x</code> occurs before <code>y</code> in <code>S</code>, then <code>x</code> should occur before <code>y</code> in the returned string.</p>
+<p>Return any permutation of <code>T</code> (as a string) that satisfies this property.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Example :</span><br><span class="line">Input: </span><br><span class="line">S &#x3D; &quot;cba&quot;</span><br><span class="line">T &#x3D; &quot;abcd&quot;</span><br><span class="line">Output: &quot;cbad&quot;</span><br><span class="line">Explanation: </span><br><span class="line">&quot;a&quot;, &quot;b&quot;, &quot;c&quot; appear in S, so the order of &quot;a&quot;, &quot;b&quot;, &quot;c&quot; should be &quot;c&quot;, &quot;b&quot;, and &quot;a&quot;. </span><br><span class="line">Since &quot;d&quot; does not appear in S, it can be at any position in T. &quot;dcba&quot;, &quot;cdba&quot;, &quot;cbda&quot; are also valid outputs.</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Note:</strong></p>
+<ul>
+<li><code>S</code> has length at most <code>26</code>, and no character is repeated in <code>S</code>.</li>
+<li><code>T</code> has length at most <code>200</code>.</li>
+<li><code>S</code> and <code>T</code> consist of lowercase letters only.</li>
+</ul>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>将字符串T重新进行排序，出现在S中的字符就按照S中出现的顺序排序，未出现的就随便排。</p>
+<p>这是个民工题，只要将T记录每个字符出现的次数，整理成字典。然后遍历S，查看其元素是否在字典内，在就放入最后的结果，最后记录字典内有哪些没有在S中，放在最后即可。</p>
+<p>代码如下，设S和T长n和m，时间复杂度，空间复杂度均为<code>O(n+m)</code>。</p>
+<p><code>Runtime: 32 ms, faster than 94.51% of Python3 online submissions for Custom Sort String.</code></p>
+<p><code>Memory Usage: 13.5 MB, less than 5.00% of Python3 online submissions for Custom Sort String.</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">customSortString</span><span class="params">(self, S: str, T: str)</span> -&gt; str:</span></span><br><span class="line">        dT = &#123;&#125;</span><br><span class="line">        res1, res2 = <span class="string">""</span>, <span class="string">""</span></span><br><span class="line">        ST = set(S)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> T: </span><br><span class="line">            dT[i] = <span class="number">1</span> <span class="keyword">if</span> <span class="keyword">not</span> i <span class="keyword">in</span> dT <span class="keyword">else</span> dT[i] + <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> i <span class="keyword">in</span> ST: res2 += i</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> S:</span><br><span class="line">            <span class="keyword">if</span> i <span class="keyword">in</span> dT: res1 += i * dT[i]</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">return</span> res1 + res2</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2019-10-06</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(797.%20All%20Paths%20From%20Source%20to%20Target)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -921,83 +999,6 @@ Answers within 10^-6 of the true value will be accepted as correct.</code></pre>
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(810.%20Chalkboard%20XOR%20Game)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(810.%20Chalkboard%20XOR%20Game)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(810. Chalkboard XOR Game)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-810-Chalkboard-XOR-Game-题解"><a href="#LeetCode-810-Chalkboard-XOR-Game-题解" class="headerlink" title="LeetCode(810. Chalkboard XOR Game)题解"></a>LeetCode(810. Chalkboard XOR Game)题解</h1><p>We are given non-negative integers nums[i] which are written on a chalkboard.  Alice and Bob take turns erasing exactly one number from the chalkboard, with Alice starting first.  If erasing a number causes the bitwise XOR of all the elements of the chalkboard to become 0, then that player loses.  (Also, we’ll say the bitwise XOR of one element is that element itself, and the bitwise XOR of no elements is 0.)</p>
-<p>Also, if any player starts their turn with the bitwise XOR of all the elements of the chalkboard equal to 0, then that player wins.</p>
-<p>Return True if and only if Alice wins the game, assuming both players play optimally.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Example:</span><br><span class="line">Input: nums &#x3D; [1, 1, 2]</span><br><span class="line">Output: false</span><br><span class="line">Explanation: </span><br><span class="line">Alice has two choices: erase 1 or erase 2. </span><br><span class="line">If she erases 1, the nums array becomes [1, 2]. The bitwise XOR of all the elements of the chalkboard is 1 XOR 2 &#x3D; 3. Now Bob can remove any element he wants, because Alice will be the one to erase the last element and she will lose. </span><br><span class="line">If Alice erases 2 first, now nums becomes [1, 1]. The bitwise XOR of all the elements of the chalkboard is 1 XOR 1 &#x3D; 0. Alice will lose.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Notes:</strong></p>
-<ul>
-<li><code>1 &lt;= N &lt;= 1000</code>. </li>
-<li><code>0 &lt;= nums[i] &lt;= 2^16</code>.</li>
-</ul>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个数组，表示一个棋盘上的棋子，每个棋子有对应数组内的值。A和B两个人轮流从中删除一个棋子，从A先开始。判断胜负的标准是，如果一方删除一个棋子导致剩下棋子的值XOR值为0或者棋盘上没有棋子了，则落败，否则就继续下去。如果一方删除前就遇到棋盘的所有棋子XOR和为0，则获胜。假设双方都是按最优策略进行，判断A是否能获胜。</p>
-<p>这个题虽然是Hard的难度，但是其实异常简单。分析一下就可以得知，如果一方拿到删除权时棋盘上棋子XOR为0则自动获胜，否则，如果拿到时只剩一个棋子，那么这个人必输，因为删除了就没有了。反之如果剩两个，全一样或者棋子元素值全为0则自动获胜，那么随便删除一个留下一个不为0的棋子，就能导致对方只剩一个，则我必胜。若拿到三个，除非三个的XOR值为0，否则不管删除哪一个，都会导致对方剩两个从而导致自己必输。</p>
-<p>因此推广到一半的情况，如果A删除时棋盘棋子为奇数，那么以后每一轮都是奇数，到最后轮到A只剩一个棋子，肯定会输，除非轮到A时棋子的XOR值恰好为0。而按照双方最佳策略来说，B肯定不会给A这样的机会，因为如果B不得不给A这样的机会，那么就表示B不管删除棋盘中哪个棋子都使得其余棋子的XOR值为0，那么就表示这些值肯定都一样，一样则表示B拿到时就全部一样，B自动获胜。所以，不管怎样，A必输。</p>
-<p>反之，如果A删除时棋盘棋子为偶数，则AB的情况倒置，A必胜。</p>
-<p>因此代码如下，时间复杂度$O(N)$，空间复杂度$O(1)$:</p>
-<p><code>Runtime: 8 ms, faster than 98.47% of C++ online submissions for Chalkboard XOR Game.</code></p>
-<p><code>Memory Usage: 8.9 MB, less than 100.00% of C++ online submissions for Chalkboard XOR Game.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">xorGame</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i:nums) res ^= i;</span><br><span class="line">        <span class="keyword">return</span> res == <span class="number">0</span> || (nums.<span class="built_in">size</span>() &amp; <span class="number">1</span>) == <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-09-11</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1070,7 +1071,7 @@ Answers within 10^-6 of the true value will be accepted as correct.</code></pre>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">279</span>
+          <span class="site-state-item-count">280</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
