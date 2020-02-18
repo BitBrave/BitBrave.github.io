@@ -254,6 +254,90 @@ Output: []</code></pre><h2 id="解题思路"><a href="#解题思路" class="head
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(27.%20Remove%20Element)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(27.%20Remove%20Element)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(27. Remove Element)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-27-Remove-Element-题解"><a href="#LeetCode-27-Remove-Element-题解" class="headerlink" title="LeetCode(27. Remove Element)题解"></a>LeetCode(27. Remove Element)题解</h1><hr>
+<p>原文如下<br>Do not allocate extra space for another array, you must do this by modifying the input array in-place with O(1) extra memory.</p>
+<p>The order of elements can be changed. It doesn’t matter what you leave beyond the new length.</p>
+<p>Example 1:</p>
+<pre><code>Given nums = [3,2,2,3], val = 3,
+
+Your function should return length = 2, with the first two elements of nums being 2.</code></pre><p>It doesn’t matter what you leave beyond the returned length.<br>Example 2:</p>
+<pre><code>Given nums = [0,1,2,2,3,0,4,2], val = 2,
+
+Your function should return length = 5, with the first five elements of nums containing 0, 1, 3, 0, and 4.</code></pre><p>Note that the order of those five elements can be arbitrary.</p>
+<p>It doesn’t matter what values are set beyond the returned length.<br>Clarification:</p>
+<p>Confused why the returned value is an integer but your answer is an array?</p>
+<p>Note that the input array is passed in by reference, which means modification to the input array will be known to the caller as well.</p>
+<p>Internally you can think of this:</p>
+<pre><code>// nums is passed in by reference. (i.e., without making a copy)
+int len = removeElement(nums, val);
+
+// any modification to nums in your function would be known by the caller.
+// using the length returned by your function, it prints the first len elements.
+for (int i = 0; i &lt; len; i++) {
+    print(nums[i]);
+}</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>这是一个easy题，直接使用vector的erase函数即可，在遍历的时候发现与val一样的数直接删除，注意的是函数不仅要返回正确的length，还要返回正确的vector。同时不要花费太多的space。</p>
+<p>这是一种方式，（4ms），代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">removeElement</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> val)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = nums.<span class="built_in">size</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(nums[i]!=val) <span class="keyword">continue</span>;</span><br><span class="line">            nums.erase(nums.<span class="built_in">begin</span>()+i);</span><br><span class="line">            i--;</span><br><span class="line">            len--;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> len;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="解法二"><a href="#解法二" class="headerlink" title="解法二"></a>解法二</h2><p>根据题意我们只要将vector前面正确length内的容器内放入正确的数就可以了，因此可以用一个位置来记录，当发现与一样的数的时候，将后面的数直接覆盖前面的就可以了。</p>
+<p>代码如下(4ms)：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">removeElement</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> val)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;len; j++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(nums[j]!=val) nums[i++] = nums[j];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> i;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(304.%20Range%20Sum%20Query%202D%20-%20Immutable)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -405,73 +489,6 @@ Explanation: transactions = [buy, sell, cooldown, buy, sell]</code></pre><h2 id=
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(31.%20Next%20Permutation)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(31.%20Next%20Permutation)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(31. Next Permutation)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-31-Next-Permutation-题解"><a href="#LeetCode-31-Next-Permutation-题解" class="headerlink" title="LeetCode(31. Next Permutation)题解"></a>LeetCode(31. Next Permutation)题解</h1><hr>
-<p>Implement next permutation, which rearranges numbers into the lexicographically next greater permutation of numbers.</p>
-<p>If such arrangement is not possible, it must rearrange it as the lowest possible order (ie, sorted in ascending order).</p>
-<p>The replacement must be in-place and use only constant extra memory.</p>
-<p>Here are some examples. Inputs are in the left-hand column and its corresponding outputs are in the right-hand column.</p>
-<pre><code>1,2,3 → 1,3,2
-3,2,1 → 1,2,3
-1,1,5 → 1,5,1</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>题目是Medium难度。将vector存的数组合而成变为一个新的更大的数，并且是可以组合最大的数内的最小的。比如123只能变成132。</p>
-<p>思路就是，从后往前走，遇到一个比已遍历数中最大的数要小的数（直接看从后往前走是不是升序，遇到第一个不符合情况的即可），就将这个数与已遍历数中比其大的中最小的进行交换，然后将已遍历数进行升序排序即可。如果直到走到头都没有，则这个vector是降序排列的，那么只要将其倒序即可。</p>
-<p>代码如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">nextPermutation</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span>(len&lt;=<span class="number">1</span>) <span class="keyword">return</span>;</span><br><span class="line">        <span class="keyword">int</span> m;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=len<span class="number">-1</span>; i&gt;<span class="number">0</span>; i--)&#123;</span><br><span class="line">            <span class="keyword">if</span>(nums[i]&lt;=nums[i<span class="number">-1</span>]) <span class="keyword">continue</span>;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=len<span class="number">-1</span>; j&gt;i<span class="number">-1</span>; j--)&#123;</span><br><span class="line">                <span class="keyword">if</span>(nums[j]&lt;=nums[i<span class="number">-1</span>]) <span class="keyword">continue</span>;</span><br><span class="line">                swap(nums[j], nums[i<span class="number">-1</span>]);</span><br><span class="line">                sort(nums.<span class="built_in">begin</span>()+i, nums.<span class="built_in">end</span>());</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> left=<span class="number">0</span>, right=len<span class="number">-1</span>; left&lt;right; left++, right--)&#123;</span><br><span class="line">            swap(nums[left], nums[right]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(32.%20Longest%20Valid%20Parentheses)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -545,6 +562,73 @@ Explanation: The longest valid parentheses substring is &quot;()()&quot;</code><
 
 <p>BitBrave, 2019-05-08</p>
 
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(31.%20Next%20Permutation)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(31.%20Next%20Permutation)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(31. Next Permutation)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-31-Next-Permutation-题解"><a href="#LeetCode-31-Next-Permutation-题解" class="headerlink" title="LeetCode(31. Next Permutation)题解"></a>LeetCode(31. Next Permutation)题解</h1><hr>
+<p>Implement next permutation, which rearranges numbers into the lexicographically next greater permutation of numbers.</p>
+<p>If such arrangement is not possible, it must rearrange it as the lowest possible order (ie, sorted in ascending order).</p>
+<p>The replacement must be in-place and use only constant extra memory.</p>
+<p>Here are some examples. Inputs are in the left-hand column and its corresponding outputs are in the right-hand column.</p>
+<pre><code>1,2,3 → 1,3,2
+3,2,1 → 1,2,3
+1,1,5 → 1,5,1</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>题目是Medium难度。将vector存的数组合而成变为一个新的更大的数，并且是可以组合最大的数内的最小的。比如123只能变成132。</p>
+<p>思路就是，从后往前走，遇到一个比已遍历数中最大的数要小的数（直接看从后往前走是不是升序，遇到第一个不符合情况的即可），就将这个数与已遍历数中比其大的中最小的进行交换，然后将已遍历数进行升序排序即可。如果直到走到头都没有，则这个vector是降序排列的，那么只要将其倒序即可。</p>
+<p>代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">nextPermutation</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span>(len&lt;=<span class="number">1</span>) <span class="keyword">return</span>;</span><br><span class="line">        <span class="keyword">int</span> m;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=len<span class="number">-1</span>; i&gt;<span class="number">0</span>; i--)&#123;</span><br><span class="line">            <span class="keyword">if</span>(nums[i]&lt;=nums[i<span class="number">-1</span>]) <span class="keyword">continue</span>;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=len<span class="number">-1</span>; j&gt;i<span class="number">-1</span>; j--)&#123;</span><br><span class="line">                <span class="keyword">if</span>(nums[j]&lt;=nums[i<span class="number">-1</span>]) <span class="keyword">continue</span>;</span><br><span class="line">                swap(nums[j], nums[i<span class="number">-1</span>]);</span><br><span class="line">                sort(nums.<span class="built_in">begin</span>()+i, nums.<span class="built_in">end</span>());</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> left=<span class="number">0</span>, right=len<span class="number">-1</span>; left&lt;right; left++, right--)&#123;</span><br><span class="line">            swap(nums[left], nums[right]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
       
     </div>
 
@@ -880,87 +964,11 @@ Explanation: Maximum amount of money the thief can rob = 4 + 5 = 9.</code></pre>
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(343.%20Integer%20Break)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(343.%20Integer%20Break)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(343. Integer Break)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-343-Integer-Break-题解"><a href="#LeetCode-343-Integer-Break-题解" class="headerlink" title="LeetCode(\343. Integer Break)题解"></a>LeetCode(\343. Integer Break)题解</h1><p>Given a positive integer <em>n</em>, break it into the sum of <strong>at least</strong> two positive integers and maximize the product of those integers. Return the maximum product you can get.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: 2</span><br><span class="line">Output: 1</span><br><span class="line">Explanation: 2 &#x3D; 1 + 1, 1 × 1 &#x3D; 1.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: 10</span><br><span class="line">Output: 36</span><br><span class="line">Explanation: 10 &#x3D; 3 + 3 + 4, 3 × 3 × 4 &#x3D; 36.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Note</strong>: You may assume that <em>n</em> is not less than 2 and not larger than 58.</p>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出一个数，将其拆分为不同的数之和，同时保证所有的数的乘积最大。</p>
-<p>这个题是一个典型的DP问题，优化之后可以在O(1)的时间内计算出来。因为我们只需要将所有的值都化为3*3*3*…就可以得到最大值，当然最后如果是余下4就不再变为1和3了。</p>
-<p>如何证明这个是最优的呢，我们可以假设目前有一个最优的解，a,b,c,…。其中肯定不存在为1的数（原因不证自明），如果其中存在数大于4，比如b那么可以证明3*(b-3)&gt;b。因此可以进一步划分出3来，出现矛盾。因此，最优解中的元素一定是小于等于4.</p>
-<p>而4元素和2元素其实是一样的，一个4可以化为两个2.因此我们要比较的就是将数按照3拆分和按2拆分的区别了。这就需要比较2^(n/2)和3^(n/3)。这是一个数学比较，可以发现后者更大。</p>
-<p>因此直接将数按照3进行分割就可以了。</p>
-<p>代码如下，时间复杂度O(1)，空间复杂度O(1)。</p>
-<p><code>Runtime: 0 ms, faster than 100.00% of C++ online submissions for Integer Break.</code></p>
-<p><code>Memory Usage: 8.2 MB, less than 100.00% of C++ online submissions for Integer Break.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">integerBreak</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(n &lt;= <span class="number">4</span>) <span class="keyword">return</span> n/<span class="number">2</span> * (n-n/<span class="number">2</span>);</span><br><span class="line">        <span class="keyword">int</span> c = n / <span class="number">3</span>, m = n % <span class="number">3</span>;</span><br><span class="line">        <span class="keyword">if</span>(m == <span class="number">1</span>)&#123;</span><br><span class="line">            m = <span class="number">4</span>;</span><br><span class="line">            c--;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(m == <span class="number">0</span>) m = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">pow</span>(<span class="number">3</span>, c)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2019-12-06</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/11/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/">13</a><span class="space">&hellip;</span><a class="page-number" href="/page/28/">28</a><a class="extend next" rel="next" href="/page/13/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/11/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/">13</a><span class="space">&hellip;</span><a class="page-number" href="/page/29/">29</a><a class="extend next" rel="next" href="/page/13/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1028,7 +1036,7 @@ Explanation: Maximum amount of money the thief can rob = 4 + 5 = 9.</code></pre>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">280</span>
+          <span class="site-state-item-count">281</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
