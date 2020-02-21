@@ -177,6 +177,168 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(97.%20Interleaving%20String)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(97.%20Interleaving%20String)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(97. Interleaving String)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-97-Interleaving-String-题解"><a href="#LeetCode-97-Interleaving-String-题解" class="headerlink" title="LeetCode(97. Interleaving String)题解"></a>LeetCode(97. Interleaving String)题解</h1><hr>
+<p>Given s1, s2, s3, find whether s3 is formed by the interleaving of s1 and s2.</p>
+<p>Example 1:</p>
+<pre><code>Input: s1 = &quot;aabcc&quot;, s2 = &quot;dbbca&quot;, s3 = &quot;aadbbcbcac&quot;
+Output: true
+Example 2:
+
+Input: s1 = &quot;aabcc&quot;, s2 = &quot;dbbca&quot;, s3 = &quot;aadbbbaccc&quot;
+Output: false</code></pre><h1 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h1><p>给出三个字符串，判断第三个字符串是不是可以由前两个字符串交叉而成。字符的顺序不能乱。</p>
+<p>方法很简单。首先是判断前两个字符串的字符个数和必须和第三个一样。否则肯定不匹配。</p>
+<p>然后可以使用DP的办法，建立一个DP数组D，D[i][j]表示s1的前i+1个字符和s2的前j+1个字符是否和s3的前i+j+2个字符相配。然后直接做就可以了。</p>
+<p>代码如下：</p>
+<p>Runtime: 56 ms, faster than 5.97% of C++ online submissions for Interleaving String.<br>Memory Usage: 8.5 MB, less than 66.33% of C++ online submissions for Interleaving String.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isInterleave</span><span class="params">(<span class="built_in">string</span> s1, <span class="built_in">string</span> s2, <span class="built_in">string</span> s3)</span> </span>&#123;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> l1 = s1.<span class="built_in">size</span>(), l2 = s2.<span class="built_in">size</span>(), l3 = s3.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span>(l3 == <span class="number">0</span>) <span class="keyword">return</span> l1+l2 == <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span>(l1 == <span class="number">0</span>) <span class="keyword">return</span> s2 == s3;</span><br><span class="line">        <span class="keyword">if</span>(l2 == <span class="number">0</span>) <span class="keyword">return</span> s1 == s3;</span><br><span class="line">        <span class="keyword">if</span>(l1+l2 != l3) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">bool</span>&gt;&gt; <span class="title">DP</span><span class="params">(l1+<span class="number">1</span>, <span class="built_in">vector</span>&lt;<span class="keyword">bool</span>&gt;(l2+<span class="number">1</span>, <span class="literal">false</span>))</span></span>;</span><br><span class="line">        DP[<span class="number">0</span>][<span class="number">0</span>] = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">0</span>; k&lt;l3; k++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(l1 &gt;= k+<span class="number">1</span> &amp;&amp; s1[k] == s3[k]) DP[k+<span class="number">1</span>][<span class="number">0</span>] = DP[k][<span class="number">0</span>];</span><br><span class="line">            <span class="keyword">if</span>(l2 &gt;= k+<span class="number">1</span> &amp;&amp; s2[k] == s3[k]) DP[<span class="number">0</span>][k+<span class="number">1</span>] = DP[<span class="number">0</span>][k];</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; (i&lt;=l1) &amp;&amp; (i&lt;k+<span class="number">1</span>); i++)&#123;</span><br><span class="line">                </span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> j=k+<span class="number">1</span>-i; j&lt;=l2; j++)&#123;</span><br><span class="line">                    <span class="keyword">if</span>(s1[i<span class="number">-1</span>] != s3[k] &amp;&amp; s2[j<span class="number">-1</span>] != s3[k])&#123;</span><br><span class="line">                        DP[i][j] = <span class="literal">false</span>;</span><br><span class="line">                        <span class="keyword">continue</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span>(s1[i<span class="number">-1</span>] == s3[k])&#123;</span><br><span class="line">                        DP[i][j] = DP[i<span class="number">-1</span>][j];</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span>(s2[j<span class="number">-1</span>] == s3[k])&#123;</span><br><span class="line">                        DP[i][j] = DP[i][j] == <span class="literal">true</span> ? <span class="literal">true</span> : DP[i][j<span class="number">-1</span>];</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> DP[l1][l2];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>其实还有一种更方便的办法，首先将s1与s3比较，删除s3中与s1相同的字符（一一对应，s1的一个字符在s3中只删一次），然后最后如果s1不为空就表示不匹配，为空就判断剩下的字符串s3是不是等于s2，等于则匹配，否则不匹配。(这是错误的想法)</p>
+<p>BitBrave, 2019-06-23</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(973.%20K%20Closest%20Points%20to%20Origin)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(973.%20K%20Closest%20Points%20to%20Origin)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(973. K Closest Points to Origin)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-973-K-Closest-Points-to-Origin-题解"><a href="#LeetCode-973-K-Closest-Points-to-Origin-题解" class="headerlink" title="LeetCode(973. K Closest Points to Origin)题解"></a>LeetCode(973. K Closest Points to Origin)题解</h1><p>We have a list of <code>points</code> on the plane.  Find the <code>K</code> closest points to the origin <code>(0, 0)</code>.</p>
+<p>(Here, the distance between two points on a plane is the Euclidean distance.)</p>
+<p>You may return the answer in any order.  The answer is guaranteed to be unique (except for the order that it is in.)</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Input: points &#x3D; [[1,3],[-2,2]], K &#x3D; 1</span><br><span class="line">Output: [[-2,2]]</span><br><span class="line">Explanation: </span><br><span class="line">The distance between (1, 3) and the origin is sqrt(10).</span><br><span class="line">The distance between (-2, 2) and the origin is sqrt(8).</span><br><span class="line">Since sqrt(8) &lt; sqrt(10), (-2, 2) is closer to the origin.</span><br><span class="line">We only want the closest K &#x3D; 1 points from the origin, so the answer is just [[-2,2]].</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: points &#x3D; [[3,3],[5,-1],[-2,4]], K &#x3D; 2</span><br><span class="line">Output: [[3,3],[-2,4]]</span><br><span class="line">(The answer [[-2,4],[3,3]] would also be accepted.)</span><br></pre></td></tr></table></figure>
+
+<p><strong>Note:</strong></p>
+<ol>
+<li><code>1 &lt;= K &lt;= points.length &lt;= 10000</code></li>
+<li><code>-10000 &lt; points[i][0] &lt; 10000</code></li>
+<li><code>-10000 &lt; points[i][1] &lt; 10000</code></li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一系列点，求出其里原点最近的K个点。（距离为欧几里得距离）</p>
+<p>这个最简单的方式就是将所有点按照欧几里得距离进行排序，然后选取前K个即可。</p>
+<p>这样时间复杂度为O(NlogN)，空间复杂度O(1)，代码如下。</p>
+<p><code>Runtime: 852 ms, faster than 6.33% of C++ online submissions for K Closest Points to Origin.</code></p>
+<p><code>Memory Usage: 189.1 MB, less than 10.94% of C++ online submissions for K Closest Points to Origin.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; a, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; b)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a[<span class="number">0</span>]*a[<span class="number">0</span>]+a[<span class="number">1</span>]*a[<span class="number">1</span>] &lt; b[<span class="number">0</span>]*b[<span class="number">0</span>]+b[<span class="number">1</span>]*b[<span class="number">1</span>];</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">kClosest</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; points, <span class="keyword">int</span> K)</span> </span>&#123;</span><br><span class="line">        sort(points.<span class="built_in">begin</span>(), points.<span class="built_in">end</span>(), cmp);</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;(points.<span class="built_in">begin</span>(), points.<span class="built_in">begin</span>()+K);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>但是这样明显不是最优的，因为其实只需要前K个，而我们将所有的元素都进行了排序。因此我们可以使用Heap的方式，维护一个最大堆，然后遍历每一个坐标，在堆内元素少于K的时候，直接将点入堆，如果达到了K就判断坐标和堆顶元素的距离大小，如果小于堆顶元素就入堆，然后pop出最大堆，否则就放弃这个坐标。最后堆内的K个元素就是题目的解。</p>
+<p>代码如下，时间复杂度O(NlogK)，空间复杂度O(K)。</p>
+<p><code>Runtime: 496 ms, faster than 12.29% of C++ online submissions for K Closest Points to Origin.</code></p>
+<p><code>Memory Usage: 103.5 MB, less than 14.06% of C++ online submissions for K Closest Points to Origin.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; a, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; b)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a[<span class="number">0</span>]*a[<span class="number">0</span>]+a[<span class="number">1</span>]*a[<span class="number">1</span>] &lt; b[<span class="number">0</span>]*b[<span class="number">0</span>]+b[<span class="number">1</span>]*b[<span class="number">1</span>];</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">kClosest</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; points, <span class="keyword">int</span> K)</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">ret</span><span class="params">(&#123;points[<span class="number">0</span>]&#125;)</span></span>;</span><br><span class="line">        make_heap(ret.<span class="built_in">begin</span>(), ret.<span class="built_in">end</span>(), cmp);</span><br><span class="line">        <span class="keyword">int</span> k = <span class="number">1</span>, len = points.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(k == K <span class="keyword">and</span> cmp(ret[<span class="number">0</span>], points[i])) <span class="keyword">continue</span>;</span><br><span class="line">            ret.push_back(points[i]);</span><br><span class="line">            k++;</span><br><span class="line">            push_heap(ret.<span class="built_in">begin</span>(), ret.<span class="built_in">end</span>(), cmp);</span><br><span class="line">            <span class="keyword">if</span>(k &gt; K)&#123;</span><br><span class="line">                <span class="comment">//cout&lt;&lt;"dayul"&lt;&lt;ret[0][1]&lt;&lt;endl;</span></span><br><span class="line">                pop_heap(ret.<span class="built_in">begin</span>(), ret.<span class="built_in">end</span>(), cmp);</span><br><span class="line">                ret.pop_back();</span><br><span class="line">                k--;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>BitBrave，2019-11-26</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(978.%20Longest%20Turbulent%20Subarray)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -899,204 +1061,6 @@ Could you devise a constant space solution?</code></pre><h2 id="解题思路"><a
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(991.%20Broken%20Calculator)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(991.%20Broken%20Calculator)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(991. Broken Calculator)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-991-Broken-Calculator-题解"><a href="#LeetCode-991-Broken-Calculator-题解" class="headerlink" title="LeetCode(\991. Broken Calculator)题解"></a>LeetCode(\991. Broken Calculator)题解</h1><p>On a broken calculator that has a number showing on its display, we can perform two operations:</p>
-<ul>
-<li><strong>Double</strong>: Multiply the number on the display by 2, or;</li>
-<li><strong>Decrement</strong>: Subtract 1 from the number on the display.</li>
-</ul>
-<p>Initially, the calculator is displaying the number <code>X</code>.</p>
-<p>Return the minimum number of operations needed to display the number <code>Y</code>.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: X &#x3D; 2, Y &#x3D; 3</span><br><span class="line">Output: 2</span><br><span class="line">Explanation: Use double operation and then decrement operation &#123;2 -&gt; 4 -&gt; 3&#125;.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: X &#x3D; 5, Y &#x3D; 8</span><br><span class="line">Output: 2</span><br><span class="line">Explanation: Use decrement and then double &#123;5 -&gt; 4 -&gt; 8&#125;.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 3:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: X &#x3D; 3, Y &#x3D; 10</span><br><span class="line">Output: 3</span><br><span class="line">Explanation:  Use double, decrement and double &#123;3 -&gt; 6 -&gt; 5 -&gt; 10&#125;.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 4:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: X &#x3D; 1024, Y &#x3D; 1</span><br><span class="line">Output: 1023</span><br><span class="line">Explanation: Use decrement operations 1023 times.</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Note:</strong></p>
-<ol>
-<li><code>1 &lt;= X &lt;= 10^9</code></li>
-<li><code>1 &lt;= Y &lt;= 10^9</code></li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>这个题的意思就是，给你两个数，X和Y，现在针对X进行两个操作，加倍或者-1，可以使得X变成Y的最少的操作次数是多少？</p>
-<p>这个题从X变成Y有很多条路径，很难进行计算。但是我们可以换个思路，最优的方案中，从X变成Y和从Y按照相反的操作变为X是一样的次数。而Y的变化经过分析之后得到，变换是唯一的。</p>
-<p>对应的，如果对Y操作，那就是Y可以除以2或者+1。那么：</p>
-<ul>
-<li>Y如果小于X，Y只能+1.</li>
-<li>Y等于X，算法结束。</li>
-<li>Y&gt;X时，如果Y为奇数，Y只能+1。如果为偶数，Y可以+1，+1两次之后除以2，但是不管如何，都比Y直接除2再+1的操作次数要多。因此Y只能除以2。</li>
-<li>以上</li>
-</ul>
-<p>代码如下，时间复杂度为因为不断的除2操作，所以为O(log(Y-X))，空间复杂度O(1)。</p>
-<p><code>Runtime: 4 ms, faster than 56.60% of C++ online submissions for Broken Calculator.</code></p>
-<p><code>Memory Usage: 8.3 MB, less than 40.00% of C++ online submissions for Broken Calculator.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">brokenCalc</span><span class="params">(<span class="keyword">int</span> X, <span class="keyword">int</span> Y)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(Y &lt;= X) <span class="keyword">return</span> X - Y;</span><br><span class="line">        <span class="keyword">if</span>(Y &amp; <span class="number">1</span>) <span class="keyword">return</span> brokenCalc(X, Y + <span class="number">1</span>) + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">return</span> brokenCalc(X, Y / <span class="number">2</span>) + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>或者使用非递归模式</p>
-<p><code>Runtime: 0 ms, faster than 100.00% of C++ online submissions for Broken Calculator.</code></p>
-<p><code>Memory Usage: 8.1 MB, less than 100.00% of C++ online submissions for Broken Calculator.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">brokenCalc</span><span class="params">(<span class="keyword">int</span> X, <span class="keyword">int</span> Y)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> ret = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(Y &gt; X)&#123;</span><br><span class="line">            ret++;</span><br><span class="line">            <span class="keyword">if</span>(Y &amp; <span class="number">1</span>) Y++;</span><br><span class="line">            <span class="keyword">else</span> Y /= <span class="number">2</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret + <span class="built_in">abs</span>(X - Y);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2019-12-2</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/Leetcode(983.%20Minimum%20Cost%20For%20Tickets)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/Leetcode(983.%20Minimum%20Cost%20For%20Tickets)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">Leetcode(983. Minimum Cost For Tickets)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Leetcode-983-Minimum-Cost-For-Tickets-题解"><a href="#Leetcode-983-Minimum-Cost-For-Tickets-题解" class="headerlink" title="Leetcode(\983. Minimum Cost For Tickets)题解"></a>Leetcode(\983. Minimum Cost For Tickets)题解</h1><p>In a country popular for train travel, you have planned some train travelling one year in advance. The days of the year that you will travel is given as an array <code>days</code>. Each day is an integer from <code>1</code> to <code>365</code>.</p>
-<p>Train tickets are sold in 3 different ways:</p>
-<ul>
-<li>a 1-day pass is sold for <code>costs[0]</code> dollars;</li>
-<li>a 7-day pass is sold for <code>costs[1]</code> dollars;</li>
-<li>a 30-day pass is sold for <code>costs[2]</code> dollars.</li>
-</ul>
-<p>The passes allow that many days of consecutive travel. For example, if we get a 7-day pass on day 2, then we can travel for 7 days: day 2, 3, 4, 5, 6, 7, and 8.</p>
-<p>Return the minimum number of dollars you need to travel every day in the given list of <code>days</code>.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Input: days &#x3D; [1,4,6,7,8,20], costs &#x3D; [2,7,15]</span><br><span class="line">Output: 11</span><br><span class="line">Explanation: </span><br><span class="line">For example, here is one way to buy passes that lets you travel your travel plan:</span><br><span class="line">On day 1, you bought a 1-day pass for costs[0] &#x3D; $2, which covered day 1.</span><br><span class="line">On day 3, you bought a 7-day pass for costs[1] &#x3D; $7, which covered days 3, 4, ..., 9.</span><br><span class="line">On day 20, you bought a 1-day pass for costs[0] &#x3D; $2, which covered day 20.</span><br><span class="line">In total you spent $11 and covered all the days of your travel.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Input: days &#x3D; [1,2,3,4,5,6,7,8,9,10,30,31], costs &#x3D; [2,7,15]</span><br><span class="line">Output: 17</span><br><span class="line">Explanation: </span><br><span class="line">For example, here is one way to buy passes that lets you travel your travel plan:</span><br><span class="line">On day 1, you bought a 30-day pass for costs[2] &#x3D; $15 which covered days 1, 2, ..., 30.</span><br><span class="line">On day 31, you bought a 1-day pass for costs[0] &#x3D; $2 which covered day 31.</span><br><span class="line">In total you spent $17 and covered all the days of your travel.</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Note:</strong></p>
-<ol>
-<li><code>1 &lt;= days.length &lt;= 365</code></li>
-<li><code>1 &lt;= days[i] &lt;= 365</code></li>
-<li><code>days</code> is in strictly increasing order.</li>
-<li><code>costs.length == 3</code></li>
-<li><code>1 &lt;= costs[i] &lt;= 1000</code></li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>在一个因火车旅行而闻名的国家，一个人将一年中要旅行的日子以数组天数给出。每天是编号1到365之间的整数。火车票以3种不同的方式出售：1天车票的售价为costs[0]美元；7天的车票售价为成本costs[1]美元；30天的车票售价为costs[2]美元。通票允许连续几天旅行。例如，如果我们在第2天获得7天通行证，那么我们可以旅行7天：第2、3、4、5、6、7和8天。在给定的日期列表中，返回需要旅行的最少美元数。注意给出的旅行的天数编号是递增的。</p>
-<p>这个题在知道了用DP解决的时候，我还是想了好久，最后给出了一个我看来很复杂的解法，但是还是失败了。于是看了网上的解法，这里给出自己的理解。</p>
-<p>方法是我们用一个366长度的数组dp，dp[i]表示1到i天中旅行的最少花费。那么因为旅行的天数序列肯定小于等于365的，所以直接返回dp[365]即可。</p>
-<p>那么如何填充这个数组呢，也就是状态转移方程是什么，dp[i]是怎么计算得来的。</p>
-<p>我们可以这样想，如果第i天不旅行也就是数组中没有给出这一天，那么这一天不用花钱，dp[i] = dp[i-1]。如果旅行，那么第i天使用的票只有三种方式，1天，7天和30天。这三种票的方式要么现场买，要么前面几天里买好了第i天是连续着享受的，而前面要花费少的话，就是尽可能提前已经买了的。因此我们选dp[i-1]+costs[0],dp[i-7]+costs[1], dp[i-30]+costs[2] 中的较小值就可以了。</p>
-<p>注意数组越界问题，主要是左边越界，越界时要取0.</p>
-<p>代码如下，时间复杂度O(366)，空间复杂度O(365)。</p>
-<p><code>Runtime: 4 ms, faster than 79.28% of C++ online submissions for Minimum Cost For Tickets.</code></p>
-<p><code>Memory Usage: 8.8 MB, less than 75.00% of C++ online submissions for Minimum Cost For Tickets.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">mincostTickets</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; days, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; costs)</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">dp</span><span class="params">(<span class="number">366</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> d : days) dp[d] = INT_MAX;</span><br><span class="line">        <span class="comment">//dp[0] = 0;</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;<span class="number">366</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (dp[i] == <span class="number">0</span>) dp[i] = dp[i<span class="number">-1</span>];</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                dp[i] = <span class="built_in">min</span>(dp[i - <span class="number">1</span>] + costs[<span class="number">0</span>], <span class="built_in">min</span>(dp[<span class="built_in">max</span>(<span class="number">0</span>, i - <span class="number">7</span>)] + costs[<span class="number">1</span>], dp[<span class="built_in">max</span>(<span class="number">0</span>, i - <span class="number">30</span>)] + costs[<span class="number">2</span>]));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp[<span class="number">365</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>还有一种方法是时间复杂度O(n)，就是判断给定的天数里面相差的条件，直接填充dp[i]，只不过代码复杂一点，这里就不写了。链接在此<a href="https://blog.csdn.net/mike_learns_to_rock/article/details/86669196" target="_blank" rel="noopener">https://blog.csdn.net/mike_learns_to_rock/article/details/86669196</a></p>
-<p>BitBrave，2020-1-4</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1169,7 +1133,7 @@ Could you devise a constant space solution?</code></pre><h2 id="解题思路"><a
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">281</span>
+          <span class="site-state-item-count">283</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
