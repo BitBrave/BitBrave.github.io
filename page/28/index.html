@@ -177,6 +177,90 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(958.%20Check%20Completeness%20of%20a%20Binary%20Tree)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(958.%20Check%20Completeness%20of%20a%20Binary%20Tree)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(958. Check Completeness of a Binary Tree)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-958-Check-Completeness-of-a-Binary-Tree-题解"><a href="#LeetCode-958-Check-Completeness-of-a-Binary-Tree-题解" class="headerlink" title="LeetCode(958. Check Completeness of a Binary Tree)题解"></a>LeetCode(958. Check Completeness of a Binary Tree)题解</h1><p>Given a binary tree, determine if it is a <em>complete binary tree</em>.</p>
+<p><strong>Definition of a complete binary tree from Wikipedia:</strong><br>In a complete binary tree every level, except possibly the last, is completely filled, and all nodes in the last level are as far left as possible. It can have between 1 and 2h nodes inclusive at the last level h.</p>
+<p><strong>Example 1:</strong></p>
+<p><strong><img src="https://assets.leetcode.com/uploads/2018/12/15/complete-binary-tree-1.png" alt="img"></strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: [1,2,3,4,5,6]</span><br><span class="line">Output: true</span><br><span class="line">Explanation: Every level before the last is full (ie. levels with node-values &#123;1&#125; and &#123;2, 3&#125;), and all nodes in the last level (&#123;4, 5, 6&#125;) are as far left as possible.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<p><strong><img src="https://assets.leetcode.com/uploads/2018/12/15/complete-binary-tree-2.png" alt="img"></strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: [1,2,3,4,5,null,7]</span><br><span class="line">Output: false</span><br><span class="line">Explanation: The node with value 7 isn&#39;t as far left as possible.</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Note:</strong></p>
+<ol>
+<li>The tree will have between 1 and 100 nodes.</li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出一个二叉树，判断是不是完全二叉树（除了最后一层，每一层的二叉树节点是满的，最后一层的节点也是从左到右一次排列的）。</p>
+<p>这个题可以使用BFS队列的方式做，也可以使用DFS的方式。因为考虑到空间复杂度的缘故，可以使用DFS。</p>
+<p>设定一个Height函数，返回一个整数值，表示二叉树的最大深度，同时返回二叉树的类型type，如果是满二叉树就是0，完全二叉树就是1，否则就是-1。那么输入一个节点，返回以这个节点为根节点的二叉树的深度，至于Type的值，看左右子树的Type值，如果有一个-1或者两边的深度相差超过1就直接返回-1。否则就看深度，如果两边深度一样，那么左边必须是满二叉树，此时直接将右边的type值赋值给当前节点的type即可否则就是-1.如果右边深度少1，那么右子树必须是满二叉树，此时左边如果是满二叉树（Type=0）或者完全二叉树（Type=1），那么当前节点就是一个完全二叉树（Type=1），否则就返回-1.</p>
+<p>代码如下，时间复杂度O(N)，空间复杂度O(1)。</p>
+<p><code>Runtime: 4 ms, faster than 88.77% of C++ online submissions for Check Completeness of a Binary Tree.</code></p>
+<p><code>Memory Usage: 9.9 MB, less than 100.00% of C++ online submissions for Check Completeness of a Binary Tree.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">Height</span><span class="params">(TreeNode* root, <span class="keyword">int</span> &amp;type)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="literal">NULL</span>)&#123;</span><br><span class="line">            type = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        type = <span class="number">-1</span>;</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">int</span> typel, typer;</span><br><span class="line">        <span class="keyword">int</span> l = Height(root-&gt;left, typel), r = Height(root-&gt;right, typer);</span><br><span class="line">        <span class="keyword">if</span>(l == r) type = (typel==<span class="number">0</span>) ? typer : <span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(l == r + <span class="number">1</span>) type = (typer==<span class="number">0</span> <span class="keyword">and</span> typel+<span class="number">1</span>&gt;<span class="number">0</span>) ? <span class="number">1</span> : <span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span> + <span class="built_in">max</span>(l, r);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isCompleteTree</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> type;</span><br><span class="line">        Height(root, type);</span><br><span class="line">        <span class="keyword">return</span> type != <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>BitBrave，2019-11-22</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(96.%20Unique%20Binary%20Search%20Trees)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -933,99 +1017,6 @@ Explanation: The root node&apos;s value is 5 but its right child&apos;s value is
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(990.%20Satisfiability%20of%20Equality%20Equations)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(990.%20Satisfiability%20of%20Equality%20Equations)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(990. Satisfiability of Equality Equations)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-990-Satisfiability-of-Equality-Equations-题解"><a href="#LeetCode-990-Satisfiability-of-Equality-Equations-题解" class="headerlink" title="LeetCode(\990. Satisfiability of Equality Equations)题解"></a>LeetCode(\990. Satisfiability of Equality Equations)题解</h1><p>Given an array equations of strings that represent relationships between variables, each string <code>equations[i]</code> has length <code>4</code> and takes one of two different forms: <code>&quot;a==b&quot;</code> or <code>&quot;a!=b&quot;</code>. Here, <code>a</code> and <code>b</code> are lowercase letters (not necessarily different) that represent one-letter variable names.</p>
-<p>Return <code>true</code> if and only if it is possible to assign integers to variable names so as to satisfy all the given equations.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: [&quot;a&#x3D;&#x3D;b&quot;,&quot;b!&#x3D;a&quot;]</span><br><span class="line">Output: false</span><br><span class="line">Explanation: If we assign say, a &#x3D; 1 and b &#x3D; 1, then the first equation is satisfied, but not the second.  There is no way to assign the variables to satisfy both equations.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: [&quot;b&#x3D;&#x3D;a&quot;,&quot;a&#x3D;&#x3D;b&quot;]</span><br><span class="line">Output: true</span><br><span class="line">Explanation: We could assign a &#x3D; 1 and b &#x3D; 1 to satisfy both equations.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 3:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: [&quot;a&#x3D;&#x3D;b&quot;,&quot;b&#x3D;&#x3D;c&quot;,&quot;a&#x3D;&#x3D;c&quot;]</span><br><span class="line">Output: true</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 4:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: [&quot;a&#x3D;&#x3D;b&quot;,&quot;b!&#x3D;c&quot;,&quot;c&#x3D;&#x3D;a&quot;]</span><br><span class="line">Output: false</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 5:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: [&quot;c&#x3D;&#x3D;c&quot;,&quot;b&#x3D;&#x3D;d&quot;,&quot;x!&#x3D;z&quot;]</span><br><span class="line">Output: true</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Note:</strong></p>
-<ol>
-<li><code>1 &lt;= equations.length &lt;= 500</code></li>
-<li><code>equations[i].length == 4</code></li>
-<li><code>equations[i][0]</code> and <code>equations[i][3]</code> are lowercase letters</li>
-<li><code>equations[i][1]</code> is either <code>&#39;=&#39;</code> or <code>&#39;!&#39;</code></li>
-<li><code>equations[i][2]</code> is <code>&#39;=&#39;</code></li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出一系列X==Y，X！=Y的等式或者不等式，判断这些等式里是否存在矛盾关系。</p>
-<p>这个题明显就是使用Union find来解决，但是说实话我对并查集没有仔细了解过。不过我估摸着我实现的办法和并查集也差不了多少。</p>
-<p>使用一个Map，首先遍历给的数据中的所有等式，对于相等的字符使得其Map的val都是一个值。然后遍历数据中的所有不等式，判断是不是存在字符一样或者在map中的val一样，这样就出现矛盾了，返回False。如果到最后都没有这样的情况出现，返回True。</p>
-<p>代码如下，时间复杂度O(n)，空间复杂度O(1)，因为只有26个字母。</p>
-<p><code>Runtime: 8 ms, faster than 69.97% of C++ online submissions for Satisfiability of Equality Equations.</code></p>
-<p><code>Memory Usage: 9.5 MB, less than 100.00% of C++ online submissions for Satisfiability of Equality Equations.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">equationsPossible</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&amp; equations)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = equations.<span class="built_in">size</span>(), label = <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">map</span>&lt;<span class="keyword">char</span>, <span class="keyword">int</span>&gt; M;</span><br><span class="line">        <span class="keyword">for</span> (<span class="built_in">string</span> s : equations) &#123;</span><br><span class="line">            <span class="keyword">if</span> (s[<span class="number">1</span>] == <span class="string">'!'</span>) <span class="keyword">continue</span>;</span><br><span class="line">            <span class="keyword">if</span> (M.<span class="built_in">find</span>(s[<span class="number">0</span>]) != M.<span class="built_in">end</span>() <span class="keyword">and</span> M.<span class="built_in">find</span>(s[<span class="number">3</span>]) == M.<span class="built_in">end</span>()) M[s[<span class="number">3</span>]] = M[s[<span class="number">0</span>]];</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (M.<span class="built_in">find</span>(s[<span class="number">3</span>]) != M.<span class="built_in">end</span>() <span class="keyword">and</span> M.<span class="built_in">find</span>(s[<span class="number">0</span>]) == M.<span class="built_in">end</span>()) M[s[<span class="number">0</span>]] = M[s[<span class="number">3</span>]];</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (M.<span class="built_in">find</span>(s[<span class="number">3</span>]) != M.<span class="built_in">end</span>() <span class="keyword">and</span> M.<span class="built_in">find</span>(s[<span class="number">0</span>]) != M.<span class="built_in">end</span>()) &#123;</span><br><span class="line">                <span class="built_in">map</span>&lt;<span class="keyword">char</span>, <span class="keyword">int</span>&gt;::iterator iter;</span><br><span class="line">                <span class="keyword">int</span> tmp = M[s[<span class="number">3</span>]];</span><br><span class="line">                iter = M.<span class="built_in">begin</span>();</span><br><span class="line">                </span><br><span class="line">                <span class="keyword">while</span>(iter != M.<span class="built_in">end</span>()) &#123;</span><br><span class="line">                    <span class="keyword">if</span>(iter-&gt;second == tmp) M[iter-&gt;first] = M[s[<span class="number">0</span>]];</span><br><span class="line">                    iter++;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                M[s[<span class="number">0</span>]] = M[s[<span class="number">3</span>]] = label;</span><br><span class="line">                label++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="built_in">string</span> s : equations) &#123;</span><br><span class="line">            <span class="keyword">if</span> (s[<span class="number">1</span>] == <span class="string">'='</span>) <span class="keyword">continue</span>;</span><br><span class="line">            <span class="comment">//cout&lt;&lt;M[s[0]]&lt;&lt;M[s[3]]&lt;&lt;endl;</span></span><br><span class="line">            <span class="keyword">if</span> (s[<span class="number">0</span>] == s[<span class="number">3</span>] <span class="keyword">or</span> M.<span class="built_in">find</span>(s[<span class="number">0</span>]) != M.<span class="built_in">end</span>() <span class="keyword">and</span> M.<span class="built_in">find</span>(s[<span class="number">3</span>]) != M.<span class="built_in">end</span>() <span class="keyword">and</span> M[s[<span class="number">0</span>]] == M[s[<span class="number">3</span>]]) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2020-01-06</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1098,7 +1089,7 @@ Explanation: The root node&apos;s value is 5 but its right child&apos;s value is
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">285</span>
+          <span class="site-state-item-count">286</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
