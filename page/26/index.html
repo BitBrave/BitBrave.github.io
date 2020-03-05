@@ -177,6 +177,163 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(898.%20Bitwise%20ORs%20of%20Subarrays)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(898.%20Bitwise%20ORs%20of%20Subarrays)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(898. Bitwise ORs of Subarrays)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-898-Bitwise-ORs-of-Subarrays-题解"><a href="#LeetCode-898-Bitwise-ORs-of-Subarrays-题解" class="headerlink" title="LeetCode(898. Bitwise ORs of Subarrays)题解"></a>LeetCode(898. Bitwise ORs of Subarrays)题解</h1><p>We have an array <code>A</code> of non-negative integers.</p>
+<p>For every (contiguous) subarray <code>B = [A[i], A[i+1], ..., A[j]]</code> (with <code>i &lt;= j</code>), we take the bitwise OR of all the elements in <code>B</code>, obtaining a result <code>A[i] | A[i+1] | ... | A[j]</code>.</p>
+<p>Return the number of possible results.  (Results that occur more than once are only counted once in the final answer.)</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Input: [0]</span><br><span class="line">Output: 1</span><br><span class="line">Explanation: </span><br><span class="line">There is only one possible result: 0.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Input: [1,1,2]</span><br><span class="line">Output: 3</span><br><span class="line">Explanation: </span><br><span class="line">The possible subarrays are [1], [1], [2], [1, 1], [1, 2], [1, 1, 2].</span><br><span class="line">These yield the results 1, 1, 2, 1, 3, 3.</span><br><span class="line">There are 3 unique values, so the answer is 3.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 3:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Input: [1,2,4]</span><br><span class="line">Output: 6</span><br><span class="line">Explanation: </span><br><span class="line">The possible results are 1, 2, 3, 4, 6, and 7.</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Note:</strong></p>
+<ol>
+<li><code>1 &lt;= A.length &lt;= 50000</code></li>
+<li><code>0 &lt;= A[i] &lt;= 10^9</code></li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给定一个数组，求出所有的连续子数组内的元素相或的值的个数。</p>
+<p>这个题很容易超时，要用到很多小trick。</p>
+<p>做法如下，首先是从头到尾遍历数组，对于当前遍历到的元素，使用set记录之前的连续子数组的集合数目，这样会自动去重，从而减少遍历，虽然理论上的时间复杂度也是O(n2)，但是如果不这样做是无论如何都无法通过的。</p>
+<p>其次是使用unorder_set，这个在C++内相比于set更快，因为不支持内部排序。</p>
+<p>这里推荐一个bolg</p>
+<p><a href="https://www.cnblogs.com/grandyang/p/10982534.html" target="_blank" rel="noopener">https://www.cnblogs.com/grandyang/p/10982534.html</a></p>
+<p>代码如下，时间复杂度O(n2)，空间复杂度O(n2)。</p>
+<p><code>Runtime: 1488 ms, faster than 30.60% of C++ online submissions for Bitwise ORs of Subarrays.</code></p>
+<p><code>Memory Usage: 314.3 MB, less than 33.33% of C++ online submissions for Bitwise ORs of Subarrays.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">subarrayBitwiseORs</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">unordered_set</span>&lt;<span class="keyword">int</span>&gt; S, cur;</span><br><span class="line">        <span class="keyword">int</span> len = A.<span class="built_in">size</span>();</span><br><span class="line">        S.insert(A[<span class="number">0</span>]);</span><br><span class="line">        cur.insert(A[<span class="number">0</span>]);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(A[i] == A[i<span class="number">-1</span>]) <span class="keyword">continue</span>;</span><br><span class="line">            <span class="built_in">unordered_set</span>&lt;<span class="keyword">int</span>&gt; ts = &#123;A[i]&#125;;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> a : cur) ts.insert(a | A[i]);</span><br><span class="line">            cur = ts;</span><br><span class="line">            S.insert(cur.<span class="built_in">begin</span>(), cur.<span class="built_in">end</span>());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> S.<span class="built_in">size</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2019-10-30</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(90.%20Subsets%20II)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(90.%20Subsets%20II)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(90. Subsets II)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-90-Subsets-II-题解"><a href="#LeetCode-90-Subsets-II-题解" class="headerlink" title="LeetCode(90. Subsets II)题解"></a>LeetCode(90. Subsets II)题解</h1><hr>
+<p>Given a collection of integers that might contain duplicates, nums, return all possible subsets (the power set).</p>
+<p>Note: The solution set must not contain duplicate subsets.</p>
+<p>Example:</p>
+<p>Input: [1,2,2]<br>Output:<br>    [<br>        [2],<br>        [1],<br>        [1,2,2],<br>        [2,2],<br>        [1,2],<br>        []<br>    ]</p>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个有重复数的数组集合，求出其所有的子集，子集不能有重复。</p>
+<p>可以将数组先排序。然后使用递归的办法，对于每个数，有加入或者不加入之分。而如果有重复的话，就有加入一次，加入两次，加入多次之分。递归时判断一下即可。</p>
+<p>代码如下：</p>
+<p>Runtime: 8 ms, faster than 92.10% of C++ online submissions for Subsets II.<br>Memory Usage: 18.2 MB, less than 5.00% of C++ online submissions for Subsets II.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">subsetsWithDup_</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> sta, <span class="keyword">int</span> len, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; tmp, <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; res)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(sta == len)&#123;</span><br><span class="line">            res.push_back(tmp);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> n = sta + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span>(n&lt;len &amp;&amp; nums[sta] == nums[n]) n++;</span><br><span class="line">        </span><br><span class="line">        subsetsWithDup_(nums, n, len, tmp, res);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=sta; i&lt;n; i++)&#123;</span><br><span class="line">            tmp.push_back(nums[sta]);</span><br><span class="line">            subsetsWithDup_(nums, n, len, tmp, res);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">subsetsWithDup</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        sort(nums.<span class="built_in">begin</span>(), nums.<span class="built_in">end</span>());</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; res;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; tmp;</span><br><span class="line">        <span class="keyword">int</span> len = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span>(len == <span class="number">0</span>) <span class="keyword">return</span> res;</span><br><span class="line">        subsetsWithDup_(nums, <span class="number">0</span>, len, tmp, res);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-06-21</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(904.%20Fruit%20Into%20Baskets)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -877,176 +1034,6 @@ Output: 1-&gt;4-&gt;3-&gt;2-&gt;5-&gt;NULL</code></pre><h2 id="解题思路"><a 
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(93.%20Restore%20IP%20Addresses)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(93.%20Restore%20IP%20Addresses)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(93. Restore IP Addresses)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-93-Restore-IP-Addresses-题解"><a href="#LeetCode-93-Restore-IP-Addresses-题解" class="headerlink" title="LeetCode(93. Restore IP Addresses)题解"></a>LeetCode(93. Restore IP Addresses)题解</h1><hr>
-<p>Given a string containing only digits, restore it by returning all possible valid IP address combinations.</p>
-<p>Example:</p>
-<pre><code>Input: &quot;25525511135&quot;
-Output: [&quot;255.255.11.135&quot;, &quot;255.255.111.35&quot;]</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个字符串，将其转换为对应的IP地址。</p>
-<p>思路很简单，IP地址的四个值都不能大于255.四个值不长。直接暴力枚举就可以了。用一个函数，遍历字符串，看看在符合符合情况下能不能选完所有的字符数字。首先选一个数，然后选两个，最多三个，因为四个以上的肯定大于255了。如果选到最后可以遍历完字符串，就直接存储下来，否则放弃。</p>
-<p>具体代码如下：</p>
-<p>Runtime: 4 ms, faster than 86.40% of C++ online submissions for Restore IP Addresses.<br>Memory Usage: 9 MB, less than 18.74% of C++ online submissions for Restore IP Addresses.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">IpAddresses</span><span class="params">(<span class="built_in">string</span> s, <span class="keyword">int</span> sta, <span class="keyword">int</span> len, <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; &amp;res, <span class="built_in">string</span> tmp1, <span class="keyword">int</span> <span class="built_in">point</span>)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">point</span>&gt;=<span class="number">4</span> &amp;&amp; sta&lt;len) <span class="keyword">return</span>;</span><br><span class="line">        <span class="keyword">if</span>(sta&gt;=len)&#123;</span><br><span class="line">            <span class="keyword">if</span>(<span class="built_in">point</span>==<span class="number">4</span>) res.push_back(tmp1.substr(<span class="number">0</span>, tmp1.<span class="built_in">size</span>()<span class="number">-1</span>));</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">string</span> tmp = tmp1;</span><br><span class="line">        tmp += s[sta];</span><br><span class="line">        tmp += <span class="string">'.'</span>;</span><br><span class="line">        IpAddresses(s, sta+<span class="number">1</span>, len, res, tmp, <span class="built_in">point</span>+<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">if</span>(s[sta]==<span class="string">'0'</span>) <span class="keyword">return</span>;</span><br><span class="line">        <span class="keyword">if</span>(sta+<span class="number">1</span>&lt;len)&#123;</span><br><span class="line">            tmp = tmp1 + s[sta];</span><br><span class="line">            tmp += s[sta+<span class="number">1</span>];</span><br><span class="line">            tmp += <span class="string">'.'</span>;</span><br><span class="line">            IpAddresses(s, sta+<span class="number">2</span>, len, res, tmp, <span class="built_in">point</span>+<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(sta+<span class="number">2</span>&lt;len &amp;&amp; (((s[sta]-<span class="string">'0'</span>)*<span class="number">100</span>+(s[sta+<span class="number">1</span>]-<span class="string">'0'</span>)*<span class="number">10</span>+s[sta+<span class="number">2</span>]-<span class="string">'0'</span>)&lt;<span class="number">256</span>))&#123;</span><br><span class="line">            tmp = tmp1 + s[sta];</span><br><span class="line">            tmp += s[sta+<span class="number">1</span>];</span><br><span class="line">            tmp += s[sta+<span class="number">2</span>];</span><br><span class="line">            tmp += <span class="string">'.'</span>;</span><br><span class="line">            IpAddresses(s, sta+<span class="number">3</span>, len, res, tmp, <span class="built_in">point</span>+<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; <span class="title">restoreIpAddresses</span><span class="params">(<span class="built_in">string</span> s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = s.<span class="built_in">size</span>();</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; res;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(len &gt; <span class="number">12</span>) <span class="keyword">return</span> res;</span><br><span class="line">        </span><br><span class="line">        IpAddresses(s, <span class="number">0</span>, len, res, <span class="string">""</span>, <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-06-22</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(932.%20Beautiful%20Array)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(932.%20Beautiful%20Array)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(932. Beautiful Array)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-932-Beautiful-Array-题解"><a href="#LeetCode-932-Beautiful-Array-题解" class="headerlink" title="LeetCode(932. Beautiful Array)题解"></a>LeetCode(932. Beautiful Array)题解</h1><p>For some fixed <code>N</code>, an array <code>A</code> is <em>beautiful</em> if it is a permutation of the integers <code>1, 2, ..., N</code>, such that:</p>
-<p>For every <code>i &lt; j</code>, there is <strong>no</strong> <code>k</code> with <code>i &lt; k &lt; j</code> such that <code>A[k] * 2 = A[i] + A[j]</code>.</p>
-<p>Given <code>N</code>, return <strong>any</strong> beautiful array <code>A</code>.  (It is guaranteed that one exists.)</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: 4</span><br><span class="line">Output: [2,1,4,3]</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: 5</span><br><span class="line">Output: [3,1,2,5,4]</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Note:</strong></p>
-<ul>
-<li><code>1 &lt;= N &lt;= 1000</code></li>
-</ul>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出一个数N，要求返回一个由1,2,3,4,…N的数组，这个数组必须是一个漂亮数组。即，任意A[i]和A[j]之间，即i&lt;k&lt;j，都有A[i]+A[j]!=2*A[k]。</p>
-<p>这个题可以使用DC的办法解决。首先假设一个数组B是漂亮数组，那么B中的元素整体加减一个元素和整体乘上除上一个数得到的数组仍然是一个漂亮数组。因为如果B[i]+B[j] != 2*B[k]，那么.</p>
-<ul>
-<li>B[i]+a+B[j]+a != 2*(B[k]+a)</li>
-<li>B[i]*a+B[j]*a != 2*(B[k]*a)</li>
-</ul>
-<p>而观察可知，中间元素的两倍一定是一个偶数，因此只要保证B[i]+B[j] 等于一个奇数一定就可以满足k位置元素的要求了。</p>
-<p>那么可以假设这样一个数组A，元素分别是1,2,3,…N。我们将其分成两组数，在左边分别放奇数1,3,5,7, …,一共(N+1)/2个，右边放上2,4,6,8,…一共N/2个。假设这两个数组内部是漂亮数组，那么这两个数组左右组合起来，也一定是一个漂亮数组。</p>
-<p>观察左边，将所有元素+1得到2,4,6,8,…，再除二就得到一个1,2,3,4,…共(N+1)/2的和一开始一样的数组。</p>
-<p>观察右边，将所有元素除二就得到一个1,2,3,4,…共N/2的和一开始一样的数组。</p>
-<p>这两个数组和一开始一样，只不过规模变小，并且只要这两个数组构成了漂亮数组，左边的只需要所有元素乘2-1，右边乘2，组合在一起就是初始问题的解。</p>
-<p>因此一个N的问题就变成了一个(N+1)/2和N/2的两个规模的问题。</p>
-<p>这个问题可以使用递归的办法解决,代码如下，时间复杂度O(nlogn)，空间复杂度O(1).</p>
-<p><code>Runtime: 16 ms, faster than 31.48% of C++ online submissions for Beautiful Array.</code></p>
-<p><code>Memory Usage: 19.8 MB, less than 100.00% of C++ online submissions for Beautiful Array.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">beautifulArray</span><span class="params">(<span class="keyword">int</span> N)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(N == <span class="number">0</span>) <span class="keyword">return</span> <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;();</span><br><span class="line">        <span class="keyword">if</span>(N == <span class="number">1</span>) <span class="keyword">return</span> <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(&#123;<span class="number">1</span>&#125;);</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; left = beautifulArray((N+<span class="number">1</span>)/<span class="number">2</span>), right = beautifulArray(N/<span class="number">2</span>), ret;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> a : left) ret.push_back(a*<span class="number">2</span><span class="number">-1</span>);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> a : right) ret.push_back(a*<span class="number">2</span>);</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>但是上述递归还是花费太多时间了因为折半的时候对于N=1,2,3这样的低阶计算了很多次，一个办法是将对应的答案存储起来，最后时间复杂度只需要O(N)，但需要O(N)的空间复杂度(1+2+4+…+N)。</p>
-<p>这里还有一个优化的办法，观察数组有以下性质，假设有一个N+1的漂亮数组，现在删除掉其中的N+1，剩下的额仍旧是漂亮数组，因为如果不是的话，那么加上N+1之后也就不是了。因此推论出，一个为N的漂亮数组，可以依次删除N,N-1,N-2等数得到一个更低阶的漂亮数组。</p>
-<p>因此，一个N的问题是这样增长过来的，以左边和右边数组的各自的元素长度计算来说分别是说。</p>
-<ul>
-<li>1,1-&gt;2,2-&gt;4,4-&gt;4,4-&gt;…-&gt;m,m。直到2*m&gt;=N.</li>
-</ul>
-<p>因此，这个题可以从左边为1个元素，右边为1个元素开始，逐步增加。每次增加，到达M时，都将当前数组的元素整体乘2-1作为M+1数组的左边，整体*2作为M+1的右边。知道数组长度大于等于N就停下，然后从中删除那些大于N的元素即可。</p>
-<p>这样的时间复杂度O(n)，空间复杂度O(1)。（均不计算答案的空间）。代码如下。</p>
-<p><code>Runtime: 4 ms, faster than 99.72% of C++ online submissions for Beautiful Array.</code></p>
-<p><code>Memory Usage: 8.8 MB, less than 100.00% of C++ online submissions for Beautiful Array.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">beautifulArray</span><span class="params">(<span class="keyword">int</span> N)</span> </span>&#123;</span><br><span class="line">        vector&lt;int&gt; V(&#123;1,2&#125;), ret;</span><br><span class="line">        <span class="keyword">int</span> M = <span class="number">2</span>;</span><br><span class="line">        <span class="keyword">while</span>(M &lt; N)&#123;</span><br><span class="line">            V.insert(V.<span class="built_in">end</span>(), V.<span class="built_in">begin</span>(), V.<span class="built_in">end</span>());</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;M; i++) V[i] = V[i] * <span class="number">2</span> <span class="number">-1</span>;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=M; i&lt;<span class="number">2</span>*M; i++) V[i] = V[i] * <span class="number">2</span>;</span><br><span class="line">            M *= <span class="number">2</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;M; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(V[i] &lt;= N) ret.push_back(V[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2019-11-13</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1119,7 +1106,7 @@ Output: [&quot;255.255.11.135&quot;, &quot;255.255.111.35&quot;]</code></pre><h2
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">286</span>
+          <span class="site-state-item-count">288</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
