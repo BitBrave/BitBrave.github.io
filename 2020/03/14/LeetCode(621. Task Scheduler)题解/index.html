@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="LeetCode(\621. Task Scheduler)题解Given a char array representing tasks CPU need to do. It contains capital letters A to Z where different letters represent different tasks. Tasks could be done without">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LeetCode(621. Task Scheduler)题解">
+<meta property="og:url" content="http://yoursite.com/2020/03/14/LeetCode(621.%20Task%20Scheduler)%E9%A2%98%E8%A7%A3/index.html">
+<meta property="og:site_name" content="BitBrave">
+<meta property="og:description" content="LeetCode(\621. Task Scheduler)题解Given a char array representing tasks CPU need to do. It contains capital letters A to Z where different letters represent different tasks. Tasks could be done without">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-03-14T14:30:17.791Z">
+<meta property="article:modified_time" content="2020-03-14T14:45:42.697Z">
+<meta property="article:author" content="XJ">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2020/03/14/LeetCode(621.%20Task%20Scheduler)%E9%A2%98%E8%A7%A3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>LeetCode(621. Task Scheduler)题解 | BitBrave</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7e6d55cf2fa14e729703953237f65413";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">BitBrave</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">IIE</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/14/LeetCode(621.%20Task%20Scheduler)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          LeetCode(621. Task Scheduler)题解
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-03-14 22:30:17 / 修改时间：22:45:42" itemprop="dateCreated datePublished" datetime="2020-03-14T22:30:17+08:00">2020-03-14</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="LeetCode-621-Task-Scheduler-题解"><a href="#LeetCode-621-Task-Scheduler-题解" class="headerlink" title="LeetCode(\621. Task Scheduler)题解"></a>LeetCode(\621. Task Scheduler)题解</h1><p>Given a char array representing tasks CPU need to do. It contains capital letters A to Z where different letters represent different tasks. Tasks could be done without original order. Each task could be done in one interval. For each interval, CPU could finish one task or just be idle.</p>
+<p>However, there is a non-negative cooling interval <strong>n</strong> that means between two <strong>same tasks</strong>, there must be at least n intervals that CPU are doing different tasks or just be idle.</p>
+<p>You need to return the <strong>least</strong> number of intervals the CPU will take to finish all the given tasks.</p>
+<p><strong>Example:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: tasks &#x3D; [&quot;A&quot;,&quot;A&quot;,&quot;A&quot;,&quot;B&quot;,&quot;B&quot;,&quot;B&quot;], n &#x3D; 2</span><br><span class="line">Output: 8</span><br><span class="line">Explanation: A -&gt; B -&gt; idle -&gt; A -&gt; B -&gt; idle -&gt; A -&gt; B.</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Note:</strong></p>
+<ol>
+<li>The number of tasks is in the range [1, 10000].</li>
+<li>The integer n is in the range [0, 100].</li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Hard</p>
+<p>给定由大写字母标的的任务列表，和一个表示间隔的值n。现在有一个电脑，可以在一个间隔的时间内完成一个任务，但是相同的任务必须隔至少n个间隔才能再次运行，每个间隔内，电脑可以选择运行任务，或者空闲。</p>
+<p>请问完成所有任务需要的最小间隔数是多少?</p>
+<p>我所能想到的解法是贪心：</p>
+<p>统计相同任务的个数，然后将任务按照任务数降序排序。然后从前到后遍历。那么第一个任务的A个数就决定了最少的间隔数是肯定大于等于，（A-1）* n + A的。那么我们可以默认空出来了（A-1）* n的间隔，后续的任务可以在这些间隔内完成，这样就不用增加新的间隔，间隔不够就再挨着慢慢增加。而贪心策略就是，我们，每次在空闲间隔内增加的方式是：以第一个任务A的排布为边界，在每个A之间分别加上当前任务，这样肯定满足条件，同时，每次添加都是沿着上一次任务结束的位置添加，如果没有空格了，还是在A的任务之间插入新的即可，在这个过程中计算增加的间隔。如果加入的任务B的个数等于A，那么除了A之间的空闲全部占掉一个之外，在最后A的外面也要占掉一个，会增加一个新的间隔。</p>
+<p>如何证明这种算法是正确的呢？我并没有想出来很形式化的语言，但是算法的过程中，每一步都尽可能不增加新的间隔，直到最后，任何最优的方案最后都可以转化为这种算法得到的答案。</p>
+<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间上，统计任务数$O(N)$，排序因为是26个 字母固定的，为$O(1)$。空间上，$O(1)$。</p>
+<p><code>Runtime: 48 ms, faster than 98.36% of C++ online submissions for Task Scheduler.</code></p>
+<p><code>Memory Usage: 8.9 MB, less than 100.00% of C++ online submissions for Task Scheduler.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">leastInterval</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">char</span>&gt;&amp; tasks, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">Task</span><span class="params">(<span class="number">26</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>, restSpace = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">char</span> t : tasks) &#123;</span><br><span class="line">            <span class="built_in">Task</span>[t - <span class="string">'A'</span>]++;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        sort(<span class="built_in">Task</span>.<span class="built_in">begin</span>(), <span class="built_in">Task</span>.<span class="built_in">end</span>());</span><br><span class="line">        </span><br><span class="line">        restSpace = n * (<span class="built_in">Task</span>[<span class="number">25</span>] - <span class="number">1</span>);</span><br><span class="line">        res = <span class="built_in">Task</span>[<span class="number">25</span>] + (<span class="built_in">Task</span>[<span class="number">25</span>] - <span class="number">1</span>) * n;  </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">24</span>; i&gt;=<span class="number">0</span>; i--) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">Task</span>[i] == <span class="built_in">Task</span>[<span class="number">25</span>]) &#123;</span><br><span class="line">                <span class="keyword">if</span> (restSpace &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                    res++;</span><br><span class="line">                    restSpace -= <span class="built_in">Task</span>[<span class="number">25</span>] - <span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> res += <span class="built_in">Task</span>[<span class="number">25</span>];</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (restSpace &gt;= <span class="built_in">Task</span>[i]) restSpace -= <span class="built_in">Task</span>[i];</span><br><span class="line">                <span class="keyword">else</span> &#123;</span><br><span class="line">                    res += <span class="built_in">Task</span>[i] - restSpace;</span><br><span class="line">                    restSpace = <span class="number">0</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="其它的解法"><a href="#其它的解法" class="headerlink" title="其它的解法"></a>其它的解法</h2><h3 id="解法1，每一轮执行最多个数的任务"><a href="#解法1，每一轮执行最多个数的任务" class="headerlink" title="解法1，每一轮执行最多个数的任务"></a>解法1，每一轮执行最多个数的任务</h3><p>统计每个任务的任务数，然后降序排序，然后从前到后在两个相同任务允许的最小时间间隔内分别执行任务，将执行了任务的任务数-1.然后再对所有任务排序，最后直到所有的任务完成，这种也是贪心，尽可能先执行任务多的任务同时尽可能占满空闲时间。时间复杂度为所有任务的个数和，空间O(1)。</p>
+<h3 id="解法2，优先队列"><a href="#解法2，优先队列" class="headerlink" title="解法2，优先队列"></a>解法2，优先队列</h3><p>将解法1优化一下，使用最大堆，优先队列存储，那么就不用每次都排序了。</p>
+<p>BitBrave，2020-03-14</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/03/06/LeetCode(503.%20Next%20Greater%20Element%20II)%E9%A2%98%E8%A7%A3/" rel="prev" title="LeetCode(503. Next Greater Element II)题解">
+      <i class="fa fa-chevron-left"></i> LeetCode(503. Next Greater Element II)题解
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/03/16/LeetCode(1383.%20Maximum%20Performance%20of%20a%20Team)%E5%91%A8%E8%B5%9B%E9%A2%984%E9%A2%98%E9%A2%98%E8%A7%A3/" rel="next" title="LeetCode(1383. Maximum Performance of a Team)周赛题4题题解">
+      LeetCode(1383. Maximum Performance of a Team)周赛题4题题解 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#LeetCode-621-Task-Scheduler-题解"><span class="nav-number">1.</span> <span class="nav-text">LeetCode(\621. Task Scheduler)题解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#解题思路"><span class="nav-number">1.1.</span> <span class="nav-text">解题思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#时空复杂度"><span class="nav-number">1.2.</span> <span class="nav-text">时空复杂度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它的解法"><span class="nav-number">1.3.</span> <span class="nav-text">其它的解法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#解法1，每一轮执行最多个数的任务"><span class="nav-number">1.3.1.</span> <span class="nav-text">解法1，每一轮执行最多个数的任务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解法2，优先队列"><span class="nav-number">1.3.2.</span> <span class="nav-text">解法2，优先队列</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="XJ"
+      src="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+  <p class="site-author-name" itemprop="name">XJ</p>
+  <div class="site-description" itemprop="description">幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">292</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">BitBrave, IIE</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+</body>
+</html>

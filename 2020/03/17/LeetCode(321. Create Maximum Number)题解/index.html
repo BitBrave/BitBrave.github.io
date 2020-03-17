@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="LeetCode(\321. Create Maximum Number)题解Given two arrays of length m and n with digits 0-9 representing two numbers. Create the maximum number of length k &lt;&#x3D; m + n from digits of the two. The relati">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LeetCode(321. Create Maximum Number)题解">
+<meta property="og:url" content="http://yoursite.com/2020/03/17/LeetCode(321.%20Create%20Maximum%20Number)%E9%A2%98%E8%A7%A3/index.html">
+<meta property="og:site_name" content="BitBrave">
+<meta property="og:description" content="LeetCode(\321. Create Maximum Number)题解Given two arrays of length m and n with digits 0-9 representing two numbers. Create the maximum number of length k &lt;&#x3D; m + n from digits of the two. The relati">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-03-17T15:42:06.386Z">
+<meta property="article:modified_time" content="2020-03-17T15:42:21.230Z">
+<meta property="article:author" content="XJ">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2020/03/17/LeetCode(321.%20Create%20Maximum%20Number)%E9%A2%98%E8%A7%A3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>LeetCode(321. Create Maximum Number)题解 | BitBrave</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7e6d55cf2fa14e729703953237f65413";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">BitBrave</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">IIE</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/17/LeetCode(321.%20Create%20Maximum%20Number)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          LeetCode(321. Create Maximum Number)题解
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-03-17 23:42:06 / 修改时间：23:42:21" itemprop="dateCreated datePublished" datetime="2020-03-17T23:42:06+08:00">2020-03-17</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="LeetCode-321-Create-Maximum-Number-题解"><a href="#LeetCode-321-Create-Maximum-Number-题解" class="headerlink" title="LeetCode(\321. Create Maximum Number)题解"></a>LeetCode(\321. Create Maximum Number)题解</h1><p>Given two arrays of length <code>m</code> and <code>n</code> with digits <code>0-9</code> representing two numbers. Create the maximum number of length <code>k &lt;= m + n</code> from digits of the two. The relative order of the digits from the same array must be preserved. Return an array of the <code>k</code> digits.</p>
+<p><strong>Note:</strong> You should try to optimize your time and space complexity.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Input:</span><br><span class="line">nums1 &#x3D; [3, 4, 6, 5]</span><br><span class="line">nums2 &#x3D; [9, 1, 2, 5, 8, 3]</span><br><span class="line">k &#x3D; 5</span><br><span class="line">Output:</span><br><span class="line">[9, 8, 6, 5, 3]</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Input:</span><br><span class="line">nums1 &#x3D; [6, 7]</span><br><span class="line">nums2 &#x3D; [6, 0, 4]</span><br><span class="line">k &#x3D; 5</span><br><span class="line">Output:</span><br><span class="line">[6, 7, 6, 0, 4]</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 3:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Input:</span><br><span class="line">nums1 &#x3D; [3, 9]</span><br><span class="line">nums2 &#x3D; [8, 9]</span><br><span class="line">k &#x3D; 3</span><br><span class="line">Output:</span><br><span class="line">[9, 8, 9]</span><br></pre></td></tr></table></figure>
+
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Hard</p>
+<p>有m和n长的两个整数数组nums1和nums2，整数数组表示一个大的多位整数。从前到后每个元素都是0-9的值。现在从两个数组中选出K(K&lt;m+n)个数组成一个新的整数数组来表示一个大的K位数，选出的元素要保持在原有数组的相对顺序，返回选定的最大的K位数数组。</p>
+<p>这个题如何来做呢？我的思路是这样的——</p>
+<p>首先不考虑边界问题，我们组成一个K位数，一定是从nums1中选一些数，再从nums2中选一些数组成K个数，再组合成一个K位数。那么我们就遍历从nums1选0个数和nums2选K个数，nums1选1个数和nums2选K-1个数，…，nums1选K个数和nums2选0个数，这样遍历K种情况，每种情况下都得到对应的最大的K位数整数数组，最后比较一下就可以。这个步骤的时间复杂度$O(K)$。</p>
+<p>好，现在考虑选定了数之后怎么组合的问题。假定从nums1中选了a个数，从nums2中选了b个数，a+b=K。那么nums1的a个数和nums2的b个数在保持原有相对顺序不变的情况下得到最大的K位数数组的组合方式就很简单了。我们直接按照类似于归并排序内的merge方式就可以。在a个数和b个数的开头分别设置一个指针，每次选择两个指针中较大的那个值放入组合的K位数中的尾部即可，然后对应的指针后移一位。但是这里要注意如果两个指针指向的元素是一样的话，那么就要判断后面的元素大大小才能确定移动哪个指针（移动后面元素更大的那个数组的指针）。这个步骤的时间复杂度为$O(K)$。</p>
+<p>那么现在就应该考虑如何从两个数组中选数了。假定我们要从nums1中选出a个数，一共有多少种方式呢，答案是$ C_{m}^{a} $ 种。如果再加上nums2的二者一乘，时间复杂度就太高了。但其实想一想，我们只需要nums1中最大的a个数就可以了，怎么定义最大呢，就是a个数组成的a位数是所有a个数组成的数中最大的。</p>
+<p>那么现在，问题就变成了——怎么从一个0-9的整数数组中选出a个数，假设数组为nums1，在保持原有顺序的前提下，使得选出的a个数组成最大的a位数。</p>
+<p>在这里我们可以使用贪心策略，即我们尽可能保证选出的a个数，位于前列的数更大，这样最后组成的a位数就尽可能大。比如选第一个数，我们就首先去寻找9的位置，如果存在9且这个9后面的数大于等于a-1个，那么我们就可以选这个，然后在后面的序列中选剩下的a-1个数。如果不满足条件，就依次寻找8、7、6等。</p>
+<p>这里我们可以选择使用Stack来帮助我们，维护一个递减栈，从nums1的左边开始向右遍历。当遍历到一个数时，如果栈为空或者当前元素加上栈内的元素个数再加上剩余未遍历的元素等于a，就直接将元素入栈。否则就判断当前元素是否小于栈顶元素，小于等于就直接入栈。如果大于，就在保证当前元素加上栈内的元素个数再加上剩余未遍历的元素等于a，同时栈顶元素小于当前元素的前提下，不断出栈，最后将当前元素入栈。最后遍历结束时，栈中的元素个数一定大于等于a，返回栈底前a个元素，这就是最大的a个符合顺序的元素。这个步骤时间复杂度为$O(m)$。同样对nums2操作，时间复杂度为$O(n)$。</p>
+<p>因此，按照上述方法，时间复杂度为$O(K(K+m+n))$。空间复杂度$O(K+m+n)$。</p>
+<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下。</p>
+<p><code>Runtime: 48 ms, faster than 70.26% of C++ online submissions for Create Maximum Number.</code></p>
+<p><code>Memory Usage: 23.4 MB, less than 80.00% of C++ online submissions for Create Maximum Number.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">maxNumberOfSingleArray</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">res</span><span class="params">(k)</span></span>;</span><br><span class="line">        <span class="built_in">deque</span>&lt;<span class="keyword">int</span>&gt; S;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++) &#123;</span><br><span class="line">            <span class="keyword">while</span> (!S.empty() <span class="keyword">and</span> S.back() &lt; nums[i] <span class="keyword">and</span> S.<span class="built_in">size</span>() + len - i &gt; k) S.pop_back();</span><br><span class="line">            S.push_back(nums[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;k; i++) &#123;</span><br><span class="line">            res[i] = S.front();</span><br><span class="line">            S.pop_front();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">merge</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; res1, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; res2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> k1 = res1.<span class="built_in">size</span>(), k2 = res2.<span class="built_in">size</span>(), i1 = <span class="number">0</span>, i2 = <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; res;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span> (i1 &lt; k1 <span class="keyword">and</span> i2 &lt; k2) &#123;</span><br><span class="line">            <span class="keyword">if</span> (res1[i1] &gt; res2[i2]) res.push_back(res1[i1++]);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (res1[i1] &lt; res2[i2]) res.push_back(res2[i2++]);</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">int</span> ti1 = i1 + <span class="number">1</span>, ti2 = i2 + <span class="number">1</span>;</span><br><span class="line">                <span class="keyword">while</span> (ti1 &lt; k1 <span class="keyword">and</span> ti2 &lt; k2 <span class="keyword">and</span> res1[ti1] == res2[ti2]) &#123;</span><br><span class="line">                    ti1++;</span><br><span class="line">                    ti2++;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (ti1 == k1) res.push_back(res2[i2++]);</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (ti2 == k2) res.push_back(res1[i1++]);</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (res1[ti1] &gt; res2[ti2]) res.push_back(res1[i1++]);</span><br><span class="line">                <span class="keyword">else</span> res.push_back(res2[i2++]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span> (i1 &lt; k1) res.push_back(res1[i1++]);</span><br><span class="line">        <span class="keyword">while</span> (i2 &lt; k2) res.push_back(res2[i2++]);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isBigger</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; res1, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; res2, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;k; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (res1[i] &gt; res2[i]) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            <span class="keyword">if</span> (res1[i] &lt; res2[i]) <span class="keyword">return</span> <span class="literal">false</span>; </span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">maxNumber</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums1, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums2, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> m = nums1.<span class="built_in">size</span>(), n = nums2.<span class="built_in">size</span>();</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">res</span><span class="params">(k, <span class="number">0</span>)</span></span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;=k; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (i &gt; m <span class="keyword">or</span> k-i &gt; n) <span class="keyword">continue</span>;</span><br><span class="line">            </span><br><span class="line">            <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; tmp1 = maxNumberOfSingleArray(nums1, i);</span><br><span class="line">            <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; tmp2 = maxNumberOfSingleArray(nums2, k-i);</span><br><span class="line">            </span><br><span class="line">            <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; tmp = merge(tmp1, tmp2);</span><br><span class="line">            <span class="keyword">if</span> (isBigger(tmp, res, k)) &#123;</span><br><span class="line">                res = tmp;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2020-03-18</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/03/16/LeetCode(1383.%20Maximum%20Performance%20of%20a%20Team)%E5%91%A8%E8%B5%9B%E9%A2%984%E9%A2%98%E9%A2%98%E8%A7%A3/" rel="prev" title="LeetCode(1383. Maximum Performance of a Team)周赛题4题题解">
+      <i class="fa fa-chevron-left"></i> LeetCode(1383. Maximum Performance of a Team)周赛题4题题解
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#LeetCode-321-Create-Maximum-Number-题解"><span class="nav-number">1.</span> <span class="nav-text">LeetCode(\321. Create Maximum Number)题解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#解题思路"><span class="nav-number">1.1.</span> <span class="nav-text">解题思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#时空复杂度"><span class="nav-number">1.2.</span> <span class="nav-text">时空复杂度</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="XJ"
+      src="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+  <p class="site-author-name" itemprop="name">XJ</p>
+  <div class="site-description" itemprop="description">幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">292</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">BitBrave, IIE</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+</body>
+</html>

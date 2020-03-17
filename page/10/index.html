@@ -177,6 +177,312 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(15.%203Sum)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(15.%203Sum)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(15. 3Sum)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-15-3Sum-题解"><a href="#LeetCode-15-3Sum-题解" class="headerlink" title="LeetCode(15. 3Sum)题解"></a>LeetCode(15. 3Sum)题解</h1><hr>
+<p>原文如下：</p>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>题目要求从一个数组中找出不同的三个数的组合，使之和为0。是一个Medium的题目，当然可以使用一个三重循环，时间复杂度O(n3)，但是我们可以有一个更好的方式，时间复杂度O(n2)。</p>
+<p>首先处理问题时，可以将数组初步处理一下，比如无序变为有序，再来看问题或许会好一点。这个题目我们可以将数组首先排序，然后再来看，当选定一个数时，再根据这个数来从这个有序数组中选另外的数。方法如下</p>
+<p>具体步骤如下：</p>
+<pre><code>1. 将数组nums升序排序，长度为len，并从左到右依次选定一个为位置i，初始化i=0；O(nlogn)
+2. 设置r = 0 - nums[i]，left = i + 1, right = nums[len  - 1]
+3. 计算nums[left] + nums[right] 是否等于r，如下处理：
+    a 如果等于r，就将i，left，right三个位置的数记录下来，然后left++，right++；
+    b 如果大于r，说明三个数的和大于0，此时需要降低，right--；
+    c 如果小于r，说明三个数的和小于0，此时需要增大，left++；
+    PS：移动的过程中，如果发现nums[left] = nums[left+1]之类的情况，表示这个数重复了，而我们之前已经比较过这个数了，所以此时可以直接跳过。
+4. i++，如果与前一个数一样，则continue
+5. 当i==len-2时，返回函数 O(n2)
+a trick: 当检测时，如果nums[left] + nums[left + 1] &gt; r 或者 nums[right] + nums[right - 1] &lt; r，就没比较测试后面的了，因为后面的肯定更加不可能满足条件了。直接i++</code></pre><p>代码如下</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">threeSum</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; res;</span><br><span class="line">        <span class="keyword">int</span> len = nums.<span class="built_in">size</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// sort O(nlogn)</span></span><br><span class="line">        sort(nums.<span class="built_in">begin</span>(), nums.<span class="built_in">end</span>());</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> left = <span class="number">0</span>, right = <span class="number">0</span>, r = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; len - <span class="number">2</span>; i++)&#123;</span><br><span class="line">            left = i + <span class="number">1</span>;</span><br><span class="line">            right = len - <span class="number">1</span>;</span><br><span class="line">            r = <span class="number">0</span> - nums[i];</span><br><span class="line">            <span class="keyword">while</span>(left &lt; right)&#123;</span><br><span class="line">                <span class="keyword">if</span>(nums[left] + nums[left + <span class="number">1</span>] &gt; r || nums[right] + nums[right - <span class="number">1</span>] &lt; r) <span class="keyword">break</span>;</span><br><span class="line">                </span><br><span class="line">                <span class="keyword">if</span>(r &gt; nums[left] + nums[right]) left++;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span>(r &lt; nums[left] + nums[right]) right--;</span><br><span class="line">                <span class="keyword">else</span>&#123;</span><br><span class="line">                    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; a&#123;nums[i], nums[left], nums[right]&#125;;</span><br><span class="line">                    res.push_back(a);</span><br><span class="line">                    left++;</span><br><span class="line">                    right--;</span><br><span class="line">                    <span class="keyword">while</span>(left &lt; right &amp;&amp; nums[left] == nums[left<span class="number">-1</span>]) left++;</span><br><span class="line">                    <span class="keyword">while</span>(right &gt; left &amp;&amp; nums[right] == nums[right+<span class="number">1</span>]) right--;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">while</span>(i + <span class="number">1</span> &lt; len - <span class="number">2</span> &amp;&amp; nums[i] == nums[i + <span class="number">1</span>]) i++; </span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2-19-04-19. PS:(<strong>LeetCode上你的stdout也算时间的，所以在提交的时候记得注释掉cout之类的print函数，否则本来accept的都会timelimit exceed的。</strong>)</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(150.%20Evaluate%20Reverse%20Polish%20Notation)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(150.%20Evaluate%20Reverse%20Polish%20Notation)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(150. Evaluate Reverse Polish Notation)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-150-Evaluate-Reverse-Polish-Notation-题解"><a href="#LeetCode-150-Evaluate-Reverse-Polish-Notation-题解" class="headerlink" title="LeetCode(150. Evaluate Reverse Polish Notation)题解"></a>LeetCode(150. Evaluate Reverse Polish Notation)题解</h1><hr>
+<p>Evaluate the value of an arithmetic expression in Reverse Polish Notation.</p>
+<p>Valid operators are +, -, *, /. Each operand may be an integer or another expression.</p>
+<p>Note:</p>
+<pre><code>Division between two integers should truncate toward zero.
+The given RPN expression is always valid. That means the expression would always evaluate to a result and there won&apos;t be any divide by zero operation.</code></pre><p>Example 1:</p>
+<pre><code>Input: [&quot;2&quot;, &quot;1&quot;, &quot;+&quot;, &quot;3&quot;, &quot;*&quot;]
+Output: 9
+Explanation: ((2 + 1) * 3) = 9
+Example 2:
+
+Input: [&quot;4&quot;, &quot;13&quot;, &quot;5&quot;, &quot;/&quot;, &quot;+&quot;]
+Output: 6
+Explanation: (4 + (13 / 5)) = 6</code></pre><p>Example 3:</p>
+<pre><code>Input: [&quot;10&quot;, &quot;6&quot;, &quot;9&quot;, &quot;3&quot;, &quot;+&quot;, &quot;-11&quot;, &quot;*&quot;, &quot;/&quot;, &quot;*&quot;, &quot;17&quot;, &quot;+&quot;, &quot;5&quot;, &quot;+&quot;]
+Output: 22
+Explanation: 
+((10 * (6 / ((9 + 3) * -11))) + 17) + 5
+= ((10 * (6 / (12 * -11))) + 17) + 5
+= ((10 * (6 / -132)) + 17) + 5
+= ((10 * 0) + 17) + 5
+= (0 + 17) + 5
+= 17 + 5
+= 22</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>要求使用逆波兰表达式，就是后缀计算法给出的式子，计算表达式的值。</p>
+<p>逆波兰表达式的解释：<a href="https://baike.baidu.com/item/%E9%80%86%E6%B3%A2%E5%85%B0%E5%BC%8F/128437?fr=aladdin" target="_blank" rel="noopener">https://baike.baidu.com/item/%E9%80%86%E6%B3%A2%E5%85%B0%E5%BC%8F/128437?fr=aladdin</a></p>
+<p>直接根据上述解释就可以写代码啦。</p>
+<p>代码如下：</p>
+<p>Runtime: 8 ms, faster than 99.46% of C++ online submissions for Evaluate Reverse Polish Notation.<br>Memory Usage: 11.6 MB, less than 49.40% of C++ online submissions for Evaluate Reverse Polish Notation.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isOperator</span><span class="params">(<span class="built_in">string</span> a)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(a == <span class="string">"+"</span> || a == <span class="string">"-"</span> || a == <span class="string">"*"</span> || a == <span class="string">"/"</span>) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">Cal</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b, <span class="built_in">string</span> o)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(o == <span class="string">"+"</span>) <span class="keyword">return</span> a+b;</span><br><span class="line">        <span class="keyword">if</span>(o == <span class="string">"-"</span>) <span class="keyword">return</span> a-b;</span><br><span class="line">        <span class="keyword">if</span>(o == <span class="string">"*"</span>) <span class="keyword">return</span> a*b;</span><br><span class="line">        <span class="keyword">if</span>(o == <span class="string">"/"</span>) <span class="keyword">return</span> a/b;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">evalRPN</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&amp; tokens)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = tokens.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> v1 = <span class="number">0</span>, v2 = <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">stack</span>&lt;<span class="keyword">int</span>&gt; S;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(!isOperator(tokens[i]))&#123;</span><br><span class="line">                <span class="built_in">sscanf</span>(tokens[i].c_str(),<span class="string">"%d"</span>,&amp;v1);</span><br><span class="line">                S.push(v1);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                v1 = S.top(); S.pop();</span><br><span class="line">                v2 = S.top(); S.pop();</span><br><span class="line">                S.push(Cal(v2, v1, tokens[i]));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> S.top();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-07-10</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(151.%20Reverse%20Words%20in%20a%20String)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(151.%20Reverse%20Words%20in%20a%20String)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(151. Reverse Words in a String)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-151-Reverse-Words-in-a-String-题解"><a href="#LeetCode-151-Reverse-Words-in-a-String-题解" class="headerlink" title="LeetCode(151. Reverse Words in a String)题解"></a>LeetCode(151. Reverse Words in a String)题解</h1><hr>
+<p>Given an input string, reverse the string word by word.</p>
+<p>Example 1:</p>
+<pre><code>Input: &quot;the sky is blue&quot;
+Output: &quot;blue is sky the&quot;</code></pre><p>Example 2:</p>
+<pre><code>Input: &quot;  hello world!  &quot;
+Output: &quot;world! hello&quot;
+Explanation: Your reversed string should not contain leading or trailing spaces.</code></pre><p>Example 3:</p>
+<pre><code>Input: &quot;a good   example&quot;
+Output: &quot;example good a&quot;
+Explanation: You need to reduce multiple spaces between two words to a single space in the reversed string.</code></pre><p>Note:</p>
+<pre><code>A word is defined as a sequence of non-space characters.
+Input string may contain leading or trailing spaces. However, your reversed string should not contain leading or trailing spaces.
+You need to reduce multiple spaces between two words to a single space in the reversed string.</code></pre><p>Follow up:</p>
+<pre><code>For C programmers, try to solve it in-place in O(1) extra space.</code></pre><h2 id="题意理解"><a href="#题意理解" class="headerlink" title="题意理解"></a>题意理解</h2><p>给一个字符串，按照word为单位将其反序。</p>
+<p>不需要考脑子的题目，只需要细致就可以</p>
+<p>代码如下：</p>
+<p>Runtime: 12 ms, faster than 41.62% of C++ online submissions for Reverse Words in a String.<br>Memory Usage: 69.4 MB, less than 6.55% of C++ online submissions for Reverse Words in a String.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">string</span> <span class="title">reverseWords</span><span class="params">(<span class="built_in">string</span> s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(s==<span class="string">""</span>) <span class="keyword">return</span> s;</span><br><span class="line">        <span class="keyword">int</span> sta = <span class="number">0</span>, loc;</span><br><span class="line">        <span class="keyword">while</span>(sta&lt;s.<span class="built_in">size</span>() &amp;&amp; s[sta]==<span class="string">' '</span>) sta++;</span><br><span class="line">        <span class="keyword">if</span>(sta == s.<span class="built_in">size</span>()) <span class="keyword">return</span> <span class="string">""</span>;</span><br><span class="line">        loc = s.<span class="built_in">find</span>(<span class="string">' '</span>, sta);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(loc == <span class="built_in">string</span>::npos) <span class="keyword">return</span> s[<span class="number">0</span>] == <span class="string">' '</span> ? s.substr(<span class="number">1</span>) : s;</span><br><span class="line">        s = reverseWords(s.substr(loc+<span class="number">1</span>)) + <span class="string">" "</span> + s.substr(sta, loc-sta);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(s[<span class="number">0</span>] == <span class="string">' '</span>) <span class="keyword">return</span> s.substr(<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">return</span> s;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-08-06</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(148.%20Sort%20List)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(148.%20Sort%20List)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(148. Sort List)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-148-Sort-List-题解"><a href="#LeetCode-148-Sort-List-题解" class="headerlink" title="LeetCode(148. Sort List)题解"></a>LeetCode(148. Sort List)题解</h1><hr>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>对一个链表进行排序，使用常量空间，时间复杂度O(nlogn)。</p>
+<p>使用归并排序就好了。首先遍历出其长度，再依次归并即可。</p>
+<p>代码如下：</p>
+<p>Runtime: 36 ms, faster than 99.77% of C++ online submissions for Sort List.<br>Memory Usage: 11.7 MB, less than 70.58% of C++ online submissions for Sort List.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode *next;</span></span><br><span class="line"><span class="comment"> *     ListNode(int x) : val(x), next(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">ListNode* <span class="title">mergeSort</span><span class="params">(ListNode* head, <span class="keyword">int</span> l)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(l&lt;=<span class="number">0</span>) <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">if</span>(l == <span class="number">1</span>) <span class="keyword">return</span> head;</span><br><span class="line">        <span class="keyword">int</span> m = l/<span class="number">2</span>;</span><br><span class="line">        ListNode* mid = head;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;m; i++) mid = mid-&gt;next;</span><br><span class="line">        </span><br><span class="line">        ListNode* left = mergeSort(head, m);</span><br><span class="line">        ListNode* right = mergeSort(mid, l-m);</span><br><span class="line">        <span class="comment">// ---</span></span><br><span class="line">        ListNode *merge, *M;</span><br><span class="line">        <span class="keyword">int</span> llen = m, rlen = l-m;</span><br><span class="line">        <span class="keyword">if</span>(left-&gt;val &lt; right-&gt;val)&#123;</span><br><span class="line">            merge = left;</span><br><span class="line">            left = left-&gt;next;</span><br><span class="line">            llen--;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            merge = right;</span><br><span class="line">            right = right-&gt;next;</span><br><span class="line">            rlen--;</span><br><span class="line">        &#125;</span><br><span class="line">        M = merge;</span><br><span class="line">        <span class="keyword">while</span>(llen &gt; <span class="number">0</span> &amp;&amp; rlen &gt; <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(left-&gt;val &lt; right-&gt;val)&#123;</span><br><span class="line">                merge-&gt;next = left;</span><br><span class="line">                left = left-&gt;next;</span><br><span class="line">                llen--;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                merge-&gt;next = right;</span><br><span class="line">                right = right-&gt;next;</span><br><span class="line">                rlen--;</span><br><span class="line">            &#125;</span><br><span class="line">            merge = merge-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">while</span>(llen &gt; <span class="number">0</span>)&#123;</span><br><span class="line">            merge-&gt;next = left;</span><br><span class="line">            left = left-&gt;next;</span><br><span class="line">            merge = merge-&gt;next;</span><br><span class="line">            llen--;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">while</span>(rlen &gt; <span class="number">0</span>)&#123;</span><br><span class="line">            merge-&gt;next = right;</span><br><span class="line">            right = right-&gt;next;</span><br><span class="line">            merge = merge-&gt;next;</span><br><span class="line">            rlen--;</span><br><span class="line">        &#125;</span><br><span class="line">        merge-&gt;next = <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">return</span> M;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">ListNode* <span class="title">sortList</span><span class="params">(ListNode* head)</span> </span>&#123;</span><br><span class="line">        ListNode* res = head;</span><br><span class="line">        <span class="keyword">if</span>(res == <span class="literal">NULL</span>) <span class="keyword">return</span> res;</span><br><span class="line">        <span class="keyword">int</span> len = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(res != <span class="literal">NULL</span>)&#123;</span><br><span class="line">            res = res-&gt;next;</span><br><span class="line">            len++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> mergeSort(head, len);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-07-10</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(152.%20Maximum%20Product%20Subarray)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -613,315 +919,11 @@ A solution set is:
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(19.%20Remove%20Nth%20Node%20From%20End%20of%20List)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(19.%20Remove%20Nth%20Node%20From%20End%20of%20List)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(19. Remove Nth Node From End of List)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-19-Remove-Nth-Node-From-End-of-List-题解"><a href="#LeetCode-19-Remove-Nth-Node-From-End-of-List-题解" class="headerlink" title="LeetCode(19. Remove Nth Node From End of List)题解"></a>LeetCode(19. Remove Nth Node From End of List)题解</h1><hr>
-<p>原文如下：</p>
-<p>Given a linked list, remove the n-th node from the end of list and return its head.</p>
-<p><strong>Example:</strong></p>
-<pre><code>Given linked list: 1-&gt;2-&gt;3-&gt;4-&gt;5, and n = 2.
-
-After removing the second node from the end, the linked list becomes 1-&gt;2-&gt;3-&gt;5.</code></pre><p><strong>Note:</strong></p>
-<p>Given n will always be valid.</p>
-<p><strong>Follow up:</strong></p>
-<p>Could you do this in one pass?</p>
-<h2 id="题意理解"><a href="#题意理解" class="headerlink" title="题意理解"></a>题意理解</h2><p>这个题Medium，要求给定一个链表的头指针，删除这个链表内倒数第n个节点。一般来说很简单，最直观的方式就是我遍历两遍，第一遍找出总长度，计算倒数第n个节点的在顺数第几个，第二次遍历直接删除。或者遍历一次，每一步都记录下节点的值，最后找到对应的第n个删除，再用剩下的额值重新建立一个链表。这两种方法一个是加大了时间，一个增加了空间。况且题目建议一次遍历即可。</p>
-<p>那么如何做呢？可以使用递归的方式，利用函数天然的堆栈空间进行位置记录。具体采用如下策略：</p>
-<pre><code>1 从head进入，传入当前节点地址，pos位置参数（引用实参），和需要删除的节点参数n
-2 进入递归函数，直接走到最后一个，将pos=1，开始返回
-3 通过n是否等于pos来判断是否当前节点是需要删除的，如果不等于则返回当前节点，如果等于则直接返回当前节点的递归回来的节点（当前节点的下一个节点）
-4 递归结束后直接返回删除对应位置节点之后的链表的head节点</code></pre><p>代码如下，faster than 100% exampls。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode *next;</span></span><br><span class="line"><span class="comment"> *     ListNode(int x) : val(x), next(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">ListNode* <span class="title">recNode</span><span class="params">(ListNode* node, <span class="keyword">int</span> &amp;pos, <span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(node-&gt;next == <span class="literal">NULL</span>)&#123;</span><br><span class="line">            pos = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span>(n == pos)&#123;</span><br><span class="line">                pos = INT_MAX;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> node;</span><br><span class="line">        &#125;;</span><br><span class="line">        </span><br><span class="line">        ListNode* bnode = recNode(node-&gt;next, pos, n);</span><br><span class="line">        </span><br><span class="line">        pos = (INT_MAX==pos) ? pos : pos + <span class="number">1</span>;</span><br><span class="line">        node-&gt;next = bnode;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(n == pos) &#123;</span><br><span class="line">            pos = INT_MAX;</span><br><span class="line">            <span class="keyword">return</span> bnode;</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">return</span> node;    </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">ListNode* <span class="title">removeNthFromEnd</span><span class="params">(ListNode* head, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(head == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">int</span> pos = INT_MAX;</span><br><span class="line">        <span class="keyword">return</span> recNode(head, pos, n);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2019-04-22</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(20.%20Valid%20Parentheses)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(20.%20Valid%20Parentheses)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(20. Valid Parentheses)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-20-Valid-Parentheses-题解"><a href="#LeetCode-20-Valid-Parentheses-题解" class="headerlink" title="LeetCode(20. Valid Parentheses)题解"></a>LeetCode(20. Valid Parentheses)题解</h1><hr>
-<p>原文如下<br>Given a string containing just the characters ‘(‘, ‘)’, ‘{‘, ‘}’, ‘[‘ and ‘]’, determine if the input string is valid.</p>
-<p>An input string is valid if:</p>
-<p>Open brackets must be closed by the same type of brackets.<br>Open brackets must be closed in the correct order.<br>Note that an empty string is also considered valid.</p>
-<p>Example 1:</p>
-<pre><code>Input: &quot;()&quot;
-Output: true</code></pre><p>Example 2:</p>
-<pre><code>Input: &quot;()[]{}&quot;
-Output: true</code></pre><p>Example 3:</p>
-<pre><code>Input: &quot;(]&quot;
-Output: false</code></pre><p>Example 4:</p>
-<pre><code>Input: &quot;([)]&quot;
-Output: false</code></pre><p>Example 5:</p>
-<pre><code>Input: &quot;{[]}&quot;
-Output: true</code></pre><h2 id="题意理解，Easy题，直接使用STL的栈就可以了。代码非常简单。"><a href="#题意理解，Easy题，直接使用STL的栈就可以了。代码非常简单。" class="headerlink" title="题意理解，Easy题，直接使用STL的栈就可以了。代码非常简单。"></a>题意理解，Easy题，直接使用STL的栈就可以了。代码非常简单。</h2><p>代码如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isLeft</span><span class="params">(<span class="keyword">char</span> c)</span></span>&#123;</span><br><span class="line">        <span class="keyword">switch</span>(c)&#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'('</span>: <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'['</span>: <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'&#123;'</span>: <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            <span class="keyword">default</span>: <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isMatch</span><span class="params">(<span class="keyword">char</span> a, <span class="keyword">char</span> b)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>((a==<span class="string">'('</span> &amp;&amp; b==<span class="string">')'</span>) || (a==<span class="string">'['</span> &amp;&amp; b==<span class="string">']'</span>) || (a==<span class="string">'&#123;'</span> &amp;&amp; b==<span class="string">'&#125;'</span>)) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isValid</span><span class="params">(<span class="built_in">string</span> s)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">stack</span>&lt;<span class="keyword">char</span>&gt; st;</span><br><span class="line">        <span class="keyword">int</span> len = s.<span class="built_in">size</span>();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(isLeft(s[i])) st.push(s[i]);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(!st.empty())&#123;</span><br><span class="line">                <span class="keyword">if</span>(!isMatch(st.top(), s[i])) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">                st.pop();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> st.empty();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(200.%20Number%20of%20Islands)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(200.%20Number%20of%20Islands)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(200. Number of Islands)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-200-Number-of-Islands-题解"><a href="#LeetCode-200-Number-of-Islands-题解" class="headerlink" title="LeetCode(200. Number of Islands)题解"></a>LeetCode(200. Number of Islands)题解</h1><hr>
-<p>Given a 2d grid map of ‘1’s (land) and ‘0’s (water), count the number of islands. An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.</p>
-<p>Example 1:</p>
-<pre><code>Input:
-11110
-11010
-11000
-00000
-
-Output: 1</code></pre><p>Example 2:</p>
-<pre><code>Input:
-11000
-11000
-00100
-00011
-
-Output: 3</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个二维数组，0代表水，1代表陆地，在横纵上被水围住的1组成一个小岛。找出矩阵中的所有小岛，返回对应小岛数。</p>
-<p>这个可以使用DFS解决，每次遍历矩阵，第一次遇到1就将其变为0，然后DFS将与其相邻的都变为0.然后直到结束。</p>
-<p>代码如下：</p>
-<p>Runtime: 12 ms, faster than 93.21% of C++ online submissions for Number of Islands.<br>Memory Usage: 10.7 MB, less than 86.51% of C++ online submissions for Number of Islands.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">DFS</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">char</span>&gt;&gt;&amp; grid, <span class="keyword">int</span> i, <span class="keyword">int</span> j, <span class="keyword">int</span> row, <span class="keyword">int</span> col)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(grid[i][j] == <span class="string">'0'</span>) <span class="keyword">return</span>;</span><br><span class="line">        grid[i][j] = <span class="string">'0'</span>;</span><br><span class="line">        <span class="keyword">if</span>(i&gt;<span class="number">0</span>) DFS(grid, i<span class="number">-1</span>, j, row, col);</span><br><span class="line">        <span class="keyword">if</span>(j&gt;<span class="number">0</span>) DFS(grid, i, j<span class="number">-1</span>, row, col);</span><br><span class="line">        <span class="keyword">if</span>(i&lt;row<span class="number">-1</span>) DFS(grid, i+<span class="number">1</span>, j, row, col);</span><br><span class="line">        <span class="keyword">if</span>(j&lt;col<span class="number">-1</span>) DFS(grid, i, j+<span class="number">1</span>, row, col);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">numIslands</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">char</span>&gt;&gt;&amp; grid)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> row = grid.<span class="built_in">size</span>(), col;</span><br><span class="line">        <span class="keyword">if</span>(row == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        col = grid[<span class="number">0</span>].<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;row; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;col; j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(grid[i][j] == <span class="string">'1'</span>)&#123;</span><br><span class="line">                    DFS(grid, i ,j, row, col);</span><br><span class="line">                    res++;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-07-29</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(215.%20Kth%20Largest%20Element%20in%20an%20Array)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(215.%20Kth%20Largest%20Element%20in%20an%20Array)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(215. Kth Largest Element in an Array)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-215-Kth-Largest-Element-in-an-Array-题解"><a href="#LeetCode-215-Kth-Largest-Element-in-an-Array-题解" class="headerlink" title="LeetCode(215. Kth Largest Element in an Array)题解"></a>LeetCode(215. Kth Largest Element in an Array)题解</h1><hr>
-<p>Find the kth largest element in an unsorted array. Note that it is the kth largest element in the sorted order, not the kth distinct element.</p>
-<p>Example 1:</p>
-<pre><code>Input: [3,2,1,5,6,4] and k = 2
-Output: 5</code></pre><p>Example 2:</p>
-<pre><code>Input: [3,2,3,1,2,4,5,5,6] and k = 4
-Output: 4</code></pre><p>Note:<br>    You may assume k is always valid, 1 ≤ k ≤ array’s length.</p>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出一个无序数组，找出其中第K大的数。</p>
-<p>最简单的方式就是排序，然后直接返回第K大的数，时间复杂度是O(nlogn). 使用STL函数可以AC。</p>
-<p>代码如下</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">findKthLargest</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        sort(nums.<span class="built_in">begin</span>(), nums.<span class="built_in">end</span>());</span><br><span class="line">        <span class="keyword">return</span> nums[nums.<span class="built_in">size</span>()-k];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>但是这样太简单了，肯定有更好的办法。一个就是DC。类似于快排。随便选一个数，比其大的数放在左边，比其小的数放在右边。如果左边的数有K-1个的话，就直接返回现在选中的数，如果左边的数大于K-1，就缩短数组，直接在左边数组中找。如果小于K-1个，就表示第K大的数在右边，就在右边数组内寻找第K-len(left)大的数。理想情况下的时间复杂度O(logn),最差是O(n2).但一般情况下，时间复杂度是O(logn)</p>
-<p>PS: 需要注意有重复的数，因此在计算的时候需要记录相同的数。</p>
-<p>代码如下：</p>
-<p>Runtime: 88 ms, faster than 6.01% of C++ online submissions for Kth Largest Element in an Array.<br>Memory Usage: 12.4 MB, less than 5.08% of C++ online submissions for Kth Largest Element in an Array.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">findKthLargest_</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> sta, <span class="keyword">int</span> <span class="built_in">end</span>, <span class="keyword">int</span> k)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(sta&gt;<span class="built_in">end</span>) <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">int</span> left = <span class="number">0</span>, right = <span class="number">0</span>, same_count = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> i, j;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(i = sta+<span class="number">1</span>, j = <span class="built_in">end</span>; i&lt;j; )&#123;</span><br><span class="line">            <span class="keyword">if</span>(nums[i]&gt;nums[sta])&#123;</span><br><span class="line">                <span class="keyword">if</span>(nums[j]&lt;nums[sta])&#123;</span><br><span class="line">                    i++; j--;</span><br><span class="line">                    left++; right++;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span>(nums[j]&gt;nums[sta])&#123;</span><br><span class="line">                    i++;</span><br><span class="line">                    left++;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span>&#123;</span><br><span class="line">                    i++;</span><br><span class="line">                    left++;</span><br><span class="line">                    same_count++;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(nums[i]&lt;nums[sta])&#123;</span><br><span class="line">                <span class="keyword">if</span>(nums[j]&gt;nums[sta])&#123;</span><br><span class="line">                    swap(nums[i], nums[j]);</span><br><span class="line">                    i++; j--;</span><br><span class="line">                    left++; right++;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span>(nums[j]&lt;nums[sta])&#123;</span><br><span class="line">                    j--;</span><br><span class="line">                    right++;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span>&#123;</span><br><span class="line">                    swap(nums[i], nums[j]);</span><br><span class="line">                    i++; j--;</span><br><span class="line">                    left++; right++;</span><br><span class="line">                    same_count++;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(nums[i]==nums[sta])&#123;</span><br><span class="line">                i++;</span><br><span class="line">                left++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//cout&lt;&lt;left&lt;&lt;"+"&lt;&lt;right&lt;&lt;endl;</span></span><br><span class="line">        <span class="keyword">if</span>(i==j)&#123;</span><br><span class="line">            <span class="keyword">if</span>(nums[i]&gt;nums[sta])&#123;</span><br><span class="line">                swap(nums[sta], nums[i]);</span><br><span class="line">                left += <span class="number">2</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(nums[i]&lt;nums[sta])&#123;</span><br><span class="line">                swap(nums[sta], nums[i<span class="number">-1</span>]);</span><br><span class="line">                i--;</span><br><span class="line">                left++; right++;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                left += <span class="number">2</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(i&gt;j)&#123;</span><br><span class="line">            left++;</span><br><span class="line">            swap(nums[sta], nums[i<span class="number">-1</span>]);</span><br><span class="line">            i--;</span><br><span class="line">        &#125;;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(k&lt;left-same_count)&#123;</span><br><span class="line">            <span class="keyword">return</span> findKthLargest_(nums, sta, sta+left<span class="number">-2</span>, k);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(k&gt;left<span class="number">-1</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> findKthLargest_(nums, sta+left, <span class="built_in">end</span>, k-left);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> nums[i];</span><br><span class="line">    &#125;   </span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">findKthLargest</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = nums.<span class="built_in">size</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> findKthLargest_(nums, <span class="number">0</span>, len<span class="number">-1</span>, k<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-07-30</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/9/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/29/">29</a><a class="extend next" rel="next" href="/page/11/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/9/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/30/">30</a><a class="extend next" rel="next" href="/page/11/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -989,7 +991,7 @@ Output: 4</code></pre><p>Note:<br>    You may assume k is always valid, 1 ≤ k 
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">288</span>
+          <span class="site-state-item-count">292</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
