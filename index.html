@@ -177,6 +177,451 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/26/LeetCode(1392.%20Longest%20Happy%20Prefix)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/26/LeetCode(1392.%20Longest%20Happy%20Prefix)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1392. Longest Happy Prefix)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-03-26 16:42:18 / 修改时间：16:42:19" itemprop="dateCreated datePublished" datetime="2020-03-26T16:42:18+08:00">2020-03-26</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-1392-Longest-Happy-Prefix-题解"><a href="#LeetCode-1392-Longest-Happy-Prefix-题解" class="headerlink" title="LeetCode(\1392. Longest Happy Prefix)题解"></a>LeetCode(\1392. Longest Happy Prefix)题解</h1><p>A string is called a <em>happy prefix</em> if is a <strong>non-empty</strong> prefix which is also a suffix (excluding itself).</p>
+<p>Given a string <code>s</code>. Return the <strong>longest happy prefix</strong> of <code>s</code> .</p>
+<p>Return an empty string if no such prefix exists.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: s &#x3D; &quot;level&quot;</span><br><span class="line">Output: &quot;l&quot;</span><br><span class="line">Explanation: s contains 4 prefix excluding itself (&quot;l&quot;, &quot;le&quot;, &quot;lev&quot;, &quot;leve&quot;), and suffix (&quot;l&quot;, &quot;el&quot;, &quot;vel&quot;, &quot;evel&quot;). The largest prefix which is also suffix is given by &quot;l&quot;.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: s &#x3D; &quot;ababab&quot;</span><br><span class="line">Output: &quot;abab&quot;</span><br><span class="line">Explanation: &quot;abab&quot; is the largest prefix which is also suffix. They can overlap in the original string.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 3:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: s &#x3D; &quot;leetcodeleet&quot;</span><br><span class="line">Output: &quot;leet&quot;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 4:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: s &#x3D; &quot;a&quot;</span><br><span class="line">Output: &quot;&quot;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>1 &lt;= s.length &lt;= 10^5</code></li>
+<li><code>s</code> contains only lowercase English letters.</li>
+</ul>
+<p><a href="https://leetcode.com/problems/longest-happy-prefix/discuss" target="_blank" rel="noopener">Discuss</a></p>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Hard</p>
+<p>求出一个字符串的公共前后缀最长值。</p>
+<p>这个乍一看很难在O(n)的时间内解决。但是知道KMP的人来说，这就是求Next数组而已。同时Rolling hash也可以解决，将字符串映射到一个值，将前缀的值依次放入Set 中，然后将后缀依次转为整数，然后在O(1)时间内就可以判断是否存在。</p>
+<p>这里我使用Next的方式。</p>
+<p>代码如下，时间复杂度O(N)，空间复杂度O(N)。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">string</span> <span class="title">longestPrefix</span><span class="params">(<span class="built_in">string</span> s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = s.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> j = <span class="number">1</span>, t = <span class="number">0</span>;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">Next</span><span class="params">(len + <span class="number">2</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">        <span class="keyword">while</span> (j &lt;= len) &#123;</span><br><span class="line">            <span class="keyword">if</span> (t == <span class="number">0</span> || s[j<span class="number">-1</span>] == s[t<span class="number">-1</span>]) &#123;</span><br><span class="line">                Next[j+<span class="number">1</span>] = t + <span class="number">1</span>;</span><br><span class="line">                j++;</span><br><span class="line">                t++;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                t = Next[t];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> s.substr(<span class="number">0</span>, Next[len+<span class="number">1</span>]<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2020-03-25</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/26/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%E7%AE%97%E6%B3%95KMP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/26/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%E7%AE%97%E6%B3%95KMP/" class="post-title-link" itemprop="url">字符串匹配算法KMP</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-03-26 14:45:24 / 修改时间：16:36:44" itemprop="dateCreated datePublished" datetime="2020-03-26T14:45:24+08:00">2020-03-26</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="字符串匹配算法KMP"><a href="#字符串匹配算法KMP" class="headerlink" title="字符串匹配算法KMP"></a>字符串匹配算法KMP</h1><p>存在一个字符串主串S，和一个模式串P。寻找P是否是S的子串，如果是就返回第一次匹配的位置，否则返回-1。</p>
+<p>这里统一定义一下：对于S和P中的字符，从前到后，每个字符的编号从1开始，分别为1，2，3，···。比如S[0]为1号字符，所以如果第一次匹配的位置就是开头，就返回1。（在C++中，string类的length与size没有区别）。</p>
+<p>###算法思路</p>
+<p>KMP是非常经典的字符串匹配算法，可以在$O(N+M)$的时间内得到结果，相比于普通的比较算法$O(MN)$极大地提升了效率，N为S的长度，M为P的长度。</p>
+<p>因为我只能说大概理解了KMP算法，但是能够信手拈来给别人讲目前还做不到，所以这里写出来让自己熟悉一下。</p>
+<h4 id="普通的比较算法"><a href="#普通的比较算法" class="headerlink" title="普通的比较算法"></a>普通的比较算法</h4><p>一般来说要寻找P在S中的位置，我们都是从S的开头开始依次与P比较，记录下S的开始位置k，然后开以k开始的长度为M的子串是不是和P相等，是就结束算法，不是就k++，继续之前的步骤。这样的算法每一步都需要M次比较，总的时间复杂度$O(MN)$。</p>
+<p>算法的代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 普通的匹配算法</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">naive</span><span class="params">(<span class="built_in">string</span> str, <span class="built_in">string</span> pstr)</span> </span>&#123; <span class="comment">// 主串，模式串</span></span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">1</span>, j = <span class="number">1</span>, k = i;</span><br><span class="line">    <span class="keyword">while</span> (i &lt;= str.<span class="built_in">size</span>() <span class="keyword">and</span> j &lt;= pstr.<span class="built_in">size</span>()) &#123;</span><br><span class="line">        <span class="keyword">if</span> (str[i<span class="number">-1</span>] == pstr[j<span class="number">-1</span>]) &#123;</span><br><span class="line">            i++;</span><br><span class="line">            j++;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            i = ++k;</span><br><span class="line">            j = <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (j &gt; pstr.<span class="built_in">size</span>()) <span class="keyword">return</span> k;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="KMP"><a href="#KMP" class="headerlink" title="KMP"></a>KMP</h4><p>普通的匹配算法，在遇到不匹配的时候，主串会回溯到最开始匹配的地方，造成了浪费。比如aba，如果3号上的a与主串的某个地方匹配，那么1号上的a就肯定与这个位置匹配，就不用重复比较。因此KMP算法对模式串构造一个Next数组，存储每个字符前面的子串的公共前后缀长度+1，也就是如果当前字符与主串的不匹配，那么应该与模式串的哪一个位置匹配。Next[1]=0，Next[2]=1。</p>
+<p>总的来说，从S和P的1号字符开始匹配，如果相等就各自++，如果遇到不匹配的地方，此时S中为i号字符，P中为j号字符，将j = Next[j]匹配即可，如果j=0，表示P的第一个字符就不匹配，此i++，j++即可。</p>
+<p>算法的代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// KMP</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">KMP</span><span class="params">(<span class="built_in">string</span> str, <span class="built_in">string</span> pstr, <span class="keyword">int</span> next[])</span> </span>&#123; <span class="comment">// 主串，模式串</span></span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">1</span>, j = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span> (i &lt;= str.<span class="built_in">size</span>() <span class="keyword">and</span> j &lt;= pstr.<span class="built_in">size</span>()) &#123;</span><br><span class="line">        <span class="keyword">if</span> (i == <span class="number">0</span> <span class="keyword">or</span> str[i<span class="number">-1</span>] == pstr[j<span class="number">-1</span>]) &#123;</span><br><span class="line">            i++;</span><br><span class="line">            j++;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            j = next[j];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (j &gt; pstr.<span class="built_in">size</span>()) <span class="keyword">return</span> i - pstr.<span class="built_in">size</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Next数组填充（Most-Important）"><a href="#Next数组填充（Most-Important）" class="headerlink" title="Next数组填充（Most Important）"></a>Next数组填充（Most Important）</h4><p>字符串P存在一个Next整数数组，P[i]对应Next[i]，Next[i]表示字符串P在匹配时，如果i号字符不匹配的时候，应该取哪个字符进行下一步的匹配，就是i字符前面的子串的公共前后缀长度+1。</p>
+<p>在填充Next[j+1]的时候，我们假设小于等于j的都已经填充完毕。</p>
+<p>那么根据前缀是固定的，后缀是相对的。这里使用类似于DP的方法。</p>
+<p>此时Next[j] = t，根据两种情况来分别推导：</p>
+<ul>
+<li>Pj = Pt，此时直接——Next[j+1] = t + 1;</li>
+<li>Pj != Pt，则循环地将t赋值为Next[t]，直到t=0，或者满足Pj=Pt。如果t=0，表示当前子串没有公共前后缀，则直接就是到第一个字符比较，因此Next[j+1] = 1;</li>
+</ul>
+<p>填充的算法如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 填充Next</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">getNext</span><span class="params">(<span class="built_in">string</span> pstr, <span class="keyword">int</span> next[])</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> j = <span class="number">1</span>, t = <span class="number">0</span>;</span><br><span class="line">    next[<span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// next[0]空置，可以用于存储模式串的长度</span></span><br><span class="line">    <span class="comment">// next.size() = pstr.size() + 2.</span></span><br><span class="line">    <span class="comment">// next[0]无用，next[i]存储1号到i-1号的子串的公共前后缀长度+1</span></span><br><span class="line">    <span class="comment">// next[pstr.size()+1]存储整个字符串的公共前后缀长度+1</span></span><br><span class="line">    <span class="keyword">while</span> (j &lt;= pstr.<span class="built_in">size</span>()) &#123;</span><br><span class="line">        <span class="keyword">if</span> (t == <span class="number">0</span> <span class="keyword">or</span> pstr[j<span class="number">-1</span>] == pstr[t<span class="number">-1</span>]) &#123;</span><br><span class="line">            next[j+<span class="number">1</span>] = t + <span class="number">1</span>;</span><br><span class="line">            j++;</span><br><span class="line">            t++;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            t = next[t];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="KMP算法的优化，一个更好的Next数组：Nextval数组填充"><a href="#KMP算法的优化，一个更好的Next数组：Nextval数组填充" class="headerlink" title="KMP算法的优化，一个更好的Next数组：Nextval数组填充"></a>KMP算法的优化，一个更好的Next数组：Nextval数组填充</h4><p>Next数组用于KMP已经很好了，但是还是有优化的空间。考虑这样的一样情况，如果Pj != Pt。那么就令t = Next[t]，如果这时候原有的Pt现在的Pt，其实是不用比较的，直接就再次执行t = Next[t]即可。</p>
+<p>这里我们将优化的数组成为Nextval，填充策略如下, t 初始化为0：</p>
+<ul>
+<li>j = 1时，Nextval[j] = 0，作为特殊标记，表示模式串的第一个字符就不匹配应该怎么办。</li>
+<li>j &gt; 1时，（1）若Pj != Pt，则Nextval[j] = t + 1 （2）若Pj = Pt，则Nextval[j] = Nextval[t+1]; </li>
+</ul>
+<p>因此优化代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 填充Nextval</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">getNextval</span><span class="params">(<span class="built_in">string</span> pstr, <span class="keyword">int</span> nextval [])</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> j = <span class="number">1</span>, t = <span class="number">0</span>;</span><br><span class="line">    next[<span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">    nextval[<span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (j &lt; pstr.<span class="built_in">size</span>()) &#123;</span><br><span class="line">        <span class="keyword">if</span> (t == <span class="number">0</span> <span class="keyword">or</span> pstr[j<span class="number">-1</span>] == pstr[t<span class="number">-1</span>]) &#123;</span><br><span class="line">            <span class="keyword">if</span> (pstr[j] != pstr[t]) nextval[j+<span class="number">1</span>] = t + <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span> nextval[j+<span class="number">1</span>] = nextval[t+<span class="number">1</span>];</span><br><span class="line">            j++;</span><br><span class="line">            t++;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            t = nextval[t];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2020-03-26.</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/20/LeetCode(757.%20Set%20Intersection%20Size%20At%20Least%20Two)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/20/LeetCode(757.%20Set%20Intersection%20Size%20At%20Least%20Two)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(757. Set Intersection Size At Least Two)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-03-20 23:56:24" itemprop="dateCreated datePublished" datetime="2020-03-20T23:56:24+08:00">2020-03-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-03-23 23:42:52" itemprop="dateModified" datetime="2020-03-23T23:42:52+08:00">2020-03-23</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-757-Set-Intersection-Size-At-Least-Two-题解"><a href="#LeetCode-757-Set-Intersection-Size-At-Least-Two-题解" class="headerlink" title="LeetCode(\757. Set Intersection Size At Least Two)题解"></a>LeetCode(\757. Set Intersection Size At Least Two)题解</h1><p>An integer interval <code>[a, b]</code> (for integers <code>a &lt; b</code>) is a set of all consecutive integers from <code>a</code> to <code>b</code>, including <code>a</code> and <code>b</code>.</p>
+<p>Find the minimum size of a set S such that for every integer interval A in <code>intervals</code>, the intersection of S with A has size at least 2.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Input: intervals &#x3D; [[1, 3], [1, 4], [2, 5], [3, 5]]</span><br><span class="line">Output: 3</span><br><span class="line">Explanation:</span><br><span class="line">Consider the set S &#x3D; &#123;2, 3, 4&#125;.  For each interval, there are at least 2 elements from S in the interval.</span><br><span class="line">Also, there isn&#39;t a smaller size set that fulfills the above condition.</span><br><span class="line">Thus, we output the size of this set, which is 3.</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Input: intervals &#x3D; [[1, 2], [2, 3], [2, 4], [4, 5]]</span><br><span class="line">Output: 5</span><br><span class="line">Explanation:</span><br><span class="line">An example of a minimum sized set is &#123;1, 2, 3, 4, 5&#125;.</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Note:</strong></p>
+<ol>
+<li><code>intervals</code> will have length in range <code>[1, 3000]</code>.</li>
+<li><code>intervals[i]</code> will have length <code>2</code>, representing some integer interval.</li>
+<li><code>intervals[i][j]</code> will be an integer in <code>[0, 10^8]</code>.</li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Hard</p>
+<p>给出一系列区间，区间的表示使用[a,b]，表示a~b之间包括ab的所有值，现在寻找一个最小的集合，保证对于每个给定的区间，集合S内至少有两个元素在这个区间内，请问这个最小集合的长度是多少。</p>
+<p>本题使用Greedy。有两种方法，不过都是一样的思路，都是对于一个区间，集合S与之相交的两个值尽可能也与其他相交。</p>
+<h2 id="第一种，按照右区间排序（相同右区间的左区间更大在前！）"><a href="#第一种，按照右区间排序（相同右区间的左区间更大在前！）" class="headerlink" title="第一种，按照右区间排序（相同右区间的左区间更大在前！）"></a>第一种，按照右区间排序（相同右区间的左区间更大在前！）</h2><p>将所有的区间按照右边界升序排序，然后从第一个区间x开始，可知区间x与S至少有两个元素相交，如何选取这两个元素呢？因为要尽可能兼容其他区间，所以这个值我们选x区间的最后两个，如果x=[x1, x2]，那么就选m=x2-1，n=x2。因为后面的区间右边界都比当前x的右边界大，因此我们尽可能靠后选择。然后遍历到下一个区间y=[y1,y2]，判断y1和n、m的大小，如果y1&lt;=m，表示m、n可以包含在y中，就不需要增加新的数， 如果y1==n，表示只包含了一个，就需要增加一个值=y2，如果都不在就增加两个值y2和y2-1。注意我们每次只需要比较最新的两个值，也就是最大的两个值，m和n。因此要更新m和n，然后继续遍历到下一个区间即可。</p>
+<p>注意相同右边区间的时候，一定要左区间更大的在前，否则在判断的时候会出错。</p>
+<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间上，排序$O(nlogn)$，空间上，不需要记录集合元素，$O(1)$。</p>
+<p><code>Runtime: 340 ms, faster than 5.32% of C++ online submissions for Set Intersection Size At Least Two.</code></p>
+<p><code>Memory Usage: 51.9 MB, less than 33.33% of C++ online submissions for Set Intersection Size At Least Two.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">intersectionSizeTwo</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; intervals)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>, m = INT_MIN, n = INT_MIN + <span class="number">1</span>;</span><br><span class="line">        </span><br><span class="line">        sort(intervals.<span class="built_in">begin</span>(), intervals.<span class="built_in">end</span>(), [](<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; a, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; b) &#123; <span class="keyword">return</span> a[<span class="number">1</span>] &lt; b[<span class="number">1</span>] <span class="keyword">or</span> (a[<span class="number">1</span>] == b[<span class="number">1</span>] <span class="keyword">and</span> a[<span class="number">0</span>] &gt; b[<span class="number">0</span>]); &#125;);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; interval : intervals) &#123;</span><br><span class="line">            <span class="keyword">if</span> (interval[<span class="number">0</span>] &gt; n) &#123;</span><br><span class="line">                m = interval[<span class="number">1</span>] - <span class="number">1</span>;</span><br><span class="line">                n = m + <span class="number">1</span>;</span><br><span class="line">                res += <span class="number">2</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (interval[<span class="number">0</span>] &gt; m) &#123;</span><br><span class="line">                m = n;</span><br><span class="line">                n = interval[<span class="number">1</span>];</span><br><span class="line">                res++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="第二种，按照左区间排序（相同左区间的右区间更小在前！）"><a href="#第二种，按照左区间排序（相同左区间的右区间更小在前！）" class="headerlink" title="第二种，按照左区间排序（相同左区间的右区间更小在前！）"></a>第二种，按照左区间排序（相同左区间的右区间更小在前！）</h2><p>将所有的区间按照左边界升序排序，然后从最后一个区间x开始，可知区间x与S至少有两个元素相交，如何选取这两个元素呢？因为要尽可能兼容其他区间，所以这个值我们选x区间的前两个，如果x=[x1, x2]，那么就选m=x1，n=x1+1。因为前面的区间左边界都比当前x的左边界大，因此我们尽可能靠前选择。然后遍历到下一个区间y=[y1,y2]，判断y2和m、n的大小，如果y2&gt;=n，表示m、n可以包含在y中，就不需要增加新的数， 如果y2==m，表示只包含了一个，就需要增加一个值=y1，如果都不在就增加两个值y1和y1+1。注意我们每次只需要比较最新的两个值，也就是最小的两个值，m和n。因此要更新m和n，然后继续遍历到下一个区间即可。</p>
+<h2 id="时空复杂度-1"><a href="#时空复杂度-1" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间上，排序$O(nlogn)$，空间上，不需要记录集合元素，$O(1)$。</p>
+<p><code>Runtime: 372 ms, faster than 5.32% of C++ online submissions for Set Intersection Size At Least Two.</code></p>
+<p><code>Memory Usage: 52 MB, less than 33.33% of C++ online submissions for Set Intersection Size At Least Two.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">intersectionSizeTwo</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; intervals)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>, m = INT_MAX - <span class="number">1</span>, n = INT_MAX;</span><br><span class="line">        </span><br><span class="line">        sort(intervals.<span class="built_in">begin</span>(), intervals.<span class="built_in">end</span>(), [](<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; a, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; b) &#123; <span class="keyword">return</span> a[<span class="number">0</span>] &gt; b[<span class="number">0</span>] <span class="keyword">or</span> (a[<span class="number">0</span>] == b[<span class="number">0</span>] <span class="keyword">and</span> a[<span class="number">1</span>] &lt; b[<span class="number">1</span>]); &#125;);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; interval : intervals) &#123;</span><br><span class="line">            <span class="keyword">if</span> (interval[<span class="number">1</span>] &lt; m) &#123;</span><br><span class="line">                m = interval[<span class="number">0</span>];</span><br><span class="line">                n = m + <span class="number">1</span>;</span><br><span class="line">                res += <span class="number">2</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (interval[<span class="number">1</span>] &lt; n) &#123;</span><br><span class="line">                n = m;</span><br><span class="line">                m = interval[<span class="number">0</span>];</span><br><span class="line">                res++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2020-03-20</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/20/LeetCode(630.%20Course%20Schedule%20III)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/20/LeetCode(630.%20Course%20Schedule%20III)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(630. Course Schedule III)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-03-20 00:58:39 / 修改时间：01:04:42" itemprop="dateCreated datePublished" datetime="2020-03-20T00:58:39+08:00">2020-03-20</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-630-Course-Schedule-III-题解"><a href="#LeetCode-630-Course-Schedule-III-题解" class="headerlink" title="LeetCode(\630. Course Schedule III)题解"></a>LeetCode(\630. Course Schedule III)题解</h1><p>There are <code>n</code> different online courses numbered from <code>1</code> to <code>n</code>. Each course has some duration(course length) <code>t</code> and closed on <code>dth</code> day. A course should be taken <strong>continuously</strong> for <code>t</code> days and must be finished before or on the <code>dth</code> day. You will start at the <code>1st</code> day.</p>
+<p>Given <code>n</code> online courses represented by pairs <code>(t,d)</code>, your task is to find the maximal number of courses that can be taken.</p>
+<p><strong>Example:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Input: [[100, 200], [200, 1300], [1000, 1250], [2000, 3200]]</span><br><span class="line">Output: 3</span><br><span class="line">Explanation: </span><br><span class="line">There&#39;re totally 4 courses, but you can take 3 courses at most:</span><br><span class="line">First, take the 1st course, it costs 100 days so you will finish it on the 100th day, and ready to take the next course on the 101st day.</span><br><span class="line">Second, take the 3rd course, it costs 1000 days so you will finish it on the 1100th day, and ready to take the next course on the 1101st day. </span><br><span class="line">Third, take the 2nd course, it costs 200 days so you will finish it on the 1300th day. </span><br><span class="line">The 4th course cannot be taken now, since you will finish it on the 3300th day, which exceeds the closed date.</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Note:</strong></p>
+<ol>
+<li>The integer 1 &lt;= d, t, n &lt;= 10,000.</li>
+<li>You can’t take two courses simultaneously.</li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Hard</p>
+<p>课程调度的一个变种问题。存在一批课程，每个课程存在包括两个数(t，d)，t为课程持续的时间，d为课程最晚的截止时间，即课程必须在d之前完成。现在在不冲突的情况下，串行地执行课程，可以放弃掉一些课程，请问可以成功执行的课程有最多有多少？</p>
+<p>这个题还是使用使用Greedy，蛮难想到的其实。和最小延迟调度一样，我们同样将课程按照截止时间升序排序，因为还是尽可能执行截止时间更早的课程。但是和最小延迟调度每个课程都选用不一样的是，加入一门课程，如果发现这个课程超过了截止时间，那么就从已经加入的课程中删除一个耗时最久即t最大的课程，如果加入的这个课程就是最耗时的，那自然就删除当前这个课程。</p>
+<p>按照上述策略，就可以得到最多的可以成功执行的课程，至于最优性证明，假设存在一个最优的选择方案，那么一定可以调整成上述策略选择出来的课程。</p>
+<p>这里删除耗时最久的课程，可以使用优先队列，大顶堆。</p>
+<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间上，排序加选择，$O(nlogn)$，空间上，$O(n)$。</p>
+<p><code>Runtime: 1096 ms, faster than 12.12% of C++ online submissions for Course Schedule III.</code></p>
+<p><code>Memory Usage: 248.3 MB, less than 100.00% of C++ online submissions for Course Schedule III.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; a, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a[<span class="number">1</span>] &lt; b[<span class="number">1</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">scheduleCourse</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; courses)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>, len = courses.<span class="built_in">size</span>(), courseLen = <span class="number">0</span>;</span><br><span class="line">        sort(courses.<span class="built_in">begin</span>(), courses.<span class="built_in">end</span>(), cmp);</span><br><span class="line">        priority_queue&lt;<span class="keyword">int</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;, less&lt;<span class="keyword">int</span>&gt;&gt; Q;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++) &#123;</span><br><span class="line">            Q.push(courses[i][<span class="number">0</span>]);</span><br><span class="line">            courseLen += courses[i][<span class="number">0</span>];</span><br><span class="line">            <span class="keyword">if</span> (courseLen &gt; courses[i][<span class="number">1</span>]) &#123;</span><br><span class="line">                courseLen -= Q.top();</span><br><span class="line">                Q.pop();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> Q.<span class="built_in">size</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2020-03-19</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/19/LeetCode(330.%20Patching%20Array)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/19/LeetCode(330.%20Patching%20Array)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(330. Patching Array)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-03-19 12:12:15 / 修改时间：12:12:18" itemprop="dateCreated datePublished" datetime="2020-03-19T12:12:15+08:00">2020-03-19</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-330-Patching-Array-题解"><a href="#LeetCode-330-Patching-Array-题解" class="headerlink" title="LeetCode(\330. Patching Array)题解"></a>LeetCode(\330. Patching Array)题解</h1><p>Given a sorted positive integer array <em>nums</em> and an integer <em>n</em>, add/patch elements to the array such that any number in range <code>[1, n]</code> inclusive can be formed by the sum of some elements in the array. Return the minimum number of patches required.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Input: nums &#x3D; [1,3], n &#x3D; 6</span><br><span class="line">Output: 1 </span><br><span class="line">Explanation:</span><br><span class="line">Combinations of nums are [1], [3], [1,3], which form possible sums of: 1, 3, 4.</span><br><span class="line">Now if we add&#x2F;patch 2 to nums, the combinations are: [1], [2], [3], [1,3], [2,3], [1,2,3].</span><br><span class="line">Possible sums are 1, 2, 3, 4, 5, 6, which now covers the range [1, 6].</span><br><span class="line">So we only need 1 patch.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: nums &#x3D; [1,5,10], n &#x3D; 20</span><br><span class="line">Output: 2</span><br><span class="line">Explanation: The two patches can be [2, 4].</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 3:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: nums &#x3D; [1,2,2], n &#x3D; 5</span><br><span class="line">Output: 0</span><br></pre></td></tr></table></figure>
+
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Hard</p>
+<p>给一个排序的整数数组nums，和一个n。通过向nums中增加一些元素，使得1~n可以通过nums中的元素进行组合求和得到。返回需要增加的最少元素个数。</p>
+<p>这题使用Greedy。总体来说，贪心策略为：我们从1开始，尽可能向着连续增长最快的方向前进，遇到无法增长的时候，尽可能从nums中寻找可以使当前无法覆盖的被覆盖，找不到才增加一个数。比如1，2，走到最远端的是1+2=3，下一个无法达到的数是4，因此直接增加一个4。这种方法可以使用反证法证明是最优的，因为如果增加的数不是最近的无法达到的数，如果增加的比这个数小，最后的总的增加数肯定是小于等于这种方式，如果增加的比这个数大，那这个数就永远也无法满足了。</p>
+<p>因此，具体做法如下。</p>
+<p>我们维护一个数miss，表示当前构造的序列中，最近一个无法抵达的数。比如当前构造的序列覆盖的范围为1~t，那么miss=t+1。初始化miss=1，因为此时序列中没有元素。</p>
+<p>我们假设算法运行到一定程度了，这时候nums从左到右遍历到了i位置，最近的缺失值为miss，那么可以推断出，当前的序列构造到了1~miss-1。</p>
+<p>那么这时候判断nums[i]的值，如果大于miss，说明这时候nums中的所有未加入的都大于miss，加入任何值都不能使得miss被覆盖，因此需要我们加入一个为val=miss的值到构造序列中。如果nums[i]&lt;=miss，那么nums[i]与构造序列中的miss-nums[i]或者nums[i]本身就可以组合出miss，因此这时候不需要加入新的数，而是加入val=nums[i]即可，同时i++。通过上述操作之后，构造序列的覆盖范围变成了1~miss-1+val，那么下一个miss值就是miss+val。这样循环下去，直到miss+val&gt;n。</p>
+<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间上$O(n)$，空间上$O(1)$。</p>
+<p><code>Runtime: 8 ms, faster than 66.49% of C++ online submissions for Patching Array.</code></p>
+<p><code>Memory Usage: 8.2 MB, less than 100.00% of C++ online submissions for Patching Array.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minPatches</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">long</span> miss = <span class="number">1</span>, i = <span class="number">0</span>, len = nums.<span class="built_in">size</span>(), res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (miss &lt;= n) &#123;</span><br><span class="line">            <span class="keyword">if</span> (i &lt; len <span class="keyword">and</span> nums[i] &lt;= miss) &#123;</span><br><span class="line">                miss = miss + nums[i++];</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                res++;</span><br><span class="line">                miss = miss + miss;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2020-03-19</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/17/LeetCode(321.%20Create%20Maximum%20Number)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -612,492 +1057,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/03/LeetCode(1368.%20Minimum%20Cost%20to%20Make%20at%20Least%20One%20Valid%20Path%20in%20a%20Grid)%E5%91%A8%E8%B5%9B%E7%AC%AC4%E9%A2%98%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/03/03/LeetCode(1368.%20Minimum%20Cost%20to%20Make%20at%20Least%20One%20Valid%20Path%20in%20a%20Grid)%E5%91%A8%E8%B5%9B%E7%AC%AC4%E9%A2%98%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1368. Minimum Cost to Make at Least One Valid Path in a Grid)周赛第4题题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-03-03 23:43:15 / 修改时间：23:43:16" itemprop="dateCreated datePublished" datetime="2020-03-03T23:43:15+08:00">2020-03-03</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-1368-Minimum-Cost-to-Make-at-Least-One-Valid-Path-in-a-Grid-周赛第4题题解"><a href="#LeetCode-1368-Minimum-Cost-to-Make-at-Least-One-Valid-Path-in-a-Grid-周赛第4题题解" class="headerlink" title="LeetCode(\1368. Minimum Cost to Make at Least One Valid Path in a Grid)周赛第4题题解"></a>LeetCode(\1368. Minimum Cost to Make at Least One Valid Path in a Grid)周赛第4题题解</h1><p>Given a <em>m</em> x <em>n</em> <code>grid</code>. Each cell of the <code>grid</code> has a sign pointing to the next cell you should visit if you are currently in this cell. The sign of <code>grid[i][j]</code> can be:</p>
-<ul>
-<li><strong>1</strong> which means go to the cell to the right. (i.e go from <code>grid[i][j]</code> to <code>grid[i][j + 1]</code>)</li>
-<li><strong>2</strong> which means go to the cell to the left. (i.e go from <code>grid[i][j]</code> to <code>grid[i][j - 1]</code>)</li>
-<li><strong>3</strong> which means go to the lower cell. (i.e go from <code>grid[i][j]</code> to <code>grid[i + 1][j]</code>)</li>
-<li><strong>4</strong> which means go to the upper cell. (i.e go from <code>grid[i][j]</code> to <code>grid[i - 1][j]</code>)</li>
-</ul>
-<p>Notice that there could be some <strong>invalid signs</strong> on the cells of the <code>grid</code> which points outside the <code>grid</code>.</p>
-<p>You will initially start at the upper left cell <code>(0,0)</code>. A valid path in the grid is a path which starts from the upper left cell <code>(0,0)</code> and ends at the bottom-right cell <code>(m - 1, n - 1)</code> following the signs on the grid. The valid path <strong>doesn’t have to be the shortest</strong>.</p>
-<p>You can modify the sign on a cell with <code>cost = 1</code>. You can modify the sign on a cell <strong>one time only</strong>.</p>
-<p>Return <em>the minimum cost</em> to make the grid have at least one valid path.</p>
-<p><strong>Example 1:</strong></p>
-<p><img src="https://assets.leetcode.com/uploads/2020/02/13/grid1.png" alt="img"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Input: grid &#x3D; [[1,1,1,1],[2,2,2,2],[1,1,1,1],[2,2,2,2]]</span><br><span class="line">Output: 3</span><br><span class="line">Explanation: You will start at point (0, 0).</span><br><span class="line">The path to (3, 3) is as follows. (0, 0) --&gt; (0, 1) --&gt; (0, 2) --&gt; (0, 3) change the arrow to down with cost &#x3D; 1 --&gt; (1, 3) --&gt; (1, 2) --&gt; (1, 1) --&gt; (1, 0) change the arrow to down with cost &#x3D; 1 --&gt; (2, 0) --&gt; (2, 1) --&gt; (2, 2) --&gt; (2, 3) change the arrow to down with cost &#x3D; 1 --&gt; (3, 3)</span><br><span class="line">The total cost &#x3D; 3.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<p><img src="https://assets.leetcode.com/uploads/2020/02/13/grid2.png" alt="img"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: grid &#x3D; [[1,1,3],[3,2,2],[1,1,4]]</span><br><span class="line">Output: 0</span><br><span class="line">Explanation: You can follow the path from (0, 0) to (2, 2).</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 3:</strong></p>
-<p><img src="https://assets.leetcode.com/uploads/2020/02/13/grid3.png" alt="img"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: grid &#x3D; [[1,2],[4,3]]</span><br><span class="line">Output: 1</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 4:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: grid &#x3D; [[2,2,2],[2,2,2]]</span><br><span class="line">Output: 3</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 5:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: grid &#x3D; [[4]]</span><br><span class="line">Output: 0</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Constraints:</strong></p>
-<ul>
-<li><code>m == grid.length</code></li>
-<li><code>n == grid[i].length</code></li>
-<li><code>1 &lt;= m, n &lt;= 100</code></li>
-</ul>
-<p><a href="https://leetcode.com/problems/minimum-cost-to-make-at-least-one-valid-path-in-a-grid/discuss" target="_blank" rel="noopener">Discuss</a></p>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>一个M*N大小的矩阵，每个矩阵元素为1234中的一个，分别表示一个方向，左右下上。从左上角开始，到右下角找一条路，我们可以将某个元素改变方向，改一次代价+1。找出代价最小的办法，使得存在至少一条可达的路径。当然，如果不用改就有路径，那就代价为0，是最好的。</p>
-<p>这个题一开始可能会想到用DP，但是从左上角到右下角的路径并不是只能向右向下的，而是可以迂回的，所以用DP很难构造出有效的状态转移方程。我是参考了大佬们的解法才发现如下的解法。</p>
-<p>将每个元素位置看成一个点，矩阵一共有M*N个点。点与点之间有边相连，一个点有四条边，其原本的方向所指的方向上，边权值为0，其余三条边的边权值为1。那么一个矩阵最终可以转化为一个0-1图。以左上角为源点，右下角为汇点。这个题就可以变为寻找一条由源点到汇点的最短路。可以使用的方法有0-1BFS和Dijkstra。</p>
-<h3 id="0-1-BFS"><a href="#0-1-BFS" class="headerlink" title="0-1 BFS"></a>0-1 BFS</h3><p>0-1BFS问题是指最短路问题中，边权只有 0 和 1 的特殊情况。写法类似 SPFA + SLF(Small Label First) 优化。需要一个 deque 。把权值 0 的边扩展到的点放到队首，权值 1 的边扩展到的点放到队尾。时间复杂度 O(V + E) 。</p>
-<p>在这个题中，我们准备一个双向队列，和一个二维数组记录左上角到每个点的最短路径长度。首先将左上角的点入队列，然后在队列不空的情况下，弹出队首的点，查看其出边，对于可以松弛的点，就更新长度，同时如果权值为0就将对应的点插入队首，否则插入队尾。直到最后队列为空。</p>
-<h3 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h3><p>代码如下，时间上，$O(V+E) = O(MN)$，空间上，$O(MN)$。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minCost</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; grid)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 0-1 BFS</span></span><br><span class="line">        <span class="keyword">int</span> m = grid.<span class="built_in">size</span>(), n = grid[<span class="number">0</span>].<span class="built_in">size</span>();</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">dis</span><span class="params">(m, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(n, INT_MAX))</span></span>;</span><br><span class="line">        <span class="built_in">deque</span>&lt;pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt;&gt; Q;</span><br><span class="line">        </span><br><span class="line">        Q.push_back(make_pair(<span class="number">0</span>, <span class="number">0</span>));</span><br><span class="line">        dis[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (!Q.empty()) &#123;</span><br><span class="line">            pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; p = Q.front(); Q.pop_front();</span><br><span class="line">            <span class="keyword">int</span> w = <span class="number">0</span>, i = p.first, j = p.second;</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// right 1</span></span><br><span class="line">            <span class="keyword">if</span> (j &lt; n<span class="number">-1</span>) &#123;</span><br><span class="line">                w = grid[i][j] == <span class="number">1</span> ? <span class="number">0</span> : <span class="number">1</span>;</span><br><span class="line">                <span class="keyword">if</span> (dis[i][j] + w &lt; dis[i][j+<span class="number">1</span>]) &#123;</span><br><span class="line">                    dis[i][j+<span class="number">1</span>] = dis[i][j] + w;</span><br><span class="line">                    <span class="keyword">if</span> (w == <span class="number">0</span>) Q.push_front(make_pair(i, j+<span class="number">1</span>));</span><br><span class="line">                    <span class="keyword">else</span> Q.push_back(make_pair(i, j+<span class="number">1</span>));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// left 2</span></span><br><span class="line">            <span class="keyword">if</span> (j &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                w = grid[i][j] == <span class="number">2</span> ? <span class="number">0</span> : <span class="number">1</span>;</span><br><span class="line">                <span class="keyword">if</span> (dis[i][j] + w &lt; dis[i][j<span class="number">-1</span>]) &#123;</span><br><span class="line">                    dis[i][j<span class="number">-1</span>] = dis[i][j] + w;</span><br><span class="line">                    <span class="keyword">if</span> (w == <span class="number">0</span>) Q.push_front(make_pair(i, j<span class="number">-1</span>));</span><br><span class="line">                    <span class="keyword">else</span> Q.push_back(make_pair(i, j<span class="number">-1</span>));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// down 3</span></span><br><span class="line">            <span class="keyword">if</span> (i &lt; m<span class="number">-1</span>) &#123;</span><br><span class="line">                w = grid[i][j] == <span class="number">3</span> ? <span class="number">0</span> : <span class="number">1</span>;</span><br><span class="line">                <span class="keyword">if</span> (dis[i][j] + w &lt; dis[i+<span class="number">1</span>][j]) &#123;</span><br><span class="line">                    dis[i+<span class="number">1</span>][j] = dis[i][j] + w;</span><br><span class="line">                    <span class="keyword">if</span> (w == <span class="number">0</span>) Q.push_front(make_pair(i+<span class="number">1</span>, j));</span><br><span class="line">                    <span class="keyword">else</span> Q.push_back(make_pair(i+<span class="number">1</span>, j));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// up 4</span></span><br><span class="line">            <span class="keyword">if</span> (i &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                w = grid[i][j] == <span class="number">4</span> ? <span class="number">0</span> : <span class="number">1</span>;</span><br><span class="line">                <span class="keyword">if</span> (dis[i][j] + w &lt; dis[i<span class="number">-1</span>][j]) &#123;</span><br><span class="line">                    dis[i<span class="number">-1</span>][j] = dis[i][j] + w;</span><br><span class="line">                    <span class="keyword">if</span> (w == <span class="number">0</span>) Q.push_front(make_pair(i<span class="number">-1</span>, j));</span><br><span class="line">                    <span class="keyword">else</span> Q.push_back(make_pair(i<span class="number">-1</span>, j));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> dis[m<span class="number">-1</span>][n<span class="number">-1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<h3 id="Dijkstra"><a href="#Dijkstra" class="headerlink" title="Dijkstra"></a>Dijkstra</h3><p>Dijkstra是用于寻找正权值图中，源点到其它点的最短路径的办法，若有N个节点，时间复杂度一般为$O(n^2)$。</p>
-<p>本题中，构建图之后，我们可以直接应用Dijkstra算法求出最短路径长度。</p>
-<h3 id="时空复杂度-1"><a href="#时空复杂度-1" class="headerlink" title="时空复杂度"></a>时空复杂度</h3><p>代码如下，时间上，$O((MN)^2)$，空间上，$O(MN)$。在实际使用中是超时的。。。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> m, <span class="keyword">int</span> n, <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">bool</span>&gt;&gt;&amp; visit, <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; dis, <span class="keyword">int</span>&amp; x, <span class="keyword">int</span>&amp; y)</span> </span>&#123;</span><br><span class="line">        x = <span class="number">-1</span>;</span><br><span class="line">        y = <span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;m; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;n; j++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (visit[i][j]) <span class="keyword">continue</span>;</span><br><span class="line">                <span class="keyword">if</span> (x == <span class="number">-1</span> <span class="keyword">or</span> dis[i][j] &lt; dis[x][y]) &#123;</span><br><span class="line">                    x = i;</span><br><span class="line">                    y = j;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minCost</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; grid)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// Dijkstra</span></span><br><span class="line">        <span class="keyword">int</span> m = grid.<span class="built_in">size</span>(), n = grid[<span class="number">0</span>].<span class="built_in">size</span>(), len = m * n - <span class="number">1</span>;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">bool</span>&gt;&gt; <span class="title">visit</span><span class="params">(m, <span class="built_in">vector</span>&lt;<span class="keyword">bool</span>&gt;(n, <span class="literal">false</span>))</span></span>;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">dis</span><span class="params">(m, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(n, INT_MAX))</span></span>;</span><br><span class="line">        </span><br><span class="line">        dis[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> k=<span class="number">0</span>; k&lt;len; k++) &#123;</span><br><span class="line">            <span class="comment">// find the point with shortest path distance in no-visit set</span></span><br><span class="line">            <span class="keyword">int</span> i, j, w;</span><br><span class="line">            <span class="built_in">find</span>(m, n, visit, dis, i, j);</span><br><span class="line">            visit[i][j] = <span class="literal">true</span>;</span><br><span class="line">            <span class="comment">//cout&lt;&lt;"shortest "&lt;&lt;i&lt;&lt;j&lt;&lt;" dis: "&lt;&lt;dis[i][j]&lt;&lt;endl;</span></span><br><span class="line">            <span class="comment">// right 1</span></span><br><span class="line">            w = grid[i][j] == <span class="number">1</span> ? <span class="number">0</span> : <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (j &lt; n<span class="number">-1</span> <span class="keyword">and</span> dis[i][j] + w &lt; dis[i][j+<span class="number">1</span>]) dis[i][j+<span class="number">1</span>] = dis[i][j] + w;</span><br><span class="line">            <span class="comment">// left 2</span></span><br><span class="line">            w = grid[i][j] == <span class="number">2</span> ? <span class="number">0</span> : <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (j &gt; <span class="number">0</span> <span class="keyword">and</span> dis[i][j] + w &lt; dis[i][j<span class="number">-1</span>]) dis[i][j<span class="number">-1</span>] = dis[i][j] + w;</span><br><span class="line">            <span class="comment">// down 3</span></span><br><span class="line">            w = grid[i][j] == <span class="number">3</span> ? <span class="number">0</span> : <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (i &lt; m<span class="number">-1</span> <span class="keyword">and</span> dis[i][j] + w &lt; dis[i+<span class="number">1</span>][j]) dis[i+<span class="number">1</span>][j] = dis[i][j] + w;</span><br><span class="line">            <span class="comment">// up 4</span></span><br><span class="line">            w = grid[i][j] == <span class="number">4</span> ? <span class="number">0</span> : <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (i &gt; <span class="number">0</span> <span class="keyword">and</span> dis[i][j] + w &lt; dis[i<span class="number">-1</span>][j]) dis[i<span class="number">-1</span>][j] = dis[i][j] + w;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dis[m<span class="number">-1</span>][n<span class="number">-1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2020-03-03</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/02/LeetCode(316.%20Remove%20Duplicate%20Letters)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/03/02/LeetCode(316.%20Remove%20Duplicate%20Letters)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(316. Remove Duplicate Letters)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-03-02 22:09:14" itemprop="dateCreated datePublished" datetime="2020-03-02T22:09:14+08:00">2020-03-02</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-316-Remove-Duplicate-Letters-题解"><a href="#LeetCode-316-Remove-Duplicate-Letters-题解" class="headerlink" title="LeetCode(\316. Remove Duplicate Letters)题解"></a>LeetCode(\316. Remove Duplicate Letters)题解</h1><p>Given a string which contains only lowercase letters, remove duplicate letters so that every letter appears once and only once. You must make sure your result is the smallest in lexicographical order among all possible results.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: &quot;bcabc&quot;</span><br><span class="line">Output: &quot;abc&quot;</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: &quot;cbacdcbc&quot;</span><br><span class="line">Output: &quot;acdb&quot;</span><br></pre></td></tr></table></figure>
-
-<p><strong>Note:</strong> This question is the same as 1081: <a href="https://leetcode.com/problems/smallest-subsequence-of-distinct-characters/" target="_blank" rel="noopener">https://leetcode.com/problems/smallest-subsequence-of-distinct-characters/</a></p>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Hard</p>
-<p>给出一个字符串s，每个字符都是小写字母。现在要求删除s中重复的字符，最后留下的都是不重复的字符，保证留下来的字符组成的字符串是所有符合条件的字符串中按字典序排列是最小的，返回这个字符串。</p>
-<h3 id="解法1，Greedy"><a href="#解法1，Greedy" class="headerlink" title="解法1，Greedy"></a>解法1，Greedy</h3><p>假设我们最终的结果字符串为r，而我们从左到右逐步去确定r的每个位置上的字符。在第k步确定第k个字符。</p>
-<p>在第k步，我们已经确定了r[0,k-1]，现在确定第k个，如何去确定这个字符呢？假设这个字符为s[i]，那么一定满足如下条件：1、s中i位置之后的元素集一定包含了s中i之前的元素集，因为如果不是的话就向后遍历会丢掉s中i位置后不包含的i位置之前的元素。2、去除s中i位置之后的字符串中所有的s[i]。满足上面的条件之后，我们在每一步确定的i时，因为要保持字典序最小，因此确定一个贪心策略，s[i]是所有满足上述条件的字符中最小的。这个只要比较一下就好了。</p>
-<p>将更新的s中i位置之后的字符串当做新的s，重复上面的1，2步骤，直到s为空。</p>
-<h3 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h3><p>代码如下，空间上，除去递归，一次函数运行花费$O(n)$，时间上，每次构建字典和遍历花费$O(n)$，递归$n$，总共$O(n^2)$。</p>
-<p><code>Runtime: 92 ms, faster than 7.25% of Python3 online submissions for Remove Duplicate Letters.</code></p>
-<p><code>Memory Usage: 12.8 MB, less than 100.00% of Python3 online submissions for Remove Duplicate Letters.</code></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">removeDuplicateLetters</span><span class="params">(self, s: str)</span> -&gt; str:</span></span><br><span class="line">        <span class="keyword">if</span> s == <span class="string">""</span>: <span class="keyword">return</span> <span class="string">""</span></span><br><span class="line">        C = Counter(s)</span><br><span class="line">        k = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> i, c <span class="keyword">in</span> enumerate(s):</span><br><span class="line">            <span class="keyword">if</span> s[i] &lt; s[k]: k = i</span><br><span class="line">            C[c] -= <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> C[c] == <span class="number">0</span>: <span class="keyword">break</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> s[k] + self.removeDuplicateLetters(s[k+<span class="number">1</span>:].replace(s[k], <span class="string">''</span>))</span><br></pre></td></tr></table></figure>
-
-<h3 id="解法2，Stack"><a href="#解法2，Stack" class="headerlink" title="解法2，Stack"></a>解法2，Stack</h3><p>我们可以使用栈来求解。从左到右遍历字符串s时，我们来决定哪些字符可以删除。用一个字典记录每个字符出现的次数。当遍历到第i个字符时，我们可以看i的前面字符，假设为第j个字符，如果s[i]&lt;s[j]，同时i之后还有s[j]，那么s[j]就可以删除了。</p>
-<p>这里需要注意的是，假如字符串为bcab，最好的答案是bca，应该删除最后一个b，看似与上面的论述相矛盾。因此我们需要用一个栈来记录我们保存的字符，每次删除了字符之后，都会生成一个新的s，然后在这个新的字符串s里面，j=i-1。即i和j是相邻的，只有这样才能保证s[j]删除时不会引发错误。比如bcabc，遍历到a的时候，前面相邻的c可以删除，此时形成babc，这时候就是新的字符串a，又可以将b删除。字符串为bcab的时候，遍历到a时，前面的b与a不相邻，因此不能删除。</p>
-<h3 id="时空复杂度-1"><a href="#时空复杂度-1" class="headerlink" title="时空复杂度"></a>时空复杂度</h3><p>代码如下，时间上，$O(n)$，空间上，$O(n)$。</p>
-<p><code>Runtime: 4 ms, faster than 82.46% of C++ online submissions for Remove Duplicate Letters.</code></p>
-<p><code>Memory Usage: 8.3 MB, less than 100.00% of C++ online submissions for Remove Duplicate Letters.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">string</span> <span class="title">removeDuplicateLetters</span><span class="params">(<span class="built_in">string</span> s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = s.<span class="built_in">size</span>();</span><br><span class="line">        <span class="built_in">string</span> res = <span class="string">""</span>;</span><br><span class="line">        <span class="built_in">unordered_map</span>&lt;<span class="keyword">char</span>, <span class="keyword">int</span>&gt; M;</span><br><span class="line">        <span class="built_in">unordered_map</span>&lt;<span class="keyword">char</span>, <span class="keyword">bool</span>&gt; V;</span><br><span class="line">        <span class="built_in">stack</span>&lt;<span class="keyword">int</span>&gt; S;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> c : s) &#123;</span><br><span class="line">            <span class="keyword">if</span> (M.<span class="built_in">find</span>(c) == M.<span class="built_in">end</span>()) M[c] = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span> M[c]++; </span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="built_in">unordered_map</span>&lt;<span class="keyword">char</span>, <span class="keyword">int</span>&gt;::iterator iter=M.<span class="built_in">begin</span>(); iter!=M.<span class="built_in">end</span>(); iter++) V[iter-&gt;first] = <span class="literal">false</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;M.<span class="built_in">size</span>()&lt;&lt;V.<span class="built_in">size</span>()&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++) &#123;</span><br><span class="line">            M[s[i]]--;</span><br><span class="line">            <span class="keyword">if</span> (V[s[i]] == <span class="literal">true</span>) <span class="keyword">continue</span>;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">while</span> (!S.empty() <span class="keyword">and</span> s[i] &lt; s[S.top()] <span class="keyword">and</span> M[s[S.top()]] &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                V[s[S.top()]] = <span class="literal">false</span>;</span><br><span class="line">                S.pop();</span><br><span class="line">            &#125;</span><br><span class="line">            S.push(i);</span><br><span class="line">            V[s[i]] = <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">while</span> (!S.empty()) &#123;</span><br><span class="line">            res = s[S.top()] + res;</span><br><span class="line">            S.pop();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2020-03-02</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/25/LeetCode(1330.%20Reverse%20Subarray%20To%20Maximize%20Array%20Value)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/02/25/LeetCode(1330.%20Reverse%20Subarray%20To%20Maximize%20Array%20Value)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1330. Reverse Subarray To Maximize Array Value)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-02-25 21:10:49 / 修改时间：21:10:51" itemprop="dateCreated datePublished" datetime="2020-02-25T21:10:49+08:00">2020-02-25</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-1330-Reverse-Subarray-To-Maximize-Array-Value-题解"><a href="#LeetCode-1330-Reverse-Subarray-To-Maximize-Array-Value-题解" class="headerlink" title="LeetCode(\1330. Reverse Subarray To Maximize Array Value)题解"></a>LeetCode(\1330. Reverse Subarray To Maximize Array Value)题解</h1><p>You are given an integer array <code>nums</code>. The <em>value</em> of this array is defined as the sum of <code>|nums[i]-nums[i+1]|</code> for all <code>0 &lt;= i &lt; nums.length-1</code>.</p>
-<p>You are allowed to select any subarray of the given array and reverse it. You can perform this operation <strong>only once</strong>.</p>
-<p>Find maximum possible value of the final array.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: nums &#x3D; [2,3,1,5,4]</span><br><span class="line">Output: 10</span><br><span class="line">Explanation: By reversing the subarray [3,1,5] the array becomes [2,5,1,3,4] whose value is 10.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: nums &#x3D; [2,4,9,24,2,1,10]</span><br><span class="line">Output: 68</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Constraints:</strong></p>
-<ul>
-<li><code>1 &lt;= nums.length &lt;= 3*10^4</code></li>
-<li><code>-10^5 &lt;= nums[i] &lt;= 10^5</code></li>
-</ul>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出一个整数数组，定义这个数组的和为相邻元素之差的和。现在允许将数组中的某个子数组进行整体翻转，然后计算对应的和。返回数组可得到的最大和。</p>
-<p>这个题分析一下可知。有如下几种情况。</p>
-<p>如果最优的最大和是不翻转的情况，那么就等于是翻转整个数组。</p>
-<p>如果最优的情况下，翻转子串的边界是数组边界，那么用O(n)的时间遍历两次，分别找出是右边界和左边界的情况就可以了。</p>
-<p>如果最优的情况下，翻转子串的边界在数组内部，这是最复杂的情况，那么该如何考虑呢？假设我们已经计算出来数组在不翻转的情况下的和S，那么翻转之后其实只是改变了子串和整体数组的交界处的情况，其它地方均没有改变。因此假设边界左端点的值是b，挨着的前一个是a，右端点是c，挨着的后一个是d。那么变换之后的结果其实就是S+abs(d-b)+abs(c-a)-abs(b-a)-abs(d-c)=S+x。只要x大于0，就意味着增量为正，变换会导致结果优化。我们再假设a&lt;=b, c&lt;=d, 那么增量就是2*(c-b). 而分析可知我们要让c尽可能大，b尽可能小。因此我们用两个O(n)的时间。第一次找b，怎么找呢？就是每两个相邻的，选大的那一个，然后在所有对中选对应b最小的那一对。第二次找c就是每两个相邻的，选小的那个，然后在所有的对中选最大的c的那一对。</p>
-<p>这里假设了abcd的关系，其实也可以假设其他情况，最后都是一样的。</p>
-<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间上，O(n)，空间上，O(1)。</p>
-<p><code>Runtime: 44 ms, faster than 77.24% of C++ online submissions for Reverse Subarray To Maximize Array Value.</code></p>
-<p><code>Memory Usage: 10.8 MB, less than 100.00% of C++ online submissions for Reverse Subarray To Maximize Array Value.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxValueAfterReverse</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = nums.<span class="built_in">size</span>(), res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span> (len == <span class="number">1</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> S = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;len; i++) S += <span class="built_in">abs</span>(nums[i]-nums[i<span class="number">-1</span>]);</span><br><span class="line">        <span class="comment">// 交换的区间左端点是数组的左边界</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len<span class="number">-1</span>; i++) res = <span class="built_in">max</span>(res, S+<span class="built_in">abs</span>(nums[i+<span class="number">1</span>]-nums[<span class="number">0</span>])-<span class="built_in">abs</span>(nums[i+<span class="number">1</span>]-nums[i]));</span><br><span class="line">        <span class="comment">// 交换的区间右端点是数组的右边界</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j=len<span class="number">-1</span>; j&gt;<span class="number">0</span>; j--) res = <span class="built_in">max</span>(res, S+<span class="built_in">abs</span>(nums[len<span class="number">-1</span>]-nums[j<span class="number">-1</span>])-<span class="built_in">abs</span>(nums[j]-nums[j<span class="number">-1</span>]));</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 交换区间左右端点在数组内部</span></span><br><span class="line">        <span class="comment">// 1. 找出左端点</span></span><br><span class="line">        <span class="keyword">int</span> l = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">2</span>; i&lt;len; i++) &#123;</span><br><span class="line">            <span class="keyword">int</span> ia = <span class="built_in">min</span>(nums[i], nums[i<span class="number">-1</span>]), ib = <span class="built_in">max</span>(nums[i], nums[i<span class="number">-1</span>]);</span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">max</span>(nums[i], nums[i<span class="number">-1</span>]) &lt; <span class="built_in">max</span>(nums[l], nums[l<span class="number">-1</span>])) l = i;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2. 找出右端点</span></span><br><span class="line">        <span class="keyword">int</span> r = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;len<span class="number">-1</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">min</span>(nums[i], nums[i+<span class="number">1</span>]) &gt; <span class="built_in">min</span>(nums[r], nums[r+<span class="number">1</span>])) r = i;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 判断是否交叉，否就说明增量为负数，直接返回</span></span><br><span class="line">        <span class="comment">//int la = min(nums[l], nums[l-1]), lb = max(nums[l], nums[l-1]);</span></span><br><span class="line">        <span class="comment">//int ra = min(nums[r], nums[r+1]), rb = max(nums[r], nums[r+1]);</span></span><br><span class="line">        <span class="comment">//if (la &lt;= rb and lb &gt;= ra) return res;</span></span><br><span class="line">        res = <span class="built_in">max</span>(res, S+<span class="number">2</span>*(<span class="built_in">min</span>(nums[r], nums[r+<span class="number">1</span>])-<span class="built_in">max</span>(nums[l], nums[l<span class="number">-1</span>])));</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2020-02-25</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/23/LeetCode(1363.%20Largest%20Multiple%20of%20Three)%E5%91%A8%E8%B5%9B4%E9%A2%98%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/02/23/LeetCode(1363.%20Largest%20Multiple%20of%20Three)%E5%91%A8%E8%B5%9B4%E9%A2%98%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1363. Largest Multiple of Three)周赛4题题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-02-23 15:10:52 / 修改时间：15:57:37" itemprop="dateCreated datePublished" datetime="2020-02-23T15:10:52+08:00">2020-02-23</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-1363-Largest-Multiple-of-Three-周赛4题题解"><a href="#LeetCode-1363-Largest-Multiple-of-Three-周赛4题题解" class="headerlink" title="LeetCode(\1363. Largest Multiple of Three)周赛4题题解"></a>LeetCode(\1363. Largest Multiple of Three)周赛4题题解</h1><p>Given an integer array of <code>digits</code>, return the largest multiple of <strong>three</strong> that can be formed by concatenating some of the given digits in any order.</p>
-<p>Since the answer may not fit in an integer data type, return the answer as a string.</p>
-<p>If there is no answer return an empty string.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: digits &#x3D; [8,1,9]</span><br><span class="line">Output: &quot;981&quot;</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: digits &#x3D; [8,6,7,1,0]</span><br><span class="line">Output: &quot;8760&quot;</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 3:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: digits &#x3D; [1]</span><br><span class="line">Output: &quot;&quot;</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 4:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: digits &#x3D; [0,0,0,0,0,0]</span><br><span class="line">Output: &quot;0&quot;</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Constraints:</strong></p>
-<ul>
-<li><code>1 &lt;= digits.length &lt;= 10^4</code></li>
-<li><code>0 &lt;= digits[i] &lt;= 9</code></li>
-<li>The returning answer must not contain unnecessary leading zeros.</li>
-</ul>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Hard</p>
-<p>给出一个由0-9组成的整数数组，从中选出一些数组成一个大的整数，这个整数要能被3整除，以字符串形式返回最大的合法整数。</p>
-<p>这个题虽然是Hard，但是其实并不难，我们只要注意一个性质，一个整数如果能被3整除，那么整数的每个数字相加的和也能被3整除，这是充分必要条件。同时和能被3整除，就是每个元素和3的余数之和也能被被3整除，这也是充分必要的。</p>
-<p>因此基于上述性质，我们可以首先把给定的数组分为三堆，一堆M0是0，3，6，9可以被整除的，一堆M1是1，4，7余数为1，一堆M2是2，5，8余数为2。然后M0中肯定是在答案内的最后，M1和M2各自数组中每三个可以组成一个整除3的数放入最终答案，同时M1中1个数和M2中1个数合起来也可以组成一个符合条件的数。因此这里要判断，是联合组成的个数多，还是各自分开组成的位数多。</p>
-<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间上，主要是排序O(nlogn)，空间上，O(n)。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a &gt; b;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">string</span> <span class="title">trans</span> <span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; V)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (V.<span class="built_in">size</span>() == <span class="number">0</span>) <span class="keyword">return</span> <span class="string">""</span>;</span><br><span class="line">        <span class="keyword">if</span> (V[<span class="number">0</span>] == <span class="number">0</span>) <span class="keyword">return</span> <span class="string">"0"</span>;</span><br><span class="line">        <span class="built_in">string</span> res = <span class="string">""</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> v : V) res += <span class="keyword">char</span>(<span class="number">48</span> + v);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="built_in">string</span> <span class="title">largestMultipleOfThree</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; digits)</span> </span>&#123;</span><br><span class="line">        sort(digits.<span class="built_in">begin</span>(), digits.<span class="built_in">end</span>(), cmp);</span><br><span class="line">        <span class="keyword">int</span> m1 = <span class="number">1</span>, m2 = <span class="number">2</span>, i1 = <span class="number">0</span>, i2 = <span class="number">0</span>;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">M</span><span class="params">(<span class="number">3</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;())</span></span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> d : digits) M[d % <span class="number">3</span>].push_back(d);</span><br><span class="line">        </span><br><span class="line">        m1 = M[<span class="number">1</span>].<span class="built_in">size</span>();</span><br><span class="line">        m2 = M[<span class="number">2</span>].<span class="built_in">size</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> ((m1/<span class="number">3</span>*<span class="number">3</span>+m2/<span class="number">3</span>*<span class="number">3</span>+<span class="built_in">min</span>(m1-m1/<span class="number">3</span>*<span class="number">3</span>, m2-m2/<span class="number">3</span>*<span class="number">3</span>)*<span class="number">2</span>) &gt;= <span class="built_in">min</span>(m1,m2)*<span class="number">2</span>) &#123;</span><br><span class="line">            <span class="keyword">for</span> (i1=<span class="number">2</span>; i1&lt;m1; i1+=<span class="number">3</span>) M[<span class="number">0</span>].insert(M[<span class="number">0</span>].<span class="built_in">end</span>(), M[<span class="number">1</span>].<span class="built_in">begin</span>()+i1<span class="number">-2</span>, M[<span class="number">1</span>].<span class="built_in">begin</span>()+i1+<span class="number">1</span>);</span><br><span class="line">            <span class="keyword">for</span> (i2=<span class="number">2</span>; i2&lt;m2; i2+=<span class="number">3</span>) M[<span class="number">0</span>].insert(M[<span class="number">0</span>].<span class="built_in">end</span>(), M[<span class="number">2</span>].<span class="built_in">begin</span>()+i2<span class="number">-2</span>, M[<span class="number">2</span>].<span class="built_in">begin</span>()+i2+<span class="number">1</span>);</span><br><span class="line">            i1 = <span class="built_in">abs</span>(i1 - m1 - <span class="number">2</span>);</span><br><span class="line">            i2 = <span class="built_in">abs</span>(i2 - m2 - <span class="number">2</span>);</span><br><span class="line">            <span class="keyword">if</span> (i1 &gt;= <span class="number">1</span> <span class="keyword">and</span> i2 &gt;= <span class="number">1</span>) &#123;</span><br><span class="line">                M[<span class="number">0</span>].push_back(M[<span class="number">1</span>][m1-i1]);</span><br><span class="line">                M[<span class="number">0</span>].push_back(M[<span class="number">2</span>][m2-i2]);</span><br><span class="line">                i1--;</span><br><span class="line">                i2--;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (i1 &gt;= <span class="number">1</span> <span class="keyword">and</span> i2 &gt;= <span class="number">1</span>) &#123;</span><br><span class="line">                M[<span class="number">0</span>].push_back(M[<span class="number">1</span>][m1-i1]);</span><br><span class="line">                M[<span class="number">0</span>].push_back(M[<span class="number">2</span>][m2-i2]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            M[<span class="number">0</span>].insert(M[<span class="number">0</span>].<span class="built_in">end</span>(), M[<span class="number">1</span>].<span class="built_in">begin</span>(), M[<span class="number">1</span>].<span class="built_in">begin</span>()+<span class="built_in">min</span>(m1, m2));</span><br><span class="line">            M[<span class="number">0</span>].insert(M[<span class="number">0</span>].<span class="built_in">end</span>(), M[<span class="number">2</span>].<span class="built_in">begin</span>(), M[<span class="number">2</span>].<span class="built_in">begin</span>()+<span class="built_in">min</span>(m1, m2));</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">        sort(M[<span class="number">0</span>].<span class="built_in">begin</span>(), M[<span class="number">0</span>].<span class="built_in">end</span>(), cmp);</span><br><span class="line">        <span class="keyword">return</span> trans(M[<span class="number">0</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>一个优化的算法就是，这里用一个10长度的数组记录就可以了，每个索引的地方记录对应的数的个数，花费时间O(n)。空间上O(1)。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">string</span> <span class="title">trans</span> <span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; V)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (V.<span class="built_in">size</span>() == <span class="number">0</span>) <span class="keyword">return</span> <span class="string">""</span>;</span><br><span class="line">        <span class="keyword">if</span> (V[<span class="number">0</span>] == <span class="number">0</span>) <span class="keyword">return</span> <span class="string">"0"</span>;</span><br><span class="line">        <span class="built_in">string</span> res = <span class="string">""</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> v : V) res += <span class="keyword">char</span>(<span class="number">48</span> + v);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="built_in">string</span> <span class="title">largestMultipleOfThree</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; digits)</span> </span>&#123;</span><br><span class="line">        vector&lt;int&gt; V(10, 0), M(3, 0);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> d: digits) &#123;</span><br><span class="line">            V[d]++;</span><br><span class="line">            M[d % <span class="number">3</span>]++;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> m = <span class="built_in">min</span>(M[<span class="number">1</span>],M[<span class="number">2</span>]), del1, del2;</span><br><span class="line">        <span class="comment">// 去掉多余的数</span></span><br><span class="line">        <span class="keyword">if</span> (m*<span class="number">2</span> &gt;= M[<span class="number">1</span>]/<span class="number">3</span>*<span class="number">3</span>+M[<span class="number">2</span>]/<span class="number">3</span>*<span class="number">3</span>+<span class="built_in">min</span>(M[<span class="number">1</span>]-M[<span class="number">1</span>]/<span class="number">3</span>*<span class="number">3</span>, M[<span class="number">2</span>]-M[<span class="number">2</span>]/<span class="number">3</span>*<span class="number">3</span>)*<span class="number">2</span>) &#123;</span><br><span class="line">            del1 = M[<span class="number">1</span>] - m;</span><br><span class="line">            del2 = M[<span class="number">2</span>] - m;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            del1 = M[<span class="number">1</span>] % <span class="number">3</span> - <span class="built_in">min</span>(M[<span class="number">1</span>]-M[<span class="number">1</span>]/<span class="number">3</span>*<span class="number">3</span>, M[<span class="number">2</span>]-M[<span class="number">2</span>]/<span class="number">3</span>*<span class="number">3</span>);</span><br><span class="line">            del2 = M[<span class="number">2</span>] % <span class="number">3</span> - <span class="built_in">min</span>(M[<span class="number">1</span>]-M[<span class="number">1</span>]/<span class="number">3</span>*<span class="number">3</span>, M[<span class="number">2</span>]-M[<span class="number">2</span>]/<span class="number">3</span>*<span class="number">3</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;del1 &lt;&lt; del2&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;<span class="number">9</span>; i+=<span class="number">3</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (del1 &gt; V[i]) &#123;</span><br><span class="line">                del1 -= V[i];</span><br><span class="line">                V[i] = <span class="number">0</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                V[i] -= del1;</span><br><span class="line">                del1 = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">2</span>; i&lt;<span class="number">9</span>; i+=<span class="number">3</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (del2 &gt; V[i]) &#123;</span><br><span class="line">                del2 -= V[i];</span><br><span class="line">                V[i] = <span class="number">0</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                V[i] -= del2;</span><br><span class="line">                del2 = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">                    </span><br><span class="line">        <span class="built_in">string</span> res = <span class="string">""</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">9</span>; i&gt;=<span class="number">0</span>; i--) res += <span class="built_in">string</span>(V[i], <span class="number">48</span>+i);</span><br><span class="line">        <span class="keyword">if</span> (res.<span class="built_in">size</span>() &gt; <span class="number">0</span> <span class="keyword">and</span> res[<span class="number">0</span>] == <span class="string">'0'</span>) res = <span class="string">"0"</span>; </span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2020-02-23</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/21/LeetCode(1353.%20Maximum%20Number%20of%20Events%20That%20Can%20Be%20Attended)%E5%91%A8%E8%B5%9B3%E9%A2%98%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/02/21/LeetCode(1353.%20Maximum%20Number%20of%20Events%20That%20Can%20Be%20Attended)%E5%91%A8%E8%B5%9B3%E9%A2%98%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1353. Maximum Number of Events That Can Be Attended)周赛3题题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-02-21 18:21:10 / 修改时间：19:41:57" itemprop="dateCreated datePublished" datetime="2020-02-21T18:21:10+08:00">2020-02-21</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-1353-Maximum-Number-of-Events-That-Can-Be-Attended-周赛3题题解"><a href="#LeetCode-1353-Maximum-Number-of-Events-That-Can-Be-Attended-周赛3题题解" class="headerlink" title="LeetCode(\1353. Maximum Number of Events That Can Be Attended)周赛3题题解"></a>LeetCode(\1353. Maximum Number of Events That Can Be Attended)周赛3题题解</h1><p>Given an array of <code>events</code> where <code>events[i] = [startDayi, endDayi]</code>. Every event <code>i</code> starts at <code>startDayi</code> and ends at <code>endDayi</code>.</p>
-<p>You can attend an event <code>i</code> at any day <code>d</code> where <code>startTimei &lt;= d &lt;= endTimei</code>. Notice that you can only attend one event at any time <code>d</code>.</p>
-<p>Return <em>the maximum number of events</em> you can attend.</p>
-<p><strong>Example 1:</strong></p>
-<p><img src="https://assets.leetcode.com/uploads/2020/02/05/e1.png" alt="img"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Input: events &#x3D; [[1,2],[2,3],[3,4]]</span><br><span class="line">Output: 3</span><br><span class="line">Explanation: You can attend all the three events.</span><br><span class="line">One way to attend them all is as shown.</span><br><span class="line">Attend the first event on day 1.</span><br><span class="line">Attend the second event on day 2.</span><br><span class="line">Attend the third event on day 3.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: events&#x3D; [[1,2],[2,3],[3,4],[1,2]]</span><br><span class="line">Output: 4</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 3:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: events &#x3D; [[1,4],[4,4],[2,2],[3,4],[1,1]]</span><br><span class="line">Output: 4</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 4:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: events &#x3D; [[1,100000]]</span><br><span class="line">Output: 1</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 5:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: events &#x3D; [[1,1],[1,2],[1,3],[1,4],[1,5],[1,6],[1,7]]</span><br><span class="line">Output: 7</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Constraints:</strong></p>
-<ul>
-<li><code>1 &lt;= events.length &lt;= 10^5</code></li>
-<li><code>events[i].length == 2</code></li>
-<li><code>1 &lt;= events[i][0] &lt;= events[i][1] &lt;= 10^5</code></li>
-</ul>
-<h2 id="解法一-Greedy"><a href="#解法一-Greedy" class="headerlink" title="解法一 Greedy"></a>解法一 Greedy</h2><p>Medium</p>
-<p>给一个事件数组，每个事件有两个元素start和end，表示开始和结束时间，可能是很多天，也可能就一天。我们可以在一个事件的运行期间参与这个事件，但是我们在一天只能参与一个事件，而多个事件的运行时间可能重叠。返回可以参加的最大的事件数。</p>
-<p>我们可以使用Greedy来做这个题，采用这样一个贪心策略：我们参加一个事件，尽可能早。将所有事件排序后，我们从头到尾遍历事件，对每一个事件，都尽可能早地去参加，这样就能给后面的尽可能留多的时间。这是可以证明任何最优方案可以转化为按照这个策略所得到的结果。</p>
-<p>具体算法如下。</p>
-<p>将事件按照结束时间排序。使用一个集合S记录选中的事件，初始化事件为空。</p>
-<p>然后从头到尾遍历事件，遍历到一个事件e，如果e的开始时间不在集合里面，就将这个开始时间放入集合。</p>
-<p>如果在里面的话，就从左到右遍历这个事件的天数，只要发现不在集合内的，就加入集合。</p>
-<p>然后结束遍历。返回集合的大小即可。</p>
-<h3 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h3><p>代码如下，时间上，N个事件，排序花费O(nlogn)，遍历的时间复杂度就是N个事件的天数之和。空间上，set最多存储N个值，为O(n)。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">bool cmp(vector&lt;int&gt; a, vector&lt;int&gt; b) &#123;</span><br><span class="line">    <span class="keyword">return</span> a[<span class="number">1</span>] &lt; b[<span class="number">1</span>];</span><br><span class="line">&#125;</span><br><span class="line">class Solution &#123;</span><br><span class="line">public:</span><br><span class="line">    int maxEvents(vector&lt;vector&lt;int&gt;&gt;&amp; events) &#123;</span><br><span class="line">        set&lt;int&gt; S;</span><br><span class="line">        sort(events.begin(), events.end(), cmp);</span><br><span class="line">        <span class="keyword">for</span> (vector&lt;int&gt; event : events) &#123;</span><br><span class="line">            <span class="keyword">if</span> (S.find(event[<span class="number">0</span>]) == S.end()) S.insert(event[<span class="number">0</span>]);</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">for</span> (int i=event[<span class="number">0</span>]+<span class="number">1</span>; i&lt;=event[<span class="number">1</span>]; i++) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (S.find(i) == S.end()) &#123;</span><br><span class="line">                        S.insert(i);</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; </span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> S.size();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<h2 id="解法二-优先队列"><a href="#解法二-优先队列" class="headerlink" title="解法二 优先队列"></a>解法二 优先队列</h2><p>还有一种使用优先队列的的方式。</p>
-<p>因为最多有100000天可以参加活动，我们从第一天开始往后看，每一天都加入当前开始的事件到队列里面去。然后从队列里面删除掉在当天已经结束的所有事件。这样，队列里面就都是可以参加的活动。然后在这些事件里，我们参加最早结束的事件，从队列删除队列首部就可以了。即采用了贪婪策略，每天参加可以参加的事件中最早结束的。</p>
-<p>算法如下</p>
-<p>构造一个优先队列pQ来存储事件的结束时间，使用小顶堆实现，表明每次出队列的是结束早的事件。</p>
-<p>对事件数组按照开始时间排序。然后根据题意，事件的运行时间最多为10000天。从第一天开始遍历（主循环）。同时从事件数组头也开始遍历，记录位置。</p>
-<p>当优先队列pQ不为空并且队首的元素比当前天数小时，即当前天数超过了事件的结束时间，不在对应事件的活动时间内。从队列内弹出队首元素。</p>
-<p>从事件数组记录的位置开始向后遍历，如果当前事件的开始时间等于当前天数，就将当前事件的结束时间压入优先队列pQ。只要遇到当前事件的开始时间不等于当前天数。</p>
-<p>查看pQ是否有元素，如果有元素，则表明当前天数下，可以参加事件，res+1。然后重复上述步骤，遍历下一天，最后返回结果res。</p>
-<h3 id="时空复杂度-1"><a href="#时空复杂度-1" class="headerlink" title="时空复杂度"></a>时空复杂度</h3><p>代码如下，时间上，排序和队列的操作均为$O(nlogn)$，空间上为$O(n)$。</p>
-<p><code>Runtime: **328 ms**</code></p>
-<p><code>Memory Usage: **45.6 MB**</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxEvents</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; events)</span> </span>&#123;</span><br><span class="line">        priority_queue&lt;<span class="keyword">int</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;, greater&lt;<span class="keyword">int</span>&gt;&gt; pQ; <span class="comment">// 小顶堆的优先队列</span></span><br><span class="line">        sort(events.<span class="built_in">begin</span>(), events.<span class="built_in">end</span>()); <span class="comment">// 默认使用第二维数组中第一个元素升序排列，这里就是按事件的开始时间升序</span></span><br><span class="line">        <span class="keyword">int</span> e = <span class="number">0</span>, len = events.<span class="built_in">size</span>(), res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> d=<span class="number">1</span>; d&lt;=<span class="number">100000</span>; d++) &#123;</span><br><span class="line">            <span class="comment">// 丢掉过期的事件</span></span><br><span class="line">            <span class="keyword">while</span> (pQ.empty()==<span class="literal">false</span> <span class="keyword">and</span> pQ.top() &lt; d) pQ.pop();</span><br><span class="line">            <span class="comment">// 存入今天刚开始的事件的结束时间</span></span><br><span class="line">            <span class="keyword">while</span> (e &lt; len <span class="keyword">and</span> events[e][<span class="number">0</span>] == d) pQ.push(events[e++][<span class="number">1</span>]);</span><br><span class="line">            <span class="comment">// 从队列里找出最早结束的事件参加</span></span><br><span class="line">            <span class="keyword">if</span> (pQ.empty() == <span class="literal">false</span>) &#123;</span><br><span class="line">                pQ.pop();</span><br><span class="line">                res++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>优化一下，跳过那些一个事件都不存在的天数。</p>
-<p><code>Runtime: **272 ms**</code></p>
-<p><code>Memory Usage: **45.6 MB**</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxEvents</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; events)</span> </span>&#123;</span><br><span class="line">        priority_queue&lt;<span class="keyword">int</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;, greater&lt;<span class="keyword">int</span>&gt;&gt; pQ; <span class="comment">// 小顶堆的优先队列</span></span><br><span class="line">        sort(events.<span class="built_in">begin</span>(), events.<span class="built_in">end</span>()); <span class="comment">// 默认使用第二维数组中第一个元素升序排列，这里就是按事件的开始时间升序</span></span><br><span class="line">        <span class="keyword">int</span> d = <span class="number">0</span>, e = <span class="number">0</span>, len = events.<span class="built_in">size</span>(), res = <span class="number">0</span>;</span><br><span class="line">        <span class="comment">//cout&lt;&lt;"star"&lt;&lt;endl;</span></span><br><span class="line">        <span class="keyword">while</span> (pQ.empty()==<span class="literal">false</span> <span class="keyword">or</span> e&lt;len) &#123;</span><br><span class="line">            <span class="comment">// 当前天数不存在任何事件时，更新到当前事件的开始时间</span></span><br><span class="line">            <span class="keyword">if</span> (pQ.empty()) d = events[e][<span class="number">0</span>];</span><br><span class="line">            <span class="comment">// 存入今天刚开始的事件的结束时间</span></span><br><span class="line">            <span class="keyword">while</span> (e &lt; len <span class="keyword">and</span> events[e][<span class="number">0</span>] &lt;= d) pQ.push(events[e++][<span class="number">1</span>]);</span><br><span class="line">            <span class="comment">// 从队列里找出最早结束的事件参加</span></span><br><span class="line">            pQ.pop();</span><br><span class="line">            res++;</span><br><span class="line">            d++;</span><br><span class="line">            <span class="comment">// 丢掉过期的事件</span></span><br><span class="line">            <span class="keyword">while</span> (pQ.empty()==<span class="literal">false</span> <span class="keyword">and</span> pQ.top() &lt; d) pQ.pop();  </span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2020-02-21. 这题没想出来，是参考的别人的做法学的。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1170,7 +1129,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">292</span>
+          <span class="site-state-item-count">297</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
