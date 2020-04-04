@@ -177,6 +177,466 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(357.%20Count%20Numbers%20with%20Unique%20Digits)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(357.%20Count%20Numbers%20with%20Unique%20Digits)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(357. Count Numbers with Unique Digits)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-357-Count-Numbers-with-Unique-Digits-题解"><a href="#LeetCode-357-Count-Numbers-with-Unique-Digits-题解" class="headerlink" title="LeetCode(\357. Count Numbers with Unique Digits)题解"></a>LeetCode(\357. Count Numbers with Unique Digits)题解</h1><p>Given a <strong>non-negative</strong> integer n, count all numbers with unique digits, x, where 0 ≤ x &lt; 10n.</p>
+<p><strong>Example:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Input: 2</span><br><span class="line">Output: 91 </span><br><span class="line">Explanation: The answer should be the total numbers in the range of 0 ≤ x &lt; 100, </span><br><span class="line">             excluding 11,22,33,44,55,66,77,88,99</span><br></pre></td></tr></table></figure>
+
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出一个数n，求所有的在[0, 10^n)之间的每个位置上的数都不一样的数的个数。</p>
+<p>这个题是一个简单的DP问题，当然也可以思考为一个数学的推理组合问题。n就是表示数的位数，我们首先计算书长度为K的所有数字中有多少个每个位置都不一样的数。首先K=1，有10种选择，K等于2时，十位上有9中选择，然后十位上选定之后个位上也就只有9种选择了。相应的K=3时，千位上9种，十位上9种，然后各位只能有8种，以此类推，K个数字时，如果K=1，那么合法数个数为10。K&gt;1时，合法数个数为，9*9*8*…*(9-K+2)。最后将1到K为的数加起来即可。</p>
+<p>代码如下，时间复杂度O(n)，空间复杂度O(1)。</p>
+<p><code>Runtime: 0 ms, faster than 100.00% of C++ online submissions for Count Numbers with Unique Digits.</code></p>
+<p><code>Memory Usage: 8.2 MB, less than 83.33% of C++ online submissions for Count Numbers with Unique Digits.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">countNumbersWithUniqueDigits</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> ret = <span class="number">0</span>, mul = <span class="number">9</span>;</span><br><span class="line">        n = <span class="built_in">min</span>(<span class="number">10</span>, n);</span><br><span class="line">        <span class="keyword">if</span>(n == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        ret = <span class="number">10</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">2</span>; i&lt;=n; i++)&#123;</span><br><span class="line">            mul *= <span class="number">9</span> - i + <span class="number">2</span>;</span><br><span class="line">            ret += mul;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2019-12-12</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(376.%20Wiggle%20Subsequence)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(376.%20Wiggle%20Subsequence)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(376. Wiggle Subsequence)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-376-Wiggle-Subsequence-题解"><a href="#LeetCode-376-Wiggle-Subsequence-题解" class="headerlink" title="LeetCode(\376. Wiggle Subsequence)题解"></a>LeetCode(\376. Wiggle Subsequence)题解</h1><p>A sequence of numbers is called a <strong>wiggle sequence</strong> if the differences between successive numbers strictly alternate between positive and negative. The first difference (if one exists) may be either positive or negative. A sequence with fewer than two elements is trivially a wiggle sequence.</p>
+<p>For example, <code>[1,7,4,9,2,5]</code> is a wiggle sequence because the differences <code>(6,-3,5,-7,3)</code> are alternately positive and negative. In contrast, <code>[1,4,7,2,5]</code> and <code>[1,7,4,5,5]</code> are not wiggle sequences, the first because its first two differences are positive and the second because its last difference is zero.</p>
+<p>Given a sequence of integers, return the length of the longest subsequence that is a wiggle sequence. A subsequence is obtained by deleting some number of elements (eventually, also zero) from the original sequence, leaving the remaining elements in their original order.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: [1,7,4,9,2,5]</span><br><span class="line">Output: 6</span><br><span class="line">Explanation: The entire sequence is a wiggle sequence.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: [1,17,5,10,13,15,10,5,16,8]</span><br><span class="line">Output: 7</span><br><span class="line">Explanation: There are several subsequences that achieve this length. One is [1,17,10,13,10,16,8].</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 3:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: [1,2,3,4,5,6,7,8,9]</span><br><span class="line">Output: 2</span><br></pre></td></tr></table></figure>
+
+<p><strong>Follow up:</strong><br>Can you do it in O(<em>n</em>) time?</p>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个序列S，找出其中最长震荡子序列的长度。子序列元素可以不相邻，但必须保持相对顺序。震荡序列就是相邻元素之间的差值是+，-，+，-，+，-，…或者-，+，-，+，-，+，-，…。</p>
+<p>这个题使用Greedy，我们可以这样想，如果我们找到一个数a，下一个想找一个比它小的数，那么这个数一定是越大越好，因为越大后面的数比它小的可能性就越大，反之想找大的数，我们就让a尽可能小。因此，思路就出来了。</p>
+<p>从左到右遍历整个序列。我们维护一个数end，表示我们当前已遍历的序列内找到的最长子序列的最后一个数，并且用一个变量记录下一个数是需要比end大还是小。</p>
+<p>因此遍历到数a时，如果a==end，就跳过，如果a&gt;end而需要大的，下一次就需要小的，那么更新end=a，同时res++，因为序列+1。如果需要小的，那说明不能组成序列，需要丢弃一个，那肯定丢弃当前数中小的，因此还是end=a。</p>
+<p>反之如果a&lt;end而需要小的，下一次就需要大的，那么更新end=a，同时res++，因为序列+1。如果需要大的，那说明不能组成序列，需要丢弃一个，那肯定丢弃当前中大的，因此还是end=a。</p>
+<p>因此上述的分析中得出来，end其实就一直在更新，不管怎么样，遍历下一个之前，end就等于前一个，因此每个元素直接和前一个比较就可以了。</p>
+<p>代码如下，时间复杂度O(n)，空间复杂度O(1)。</p>
+<p><code>Runtime: 0 ms, faster than 100.00% of C++ online submissions for Wiggle Subsequence.</code></p>
+<p><code>Memory Usage: 8.7 MB, less than 40.00% of C++ online submissions for Wiggle Subsequence.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">wiggleMaxLength</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">1</span>, <span class="built_in">end</span> = <span class="number">0</span>, len = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span> (len &lt;= <span class="number">1</span>) <span class="keyword">return</span> len;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> dir = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;len; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (nums[i] == nums[i<span class="number">-1</span>]) <span class="keyword">continue</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (dir==<span class="number">0</span> <span class="keyword">or</span> (nums[i]&gt;nums[i<span class="number">-1</span>] <span class="keyword">and</span> dir==<span class="number">1</span>) <span class="keyword">or</span> (nums[i]&lt;nums[i<span class="number">-1</span>] <span class="keyword">and</span> dir==<span class="number">-1</span>)) &#123;</span><br><span class="line">                res++;</span><br><span class="line">                dir = nums[i]&gt;nums[i<span class="number">-1</span>] ? <span class="number">-1</span> : <span class="number">1</span>;</span><br><span class="line">                </span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2019-12-27</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(37.%20Sudoku%20Solver)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(37.%20Sudoku%20Solver)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(37. Sudoku Solver)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-37-Sudoku-Solver-题解"><a href="#LeetCode-37-Sudoku-Solver-题解" class="headerlink" title="LeetCode(37. Sudoku Solver)题解"></a>LeetCode(37. Sudoku Solver)题解</h1><hr>
+<p>Write a program to solve a Sudoku puzzle by filling the empty cells.</p>
+<p>A sudoku solution must satisfy all of the following rules:</p>
+<pre><code>Each of the digits 1-9 must occur exactly once in each row.
+Each of the digits 1-9 must occur exactly once in each column.
+Each of the the digits 1-9 must occur exactly once in each of the 9 3x3 sub-boxes of the grid.
+Empty cells are indicated by the character &apos;.&apos;.</code></pre><p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Sudoku-by-L2G-20050714.svg/250px-Sudoku-by-L2G-20050714.svg.png" alt="A sudoku puzzle..."></p>
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Sudoku-by-L2G-20050714_solution.svg/250px-Sudoku-by-L2G-20050714_solution.svg.png" alt="...and its solution numbers marked in red."></p>
+<p>Note:</p>
+<pre><code>The given board contain only digits 1-9 and the character &apos;.&apos;.
+You may assume that the given Sudoku puzzle will have a single unique solution.
+The given board size is always 9x9.</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Hard，给一个9<em>9的矩阵，其中每行每列和各3</em>3的小区域中有预先填写一些数。要求将剩下的空格填完，满足数组的要求。</p>
+<p>一个思路就是使用DFS，当遇到一个空格，查看其行、列和小区域的其他值，确定可以填的数，填入一个之后进入下一个空格，如果这样下去可以成功直接结束算法。如果中途某个空格发现无法填数，则表示失败，返回上级递归。</p>
+<p>代码如下：</p>
+<p>Runtime: 28 ms, faster than 26.39% of C++ online submissions for Sudoku Solver.<br>Memory Usage: 13.8 MB, less than 14.64% of C++ online submissions for Sudoku Solver.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">fillableVal</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">char</span>&gt; &amp;tmp, <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">char</span>&gt;&gt;&amp; board, <span class="keyword">int</span> row, <span class="keyword">int</span> col)</span></span>&#123;</span><br><span class="line">        <span class="keyword">bool</span> val[<span class="number">9</span>] = &#123;<span class="literal">true</span>, <span class="literal">true</span>, <span class="literal">true</span>, <span class="literal">true</span>, <span class="literal">true</span>, <span class="literal">true</span>, <span class="literal">true</span>, <span class="literal">true</span>, <span class="literal">true</span>&#125;;</span><br><span class="line">        <span class="keyword">int</span> li, lj;</span><br><span class="line">        <span class="comment">// col</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">9</span>; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(board[i][col]!=<span class="string">'.'</span>) val[board[i][col]-<span class="string">'1'</span>] = <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// row</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;<span class="number">9</span>; j++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(board[row][j]!=<span class="string">'.'</span>) val[board[row][j]-<span class="string">'1'</span>] = <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// local area</span></span><br><span class="line">        li = (row / <span class="number">3</span>) * <span class="number">3</span>;</span><br><span class="line">        lj = (col / <span class="number">3</span>) * <span class="number">3</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">3</span>; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;<span class="number">3</span>; j++)</span><br><span class="line">                <span class="keyword">if</span>(board[li+i][lj+j]!=<span class="string">'.'</span>) val[board[li+i][lj+j]-<span class="string">'1'</span>] = <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        tmp.<span class="built_in">clear</span>();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">9</span>; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(val[i]) tmp.push_back(<span class="string">'1'</span>+i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">SudoKu</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">char</span>&gt;&gt;&amp; board, <span class="keyword">int</span> row, <span class="keyword">int</span> col)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(col==<span class="number">9</span>) &#123;</span><br><span class="line">            row += <span class="number">1</span>;</span><br><span class="line">            col = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(row&gt;=<span class="number">9</span>) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">if</span>(board[row][col]!=<span class="string">'.'</span>) <span class="keyword">return</span> SudoKu(board, row, col+<span class="number">1</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">char</span>&gt; tmp;</span><br><span class="line">        <span class="keyword">int</span> len;</span><br><span class="line">        </span><br><span class="line">        fillableVal(tmp, board, row, col);</span><br><span class="line">        len = tmp.<span class="built_in">size</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">0</span>; k&lt;len; k++)&#123;</span><br><span class="line">            board[row][col] = tmp[k];</span><br><span class="line">            <span class="keyword">if</span>(SudoKu(board, row, col+<span class="number">1</span>)) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        board[row][col] = <span class="string">'.'</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">solveSudoku</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">char</span>&gt;&gt;&amp; board)</span> </span>&#123;</span><br><span class="line">        SudoKu(board, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2019-05-23</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(38.%20Count%20and%20Say)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(38.%20Count%20and%20Say)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(38. Count and Say)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-38-Count-and-Say-题解"><a href="#LeetCode-38-Count-and-Say-题解" class="headerlink" title="LeetCode(38. Count and Say)题解"></a>LeetCode(38. Count and Say)题解</h1><hr>
+<p>The count-and-say sequence is the sequence of integers with the first five terms as following:</p>
+<pre><code>1.     1
+2.     11
+3.     21
+4.     1211
+5.     111221
+1 is read off as &quot;one 1&quot; or 11.
+11 is read off as &quot;two 1s&quot; or 21.
+21 is read off as &quot;one 2, then one 1&quot; or 1211.</code></pre><p>Given an integer n where 1 ≤ n ≤ 30, generate the nth term of the count-and-say sequence.</p>
+<p>Note: Each term of the sequence of integers will be represented as a string.</p>
+<p>Example 1:</p>
+<pre><code>Input: 1
+Output: &quot;1&quot;</code></pre><p>Example 2:</p>
+<pre><code>Input: 4
+Output: &quot;1211&quot;</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Easy题，要求根据要求进行读数。</p>
+<p>这个题其实看了很久，好几天，每次都是看一会儿发现不懂就换了。这个乍一看是有点难懂，其实就是给一个数n表示读的次数，就是在第n次读第n-1次给出的字符串。当n等于1的时候读做1，n=2时就直接将其读作11表示1个1，n=3时将11读作2个1，返回21，当n=4时，将21读作1个2和1个1，返回1211。</p>
+<p>代码如下，天然的递归：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">string</span> <span class="title">countAndSay</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(n==<span class="number">1</span>) <span class="keyword">return</span> <span class="string">"1"</span>;</span><br><span class="line">        <span class="built_in">string</span> tmp = countAndSay(n<span class="number">-1</span>), ret = <span class="string">""</span>;</span><br><span class="line">        <span class="keyword">int</span> len = tmp.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> count = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len<span class="number">-1</span>; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(tmp[i]==tmp[i+<span class="number">1</span>]) count++;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                ret += count + <span class="string">'0'</span>;</span><br><span class="line">                ret += tmp[i];</span><br><span class="line">                count = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        ret += count + <span class="string">'0'</span>;</span><br><span class="line">        ret += tmp[len<span class="number">-1</span>];</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-05-05</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(343.%20Integer%20Break)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(343.%20Integer%20Break)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(343. Integer Break)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-343-Integer-Break-题解"><a href="#LeetCode-343-Integer-Break-题解" class="headerlink" title="LeetCode(\343. Integer Break)题解"></a>LeetCode(\343. Integer Break)题解</h1><p>Given a positive integer <em>n</em>, break it into the sum of <strong>at least</strong> two positive integers and maximize the product of those integers. Return the maximum product you can get.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: 2</span><br><span class="line">Output: 1</span><br><span class="line">Explanation: 2 &#x3D; 1 + 1, 1 × 1 &#x3D; 1.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: 10</span><br><span class="line">Output: 36</span><br><span class="line">Explanation: 10 &#x3D; 3 + 3 + 4, 3 × 3 × 4 &#x3D; 36.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Note</strong>: You may assume that <em>n</em> is not less than 2 and not larger than 58.</p>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出一个数，将其拆分为不同的数之和，同时保证所有的数的乘积最大。</p>
+<p>这个题是一个典型的DP问题，优化之后可以在O(1)的时间内计算出来。因为我们只需要将所有的值都化为3*3*3*…就可以得到最大值，当然最后如果是余下4就不再变为1和3了。</p>
+<p>如何证明这个是最优的呢，我们可以假设目前有一个最优的解，a,b,c,…。其中肯定不存在为1的数（原因不证自明），如果其中存在数大于4，比如b那么可以证明3*(b-3)&gt;b。因此可以进一步划分出3来，出现矛盾。因此，最优解中的元素一定是小于等于4.</p>
+<p>而4元素和2元素其实是一样的，一个4可以化为两个2.因此我们要比较的就是将数按照3拆分和按2拆分的区别了。这就需要比较2^(n/2)和3^(n/3)。这是一个数学比较，可以发现后者更大。</p>
+<p>因此直接将数按照3进行分割就可以了。</p>
+<p>代码如下，时间复杂度O(1)，空间复杂度O(1)。</p>
+<p><code>Runtime: 0 ms, faster than 100.00% of C++ online submissions for Integer Break.</code></p>
+<p><code>Memory Usage: 8.2 MB, less than 100.00% of C++ online submissions for Integer Break.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">integerBreak</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(n &lt;= <span class="number">4</span>) <span class="keyword">return</span> n/<span class="number">2</span> * (n-n/<span class="number">2</span>);</span><br><span class="line">        <span class="keyword">int</span> c = n / <span class="number">3</span>, m = n % <span class="number">3</span>;</span><br><span class="line">        <span class="keyword">if</span>(m == <span class="number">1</span>)&#123;</span><br><span class="line">            m = <span class="number">4</span>;</span><br><span class="line">            c--;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(m == <span class="number">0</span>) m = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">pow</span>(<span class="number">3</span>, c)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2019-12-06</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(40.%20Combination%20Sum%20II)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(40.%20Combination%20Sum%20II)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(40. Combination Sum II)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-40-Combination-Sum-II-题解"><a href="#LeetCode-40-Combination-Sum-II-题解" class="headerlink" title="LeetCode(40. Combination Sum II)题解"></a>LeetCode(40. Combination Sum II)题解</h1><hr>
+<p>Given a collection of candidate numbers (candidates) and a target number (target), find all unique combinations in candidates where the candidate numbers sums to target.</p>
+<p>Each number in candidates may only be used once in the combination.</p>
+<p>Note:</p>
+<p>All numbers (including target) will be positive integers.<br>The solution set must not contain duplicate combinations.<br>Example 1:</p>
+<pre><code>Input: candidates = [10,1,2,7,6,1,5], target = 8,
+A solution set is:
+[
+[1, 7],
+[1, 2, 5],
+[2, 6],
+[1, 1, 6]
+]</code></pre><p>Example 2:</p>
+<pre><code>Input: candidates = [2,5,2,1,2], target = 5,
+A solution set is:
+[
+[1,2,2],
+[5]
+]</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Medium，要求给定一个可能重复的数组，求出一些元素的组合其和位target，这些元素最多出现一次。</p>
+<p>我们可以使用递归的办法，将数组升序排序之后，进入一个递归数组，首先加入第一个数，当其和小于target的，剩下的在第二个数到之后的数中选，这涵盖了一些情况。然后不入这个数，直接在剩下的数内选所有的，·····当然要保证数之和要小于等于target。最后递归内的核心结构就是如果大于就返回，等于就记录，小于就往下走。</p>
+<p>因为有重复的数出现，所以要注意去重。可以使用这样的方法：当遍历到一个数时，这个数可以选择加与不加，如果不加的话，直接就跳到下一个与这个不一样的数的位置。然后找出这个数重复的次数K，然后把这个数加入1次到K次，然后再加入到下一个与这个不一样的数的位置。最后得到结果。</p>
+<p>代码如下：</p>
+<p>Runtime: 428 ms, faster than 5.03% of C++ online submissions for Combination Sum II.<br>Memory Usage: 176.9 MB, less than 5.01% of C++ online submissions for Combination Sum II.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">findSum</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; ret, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; tmp, <span class="keyword">int</span> tsum,  <span class="keyword">int</span> target, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; candidates, <span class="keyword">int</span> sta, <span class="keyword">int</span> len)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(tsum==target)&#123;</span><br><span class="line">            ret.push_back(tmp);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(sta&gt;=len || tsum&gt;target) <span class="keyword">return</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> p = sta + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span>(p&lt;len &amp;&amp; candidates[sta]==candidates[p]) p++;</span><br><span class="line">        findSum(ret, tmp, tsum, target, candidates, p, len);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=sta; i&lt;p; i++)&#123;</span><br><span class="line">            tmp.push_back(candidates[sta]);</span><br><span class="line">            findSum(ret, tmp, (<span class="number">1</span>+i-sta)*candidates[sta]+tsum, target, candidates, p, len);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">combinationSum2</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; candidates, <span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = candidates.<span class="built_in">size</span>();</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; ret;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; tmp;</span><br><span class="line">        </span><br><span class="line">        sort(candidates.<span class="built_in">begin</span>(), candidates.<span class="built_in">end</span>());</span><br><span class="line">        </span><br><span class="line">        findSum(ret, tmp, <span class="number">0</span>, target, candidates, <span class="number">0</span>, len);</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(39.%20Combination%20Sum)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -479,497 +939,6 @@ Explanation: The array can be partitioned as [1, 5, 5] and [11].</code></pre><p>
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(41.%20First%20Missing%20Positive)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(41.%20First%20Missing%20Positive)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(41. First Missing Positive)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-41-First-Missing-Positive-题解"><a href="#LeetCode-41-First-Missing-Positive-题解" class="headerlink" title="LeetCode(41. First Missing Positive)题解"></a>LeetCode(41. First Missing Positive)题解</h1><hr>
-<p>Given an unsorted integer array, find the smallest missing positive integer.</p>
-<p>Example 1:</p>
-<pre><code>Input: [1,2,0]
-Output: 3</code></pre><p>Example 2:</p>
-<pre><code>Input: [3,4,-1,1]
-Output: 2</code></pre><p>Example 3:</p>
-<pre><code>Input: [7,8,9,11,12]
-Output: 1</code></pre><p>Note:</p>
-<pre><code>Your algorithm should run in O(n) time and uses constant extra space.</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Hard，主要是题意有点难以理解。这题要求的是从一个未排序的数组中找第一个丢失掉的连续正数（从1开始找），比如[3,4,-1,1]丢失的是2，[7,8,9,11,12]丢失的是1。但是要求是时间复杂度o(n)。并且使用常量空间，就是不能额外开辟相同大小的内存。</p>
-<p>其实很简单，可以想象，连续的正数这是一个可以利用的点的，下标也是连续的，想办法把这两个联系在一起。可以如下：</p>
-<p>从头到尾遍历数组，遇到一个正数k将其放入下标为k-1的位置。但会遇到，如果k太大或者负数就将其放入最后一个位置，然后将数组要遍历的长度减1，因为这些数都是干扰的没用的但是要占位置，我们就尽量放在最后一个。还有要是数组中有重复的话，我们可以在交换的时候检查，是否k-1位置上已经有k了，如果有的话就将其放在最后一个位置，因为表示这个数多余了，数组长度-1.</p>
-<p>要注意，换置的操作方式就是将当前位置的数与k-1的数进行交换，然后将当前位置的数继续换，直到当前位置的数就该在当前位置，才走下一步。</p>
-<p>这样换完之后，从左到右，第一个k-1位置上如果不是k，就返回k即可，表示缺少k。其实按照上述的操作，返回当时记录的数组长度+1就可以了，因为遍历到最后一个循环才会退出，而已经遍历过的表明前面的数都肯定变成合法的了。</p>
-<p>代码如下：</p>
-<p>Runtime: 4 ms, faster than 94.75% of C++ online submissions for First Missing Positive.<br>Memory Usage: 8.8 MB, less than 60.83% of C++ online submissions for First Missing Positive.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">firstMissingPositive</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(i&lt;len)&#123;</span><br><span class="line">            <span class="keyword">if</span>(nums[i] == i+<span class="number">1</span>)&#123;</span><br><span class="line">                i++;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125; </span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span>(nums[i]&lt;=<span class="number">0</span> || nums[i]&gt;len || nums[nums[i]<span class="number">-1</span>] == nums[i])&#123;</span><br><span class="line">                swap(nums[len<span class="number">-1</span>], nums[i]);</span><br><span class="line">                len--;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            swap(nums[i], nums[nums[i]<span class="number">-1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> len+<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-05-24.</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(42.%20Trapping%20Rain%20Water)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(42.%20Trapping%20Rain%20Water)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(42. Trapping Rain Water)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-42-Trapping-Rain-Water-题解"><a href="#LeetCode-42-Trapping-Rain-Water-题解" class="headerlink" title="LeetCode(42. Trapping Rain Water)题解"></a>LeetCode(42. Trapping Rain Water)题解</h1><hr>
-<p>Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it is able to trap after raining.</p>
-<p><img src="https://assets.leetcode.com/uploads/2018/10/22/rainwatertrap.png" alt="The above elevation map is represented by array [0,1,0,2,1,0,1,3,2,1,2,1]. In this case, 6 units of rain water (blue section) are being trapped. Thanks Marcos for contributing this image!"></p>
-<p>Example:</p>
-<pre><code>Input: [0,1,0,2,1,0,1,3,2,1,2,1]
-Output: 6</code></pre><h2 id="题意理解"><a href="#题意理解" class="headerlink" title="题意理解"></a>题意理解</h2><p>Hard，要求给定一个数组，表示在坐标轴内从左到右按照其值在y轴上组合成的一个形状，中间的组成一个凹陷的，计算其凹陷的大小，意思就是像一个个池塘，计算其能容纳多少水。</p>
-<p>这个题可以使用stack的方式解决，时间复杂度O（n）。栈记录遇到的值，计算每次遇到值和之前的之间形成的大小，计算可以增加容纳的水。从左到右遍历数组，用一个值res记录可以容纳的水，初始化res=0。这里用一个小trick，我们入栈不入原始值，而是入坐标，从左到右遍历，遇到一个数b，坐标j，方式如下：</p>
-<p>0 如果元素为0，直接跳过</p>
-<p>1 如果栈为空，表示还未有边界，应该是第一个数，直接入栈。</p>
-<p>2 查看栈顶元素i对应的数a，有如下几种情况</p>
-<p>2-1 a小于等于b，表示a与b之间没有别的边界，直接res += （j-i-1）<em>a。然后弹出i，因为这之间的计算完毕，如果栈空则压入j。否则接着查看栈的新的栈顶元素k和对应的值c，就看新的栈顶元素是否比b大（应该是比b大的，栈记录的值都是递减的），如果是b大，计算新增加的容量，res += （c-a）</em>（j-k-1），然后弹出接着像之前的那样操作。如果是c大，这就计算res += （b-a）*（j-k-1），然后压入j。</p>
-<p>2-2 a大于b，则直接res += （b）*（j-i-1），然后压入j。</p>
-<p>代码如下：</p>
-<p>Runtime: 8 ms, faster than 93.22% of C++ online submissions for Trapping Rain Water.<br>Memory Usage: 9.6 MB, less than 55.99% of C++ online submissions for Trapping Rain Water.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">trap</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; <span class="built_in">height</span>)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>, len = <span class="built_in">height</span>.<span class="built_in">size</span>();</span><br><span class="line">        <span class="built_in">stack</span>&lt;<span class="keyword">int</span>&gt; S;</span><br><span class="line">        <span class="keyword">int</span> tmp;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(<span class="built_in">height</span>[i]==<span class="number">0</span>) <span class="keyword">continue</span>;</span><br><span class="line">            <span class="keyword">if</span>(S.empty())&#123;</span><br><span class="line">                S.push(i);</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            tmp = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">while</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">                <span class="keyword">if</span>(S.empty()) &#123;</span><br><span class="line">                    S.push(i);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span>(<span class="built_in">height</span>[S.top()]&gt;<span class="built_in">height</span>[i])&#123;</span><br><span class="line">                    res += (<span class="built_in">height</span>[i]-tmp) * (i-S.top()<span class="number">-1</span>);</span><br><span class="line">                    S.push(i);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                res += (<span class="built_in">height</span>[S.top()]-tmp) * (i-S.top()<span class="number">-1</span>);</span><br><span class="line">                tmp = <span class="built_in">height</span>[S.top()];</span><br><span class="line">                S.pop();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>优化之后,速度没有提升，但是好看了一点：</p>
-<p>Runtime: 8 ms, faster than 93.22% of C++ online submissions for Trapping Rain Water.<br>Memory Usage: 9.5 MB, less than 56.83% of C++ online submissions for Trapping Rain Water.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">trap</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; <span class="built_in">height</span>)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = <span class="built_in">height</span>.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> tmp, res = <span class="number">0</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(len&lt;<span class="number">3</span>) <span class="keyword">return</span> res;</span><br><span class="line">        </span><br><span class="line">        <span class="built_in">stack</span>&lt;<span class="keyword">int</span>&gt; S;</span><br><span class="line">        S.push(<span class="number">0</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;len; i++)&#123;</span><br><span class="line">            tmp = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">while</span>(!S.empty() &amp;&amp; <span class="built_in">height</span>[S.top()]&lt;=<span class="built_in">height</span>[i])&#123;</span><br><span class="line">                res += (<span class="built_in">height</span>[S.top()]-tmp) * (i-S.top()<span class="number">-1</span>);</span><br><span class="line">                tmp = <span class="built_in">height</span>[S.top()];</span><br><span class="line">                S.pop();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(!S.empty()) res += (<span class="built_in">height</span>[i]-tmp) * (i-S.top()<span class="number">-1</span>);</span><br><span class="line">            S.push(i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2019-5-24。完全自己的思路，nice</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(421.%20Maximum%20XOR%20of%20Two%20Numbers%20in%20an%20Array)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(421.%20Maximum%20XOR%20of%20Two%20Numbers%20in%20an%20Array)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(421. Maximum XOR of Two Numbers in an Array)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-421-Maximum-XOR-of-Two-Numbers-in-an-Array-题解"><a href="#LeetCode-421-Maximum-XOR-of-Two-Numbers-in-an-Array-题解" class="headerlink" title="LeetCode(421. Maximum XOR of Two Numbers in an Array)题解"></a>LeetCode(421. Maximum XOR of Two Numbers in an Array)题解</h1><p>Given a <strong>non-empty</strong> array of numbers, a0, a1, a2, … , an-1, where 0 ≤ ai &lt; 231.</p>
-<p>Find the maximum result of ai XOR aj, where 0 ≤ <em>i</em>, <em>j</em> &lt; <em>n</em>.</p>
-<p>Could you do this in O(<em>n</em>) runtime?</p>
-<p><strong>Example:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Input: [3, 10, 5, 25, 2, 8]</span><br><span class="line"></span><br><span class="line">Output: 28</span><br><span class="line"></span><br><span class="line">Explanation: The maximum result is 5 ^ 25 &#x3D; 28.</span><br></pre></td></tr></table></figure>
-
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个数组，从中找出两个数，使得其异或值最大，返回这个异或之后的结果。</p>
-<p>这个题可以使用最简单的，就是挨个比，时间复杂度O(n2)。但是题目提示可以在O(n)时间内完成。</p>
-<p>利用异或的特性，我们可以完成这个题目。对于异或运算，可知 <code>a^b=c &lt;==&gt; a^c=b</code>。即三个数两两异或可以推出第三个数。因此，可以考虑使用这个性质，用位比较的方式得到答案。</p>
-<p>解法如下：</p>
-<p>根据题目可知，所有的数都不会超过32位，因此每个数都可以用一个32位的二进制数进行表示。然后从最高位开始，将所有数的最高位放入一个set中，依次将这些最高位与1进行异或运算，如果得到的结果仍旧在set中，说明最终答案的最高位一定为1，否则为0.因为如果在表示set一定有两个数，其异或结果的最终值在最高位一定为1.(由定理可得1 ^ x = b &lt;==&gt; b ^ x = 1, 对与数x, 一定存在一个数b, 使得x ^ b = 1), 否则最高位的答案一定为0.</p>
-<p>继续进行下去，假设我们已经知道最终答案的最高k位为prefix, 我们先将数列中所有数的最高k+1位存入Set中. 然后, 我们假设下一位的值为1, 将数列中所有数的最高前k+1位与prefix&lt;&lt;1 + 1进行异或运算, 如果异或得到的结果仍然在Set中, 那么说明最终答案的第k+1位一定为1, 否则, 最高位的答案一定为0.</p>
-<p>因为x ^ (prefix&lt;&lt;2+1) = b　&lt;==&gt; x ^ b = prefix&lt;&lt;2+1, 即对于数x, 一定存在一个数b, 使得他们异或的结果为prefix&lt;&lt;2+1.</p>
-<p>因此, 我们可以对最终答案的32位进行依次判断, 最终得到异或的最大值.</p>
-<p>代码如下，算法的时间复杂度为<code>O(32n) = O(n)</code>，空间复杂度为 <code>o(n)</code>.</p>
-<p><code>Runtime: 208 ms, faster than 15.60% of C++ online submissions for Maximum XOR of Two Numbers in an Array.</code></p>
-<p><code>Memory Usage: 40.5 MB, less than 80.00% of C++ online submissions for Maximum XOR of Two Numbers in an Array.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">findMaximumXOR</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>, len = nums.<span class="built_in">size</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">31</span>; k&gt;=<span class="number">0</span>; k--)&#123;</span><br><span class="line">            <span class="comment">// fill set</span></span><br><span class="line">            <span class="built_in">set</span>&lt;<span class="keyword">int</span>&gt; S;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++) S.insert(nums[i]&gt;&gt;k);</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// find</span></span><br><span class="line">            res = res&lt;&lt;<span class="number">1</span> | <span class="number">1</span>;</span><br><span class="line">            <span class="built_in">set</span>&lt;<span class="keyword">int</span>&gt;::iterator iter;</span><br><span class="line">			<span class="keyword">for</span>(iter=S.<span class="built_in">begin</span>(); iter!=S.<span class="built_in">end</span>(); iter++)&#123;</span><br><span class="line">				<span class="keyword">if</span>(S.<span class="built_in">find</span>(*iter ^ res) != S.<span class="built_in">end</span>()) <span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">            <span class="keyword">if</span>(iter == S.<span class="built_in">end</span>()) res ^= <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2019-10-04</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(435.%20Non-overlapping%20Intervals)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(435.%20Non-overlapping%20Intervals)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(435. Non-overlapping Intervals)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-435-Non-overlapping-Intervals-题解"><a href="#LeetCode-435-Non-overlapping-Intervals-题解" class="headerlink" title="LeetCode(\435. Non-overlapping Intervals)题解"></a>LeetCode(\435. Non-overlapping Intervals)题解</h1><p>Given a collection of intervals, find the minimum number of intervals you need to remove to make the rest of the intervals non-overlapping.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: [[1,2],[2,3],[3,4],[1,3]]</span><br><span class="line">Output: 1</span><br><span class="line">Explanation: [1,3] can be removed and the rest of intervals are non-overlapping.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: [[1,2],[1,2],[1,2]]</span><br><span class="line">Output: 2</span><br><span class="line">Explanation: You need to remove two [1,2] to make the rest of intervals non-overlapping.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 3:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: [[1,2],[2,3]]</span><br><span class="line">Output: 0</span><br><span class="line">Explanation: You don&#39;t need to remove any of the intervals since they&#39;re already non-overlapping.</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Note:</strong></p>
-<ol>
-<li>You may assume the interval’s end point is always bigger than its start point.</li>
-<li>Intervals like [1,2] and [2,3] have borders “touching” but they don’t overlap each other.</li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出若干个区间，从中删除最少的区间数，使得剩下的区间都不相交。</p>
-<p>这个题明显就是Greedy，将所有区间按起始点开始升序排序，然后从左到右遍历。维持一个变量end，表示遍历到当前位置时，区间所占的最大位置。遍历到位置i时，比较i区间的左边与end的大小，如果end小于等于，说明这个区间和已遍历的区间（已经删除一些的）并不相交，所以直接放进去（暂时），更新end = i的右端位置。如果end大于，说明这个区间相交了，就应该删除，那么删除哪一个呢，这时候我们的greedy法则就出来了。那就是，我们尽量不往右占更多空间，就是比较end 和i的右边位置，谁大删除谁，因此res++，end = min(end，i的右边位置)。</p>
-<p>代码如下，时间复杂度，排序加遍历为O(nlogn)，空间复杂度O(1)。</p>
-<p><code>Runtime: 76 ms, faster than 14.44% of C++ online submissions for Non-overlapping Intervals.</code></p>
-<p><code>Memory Usage: 27.4 MB, less than 11.11% of C++ online submissions for Non-overlapping Intervals.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; a, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a[<span class="number">0</span>] &lt; b[<span class="number">0</span>];</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">eraseOverlapIntervals</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; intervals)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = intervals.<span class="built_in">size</span>(), res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span> (len == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        sort(intervals.<span class="built_in">begin</span>(), intervals.<span class="built_in">end</span>(), cmp);</span><br><span class="line">        <span class="keyword">int</span> <span class="built_in">end</span> = intervals[<span class="number">0</span>][<span class="number">1</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;len; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (intervals[i][<span class="number">0</span>] &gt;= <span class="built_in">end</span>) &#123;</span><br><span class="line">                <span class="built_in">end</span> = intervals[i][<span class="number">1</span>];</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                res++;</span><br><span class="line">                <span class="built_in">end</span> = <span class="built_in">min</span>(<span class="built_in">end</span>, intervals[i][<span class="number">1</span>]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-12-26</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(44.%20Wildcard%20Matching)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(44.%20Wildcard%20Matching)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(44. Wildcard Matching)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-44-Wildcard-Matching-题解"><a href="#LeetCode-44-Wildcard-Matching-题解" class="headerlink" title="LeetCode(44. Wildcard Matching)题解"></a>LeetCode(44. Wildcard Matching)题解</h1><hr>
-<p>Given an input string (s) and a pattern (p), implement wildcard pattern matching with support for ‘?’ and ‘*’.</p>
-<pre><code>&apos;?&apos; Matches any single character.
-&apos;*&apos; Matches any sequence of characters (including the empty sequence).
-The matching should cover the entire input string (not partial).</code></pre><p>Note:</p>
-<pre><code>s could be empty and contains only lowercase letters a-z.
-p could be empty and contains only lowercase letters a-z, and characters like ? or *.</code></pre><p>Example 1:</p>
-<pre><code>Input:
-s = &quot;aa&quot;
-p = &quot;a&quot;
-Output: false
-Explanation: &quot;a&quot; does not match the entire string &quot;aa&quot;.</code></pre><p>Example 2:</p>
-<pre><code>Input:
-s = &quot;aa&quot;
-p = &quot;*&quot;
-Output: true
-Explanation: &apos;*&apos; matches any sequence.</code></pre><p>Example 3:</p>
-<pre><code>Input:
-s = &quot;cb&quot;
-p = &quot;?a&quot;
-Output: false
-Explanation: &apos;?&apos; matches &apos;c&apos;, but the second letter is &apos;a&apos;, which does not match &apos;b&apos;.</code></pre><p>Example 4:</p>
-<pre><code>Input:
-s = &quot;adceb&quot;
-p = &quot;*a*b&quot;
-Output: true
-Explanation: The first &apos;*&apos; matches the empty sequence, while the second &apos;*&apos; matches the substring &quot;dce&quot;.</code></pre><p>Example 5:</p>
-<pre><code>Input:
-s = &quot;acdcb&quot;
-p = &quot;a*c?b&quot;
-Output: false</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Hard，要求给定一个字符串s，在给定一个包含通配符？和<em>的字符串，判断p是否能匹配s，其中？表示匹配任何字符，不能为空，</em>表示匹配0个或多个任意字符。</p>
-<p>以下是自己的思考：</p>
-<p>可以如下操作，使用递归函数，各自从s和p的头部开始向后遍历，假设当前走到了位置i和j，s和p的长度各为s1和p1。</p>
-<p>如果j大于等于p1，表示p遍历完，若s未完，返回false，否则true</p>
-<p>如果j小于等于p1，而s已经遍历完，查看j+1及其之后是否全为*，是则true，否则false</p>
-<p>如果j小于等于p1，而s还未遍历完，则查看当前字符，如果j对应的不为？或者<em>，查看是否和i对应的相等，是则j+1，i+1继续遍历，否则就返回false。如果j对应的？，直接i+1，j+1。如果对应的</em>，就有三种情况，不匹配，查看i，j+1，匹配1次，i+1，j+1，匹配多次，i+1，j。只要这三种情况一种满足即可，因此取或。</p>
-<p>上述的操作，但是等于遍历了所有的可能性，特别是遇到了多个<em>的时候，因此在处理的时候可以将多个挨着的</em>删减为1个。但是这样处理也会超时，可能这就是为什么是Hard吧。</p>
-<p>以下是网上查询之后得到的思路：</p>
-<p>因此还需要思考一下，当我们遇到<em>的时候，总是会有匹配一次，匹配多次，一次都不匹配三种选择，原则上来说，一个</em>可以匹配任意一个字符串。因此，可以使用一个贪心的算法。我们在遍历的时候，遇到<em>，总是先一次都不匹配，然后遇到不匹配的时候，我们往回走，去使用</em>匹配一次，再重新走一遍。但是这里有一个trick，因为<em>可以匹配任意字符串，所以我们只需要回退到最近的</em>就可以了，因为这个<em>可以模拟前面的</em>在当前这个位置之后的所有可以匹配出的所有情况</p>
-<p>代码如下：</p>
-<p>Runtime: 12 ms, faster than 96.74% of C++ online submissions for Wildcard Matching.<br>Memory Usage: 8.8 MB, less than 89.78% of C++ online submissions for Wildcard Matching.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isMatch</span><span class="params">(<span class="built_in">string</span> s, <span class="built_in">string</span> p)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">0</span>, slen = s.<span class="built_in">size</span>(), j = <span class="number">0</span>, plen = p.<span class="built_in">size</span>(), lastj = <span class="number">-1</span>, lasti = <span class="number">0</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span>(i&lt;slen)&#123;</span><br><span class="line">            <span class="keyword">if</span>((j&lt;plen) &amp;&amp; ((p[j]==<span class="string">'?'</span>) || (s[i]==p[j])))&#123;</span><br><span class="line">                i++; j++;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(j&lt;plen &amp;&amp; p[j]==<span class="string">'*'</span>)&#123;</span><br><span class="line">                lastj = j;</span><br><span class="line">                lasti = i;</span><br><span class="line">                j++;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(lastj != <span class="number">-1</span>)&#123;</span><br><span class="line">                j = lastj + <span class="number">1</span>;</span><br><span class="line">                lasti++;</span><br><span class="line">                i = lasti;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">while</span>(j&lt;plen &amp;&amp; p[j]==<span class="string">'*'</span>) j++;</span><br><span class="line">        <span class="keyword">return</span> j==plen;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>这道题也可以使用动态规划的问题，使用一个二维数组就跟求编辑距离一样，ij表示s的前i个字符和p的前j个字符是否匹配。但是实际实现的时候会出现内存溢出的问题，因此可以使用一个1*2的数组，因为每一个位置的只需要前面一个位置的结果而已。</p>
-<p>（PS：DP问题，先用简单的办法想出可以解的方案，再逐步优化即可。这道题可以先用二维数组，再慢慢优化！这是一个很重要的方法和思考的办法）</p>
-<p>这里也有一个更好的办法，只使用一个1维数组。M的长度与S一致，用一个循环遍历P，M就记录S的前i个字符与P当前遍历过的字符是否匹配。当遍历结束，返回M的最后一个结果，记住每遍历一次就更新一次M。当然也可以用M记录P的前i个字符与S当前遍历过的字符是否匹配，当遍历结束返回M的最后一个结果。这里我只实现了第一种。</p>
-<p>代码如下：</p>
-<p>Runtime: 64 ms, faster than 55.45% of C++ online submissions for Wildcard Matching.<br>Memory Usage: 9.2 MB, less than 83.74% of C++ online submissions for Wildcard Matching.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isMatch</span><span class="params">(<span class="built_in">string</span> s, <span class="built_in">string</span> p)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> slen = s.<span class="built_in">size</span>(), plen = p.<span class="built_in">size</span>(), i;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(plen==<span class="number">0</span>) <span class="keyword">return</span> slen==<span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">bool</span>&gt; <span class="title">M</span><span class="params">(slen+<span class="number">1</span>, <span class="literal">false</span>)</span></span>;</span><br><span class="line">        M[<span class="number">0</span>] = <span class="literal">true</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;plen; j++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(p[j] == <span class="string">'*'</span>)&#123;</span><br><span class="line">                i = <span class="number">0</span>;</span><br><span class="line">                <span class="keyword">while</span>(i&lt;slen+<span class="number">1</span> &amp;&amp; M[i]!=<span class="literal">true</span>) i++;</span><br><span class="line">                <span class="keyword">while</span>(i&lt;slen+<span class="number">1</span>) M[i++] = <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="keyword">for</span>(i=slen<span class="number">-1</span>; i&gt;=<span class="number">0</span>; i--)</span><br><span class="line">                    M[i+<span class="number">1</span>] = M[i] &amp;&amp; (s[i]==p[j] || p[j]==<span class="string">'?'</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            M[<span class="number">0</span>] = M[<span class="number">0</span>] &amp;&amp; p[j]==<span class="string">'*'</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> M[slen];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-05-25. 我真是越来越优秀了。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(452.%20Minimum%20Number%20of%20Arrows%20to%20Burst%20Balloons)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(452.%20Minimum%20Number%20of%20Arrows%20to%20Burst%20Balloons)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(452. Minimum Number of Arrows to Burst Balloons)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-452-Minimum-Number-of-Arrows-to-Burst-Balloons-题解"><a href="#LeetCode-452-Minimum-Number-of-Arrows-to-Burst-Balloons-题解" class="headerlink" title="LeetCode(\452. Minimum Number of Arrows to Burst Balloons)题解"></a>LeetCode(\452. Minimum Number of Arrows to Burst Balloons)题解</h1><p>There are a number of spherical balloons spread in two-dimensional space. For each balloon, provided input is the start and end coordinates of the horizontal diameter. Since it’s horizontal, y-coordinates don’t matter and hence the x-coordinates of start and end of the diameter suffice. Start is always smaller than end. There will be at most 104 balloons.</p>
-<p>An arrow can be shot up exactly vertically from different points along the x-axis. A balloon with xstart and xend bursts by an arrow shot at x if xstart ≤ x ≤ xend. There is no limit to the number of arrows that can be shot. An arrow once shot keeps travelling up infinitely. The problem is to find the minimum number of arrows that must be shot to burst all balloons.</p>
-<p><strong>Example:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Input:</span><br><span class="line">[[10,16], [2,8], [1,6], [7,12]]</span><br><span class="line"></span><br><span class="line">Output:</span><br><span class="line">2</span><br><span class="line"></span><br><span class="line">Explanation:</span><br><span class="line">One way is to shoot one arrow for example at x &#x3D; 6 (bursting the balloons [2,8] and [1,6]) and another arrow at x &#x3D; 11 (bursting the other two balloons).</span><br></pre></td></tr></table></figure>
-
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>一串气球在各自的区间，区间之间可能有重叠。从一个位置射出一箭，包含这个位置的区间所对应的就会破裂。要求用最少的箭把所有的气球射爆。</p>
-<p>这个题简化了就是，我们选最少的点，可以使得其对应所有的区间。这是一个Greedy题。策略是什么呢，就是我们每次选点的时候，都尽可能包含更多的区间进去。</p>
-<p>将所有区间按照左位置升序排列。然后维护一个sta和end值。初始化sta和end为第一个区间的左位置和右位置。然后依次遍历后面的区间。如果后面区间的左位置小于等于end值，说明这个区间和前面是重叠的，就可以和前面的用一个点来包含，更新sta为这个区间的左值，end为min(end,区间右值)。如果大于end值，说明不重叠，就必须额外选点，因此ret++，然后sta和end更新为这个区间的左位置和右位置。</p>
-<p>代码如下，时间复杂度因为排序为O(nlogn)，空间复杂度O(1)。</p>
-<p><code>Runtime: 680 ms, faster than 7.76% of C++ online submissions for Minimum Number of Arrows to Burst Balloons.</code></p>
-<p><code>Memory Usage: 159.6 MB, less than 20.00% of C++ online submissions for Minimum Number of Arrows to Burst Balloons.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; a, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a[<span class="number">0</span>] &lt;= b[<span class="number">0</span>];</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">findMinArrowShots</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; points)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = points.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> sta = <span class="number">0</span>, <span class="built_in">end</span> = <span class="number">0</span>, ret = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span> (len == <span class="number">0</span>) <span class="keyword">return</span> ret;</span><br><span class="line">        sort(points.<span class="built_in">begin</span>(), points.<span class="built_in">end</span>(), cmp);</span><br><span class="line">        </span><br><span class="line">        sta = points[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">        <span class="built_in">end</span> = points[<span class="number">0</span>][<span class="number">1</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;len; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (points[i][<span class="number">0</span>] &lt;= <span class="built_in">end</span>) &#123;</span><br><span class="line">                sta = points[i][<span class="number">0</span>];</span><br><span class="line">                <span class="built_in">end</span> = <span class="built_in">min</span>(<span class="built_in">end</span>, points[i][<span class="number">1</span>]);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                ret++;</span><br><span class="line">                sta = points[i][<span class="number">0</span>];</span><br><span class="line">                <span class="built_in">end</span> = points[i][<span class="number">1</span>];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        ret++;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2019-12-30</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1042,7 +1011,7 @@ Output: false</code></pre><h2 id="解题思路"><a href="#解题思路" class="h
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">309</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
