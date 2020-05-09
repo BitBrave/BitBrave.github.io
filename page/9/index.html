@@ -177,6 +177,83 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(103.%20Binary%20Tree%20Zigzag%20Level%20Order%20Traversal)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(103.%20Binary%20Tree%20Zigzag%20Level%20Order%20Traversal)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(103. Binary Tree Zigzag Level Order Traversal)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-103-Binary-Tree-Zigzag-Level-Order-Traversal-题解"><a href="#LeetCode-103-Binary-Tree-Zigzag-Level-Order-Traversal-题解" class="headerlink" title="LeetCode(103. Binary Tree Zigzag Level Order Traversal)题解"></a>LeetCode(103. Binary Tree Zigzag Level Order Traversal)题解</h1><hr>
+<p>Given a binary tree, return the zigzag level order traversal of its nodes’ values. (ie, from left to right, then right to left for the next level and alternate between).</p>
+<pre><code>For example:
+Given binary tree [3,9,20,null,null,15,7],
+     3
+    / \
+   9  20
+     /  \
+    15   7</code></pre><p>return its zigzag level order traversal as:</p>
+<pre><code>[
+    [3],
+    [20,9],
+    [15,7]
+]</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>实现二叉树的层序遍历,同时要是曲折的，就是这一层从左到右，下一层从右到左，再从左到右····。</p>
+<p>很简单，用一个queue存储遍历的节点，用一个数count记录每一层入队列的数目，同时用一个bool变量dir记录方向，true从左到右，false从右到左。首先根节点入队列，count+1，然后以count为准进行循环出队列，每次出队列的时候，要把出队列的节点的孩子节点入队列。最后count为0时表示这一层数目全部出来了，这一层用一个vector记录，如果dir为false，就将vector反转（reverse函数）。然后再count更新为队列的size，表示下一层的数目。</p>
+<p>代码如下：</p>
+<p>Runtime: 4 ms, faster than 93.83% of C++ online submissions for Binary Tree Zigzag Level Order Traversal.<br>Memory Usage: 13.5 MB, less than 56.33% of C++ online submissions for Binary Tree Zigzag Level Order Traversal.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">zigzagLevelOrder</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; res;</span><br><span class="line">        <span class="built_in">queue</span>&lt;TreeNode*&gt; Q;</span><br><span class="line">        <span class="keyword">int</span> count;</span><br><span class="line">        <span class="keyword">bool</span> dir = <span class="literal">false</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(root != <span class="literal">NULL</span>) Q.push(root);</span><br><span class="line">        <span class="keyword">while</span>(!Q.empty())&#123;</span><br><span class="line">            count = Q.<span class="built_in">size</span>();</span><br><span class="line">            dir = !dir;</span><br><span class="line">            TreeNode* tmp;</span><br><span class="line">            <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; item;</span><br><span class="line">            <span class="keyword">while</span>(count&gt;<span class="number">0</span>)&#123;</span><br><span class="line">                count--;</span><br><span class="line">                tmp = Q.front(); Q.pop();</span><br><span class="line">                item.push_back(tmp-&gt;val);</span><br><span class="line">                <span class="keyword">if</span>(tmp-&gt;left != <span class="literal">NULL</span>) Q.push(tmp-&gt;left);</span><br><span class="line">                <span class="keyword">if</span>(tmp-&gt;right != <span class="literal">NULL</span>) Q.push(tmp-&gt;right);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(!dir) reverse(item.<span class="built_in">begin</span>(), item.<span class="built_in">end</span>());</span><br><span class="line">            </span><br><span class="line">            res.push_back(item);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-06-27</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(102.%20Binary%20Tree%20Level%20Order%20Traversal)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -905,86 +982,6 @@ Return the following binary tree:
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(11.%20Container%20With%20Most%20Water)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(11.%20Container%20With%20Most%20Water)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(11. Container With Most Water)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-11-Container-With-Most-Water-题解"><a href="#LeetCode-11-Container-With-Most-Water-题解" class="headerlink" title="LeetCode(11. Container With Most Water)题解"></a>LeetCode(11. Container With Most Water)题解</h1><hr>
-<p>原文如下：</p>
-<p>Given n non-negative integers a1, a2, …, an , where each represents a point at coordinate (i, ai). n vertical lines are drawn such that the two endpoints of line i is at (i, ai) and (i, 0). Find two lines, which together with x-axis forms a container, such that the container contains the most water.</p>
-<p><strong>Note:</strong> You may not slant the container and n is at least 2.</p>
-<p><img src="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/07/17/question_11.jpg" alt="The above vertical lines are represented by array [1,8,6,2,5,4,8,3,7]. In this case, the max area of water (blue section) the container can contain is 49."></p>
-<p>Example:</p>
-<pre><code>Input: [1,8,6,2,5,4,8,3,7]
-Output: 49</code></pre><h2 id="题目分析："><a href="#题目分析：" class="headerlink" title="题目分析："></a>题目分析：</h2><p>题目是LeetCode内一个Medium难度的题目，并不难。要求从给定的条件中找出最大容量的容器组成。如果抽离出现实，就是要求给定一个数组A = [a1, a2, …, an]，寻找一个M = max abs(i-j)* min(ai, aj) (i,j = 1,2, …, n)。</p>
-<h2 id="思路一O-n2-："><a href="#思路一O-n2-：" class="headerlink" title="思路一O(n2)："></a>思路一O(n2)：</h2><p>题目并未给定时间复杂度的要求，一个最简单的思路就是遍历，比较任意两个数之间的大小，时间复杂度O(n2)。代码如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxArea</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; <span class="built_in">height</span>)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> M = <span class="number">0</span>, len = <span class="built_in">height</span>.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt; len; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j = i; j&lt;len; j++)&#123;</span><br><span class="line">                M = M&gt;(j-i)*<span class="built_in">min</span>(<span class="built_in">height</span>[i], <span class="built_in">height</span>[j])? M:(j-i)*<span class="built_in">min</span>(<span class="built_in">height</span>[i], <span class="built_in">height</span>[j]);</span><br><span class="line">            &#125;;</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">return</span> M;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<h2 id="思路二O-nlogn-："><a href="#思路二O-nlogn-：" class="headerlink" title="思路二O(nlogn)："></a>思路二O(nlogn)：</h2><p>一个可以提速的办法是，基于这样的一个事实：ai与aj(i&lt;\j)组成的值为abs(i-j)<em>min(ai,aj)，而在i与j之中的任何低于min(ai,aj)的ak肯定不会在是整个数组中作为最大容量时的选择，因为假如最大的容量组成为M = abs(p-k)</em>min(ak, ap)，基于i&lt;\k&lt;\j, ak&lt;=min(ai, aj)那么有如下几种情况。</p>
-<pre><code>p&lt;i&lt;j: M &lt;= abs(p-j)*min(aj, ap)。
-i&lt;j&lt;p: M &lt;= abs(p-i)*min(ai, ap)。
-i&lt;=p&lt;=j: M &lt;= min(abs(i-p)*min(ai, ap), abs(p-j)*min(aj, ap))。</code></pre><p>因此，我们可以记录数组内元素和初始位置的关系，然后将数组降序排序，得到新的数组B = [b1, b2, …, bn]，依次遍历。<br>    初始化left=min(b1的初始位置p1, b2的初始位置p2)，right= max(b1的初始位置p1, b2的初始位置p2)，M = abs(p1-p2)<em>b2。<br>    依次向下遍历，在位置pi。<br>    如果left&lt;pi&lt;right: M = M，跳过。<br>    如果pi&lt;left&lt;right: M = max(M, (right-pi)</em>B[i])，更新 left = pi<br>    如果left&lt;right&lt;pi: M = max(M, (pi-left)*B[i])，更新 right = pi</p>
-<p>这里要注意，只要pi在当前[left, right]区间之外，都要进行更新（important），不管M是否需要更新，因为B降序排序，A[pi]总是剩下的最大的，因此其间的都应该不考虑。</p>
-<p>注意B[i] = A[pi], 所以C++代码实现时，可以利用数组B只存储位置，按照A内的元素大小排序位置。不过我这里是使用Vector建立了一个二维数组，大小A.size()*2，内部存储位置与元素值。自定义比较函数。代码如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(<span class="keyword">const</span> <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;a, <span class="keyword">const</span> <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;b)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> a[<span class="number">1</span>] &gt; b[<span class="number">1</span>];</span><br><span class="line">    &#125;;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxArea</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; <span class="built_in">height</span>)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">height</span>.<span class="built_in">size</span>() &lt;= <span class="number">1</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">B</span><span class="params">(<span class="built_in">height</span>.<span class="built_in">size</span>(), <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(<span class="number">2</span>,<span class="number">0</span>))</span></span>;</span><br><span class="line">        <span class="comment">// O(n)</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="built_in">height</span>.<span class="built_in">size</span>(); i++) &#123;</span><br><span class="line">            B[i][<span class="number">0</span>] = i;</span><br><span class="line">            B[i][<span class="number">1</span>] = <span class="built_in">height</span>[i];</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="comment">// O(nlogn)</span></span><br><span class="line">        sort(B.<span class="built_in">begin</span>(), B.<span class="built_in">end</span>(), cmp);</span><br><span class="line">        <span class="comment">// O(n)</span></span><br><span class="line">        <span class="keyword">int</span> left = <span class="built_in">min</span>(B[<span class="number">0</span>][<span class="number">0</span>], B[<span class="number">1</span>][<span class="number">0</span>]), right = <span class="built_in">max</span>(B[<span class="number">0</span>][<span class="number">0</span>], B[<span class="number">1</span>][<span class="number">0</span>]), M;</span><br><span class="line">        M = (right - left) * <span class="built_in">min</span>(B[<span class="number">0</span>][<span class="number">1</span>], B[<span class="number">1</span>][<span class="number">1</span>]);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">2</span>; i&lt;B.<span class="built_in">size</span>(); i++)&#123;</span><br><span class="line">            <span class="keyword">int</span> pi = B[i][<span class="number">0</span>];</span><br><span class="line">            <span class="keyword">if</span>(left &lt; pi &amp;&amp; pi &lt; right) <span class="keyword">continue</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (pi &lt; left)&#123;</span><br><span class="line">                M = <span class="built_in">max</span>(M, (right - pi) * B[i][<span class="number">1</span>]);</span><br><span class="line">                left = pi;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                M = <span class="built_in">max</span>(M, (pi - left) * B[i][<span class="number">1</span>]);</span><br><span class="line">                right = pi;</span><br><span class="line">            &#125;;</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">return</span> M;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>当然，代码美观一点的话，也可以这样写。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(<span class="keyword">const</span> <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;a, <span class="keyword">const</span> <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;b)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> a[<span class="number">1</span>] &gt; b[<span class="number">1</span>];</span><br><span class="line">    &#125;;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxArea</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; <span class="built_in">height</span>)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">height</span>.<span class="built_in">size</span>() &lt;= <span class="number">1</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">B</span><span class="params">(<span class="built_in">height</span>.<span class="built_in">size</span>(), <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(<span class="number">2</span>,<span class="number">0</span>))</span></span>;</span><br><span class="line">        <span class="comment">// O(n)</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="built_in">height</span>.<span class="built_in">size</span>(); i++) &#123;</span><br><span class="line">            B[i][<span class="number">0</span>] = i;</span><br><span class="line">            B[i][<span class="number">1</span>] = <span class="built_in">height</span>[i];</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="comment">// O(nlogn)</span></span><br><span class="line">        sort(B.<span class="built_in">begin</span>(), B.<span class="built_in">end</span>(), cmp);</span><br><span class="line">        <span class="comment">// O(n)</span></span><br><span class="line">        <span class="keyword">int</span> left = <span class="built_in">min</span>(B[<span class="number">0</span>][<span class="number">0</span>], B[<span class="number">1</span>][<span class="number">0</span>]), right = <span class="built_in">max</span>(B[<span class="number">0</span>][<span class="number">0</span>], B[<span class="number">1</span>][<span class="number">0</span>]), M;</span><br><span class="line">        M = (right - left) * <span class="built_in">min</span>(B[<span class="number">0</span>][<span class="number">1</span>], B[<span class="number">1</span>][<span class="number">1</span>]);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">2</span>; i&lt;B.<span class="built_in">size</span>(); i++)&#123;</span><br><span class="line">            <span class="keyword">int</span> pi = B[i][<span class="number">0</span>];</span><br><span class="line">            <span class="keyword">if</span>(left &lt; pi &amp;&amp; pi &lt; right) <span class="keyword">continue</span>;</span><br><span class="line">            </span><br><span class="line">            M = (pi &lt; left)? <span class="built_in">max</span>(M, (right - pi) * B[i][<span class="number">1</span>]) : <span class="built_in">max</span>(M, (pi - left) * B[i][<span class="number">1</span>]);</span><br><span class="line">            left = <span class="built_in">min</span>(left, pi);</span><br><span class="line">            right = <span class="built_in">max</span>(right, pi);</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">return</span> M;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p><strong>PS: 版权所有，翻版必究（所有的解法完全都是自己想出来的，很开心）。</strong><br>BitBrave, 2019-04-16</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1057,7 +1054,7 @@ i&lt;=p&lt;=j: M &lt;= min(abs(i-p)*min(ai, ap), abs(p-j)*min(aj, ap))。</code>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">327</span>
+          <span class="site-state-item-count">328</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
