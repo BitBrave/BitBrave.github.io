@@ -177,6 +177,161 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(1186.%20Maximum%20Subarray%20Sum%20with%20One%20Deletion)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(1186.%20Maximum%20Subarray%20Sum%20with%20One%20Deletion)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1186. Maximum Subarray Sum with One Deletion)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-1186-Maximum-Subarray-Sum-with-One-Deletion-题解"><a href="#LeetCode-1186-Maximum-Subarray-Sum-with-One-Deletion-题解" class="headerlink" title="LeetCode(\1186. Maximum Subarray Sum with One Deletion)题解"></a>LeetCode(\1186. Maximum Subarray Sum with One Deletion)题解</h1><p>Given an array of integers, return the maximum sum for a <strong>non-empty</strong> subarray (contiguous elements) with at most one element deletion. In other words, you want to choose a subarray and optionally delete one element from it so that there is still at least one element left and the sum of the remaining elements is maximum possible.</p>
+<p>Note that the subarray needs to be <strong>non-empty</strong> after deleting one element.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: arr &#x3D; [1,-2,0,3]</span><br><span class="line">Output: 4</span><br><span class="line">Explanation: Because we can choose [1, -2, 0, 3] and drop -2, thus the subarray [1, 0, 3] becomes the maximum value.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: arr &#x3D; [1,-2,-2,3]</span><br><span class="line">Output: 3</span><br><span class="line">Explanation: We just choose [3] and it&#39;s the maximum sum.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 3:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: arr &#x3D; [-1,-1,-1,-1]</span><br><span class="line">Output: -1</span><br><span class="line">Explanation: The final subarray needs to be non-empty. You can&#39;t choose [-1] and delete -1 from it, then get an empty subarray to make the sum equals to 0.</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>1 &lt;= arr.length &lt;= 10^5</code></li>
+<li><code>-10^4 &lt;= arr[i] &lt;= 10^4</code></li>
+</ul>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>从数组中最多可以删除一个元素，然后选取最大连续子树组，返回其和。</p>
+<p>如果不删除元素，就是一个最简单的最大连续子数组和而已。如果可以删除一个，最笨的办法就是一次删除一个数，然后求剩下的最大连续子数组和，这样时间复杂度O(n2)，我试了试会超时。</p>
+<p>其实本题可以使用DP，从左到右遍历给定的数组，用两个数组分别记录包括当前元素在内的最大连续子数组之和，一个记录删除了一个元素的结果，一个记录不删除元素的结果。最后在这个过程中随时更新ret 即可。</p>
+<p>代码如下，时间复杂度O(n)，空间复杂度O(n)，但是观察数组，发现状态转移至用到了相邻的数据，所以只需要常量空间也可以完成，这样时间复杂度可为O(1).我懒得做。</p>
+<p><code>Runtime: 44 ms, faster than 61.61% of C++ online submissions for Maximum Subarray Sum with One Deletion.</code></p>
+<p><code>Memory Usage: 15 MB, less than 100.00% of C++ online submissions for Maximum Subarray Sum with One Deletion.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maximumSum</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; arr)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = arr.<span class="built_in">size</span>(), ret = arr[<span class="number">0</span>];</span><br><span class="line">        </span><br><span class="line">        vector&lt;int&gt; D0(len, arr[0]), D1(len, arr[0]);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;len; i++) &#123;</span><br><span class="line">            D0[i] = <span class="built_in">max</span>(D0[i<span class="number">-1</span>]+arr[i], arr[i]);</span><br><span class="line">            D1[i] = <span class="built_in">max</span>(D1[i<span class="number">-1</span>]+arr[i], arr[i]);</span><br><span class="line">            D1[i] = <span class="built_in">max</span>(D1[i], D0[i<span class="number">-1</span>]);</span><br><span class="line">            ret = <span class="built_in">max</span>(ret, <span class="built_in">max</span>(D0[i], D1[i]));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-12-16</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(119.%20Pascal's%20Triangle%20II)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(119.%20Pascal's%20Triangle%20II)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(119. Pascal's Triangle II)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-119-Pascal’s-Triangle-II-题解"><a href="#LeetCode-119-Pascal’s-Triangle-II-题解" class="headerlink" title="LeetCode(119. Pascal’s Triangle II)题解"></a>LeetCode(119. Pascal’s Triangle II)题解</h1><hr>
+<p>Given a non-negative index k where k ≤ 33, return the kth index row of the Pascal’s triangle.</p>
+<p>Note that the row index starts from 0.</p>
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/0/0d/PascalTriangleAnimated2.gif" alt="In Pascal&#39;s triangle, each number is the sum of the two numbers directly above it."></p>
+<p>Example:</p>
+<pre><code>Input: 3
+Output: [1,3,3,1]</code></pre><p>Follow up:</p>
+<pre><code>Could you optimize your algorithm to use only O(k) extra space?</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Easy，就是简单计算一下杨辉三角（帕斯卡三角）在给定的第N行的数而已。其中第N行由上一行的数相邻相加得到2到n-1的数。最两边为1.第一行为1.</p>
+<p>一个简单的for循环就可以了。</p>
+<p>代码如下：</p>
+<p>Runtime: 0 ms, faster than 100.00% of C++ online submissions for Pascal’s Triangle II.<br>Memory Usage: 8.5 MB, less than 46.65% of C++ online submissions for Pascal’s Triangle II.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">getRow</span><span class="params">(<span class="keyword">int</span> rowIndex)</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">res</span><span class="params">(rowIndex+<span class="number">1</span>, <span class="number">1</span>)</span></span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">2</span>; i&lt;rowIndex+<span class="number">1</span>; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> k=i<span class="number">-1</span>; k&gt;<span class="number">0</span>; k--) res[k] += res[k<span class="number">-1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-06-09</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(12.%20Integer%20to%20Roman)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -879,193 +1034,6 @@ Explanation: The longest consecutive elements sequence is [1, 2, 3, 4]. Therefor
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(129.%20Sum%20Root%20to%20Leaf%20Numbers)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(129.%20Sum%20Root%20to%20Leaf%20Numbers)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(129. Sum Root to Leaf Numbers)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-129-Sum-Root-to-Leaf-Numbers-题解"><a href="#LeetCode-129-Sum-Root-to-Leaf-Numbers-题解" class="headerlink" title="LeetCode(129. Sum Root to Leaf Numbers)题解"></a>LeetCode(129. Sum Root to Leaf Numbers)题解</h1><hr>
-<p>Given a binary tree containing digits from 0-9 only, each root-to-leaf path could represent a number.</p>
-<p>An example is the root-to-leaf path 1-&gt;2-&gt;3 which represents the number 123.</p>
-<p>Find the total sum of all root-to-leaf numbers.</p>
-<p>Note: A leaf is a node with no children.</p>
-<p>Example:</p>
-<pre><code>Input: [1,2,3]
-    1
-   / \
-  2   3
-Output: 25
-Explanation:
-The root-to-leaf path 1-&gt;2 represents the number 12.
-The root-to-leaf path 1-&gt;3 represents the number 13.
-Therefore, sum = 12 + 13 = 25.</code></pre><p>Example 2:</p>
-<pre><code>Input: [4,9,0,5,1]
-    4
-   / \
-  9   0
- / \
-5   1
-Output: 1026
-Explanation:
-The root-to-leaf path 4-&gt;9-&gt;5 represents the number 495.
-The root-to-leaf path 4-&gt;9-&gt;1 represents the number 491.
-The root-to-leaf path 4-&gt;0 represents the number 40.
-Therefore, sum = 495 + 491 + 40 = 1026.</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个二叉树，每个节点的值为0-9，每个根节点到孩子节点的值组合起来是一个数。求出所有路径上的值的和。</p>
-<p>这个题简单的分叉递归就可以了。每次当前再每次向下走的时候都意味着当前数字向左移一位，直接*10即可。</p>
-<p>代码如下：</p>
-<p>Runtime: 0 ms, faster than 100.00% of C++ online submissions for Sum Root to Leaf Numbers.<br>Memory Usage: 12.3 MB, less than 73.12% of C++ online submissions for Sum Root to Leaf Numbers.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">sumNumbers_</span><span class="params">(TreeNode* root, <span class="keyword">int</span> res)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root-&gt;left == <span class="literal">NULL</span> &amp;&amp; root-&gt;right == <span class="literal">NULL</span>) <span class="keyword">return</span> res * <span class="number">10</span> + root-&gt;val;</span><br><span class="line">        <span class="keyword">int</span> R = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span>(root-&gt;right != <span class="literal">NULL</span>) R = sumNumbers_(root-&gt;right, res * <span class="number">10</span> + root-&gt;val);</span><br><span class="line">        <span class="keyword">if</span>(root-&gt;left != <span class="literal">NULL</span>) R += sumNumbers_(root-&gt;left, res * <span class="number">10</span> + root-&gt;val);</span><br><span class="line">        <span class="keyword">return</span> R;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">sumNumbers</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        res = sumNumbers_(root, res);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-07-06</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(13.%20Roman%20to%20Integer)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(13.%20Roman%20to%20Integer)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(13. Roman to Integer)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-13-Roman-to-Integer-题解"><a href="#LeetCode-13-Roman-to-Integer-题解" class="headerlink" title="LeetCode(13. Roman to Integer)题解"></a>LeetCode(13. Roman to Integer)题解</h1><hr>
-<p>原文如下：<br>Roman numerals are represented by seven different symbols: I, V, X, L, C, D and M.</p>
-<pre><code>Symbol       Value
-I             1
-V             5
-X             10
-L             50
-C             100
-D             500
-M             1000</code></pre><p>For example, two is written as II in Roman numeral, just two one’s added together. Twelve is written as, XII, which is simply X + II. The number twenty seven is written as XXVII, which is XX + V + II.</p>
-<p>Roman numerals are usually written largest to smallest from left to right. However, the numeral for four is not IIII. Instead, the number four is written as IV. Because the one is before the five we subtract it making four. The same principle applies to the number nine, which is written as IX. There are six instances where subtraction is used:</p>
-<pre><code>I can be placed before V (5) and X (10) to make 4 and 9. 
-X can be placed before L (50) and C (100) to make 40 and 90. 
-C can be placed before D (500) and M (1000) to make 400 and 900.
-Given a roman numeral, convert it to an integer. Input is guaranteed to be within the range from 1 to 3999.
-
-Example 1:
-
-Input: &quot;III&quot;
-Output: 3
-Example 2:
-
-Input: &quot;IV&quot;
-Output: 4
-Example 3:
-
-Input: &quot;IX&quot;
-Output: 9
-Example 4:
-
-Input: &quot;LVIII&quot;
-Output: 58
-Explanation: L = 50, V= 5, III = 3.
-Example 5:
-
-Input: &quot;MCMXCIV&quot;
-Output: 1994
-Explanation: M = 1000, CM = 900, XC = 90 and IV = 4.</code></pre><h2 id="解题思路（easy，直接转换，只是注意一下表达4-9时的方式即可）。代码如下："><a href="#解题思路（easy，直接转换，只是注意一下表达4-9时的方式即可）。代码如下：" class="headerlink" title="解题思路（easy，直接转换，只是注意一下表达4 9时的方式即可）。代码如下："></a>解题思路（easy，直接转换，只是注意一下表达4 9时的方式即可）。代码如下：</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">romanToInt</span><span class="params">(<span class="built_in">string</span> s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> num = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; s.<span class="built_in">size</span>(); i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(s[i]==<span class="string">'M'</span>) num += <span class="number">1000</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(s[i]==<span class="string">'D'</span>) num += <span class="number">500</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(s[i]==<span class="string">'C'</span>)&#123;</span><br><span class="line">                <span class="keyword">if</span>(i+<span class="number">1</span> &lt; s.<span class="built_in">size</span>()&amp;&amp;(s[i+<span class="number">1</span>]==<span class="string">'M'</span> || s[i+<span class="number">1</span>]==<span class="string">'D'</span>)) num -= <span class="number">100</span>;</span><br><span class="line">                <span class="keyword">else</span> num += <span class="number">100</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(s[i]==<span class="string">'L'</span>) num += <span class="number">50</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(s[i]==<span class="string">'X'</span>)&#123;</span><br><span class="line">                <span class="keyword">if</span>(i+<span class="number">1</span> &lt; s.<span class="built_in">size</span>()&amp;&amp;(s[i+<span class="number">1</span>]==<span class="string">'C'</span> || s[i+<span class="number">1</span>]==<span class="string">'L'</span>)) num -= <span class="number">10</span>;</span><br><span class="line">                <span class="keyword">else</span> num += <span class="number">10</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(s[i]==<span class="string">'V'</span>) num += <span class="number">5</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(s[i]==<span class="string">'I'</span>)&#123;</span><br><span class="line">                <span class="keyword">if</span>(i+<span class="number">1</span> &lt; s.<span class="built_in">size</span>()&amp;&amp;(s[i+<span class="number">1</span>]==<span class="string">'X'</span> || s[i+<span class="number">1</span>]==<span class="string">'V'</span>)) num -= <span class="number">1</span>;</span><br><span class="line">                <span class="keyword">else</span> num += <span class="number">1</span>;</span><br><span class="line">            &#125;;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> num;</span><br><span class="line">    &#125;;</span><br><span class="line">    </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-04-18</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1138,7 +1106,7 @@ Explanation: M = 1000, CM = 900, XC = 90 and IV = 4.</code></pre><h2 id="解题�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">328</span>
+          <span class="site-state-item-count">330</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

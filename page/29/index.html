@@ -177,6 +177,201 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(87.%20Scramble%20String)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(87.%20Scramble%20String)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(87. Scramble String)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-87-Scramble-String-题解"><a href="#LeetCode-87-Scramble-String-题解" class="headerlink" title="LeetCode(87. Scramble String)题解"></a>LeetCode(87. Scramble String)题解</h1><hr>
+<p>Given a string s1, we may represent it as a binary tree by partitioning it to two non-empty substrings recursively.</p>
+<p>Below is one possible representation of s1 = “great”:</p>
+<pre><code>    great
+   /    \
+  gr    eat
+ / \    /  \
+g   r  e   at
+           / \
+          a   t</code></pre><p>To scramble the string, we may choose any non-leaf node and swap its two children.</p>
+<p>For example, if we choose the node “gr” and swap its two children, it produces a scrambled string “rgeat”.</p>
+<pre><code>    rgeat
+   /    \
+  rg    eat
+ / \    /  \
+r   g  e   at
+           / \
+          a   t</code></pre><p>We say that “rgeat” is a scrambled string of “great”.</p>
+<p>Similarly, if we continue to swap the children of nodes “eat” and “at”, it produces a scrambled string “rgtae”.</p>
+<pre><code>    rgtae
+   /    \
+  rg    tae
+ / \    /  \
+r   g  ta  e
+       / \
+      t   a</code></pre><p>We say that “rgtae” is a scrambled string of “great”.</p>
+<p>Given two strings s1 and s2 of the same length, determine if s2 is a scrambled string of s1.</p>
+<p>Example 1:</p>
+<pre><code>Input: s1 = &quot;great&quot;, s2 = &quot;rgeat&quot;
+Output: true</code></pre><p>Example 2:</p>
+<pre><code>Input: s1 = &quot;abcde&quot;, s2 = &quot;caebd&quot;
+Output: false</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>这是一个Hard题，要求说给出两个字符串s1和s2，其中s1字符串可以从不同的位置进行拆分，变成一个完全二叉树（任何一个非叶子节点都有两个孩子节点），然后制定一个非叶子节点时，将其两个孩子节点及其子树交换位置，然后从左到右叶子节点组成一个新的字符串，要求判断s2是不是可以由这样的方式通过s1来生成。</p>
+<p>初一看这个题是没有什么头绪的。但是仔细想想，我们会发现假设s2就是s1生成的，那么s1一定采用了某种构建二叉树的方式。第一次在整个s1的某个位置砍一刀分成两个子串成为根节点的两个子节点，然后两个子串又各自按照相同的方式拆分，最后一些位置的节点交换一下位置就可以了。那么我们可以想象得到，<strong>s1如果被拆分为两个子串a和b，那么a中的字符不管最后怎么拆分和交换节点，最后a中的字符串一定全部在b中字符组成的字符串的前面或者后面。</strong>也可以这样说，s2如果一定是s1生成的。那个在s2中一定存在一个拆分的位置，将其分为两个子串a1和b1，其中a1中所有字符的在s1中的对应位置要么全部在b1的所有字符在s1中对应位置的前面，要么全部在后面，因为这相当于将s1拆分为两个子串。然后各自的子串就按照一样的方式比较。</p>
+<p>因此算法可以使用DP，递归执行，只有当最后s1和s2都只有一个或两个字符时，可以直接比较，否则直接依次将s2从左到右进行拆分（假设这就是s1拆分的位置），看看能不能由s1形成。能就直接结束返回true，否则就一直遍历到最后，如果直到最后都发现不能则返回false。</p>
+<p>这里有一个重要的函数就是比较两个字符串是不是一样的，即用来判断两个字符串是不是由相同种类和数量的字符组成的。比如”abb”和”bab”是一样的，而”abb”和”aab”就不一样。这个方式我首先是使用了map，将s1变成map，记录每个字符的数量，然后用s2的每个字符去erase这个map，最后查看是否empty。这个可以ac，但是有点耗时。</p>
+<p>一个可以加速的方式是直接用s2的每个字符去在s1中寻找对应的元素并删除，最后看s1是否是empty。</p>
+<p>也可以使用STL的sort函数，将两个string进行排序之后比较是否一样。这后两种方法可以有效提速和减小内存。</p>
+<p>使用map的代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isSame</span><span class="params">(<span class="built_in">string</span> s1, <span class="built_in">string</span> s2)</span></span>&#123;</span><br><span class="line">        <span class="built_in">map</span>&lt;<span class="keyword">char</span>, <span class="keyword">int</span>&gt; mp;</span><br><span class="line">        <span class="keyword">int</span> len = s1.<span class="built_in">size</span>();</span><br><span class="line">        <span class="built_in">map</span>&lt;<span class="keyword">char</span>, <span class="keyword">int</span>&gt;::iterator iter;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            iter = mp.<span class="built_in">find</span>(s1[i]);</span><br><span class="line">            <span class="keyword">if</span>(iter != mp.<span class="built_in">end</span>()) mp[s1[i]] += <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span> mp[s1[i]] = <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            iter = mp.<span class="built_in">find</span>(s2[i]);</span><br><span class="line">            <span class="keyword">if</span>(iter == mp.<span class="built_in">end</span>()) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            mp[s2[i]]--;</span><br><span class="line">            <span class="keyword">if</span>(mp[s2[i]] &lt;=<span class="number">0</span>) mp.erase(s2[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isScramble</span><span class="params">(<span class="built_in">string</span> s1, <span class="built_in">string</span> s2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(!isSame(s1, s2)) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> len = s2.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span>(len&lt;=<span class="number">2</span>) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">bool</span> ret = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;len; i++)&#123;</span><br><span class="line">            ret = isScramble(s1.substr(<span class="number">0</span>,i), s2.substr(<span class="number">0</span>,i));</span><br><span class="line">            <span class="keyword">if</span>(ret) ret = ret &amp; isScramble(s1.substr(i,len-i), s2.substr(i,len-i));</span><br><span class="line">            <span class="keyword">if</span>(ret) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            </span><br><span class="line">            ret = isScramble(s1.substr(len-i,i), s2.substr(<span class="number">0</span>,i));</span><br><span class="line">            <span class="keyword">if</span>(ret) ret = ret &amp; isScramble(s1.substr(<span class="number">0</span>,len-i), s2.substr(i,len-i));</span><br><span class="line">            <span class="keyword">if</span>(ret) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>使用string的比较的代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isSame</span><span class="params">(<span class="built_in">string</span> s1, <span class="built_in">string</span> s2)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = s1.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> pos;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            pos = s1.<span class="built_in">find</span>(s2[i]);</span><br><span class="line">            <span class="keyword">if</span>(pos==<span class="number">-1</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            s1.erase(pos, <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> s1.empty();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isScramble</span><span class="params">(<span class="built_in">string</span> s1, <span class="built_in">string</span> s2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(!isSame(s1, s2)) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> len = s2.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span>(len&lt;=<span class="number">2</span>) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">bool</span> ret = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;len; i++)&#123;</span><br><span class="line">            ret = isScramble(s1.substr(<span class="number">0</span>,i), s2.substr(<span class="number">0</span>,i));</span><br><span class="line">            <span class="keyword">if</span>(ret) ret = ret &amp; isScramble(s1.substr(i,len-i), s2.substr(i,len-i));</span><br><span class="line">            <span class="keyword">if</span>(ret) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            </span><br><span class="line">            ret = isScramble(s1.substr(len-i,i), s2.substr(<span class="number">0</span>,i));</span><br><span class="line">            <span class="keyword">if</span>(ret) ret = ret &amp; isScramble(s1.substr(<span class="number">0</span>,len-i), s2.substr(i,len-i));</span><br><span class="line">            <span class="keyword">if</span>(ret) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>使用sort的代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isSame</span><span class="params">(<span class="built_in">string</span> s1, <span class="built_in">string</span> s2)</span></span>&#123;</span><br><span class="line">        sort(s1.<span class="built_in">begin</span>(), s1.<span class="built_in">end</span>());</span><br><span class="line">        sort(s2.<span class="built_in">begin</span>(), s2.<span class="built_in">end</span>());</span><br><span class="line">        <span class="keyword">return</span> s1==s2;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isScramble</span><span class="params">(<span class="built_in">string</span> s1, <span class="built_in">string</span> s2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(!isSame(s1, s2)) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> len = s2.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span>(len&lt;=<span class="number">2</span>) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">bool</span> ret = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;len; i++)&#123;</span><br><span class="line">            ret = isScramble(s1.substr(<span class="number">0</span>,i), s2.substr(<span class="number">0</span>,i));</span><br><span class="line">            <span class="keyword">if</span>(ret) ret = ret &amp; isScramble(s1.substr(i,len-i), s2.substr(i,len-i));</span><br><span class="line">            <span class="keyword">if</span>(ret) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            </span><br><span class="line">            ret = isScramble(s1.substr(len-i,i), s2.substr(<span class="number">0</span>,i));</span><br><span class="line">            <span class="keyword">if</span>(ret) ret = ret &amp; isScramble(s1.substr(<span class="number">0</span>,len-i), s2.substr(i,len-i));</span><br><span class="line">            <span class="keyword">if</span>(ret) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2019-05-04。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(871.%20Minimum%20Number%20of%20Refueling%20Stops)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(871.%20Minimum%20Number%20of%20Refueling%20Stops)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(871. Minimum Number of Refueling Stops)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-871-Minimum-Number-of-Refueling-Stops-题解"><a href="#LeetCode-871-Minimum-Number-of-Refueling-Stops-题解" class="headerlink" title="LeetCode(\871. Minimum Number of Refueling Stops)题解"></a>LeetCode(\871. Minimum Number of Refueling Stops)题解</h1><p>A car travels from a starting position to a destination which is <code>target</code> miles east of the starting position.</p>
+<p>Along the way, there are gas stations. Each <code>station[i]</code> represents a gas station that is <code>station[i][0]</code> miles east of the starting position, and has <code>station[i][1]</code> liters of gas.</p>
+<p>The car starts with an infinite tank of gas, which initially has <code>startFuel</code> liters of fuel in it. It uses 1 liter of gas per 1 mile that it drives.</p>
+<p>When the car reaches a gas station, it may stop and refuel, transferring all the gas from the station into the car.</p>
+<p>What is the least number of refueling stops the car must make in order to reach its destination? If it cannot reach the destination, return <code>-1</code>.</p>
+<p>Note that if the car reaches a gas station with 0 fuel left, the car can still refuel there. If the car reaches the destination with 0 fuel left, it is still considered to have arrived.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: target &#x3D; 1, startFuel &#x3D; 1, stations &#x3D; []</span><br><span class="line">Output: 0</span><br><span class="line">Explanation: We can reach the target without refueling.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: target &#x3D; 100, startFuel &#x3D; 1, stations &#x3D; [[10,100]]</span><br><span class="line">Output: -1</span><br><span class="line">Explanation: We can&#39;t reach the target (or even the first gas station).</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 3:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Input: target &#x3D; 100, startFuel &#x3D; 10, stations &#x3D; [[10,60],[20,30],[30,30],[60,40]]</span><br><span class="line">Output: 2</span><br><span class="line">Explanation: </span><br><span class="line">We start with 10 liters of fuel.</span><br><span class="line">We drive to position 10, expending 10 liters of fuel.  We refuel from 0 liters to 60 liters of gas.</span><br><span class="line">Then, we drive from position 10 to position 60 (expending 50 liters of fuel),</span><br><span class="line">and refuel from 10 liters to 50 liters of gas.  We then drive to and reach the target.</span><br><span class="line">We made 2 refueling stops along the way, so we return 2.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Note:</strong></p>
+<ol>
+<li><code>1 &lt;= target, startFuel, stations[i][1] &lt;= 10^9</code></li>
+<li><code>0 &lt;= stations.length &lt;= 500</code></li>
+<li><code>0 &lt; stations[0][0] &lt; stations[1][0] &lt; ... &lt; stations[stations.length-1][0] &lt; target</code></li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>有一个有油箱无限大的车，车本身的油可以走startFuel公里，从起始点0向东出发达到目的地（距离起始点target公里）。路上有一些加油站，每个加油站有一定量的油，stations[i][0]表示该加油站离起点的距离，stations[i][1]表示该加油站的油可以支持车跑多远。现在求出车到达目的地的最少的加油次数，如果不能到达，就返回-1.</p>
+<p>一般来说求极值问题可以使用DP问题求解。不过这个题如果简单地设为一最少加油站的次数作为转移特征很不好搞。我也是参考网上资料之后才想到DP的解法。总结如下。</p>
+<p>设定一个N+1大小的一维数组DP（N为加油站的个数），其中DP[i]表示加油i次能到达的最大距离。假设我们得到了这个DP数组，只需要遍历这个数组，找到最小的i使得DP[i]大于等于target即可。那么如何构建这个DP数组呢？</p>
+<p>可知，DP[0]=startFuel.因为不加油只能走这么远。</p>
+<p>那么接下来就依次根据离起点远近遍历所有的加油站，所幸给定的加油站就是根据距离排序的。当我们遍历到第i个加油站，我们已经得到了目前DP[0,…,i-1]的当前最优值。那么就遍历这些最优值，判断其能否到达i加油站，如果能就更新其DP[j+1] = max(DP[j+1], DP[j]+station[i][1]).表示在这个站加油一次之后能走的最远距离（也可能不加）。</p>
+<p>代码如下，时间复杂度O(n2)，空间复杂度O(n).</p>
+<p><code>Runtime: 52 ms, faster than 36.23% of C++ online submissions for Minimum Number of Refueling Stops.</code></p>
+<p><code>Memory Usage: 13.1 MB, less than 100.00% of C++ online submissions for Minimum Number of Refueling Stops.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minRefuelStops</span><span class="params">(<span class="keyword">int</span> target, <span class="keyword">int</span> startFuel, <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; stations)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = stations.<span class="built_in">size</span>();</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">long</span>&gt; <span class="title">DP</span><span class="params">(len+<span class="number">1</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">        DP[<span class="number">0</span>] = startFuel;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=i; j&gt;=<span class="number">0</span> &amp;&amp; DP[j]&gt;=stations[i][<span class="number">0</span>]; j--)&#123;</span><br><span class="line">                DP[j+<span class="number">1</span>] = <span class="built_in">max</span>(DP[j+<span class="number">1</span>], DP[j] + stations[i][<span class="number">1</span>]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;=len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(DP[i] &gt;= target) <span class="keyword">return</span> i;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>还有另一种使用Heap最大堆的办法，有时间再细看吧。</p>
+<p>或者我想到可以使用队列的方式，从起点开始，将当前车能到达的加油站放入队列，然后遍历这个队列，对每一个计算在这个加油站加油能走到的最远的距离，再将这些路途上能到达的加油站都记录上，清空当前的队列之后，再将记录的加油站都入队。要记住，每个入队的加油站都记着车在这里加油之后可以走到的最远距离。然后每一层就相当于车多停留一个站，这个过程中随时判断车是否能到达目标，能就直接返回当前的加油次数即可。</p>
+<p>BitBrave, 2019-10-05</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(873.%20Length%20of%20Longest%20Fibonacci%20Subsequence)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -865,166 +1060,6 @@ Explanation: We define the gray code sequence to begin with 0.
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(890.%20Find%20and%20Replace%20Pattern)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(890.%20Find%20and%20Replace%20Pattern)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(890. Find and Replace Pattern)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-890-Find-and-Replace-Pattern-题解"><a href="#LeetCode-890-Find-and-Replace-Pattern-题解" class="headerlink" title="LeetCode(890. Find and Replace Pattern)题解"></a>LeetCode(890. Find and Replace Pattern)题解</h1><ol>
-<li><p>You have a list of <code>words</code> and a <code>pattern</code>, and you want to know which words in <code>words</code> matches the pattern.</p>
-<p>A word matches the pattern if there exists a permutation of letters <code>p</code> so that after replacing every letter <code>x</code> in the pattern with <code>p(x)</code>, we get the desired word.</p>
-<p>(<em>Recall that a permutation of letters is a bijection from letters to letters: every letter maps to another letter, and no two letters map to the same letter.</em>)</p>
-<p>Return a list of the words in <code>words</code> that match the given pattern. </p>
-<p>You may return the answer in any order.</p>
-</li>
-</ol>
-<p>   <strong>Example 1:</strong></p>
-   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Input: words &#x3D; [&quot;abc&quot;,&quot;deq&quot;,&quot;mee&quot;,&quot;aqq&quot;,&quot;dkd&quot;,&quot;ccc&quot;], pattern &#x3D; &quot;abb&quot;</span><br><span class="line">Output: [&quot;mee&quot;,&quot;aqq&quot;]</span><br><span class="line">Explanation: &quot;mee&quot; matches the pattern because there is a permutation &#123;a -&gt; m, b -&gt; e, ...&#125;. </span><br><span class="line">&quot;ccc&quot; does not match the pattern because &#123;a -&gt; c, b -&gt; c, ...&#125; is not a permutation,</span><br><span class="line">since a and b map to the same letter.</span><br></pre></td></tr></table></figure>
-
-
-
-<p>   <strong>Note:</strong></p>
-<ul>
-<li><code>1 &lt;= words.length &lt;= 50</code></li>
-<li><code>1 &lt;= pattern.length = words[i].length &lt;= 20</code></li>
-</ul>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>有一个单词列表和一个模式，并且想知道单词中哪些单词与该模式匹配。如果在模式中将每个字母x替换为对应单词中的字母之后，能获得所需的单词就表明这个单词是符合模式的。（字母的排列是字母到字母的双射：每个字母都映射到另一个字母，没有两个字母映射到同一字母。）返回与给定模式匹配的单词列表。可以按任何顺序返回答案。</p>
-<p>这个题可以使用匹配的方式，依次对每一个单词进行匹配，如果符合就放入结果中。</p>
-<p>如何来构建这样的函数呢，我们可以分别从模式和要匹配的单词的第一个字母开始，如果对相同位置上的字母建立一个映射，如果走到最后没有多个字母映射到一个或者一个映射到多个就表明这个是符合的，即一一对应。否则就不匹配。</p>
-<p>代码如下，设一个单词长度为N，时间复杂度O(N)，空间复杂度为O(N)。</p>
-<p><code>Runtime: 8 ms, faster than 37.31% of C++ online submissions for Find and Replace Pattern.</code></p>
-<p><code>Memory Usage: 9.6 MB, less than 81.82% of C++ online submissions for Find and Replace Pattern.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isMatch</span><span class="params">(<span class="built_in">string</span> w, <span class="built_in">string</span> p, <span class="keyword">int</span> len)</span></span>&#123;</span><br><span class="line">        <span class="built_in">map</span>&lt;<span class="keyword">char</span>, <span class="keyword">char</span>&gt; M, rM;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(M.<span class="built_in">find</span>(p[i]) == M.<span class="built_in">end</span>() &amp;&amp; rM.<span class="built_in">find</span>(w[i]) == rM.<span class="built_in">end</span>())&#123;</span><br><span class="line">                M[p[i]] = w[i];</span><br><span class="line">                rM[w[i]] = p[i];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(M[p[i]] != w[i] || rM[w[i]] != p[i]) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; <span class="title">findAndReplacePattern</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&amp; words, <span class="built_in">string</span> pattern)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; ret;</span><br><span class="line">        <span class="keyword">int</span> len = pattern.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span> <span class="keyword">word</span> : words)&#123;</span><br><span class="line">            <span class="keyword">if</span>(isMatch(<span class="keyword">word</span>, pattern, len)) ret.push_back(<span class="keyword">word</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2019-10-20</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(894.%20All%20Possible%20Full%20Binary%20Trees)%20%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(894.%20All%20Possible%20Full%20Binary%20Trees)%20%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(894. All Possible Full Binary Trees) 题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-894-All-Possible-Full-Binary-Trees-题解"><a href="#LeetCode-894-All-Possible-Full-Binary-Trees-题解" class="headerlink" title="LeetCode(894. All Possible Full Binary Trees) 题解"></a>LeetCode(894. All Possible Full Binary Trees) 题解</h1><p>A <em>full binary tree</em> is a binary tree where each node has exactly 0 or 2 children.</p>
-<p>Return a list of all possible full binary trees with <code>N</code> nodes.  Each element of the answer is the root node of one possible tree.</p>
-<p>Each <code>node</code> of each tree in the answer <strong>must</strong> have <code>node.val = 0</code>.</p>
-<p>You may return the final list of trees in any order.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: 7</span><br><span class="line">Output: [[0,0,0,null,null,0,0,null,null,0,0],[0,0,0,null,null,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,null,null,null,null,0,0],[0,0,0,0,0,null,null,0,0]]</span><br><span class="line">Explanation:</span><br></pre></td></tr></table></figure>
-
-<p> <img src="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/08/22/fivetrees.png" alt=""></p>
-<p><strong>Note:</strong></p>
-<ul>
-<li><code>1 &lt;= N &lt;= 20</code></li>
-</ul>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>输入一个数，输出对应节点数的完全二叉树（由度只有0和2的节点组成的二叉树）。</p>
-<p>设二叉树节点叶子节点数为a，则内部节点为a-1。有2*a-1=N。因此完全二叉树的左右子树也一定是一个完全二叉树，其节点数也一定是奇数。</p>
-<p>知道了这个性质，就可以依次左边放置奇数个节点，右边放置奇数个节点，遍历所有的情况即可。</p>
-<p>代码如下，时间复杂度O(n)=2 * (O(1)+O(3)+O(i)+O(N-4)+O(N-2))+O(1) * O(N-2)+O(3) * O(N-4)+…+O(N-2) * O(1)，O(1) = 1. 空间复杂度就是多个二叉树的存储。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;TreeNode*&gt; <span class="title">allPossibleFBT</span><span class="params">(<span class="keyword">int</span> N)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(N == <span class="number">1</span>) <span class="keyword">return</span> <span class="built_in">vector</span>&lt;TreeNode*&gt;(&#123;<span class="keyword">new</span> TreeNode(<span class="number">0</span>)&#125;);</span><br><span class="line">        <span class="built_in">vector</span>&lt;TreeNode*&gt; res;</span><br><span class="line">        <span class="keyword">if</span>(N &amp; <span class="number">1</span> == <span class="number">0</span>) <span class="keyword">return</span> res;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;=N<span class="number">-2</span>; i+=<span class="number">2</span>)&#123;</span><br><span class="line">            <span class="built_in">vector</span>&lt;TreeNode*&gt; left = allPossibleFBT(i), right = allPossibleFBT(N-i<span class="number">-1</span>);</span><br><span class="line">            <span class="keyword">for</span>(TreeNode* l : left)&#123;</span><br><span class="line">                <span class="keyword">for</span>(TreeNode* r : right)&#123;</span><br><span class="line">                    TreeNode* root = <span class="keyword">new</span> TreeNode(<span class="number">0</span>);</span><br><span class="line">                    root-&gt;left = l;</span><br><span class="line">                    root-&gt;right = r;</span><br><span class="line">                    res.push_back(root);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2019-09-29</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1097,7 +1132,7 @@ Explanation: We define the gray code sequence to begin with 0.
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">328</span>
+          <span class="site-state-item-count">330</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
