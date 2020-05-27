@@ -177,6 +177,86 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/02/LeetCode(1288.%20Remove%20Covered%20Intervals)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/02/02/LeetCode(1288.%20Remove%20Covered%20Intervals)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1288. Remove Covered Intervals)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-02-02 21:23:54 / 修改时间：21:25:51" itemprop="dateCreated datePublished" datetime="2020-02-02T21:23:54+08:00">2020-02-02</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-1288-Remove-Covered-Intervals-题解"><a href="#LeetCode-1288-Remove-Covered-Intervals-题解" class="headerlink" title="LeetCode(\1288. Remove Covered Intervals)题解"></a>LeetCode(\1288. Remove Covered Intervals)题解</h1><p>Given a list of intervals, remove all intervals that are covered by another interval in the list. Interval <code>[a,b)</code> is covered by interval <code>[c,d)</code> if and only if <code>c &lt;= a</code> and <code>b &lt;= d</code>.</p>
+<p>After doing so, return the number of remaining intervals.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: intervals &#x3D; [[1,4],[3,6],[2,8]]</span><br><span class="line">Output: 2</span><br><span class="line">Explanation: Interval [3,6] is covered by [2,8], therefore it is removed.</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>1 &lt;= intervals.length &lt;= 1000</code></li>
+<li><code>0 &lt;= intervals[i][0] &lt; intervals[i][1] &lt;= 10^5</code></li>
+<li><code>intervals[i] != intervals[j]</code> for all <code>i != j</code></li>
+</ul>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出一系列区间，删除掉被别的区间给全包围的区间。然后返回剩下的区间个数。</p>
+<p>不得不感叹一句，Python大法好！直接计算set去掉相同的多余区间，然后遍历每个区间看是否被包围，是就删除，否则保留。</p>
+<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间复杂度O(n2)，空间复杂度O(n).</p>
+<p><code>Runtime: 156 ms, faster than 15.30% of Python3 online submissions for Remove Covered Intervals.</code></p>
+<p><code>Memory Usage: 13 MB, less than 100.00% of Python3 online submissions for Remove Covered Intervals.</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">removeCoveredIntervals</span><span class="params">(self, intervals: List[List[int]])</span> -&gt; int:</span></span><br><span class="line">        intervals = list(set(tuple(i) <span class="keyword">for</span> i <span class="keyword">in</span> intervals))</span><br><span class="line">        res = len(intervals)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(len(intervals)):</span><br><span class="line">            <span class="keyword">for</span> k <span class="keyword">in</span> range(len(intervals)):</span><br><span class="line">                <span class="keyword">if</span> k == i: <span class="keyword">continue</span></span><br><span class="line">                <span class="keyword">if</span> intervals[k][<span class="number">0</span>]&lt;=intervals[i][<span class="number">0</span>] <span class="keyword">and</span> intervals[k][<span class="number">1</span>]&gt;=intervals[i][<span class="number">1</span>]:</span><br><span class="line">                    res -= <span class="number">1</span></span><br><span class="line">                    <span class="comment">#print(intervals[k], "he", intervals[i])</span></span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>
+
+<p>BitbBrave, 2020-02-02</p>
+<p>PS: 今天听说是一个回文年，希望在2020能有好的收获。想做的事很多，慢慢来呗。今天做了一下LeetCode的竞赛题，说实话没有我想象中那么难，可能恰好遇到了能做的吧。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/02/LeetCode(1254.%20Number%20of%20Closed%20Islands)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -970,90 +1050,11 @@ Output: false</code></pre><p>这题要求使用p去生成s，s是一串英文字
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(1014.%20Best%20Sightseeing%20Pair)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(1014.%20Best%20Sightseeing%20Pair)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1014. Best Sightseeing Pair)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-1014-Best-Sightseeing-Pair-题解"><a href="#LeetCode-1014-Best-Sightseeing-Pair-题解" class="headerlink" title="LeetCode(\1014. Best Sightseeing Pair)题解"></a>LeetCode(\1014. Best Sightseeing Pair)题解</h1><p>Given an array <code>A</code> of positive integers, <code>A[i]</code> represents the value of the <code>i</code>-th sightseeing spot, and two sightseeing spots <code>i</code> and <code>j</code> have distance <code>j - i</code> between them.</p>
-<p>The <em>score</em> of a pair (<code>i &lt; j</code>) of sightseeing spots is (<code>A[i] + A[j] + i - j)</code> : the sum of the values of the sightseeing spots, <strong>minus</strong> the distance between them.</p>
-<p>Return the maximum score of a pair of sightseeing spots.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: [8,1,5,2,6]</span><br><span class="line">Output: 11</span><br><span class="line">Explanation: i &#x3D; 0, j &#x3D; 2, A[i] + A[j] + i - j &#x3D; 8 + 5 + 0 - 2 &#x3D; 11</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Note:</strong></p>
-<ol>
-<li><code>2 &lt;= A.length &lt;= 50000</code></li>
-<li><code>1 &lt;= A[i] &lt;= 1000</code></li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>有一个数组，每个元素相当于一个观光地，元素值对应观看的价值，元素的索引值的差代表两个观光地之间的距离。现在要找出两个观光地，价值之和减去距离值为所有两个观光地之间的相同值的最大。</p>
-<p>这个题最暴力的解法就是遍历所有的两种组合，但这样时间复杂度O(n2)，我做的时候超时。</p>
-<p>其实有一个非常简单的算法，我们从左到右遍历每个元素，然后用一个值去记录已经遍历数组中，到达当前观光地的价值最大的观光地的值，这个值是观光地的值减去其到当前元素位置的距离，这样就可以一次遍历解决，代码非常简单。</p>
-<p>代码如下，时间复杂度O(n)，空间复杂度O(1)。</p>
-<p><code>Runtime: 68 ms, faster than 56.81% of C++ online submissions for Best Sightseeing Pair.</code></p>
-<p><code>Memory Usage: 13.2 MB, less than 62.50% of C++ online submissions for Best Sightseeing Pair.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxScoreSightseeingPair</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> ret = <span class="number">0</span>, max_a = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> a : A)&#123;</span><br><span class="line">            ret = <span class="built_in">max</span>(max_a + a, ret);</span><br><span class="line">            max_a = <span class="built_in">max</span>(max_a, a) - <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2019-11-30</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/7/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/33/">33</a><a class="extend next" rel="next" href="/page/9/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/7/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/34/">34</a><a class="extend next" rel="next" href="/page/9/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1121,7 +1122,7 @@ Output: false</code></pre><p>这题要求使用p去生成s，s是一串英文字
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">330</span>
+          <span class="site-state-item-count">331</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

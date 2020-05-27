@@ -177,6 +177,89 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(52.%20N-Queens%20II)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(52.%20N-Queens%20II)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(52. N-Queens II)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-52-N-Queens-II-题解"><a href="#LeetCode-52-N-Queens-II-题解" class="headerlink" title="LeetCode(52. N-Queens II)题解"></a>LeetCode(52. N-Queens II)题解</h1><hr>
+<p>The n-queens puzzle is the problem of placing n queens on an n×n chessboard such that no two queens attack each other.</p>
+<p><img src="https://assets.leetcode.com/uploads/2018/10/12/8-queens.png" alt=""></p>
+<p>Given an integer n, return all distinct solutions to the n-queens puzzle.</p>
+<p>Each solution contains a distinct board configuration of the n-queens’ placement, where ‘Q’ and ‘.’ both indicate a queen and an empty space respectively.</p>
+<p>Example:</p>
+<pre><code>Input: 4
+Output: [
+[&quot;.Q..&quot;,  // Solution 1
+&quot;...Q&quot;,
+&quot;Q...&quot;,
+&quot;..Q.&quot;],
+
+[&quot;..Q.&quot;,  // Solution 2
+&quot;Q...&quot;,
+&quot;...Q&quot;,
+&quot;.Q..&quot;]
+]
+Explanation: There exist two distinct solutions to the 4-queens puzzle as shown above.</code></pre><h2 id="解题思路-与51题一模一样"><a href="#解题思路-与51题一模一样" class="headerlink" title="解题思路(与51题一模一样)"></a>解题思路(与51题一模一样)</h2><p>Hard，这道题的要求是N皇后问题：放置n的皇后在n*n的棋盘上，使其任意两个皇后不能相互攻击。给定整数n，返回所有可能情况，其中‘Q’表示皇后，‘.’表示空位置。</p>
+<p>两个皇后不能相互攻击，即要求这两个皇后不在同一行、同一列及同一斜线上。</p>
+<p>可以使用一个N维数组记录每一行上的皇后位置，使用递归计算。递归到当前行时，从1到n查看是否可以放皇后，放置的条件就是不能与前面的皇后在同一列（可以比较值是否相同，相同就在同一列），不能在同一个斜线上（当前行与当前列的差值相同则在同一个\斜线，当前行与当前值的和相同则在同一个/斜线）。</p>
+<p>代码如下，速度有点慢，懒得优化了：</p>
+<p>Runtime: 28 ms, faster than 13.38% of C++ online submissions for N-Queens II.<br>Memory Usage: 16.4 MB, less than 6.86% of C++ online submissions for N-Queens II.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isValid</span><span class="params">( <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; tmp, <span class="keyword">int</span> pos, <span class="keyword">int</span> len, <span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(tmp[i]==pos) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            <span class="keyword">if</span>((len-pos) == (i-tmp[i])) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            <span class="keyword">if</span>((len+pos) == (i+tmp[i])) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">solveNQueens_</span><span class="params">(<span class="keyword">int</span> n, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; tmp, <span class="keyword">int</span> len)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(len==n) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;n; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(!<span class="built_in">isValid</span>(tmp, i, len, n)) <span class="keyword">continue</span>;</span><br><span class="line">            tmp[len] = i;</span><br><span class="line">            res += solveNQueens_(n, tmp, len+<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">totalNQueens</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(n==<span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">tmp</span><span class="params">(n)</span></span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> solveNQueens_(n, tmp, <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2019-05-29.</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(54.%20Spiral%20Matrix)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -841,90 +924,11 @@ There are two ways to reach the bottom-right corner:
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(60.%20Permutation%20Sequence)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(60.%20Permutation%20Sequence)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(60. Permutation Sequence)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-60-Permutation-Sequence-题解"><a href="#LeetCode-60-Permutation-Sequence-题解" class="headerlink" title="LeetCode(60. Permutation Sequence)题解"></a>LeetCode(60. Permutation Sequence)题解</h1><hr>
-<p>The set [1,2,3,…,n] contains a total of n! unique permutations.</p>
-<p>By listing and labeling all of the permutations in order, we get the following sequence for n = 3:</p>
-<pre><code>&quot;123&quot;
-&quot;132&quot;
-&quot;213&quot;
-&quot;231&quot;
-&quot;312&quot;
-&quot;321&quot;
-Given n and k, return the kth permutation sequence.</code></pre><p>Note:</p>
-<pre><code>Given n will be between 1 and 9 inclusive.
-Given k will be between 1 and n! inclusive.</code></pre><p>Example 1:</p>
-<pre><code>Input: n = 3, k = 3
-Output: &quot;213&quot;</code></pre><p>Example 2:</p>
-<pre><code>Input: n = 4, k = 9
-Output: &quot;2314&quot;</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Medium，给出一个n，将1到n的排列按照组成的数字大小升序排列，取出第K个。</p>
-<p>这个题可以暴力遍历，将所有数都记录出来，再取出第K个就可以了。但可以更聪明一点。因为生序排列的话，一定是1XXXXX有n-1！种，然后2XXXXX有n-1！种，然后3XXXXX，4XXXXX…..，因此我们可以用K-(n-1)!，不断减直到下一个为负数为止，这样就可以确定第K个排列数的第一个数字是几。以此类推，在剩下的数里按照上述方式递归。直到最后一个，当n=1的时候，返回这个数即可。</p>
-<p>代码如下：</p>
-<p>Runtime: 4 ms, faster than 92.50% of C++ online submissions for Permutation Sequence.<br>Memory Usage: 8.5 MB, less than 54.59% of C++ online submissions for Permutation Sequence.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">factorial</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (n&lt;=<span class="number">1</span>) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">return</span> n * factorial(n<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="built_in">string</span> <span class="title">getKPermutation</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">char</span>&gt; Vec, <span class="keyword">int</span> n, <span class="keyword">int</span> k, <span class="built_in">string</span> res)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(n == <span class="number">1</span>) <span class="keyword">return</span> res + Vec[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">int</span> tmp = factorial(n<span class="number">-1</span>), c = <span class="number">0</span>;</span><br><span class="line">        c = k / tmp;</span><br><span class="line">        k = k % tmp;</span><br><span class="line">        <span class="keyword">if</span>(k % tmp == <span class="number">0</span>)&#123;</span><br><span class="line">            c--;</span><br><span class="line">            k = tmp;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        res += Vec[c];</span><br><span class="line">        Vec.erase(Vec.<span class="built_in">begin</span>() + c);</span><br><span class="line">        <span class="keyword">return</span> getKPermutation(Vec, n<span class="number">-1</span>, k, res);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="built_in">string</span> <span class="title">getPermutation</span><span class="params">(<span class="keyword">int</span> n, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">char</span>&gt; <span class="title">Vec</span><span class="params">(n)</span></span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;n; i++) Vec[i] = i + <span class="number">49</span>;</span><br><span class="line">        <span class="keyword">return</span> getKPermutation(Vec, n, k, <span class="string">""</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-06-02</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/20/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><span class="page-number current">21</span><a class="page-number" href="/page/22/">22</a><span class="space">&hellip;</span><a class="page-number" href="/page/33/">33</a><a class="extend next" rel="next" href="/page/22/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/20/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><span class="page-number current">21</span><a class="page-number" href="/page/22/">22</a><span class="space">&hellip;</span><a class="page-number" href="/page/34/">34</a><a class="extend next" rel="next" href="/page/22/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -992,7 +996,7 @@ Output: &quot;2314&quot;</code></pre><h2 id="解题思路"><a href="#解题思�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">330</span>
+          <span class="site-state-item-count">331</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

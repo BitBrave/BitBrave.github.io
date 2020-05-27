@@ -177,6 +177,94 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(826.%20Most%20Profit%20Assigning%20Work)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(826.%20Most%20Profit%20Assigning%20Work)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(826. Most Profit Assigning Work)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-826-Most-Profit-Assigning-Work-题解"><a href="#LeetCode-826-Most-Profit-Assigning-Work-题解" class="headerlink" title="LeetCode(826. Most Profit Assigning Work)题解"></a>LeetCode(826. Most Profit Assigning Work)题解</h1><p>We have jobs: <code>difficulty[i]</code> is the difficulty of the <code>i</code>th job, and <code>profit[i]</code> is the profit of the <code>i</code>th job. </p>
+<p>Now we have some workers. <code>worker[i]</code> is the ability of the <code>i</code>th worker, which means that this worker can only complete a job with difficulty at most <code>worker[i]</code>. </p>
+<p>Every worker can be assigned at most one job, but one job can be completed multiple times.</p>
+<p>For example, if 3 people attempt the same job that pays $1, then the total profit will be $3.  If a worker cannot complete any job, his profit is $0.</p>
+<p>What is the most profit we can make?</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: difficulty &#x3D; [2,4,6,8,10], profit &#x3D; [10,20,30,40,50], worker &#x3D; [4,5,6,7]</span><br><span class="line">Output: 100 </span><br><span class="line">Explanation: Workers are assigned jobs of difficulty [4,4,6,6] and they get profit of [20,20,30,30] seperately.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Notes:</strong></p>
+<ul>
+<li><code>1 &lt;= difficulty.length = profit.length &lt;= 10000</code></li>
+<li><code>1 &lt;= worker.length &lt;= 10000</code></li>
+<li><code>difficulty[i], profit[i], worker[i]</code>  are in range <code>[1, 10^5]</code></li>
+</ul>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>现在有一些工作，每个工作有不同的困难度，比如工作1的困难度3，工作2困难度4.然后每个工作有各自不同的收益。一些工人有自己的能力值，每个工人只能完成困难度不能高于自己能力值的工作，完成一个工作得到一份收益。一个工人只能完成一份工作，但是一个工作可以被多个人完成。求这种情况下，这些工人可以获得的最大收益是多少。</p>
+<p>我们可以这样想，一个工人需要在自己能力范围内完成尽可能高收益的工作。因此直接把工人可以完成的工作中，最高收益的工作完成即可。针对每个工人，对工作进行全搜索当然可以行。但是这样会花费O(N)的时间。</p>
+<p>因此，可以构建一个数组S，将工作W[i]按照困难度排序之后的i作为S的key，低于这个困难度的工作中最大收益作为value，这样只需要使用O(logn).就可以得到一名工人可以得到的最大收益了。但是其实也有一个Trick，可以将工人也按照能力值排序，比如从小到大，然后利用双指针法，平均花费O(1)的时间就可以得到一名工人的收益。</p>
+<p>如何构建这个数组呢？可以先将工作按照困难度排序，然后遍历工作，从小到大，将每个元素换成小于等于这个困难度的工作中的最大收益即可，时间复杂度O(nlogn).这里有一个Trick，不要直接对困难度排序，而是建一个数组，存储各个工作的编号，对编号进行排序。</p>
+<p>但是上述因为C++的Sort排序必须静态，我懒得自己写Sort函数。因此采用如下策略。<br>将任务按照difficult 从小到大排</p>
+<p>将worker 从小到大排</p>
+<p>对于当前的worker遍历它力所能及的工作并取最大利润</p>
+<p>那么下一个worker在上一个worker利润基础上，继续遍历力所能及的范围</p>
+<p>排序后one pass即可</p>
+<p>这道题的基本逻辑是，如果workerA 比workerB能力大，那么B能获得的利润肯定比A高。</p>
+<p>时间复杂度不变，空间复杂度反而还降低了，但是还是需要自己写排序函数，因此我选择Python。</p>
+<p>代码如下，设工人数量M，工作数N。则空间复杂度O(1)，时间复杂度O(NlogN+MlogM+N+M)。</p>
+<p><code>Runtime: 336 ms, faster than 70.70% of Python online submissions for Most Profit Assigning Work.</code></p>
+<p><code>Memory Usage: 14.3 MB, less than 100.00% of Python online submissions for Most Profit Assigning Work.</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">maxProfitAssignment</span><span class="params">(self, difficulty, profit, worker)</span>:</span></span><br><span class="line">        jobs = sorted(zip(difficulty, profit))</span><br><span class="line">        worker.sort()</span><br><span class="line">        index, cur_max, res = <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> ability <span class="keyword">in</span> worker:</span><br><span class="line">            <span class="keyword">while</span>(index &lt; len(difficulty) <span class="keyword">and</span> ability &gt;= jobs[index][<span class="number">0</span>]):</span><br><span class="line">                cur_max = max(cur_max, jobs[index][<span class="number">1</span>])</span><br><span class="line">                index += <span class="number">1</span></span><br><span class="line">                </span><br><span class="line">            res += cur_max</span><br><span class="line">        <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2019-09-24.</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(823.%20Binary%20Trees%20With%20Factors)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -901,95 +989,11 @@ Output: 6</code></pre><h2 id="解题思路"><a href="#解题思路" class="heade
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(850.%20Rectangle%20Area%20II)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(850.%20Rectangle%20Area%20II)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(850. Rectangle Area II)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-850-Rectangle-Area-II-题解"><a href="#LeetCode-850-Rectangle-Area-II-题解" class="headerlink" title="LeetCode(850. Rectangle Area II)题解"></a>LeetCode(850. Rectangle Area II)题解</h1><p>We are given a list of (axis-aligned) <code>rectangles</code>.  Each <code>rectangle[i] = [x1, y1, x2, y2]</code>, where (x1, y1) are the coordinates of the bottom-left corner, and (x2, y2) are the coordinates of the top-right corner of the <code>i</code>th rectangle.</p>
-<p>Find the total area covered by all <code>rectangles</code> in the plane.  Since the answer may be too large, <strong>return it modulo 10^9 + 7</strong>.</p>
-<p><img src="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/06/06/rectangle_area_ii_pic.png" alt="img"></p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: [[0,0,2,2],[1,0,2,3],[1,0,3,1]]</span><br><span class="line">Output: 6</span><br><span class="line">Explanation: As illustrated in the picture.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: [[0,0,1000000000,1000000000]]</span><br><span class="line">Output: 49</span><br><span class="line">Explanation: The answer is 10^18 modulo (10^9 + 7), which is (10^9)^2 &#x3D; (-7)^2 &#x3D; 49.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Note:</strong></p>
-<ul>
-<li><code>1 &lt;= rectangles.length &lt;= 200</code></li>
-<li><code>rectanges[i].length = 4</code></li>
-<li><code>0 &lt;= rectangles[i][j] &lt;= 10^9</code></li>
-<li><code>The total area covered by all rectangles will never exceed</code>2^63 - 1<code>and thus will fit in a 64-bit signed integer.</code></li>
-</ul>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出一些矩阵，求出这些矩阵的面积之和（有的矩阵之间有重叠）。</p>
-<p>首先考虑两个矩阵，只有三种情况，相交、相离、想含。其中相离合相含是比较好分析的，相交则有些复杂。但是这三种皆可以将两个矩阵分成几个不相交的矩阵，如相交可以分成三个（一个原始矩阵，另一个矩阵分割为两个）。</p>
-<p>因此，我们可以维护一个List或者Vector，存储不相交的矩阵。将所有输入的矩阵通过分割全部转为相离的矩阵存入这个数组，最后只需计算这些矩阵的面积和即可。</p>
-<p>如何来构建并维护这个数组呢？分别遍历这些矩阵，当输入一个矩阵时，分别判断这个矩阵是否与List中的每个矩阵相交相离或包含，如果除了相离之外的其他关系，就将输入的矩阵进行分割，再分别判定分割完的矩阵与其他数组内矩阵的位置关系，直到分割完的矩阵与数组内所有矩阵都处于相离关系。每次在判断第i+1个矩阵的时候，数组内矩阵会最多增加4i+4个。最终上限为N个矩阵的话有 $ 2N^2 - 1$个。</p>
-<p>这里有一个对应的解法，<a href="https://leetcode.com/problems/rectangle-area-ii/discuss/138028/Clean-Recursive-Solution-Java" target="_blank" rel="noopener">点击进入</a>。</p>
-<p>代码如下，时间复杂度$O(n^2)$，空间复杂度$O(n^2)$。</p>
-<p><code>Runtime: 124 ms, faster than 6.09% of C++ online submissions for Rectangle Area II.</code></p>
-<p><code>Memory Usage: 64.5 MB, less than 25.00% of C++ online submissions for Rectangle Area II.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; V;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">rectangleArea</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; rectangles)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> mod = <span class="built_in">pow</span>(<span class="number">10</span>, <span class="number">9</span>) + <span class="number">7</span>;</span><br><span class="line">        <span class="keyword">int</span> a, b;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; rec : rectangles) addRectangle(rec, <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">for</span>(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; v : V)&#123;</span><br><span class="line">            a =  (v[<span class="number">2</span>]-v[<span class="number">0</span>]) % mod;</span><br><span class="line">            b =  (v[<span class="number">3</span>]-v[<span class="number">1</span>]) % mod;</span><br><span class="line">            res = (res + ((<span class="keyword">long</span>)a * (<span class="keyword">long</span>)b) % mod) % mod;  </span><br><span class="line">        &#125; </span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 判断rec与V中第start开始的矩阵位置情况，并决定是否需要进入start+1的情况。</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">addRectangle</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; rec, <span class="keyword">int</span> start)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(start &gt;= V.<span class="built_in">size</span>())&#123;</span><br><span class="line">            V.push_back(rec);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 相交？</span></span><br><span class="line">        <span class="keyword">if</span>(rec[<span class="number">0</span>] &gt; V[start][<span class="number">2</span>] <span class="keyword">or</span> rec[<span class="number">2</span>] &lt; V[start][<span class="number">0</span>] <span class="keyword">or</span> rec[<span class="number">1</span>] &gt; V[start][<span class="number">3</span>] <span class="keyword">or</span> rec[<span class="number">3</span>] &lt; V[start][<span class="number">1</span>]) <span class="keyword">return</span> addRectangle(rec, start + <span class="number">1</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 左边相交？</span></span><br><span class="line">        <span class="keyword">if</span>(rec[<span class="number">0</span>] &lt; V[start][<span class="number">0</span>]) addRectangle(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(&#123;rec[<span class="number">0</span>], rec[<span class="number">1</span>], V[start][<span class="number">0</span>], rec[<span class="number">3</span>]&#125;), start + <span class="number">1</span>);</span><br><span class="line">        <span class="comment">// 右边相交？</span></span><br><span class="line">        <span class="keyword">if</span>(rec[<span class="number">2</span>] &gt; V[start][<span class="number">2</span>]) addRectangle(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(&#123;V[start][<span class="number">2</span>], rec[<span class="number">1</span>], rec[<span class="number">2</span>], rec[<span class="number">3</span>]&#125;), start + <span class="number">1</span>);</span><br><span class="line">        <span class="comment">// 下边相交？</span></span><br><span class="line">        <span class="keyword">if</span>(rec[<span class="number">1</span>] &lt; V[start][<span class="number">1</span>]) addRectangle(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(&#123;<span class="built_in">max</span>(rec[<span class="number">0</span>], V[start][<span class="number">0</span>]), rec[<span class="number">1</span>], <span class="built_in">min</span>(rec[<span class="number">2</span>], V[start][<span class="number">2</span>]), V[start][<span class="number">1</span>]&#125;), start + <span class="number">1</span>);</span><br><span class="line">        <span class="comment">// 上边相交？</span></span><br><span class="line">        <span class="keyword">if</span>(rec[<span class="number">3</span>] &gt; V[start][<span class="number">3</span>]) addRectangle(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(&#123;<span class="built_in">max</span>(rec[<span class="number">0</span>], V[start][<span class="number">0</span>]), V[start][<span class="number">3</span>], <span class="built_in">min</span>(rec[<span class="number">2</span>], V[start][<span class="number">2</span>]), rec[<span class="number">3</span>]&#125;), start + <span class="number">1</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-09-027</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/26/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/26/">26</a><span class="page-number current">27</span><a class="page-number" href="/page/28/">28</a><span class="space">&hellip;</span><a class="page-number" href="/page/33/">33</a><a class="extend next" rel="next" href="/page/28/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/26/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/26/">26</a><span class="page-number current">27</span><a class="page-number" href="/page/28/">28</a><span class="space">&hellip;</span><a class="page-number" href="/page/34/">34</a><a class="extend next" rel="next" href="/page/28/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1057,7 +1061,7 @@ Output: 6</code></pre><h2 id="解题思路"><a href="#解题思路" class="heade
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">330</span>
+          <span class="site-state-item-count">331</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
