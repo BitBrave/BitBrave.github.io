@@ -177,6 +177,82 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(19.%20Remove%20Nth%20Node%20From%20End%20of%20List)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(19.%20Remove%20Nth%20Node%20From%20End%20of%20List)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(19. Remove Nth Node From End of List)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-19-Remove-Nth-Node-From-End-of-List-题解"><a href="#LeetCode-19-Remove-Nth-Node-From-End-of-List-题解" class="headerlink" title="LeetCode(19. Remove Nth Node From End of List)题解"></a>LeetCode(19. Remove Nth Node From End of List)题解</h1><hr>
+<p>原文如下：</p>
+<p>Given a linked list, remove the n-th node from the end of list and return its head.</p>
+<p><strong>Example:</strong></p>
+<pre><code>Given linked list: 1-&gt;2-&gt;3-&gt;4-&gt;5, and n = 2.
+
+After removing the second node from the end, the linked list becomes 1-&gt;2-&gt;3-&gt;5.</code></pre><p><strong>Note:</strong></p>
+<p>Given n will always be valid.</p>
+<p><strong>Follow up:</strong></p>
+<p>Could you do this in one pass?</p>
+<h2 id="题意理解"><a href="#题意理解" class="headerlink" title="题意理解"></a>题意理解</h2><p>这个题Medium，要求给定一个链表的头指针，删除这个链表内倒数第n个节点。一般来说很简单，最直观的方式就是我遍历两遍，第一遍找出总长度，计算倒数第n个节点的在顺数第几个，第二次遍历直接删除。或者遍历一次，每一步都记录下节点的值，最后找到对应的第n个删除，再用剩下的额值重新建立一个链表。这两种方法一个是加大了时间，一个增加了空间。况且题目建议一次遍历即可。</p>
+<p>那么如何做呢？可以使用递归的方式，利用函数天然的堆栈空间进行位置记录。具体采用如下策略：</p>
+<pre><code>1 从head进入，传入当前节点地址，pos位置参数（引用实参），和需要删除的节点参数n
+2 进入递归函数，直接走到最后一个，将pos=1，开始返回
+3 通过n是否等于pos来判断是否当前节点是需要删除的，如果不等于则返回当前节点，如果等于则直接返回当前节点的递归回来的节点（当前节点的下一个节点）
+4 递归结束后直接返回删除对应位置节点之后的链表的head节点</code></pre><p>代码如下，faster than 100% exampls。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode *next;</span></span><br><span class="line"><span class="comment"> *     ListNode(int x) : val(x), next(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">ListNode* <span class="title">recNode</span><span class="params">(ListNode* node, <span class="keyword">int</span> &amp;pos, <span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(node-&gt;next == <span class="literal">NULL</span>)&#123;</span><br><span class="line">            pos = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span>(n == pos)&#123;</span><br><span class="line">                pos = INT_MAX;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> node;</span><br><span class="line">        &#125;;</span><br><span class="line">        </span><br><span class="line">        ListNode* bnode = recNode(node-&gt;next, pos, n);</span><br><span class="line">        </span><br><span class="line">        pos = (INT_MAX==pos) ? pos : pos + <span class="number">1</span>;</span><br><span class="line">        node-&gt;next = bnode;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(n == pos) &#123;</span><br><span class="line">            pos = INT_MAX;</span><br><span class="line">            <span class="keyword">return</span> bnode;</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">return</span> node;    </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">ListNode* <span class="title">removeNthFromEnd</span><span class="params">(ListNode* head, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(head == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">int</span> pos = INT_MAX;</span><br><span class="line">        <span class="keyword">return</span> recNode(head, pos, n);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2019-04-22</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(20.%20Valid%20Parentheses)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -848,83 +924,6 @@ Output: 1-&gt;1-&gt;2-&gt;3-&gt;4-&gt;4-&gt;5-&gt;6</code></pre><h2 id="解题�
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(236.%20Lowest%20Common%20Ancestor%20of%20a%20Binary%20Tree)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(236.%20Lowest%20Common%20Ancestor%20of%20a%20Binary%20Tree)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(236. Lowest Common Ancestor of a Binary Tree)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-236-Lowest-Common-Ancestor-of-a-Binary-Tree-题解"><a href="#LeetCode-236-Lowest-Common-Ancestor-of-a-Binary-Tree-题解" class="headerlink" title="LeetCode(236. Lowest Common Ancestor of a Binary Tree)题解"></a>LeetCode(236. Lowest Common Ancestor of a Binary Tree)题解</h1><hr>
-<p>Given a binary tree, find the lowest common ancestor (LCA) of two given nodes in the tree.</p>
-<p>According to the definition of LCA on Wikipedia: “The lowest common ancestor is defined between two nodes p and q as the lowest node in T that has both p and q as descendants (where we allow a node to be a descendant of itself).”</p>
-<p>Given the following binary tree:  root = [3,5,1,6,2,0,8,null,null,7,4]</p>
-<p><img src="https://assets.leetcode.com/uploads/2018/12/14/binarytree.png" alt=""></p>
-<p>Example 1:</p>
-<pre><code>Input: root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 1
-Output: 3
-Explanation: The LCA of nodes 5 and 1 is 3.</code></pre><p>Example 2:</p>
-<pre><code>Input: root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 4
-Output: 5
-Explanation: The LCA of nodes 5 and 4 is 5, since a node can be a descendant of itself according to the LCA definition.</code></pre><p>Note:</p>
-<pre><code>All of the nodes&apos; values will be unique.
-p and q are different and both values will exist in the binary tree.</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>找出一个二叉树中两个节点的最低公共祖先节点。</p>
-<p>可以首先建立一个链表，两次遍历整个二叉树，找到对应的节点的路径。然后从头到尾遍历两个链表，遇到分叉口就是最低祖先节点。时间复杂度O(n), 空间复杂度O(n).</p>
-<p>代码如下：</p>
-<p>Runtime: 20 ms, faster than 72.17% of C++ online submissions for Lowest Common Ancestor of a Binary Tree.<br>Memory Usage: 18.3 MB, less than 20.00% of C++ online submissions for Lowest Common Ancestor of a Binary Tree.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Node</span> &#123;</span></span><br><span class="line">        TreeNode *root;</span><br><span class="line">        Node *next;</span><br><span class="line">        Node(TreeNode *t, Node *n) : root(t), next(n) &#123;&#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="function">Node* <span class="title">findPath</span><span class="params">(TreeNode* root, TreeNode* r)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">if</span>(root-&gt;val == r-&gt;val) <span class="keyword">return</span> <span class="keyword">new</span> Node(root, <span class="literal">NULL</span>);</span><br><span class="line">        Node *tail;</span><br><span class="line">        tail = findPath(root-&gt;left, r);</span><br><span class="line">        <span class="keyword">if</span>(tail == <span class="literal">NULL</span>) tail = findPath(root-&gt;right, r);</span><br><span class="line">        <span class="keyword">if</span>(tail == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Node(root, tail);</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="function">TreeNode* <span class="title">lowestCommonAncestor</span><span class="params">(TreeNode* root, TreeNode* p, TreeNode* q)</span> </span>&#123;</span><br><span class="line">        Node *phead = findPath(root, p), *qhead = findPath(root, q);</span><br><span class="line">        TreeNode *last = <span class="literal">NULL</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span>(phead != <span class="literal">NULL</span> &amp;&amp; qhead != <span class="literal">NULL</span> &amp;&amp; phead-&gt;root == qhead-&gt;root)&#123;</span><br><span class="line">            last = phead-&gt;root;</span><br><span class="line">            phead = phead-&gt;next;</span><br><span class="line">            qhead = qhead-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> last;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-08-18</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -997,7 +996,7 @@ p and q are different and both values will exist in the binary tree.</code></pre
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">331</span>
+          <span class="site-state-item-count">332</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
