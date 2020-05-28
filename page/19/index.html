@@ -177,6 +177,85 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(39.%20Combination%20Sum)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(39.%20Combination%20Sum)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(39. Combination Sum)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-39-Combination-Sum-题解"><a href="#LeetCode-39-Combination-Sum-题解" class="headerlink" title="LeetCode(39. Combination Sum)题解"></a>LeetCode(39. Combination Sum)题解</h1><hr>
+<p>Given a set of candidate numbers (candidates) (without duplicates) and a target number (target), find all unique combinations in candidates where the candidate numbers sums to target.</p>
+<p>The same repeated number may be chosen from candidates unlimited number of times.</p>
+<p>Note:</p>
+<p>All numbers (including target) will be positive integers.<br>The solution set must not contain duplicate combinations.<br>Example 1:</p>
+<pre><code>Input: candidates = [2,3,6,7], target = 7,
+A solution set is:
+[
+[7],
+[2,2,3]
+]</code></pre><p>Example 2:</p>
+<pre><code>Input: candidates = [2,3,5], target = 8,
+A solution set is:
+[
+[2,2,2,2],
+[2,3,3],
+[3,5]
+]</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Medium，要求给定一个不重复的数组，求出一些元素的组合其和位target，这些元素可以重复多次。</p>
+<p>这道题看到首先想到的是先排序，然后队首队尾两个指针向中间走，但是这个题并不用这么复杂。</p>
+<p>我们可以使用递归的办法，将数组升序排序之后，进入一个递归数组，首先加入第一个数，当其和小于target的，剩下的在第二个数到之后的数中选，这涵盖了一些情况。然后将第一个数在此加入，等于把第一个数选取两次，然后剩下的在第二个数到之后的数中选。然后将第一个数加入三次·····当然要保证数之和要小于等于target。最后递归内的核心结构就是如果大于就返回，等于就记录，小于就往下走。</p>
+<p>代码如下：</p>
+<p>Runtime: 276 ms, faster than 5.00% of C++ online submissions for Combination Sum.<br>Memory Usage: 113.9 MB, less than 5.01% of C++ online submissions for Combination Sum.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">findSum</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; ret, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; tmp, <span class="keyword">int</span> tsum,  <span class="keyword">int</span> target, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; candidates, <span class="keyword">int</span> sta, <span class="keyword">int</span> len)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(tsum==target)&#123;</span><br><span class="line">            ret.push_back(tmp);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(sta&gt;=len || tsum&gt;target) <span class="keyword">return</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">tmp_</span><span class="params">(tmp)</span></span>;</span><br><span class="line">        findSum(ret, tmp_, tsum, target, candidates, sta+<span class="number">1</span>, len);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i*candidates[sta]+tsum &lt;= target; i++)&#123;</span><br><span class="line">            tmp_.push_back(candidates[sta]);</span><br><span class="line">            findSum(ret, tmp_, i*candidates[sta]+tsum, target, candidates, sta+<span class="number">1</span>, len);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">combinationSum</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; candidates, <span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = candidates.<span class="built_in">size</span>();</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; ret;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; tmp;</span><br><span class="line">        </span><br><span class="line">        sort(candidates.<span class="built_in">begin</span>(), candidates.<span class="built_in">end</span>());</span><br><span class="line">        </span><br><span class="line">        findSum(ret, tmp, <span class="number">0</span>, target, candidates, <span class="number">0</span>, len);</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(406.%20Queue%20Reconstruction%20by%20Height)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -891,81 +970,6 @@ Output: false</code></pre><h2 id="解题思路"><a href="#解题思路" class="h
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(45.%20Jump%20Game%20II)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(45.%20Jump%20Game%20II)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(45. Jump Game II)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-45-Jump-Game-II-题解"><a href="#LeetCode-45-Jump-Game-II-题解" class="headerlink" title="LeetCode(45. Jump Game II)题解"></a>LeetCode(45. Jump Game II)题解</h1><hr>
-<p>Given an array of non-negative integers, you are initially positioned at the first index of the array.</p>
-<p>Each element in the array represents your maximum jump length at that position.</p>
-<p>Your goal is to reach the last index in the minimum number of jumps.</p>
-<p>Example:</p>
-<pre><code>Input: [2,3,1,1,4]
-Output: 2
-Explanation: The minimum number of jumps to reach the last index is 2.
-    Jump 1 step from index 0 to 1, then 3 steps to the last index.</code></pre><p>Note:</p>
-<p>You can assume that you can always reach the last index.</p>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>这个题的前提是，这个题一定有解法。即我肯定可以在n-1步之内跳到最后。当然，就算是不可解的，下面的算法稍微改一改，判断一下即可。</p>
-<p>一个比较简单的解法是，我们用一个同等长度的数组JumpTimes来记录从当前位置开始起跳的话，最少跳几次可以达到最后一个位置。我们只需要填充完则合格数组，然后返回JumpTimes[0]即可。如何来填充呢，可以采用如下方式：最后一个位置往前数，当当前位置的数ai&gt;=l（l=i位置离最后一个位置的长度）时，表示只需要跳一次就可以记录JumpTimes[i]=1。当遇到ai&lt;\l时，就从离i位置最远的i+ai位置开始往左数直到i+1，JumpTimes[i] = min(1+JumpTimes[j])(i+1&lt;=j&lt;=ai+i)，表示我多跳一次到达这些位置即可。当然，如果能直接到最后一个就直接设置JumpTimes[i]=1。就这样首先将i设为n-1，然后n-2，直到n=1，回到最初的地方。时间复杂度为O(n2).但这样LeetCode内会超时。</p>
-<p>可以使用贪心的算法，假设给定的数组为A=[a1,a2,a3, …, an]，那么可以知道我们需要从a1要跳最小的次数到an。当然如果a1直接&gt;=n-1的话，就表示跳一次就可以到达最后面。那么如果需要跳的次数超过一次呢？首先我们考虑从开头最远跳a1的长度到达位置i，然后在这个位置最长可以跳ai的长度。这里我们可以观察到一个性质：从位置1开始跳长度l（l&lt;=a1）到位置l+1，那么寻找一个L = max(l+al+1)，从位置1开始跳两次的长度最远都不会超过这个距离。而在后续的跳法中，就算是最优的（即跳得最少的次数）跳法里面，从开头跳两次的方法都可以改为L中的第一次的跳法。这是因为L的跳法涵盖了保证了我可以跳得最远，有最多的选择，那么就可以涵盖其它跳得不够远的情况了。</p>
-<p>因此，我们可以说最优的办法就是第一次跳的位置就是L中的跳l长度，达到al+1，然后第二次的跳的位置就是以al+1为起始点，按照上述的策略一样。需要注意的就是，只要可以一步到达最后的位置，就可以结束算法了。</p>
-<p>代码如下，其实可以由优化的，比如在for循环的时候，下一次的比较是不需要从sta+nums[sta]到sta都遍历一遍的，而只需要记录下上一次的位置pre_sta，从sta+nums[sta]到pre_sta+nums[pre_sta]即可。但是不这样效果也已经很不错了。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">jump</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span>(len &lt;= <span class="number">1</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> times = <span class="number">0</span>, sta = <span class="number">0</span>, tmp, tmps;</span><br><span class="line">        <span class="keyword">while</span>(sta&lt;len<span class="number">-1</span>)&#123;</span><br><span class="line">            times++;</span><br><span class="line">            tmp = <span class="number">0</span>;</span><br><span class="line">            tmps = INT_MAX;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=sta+nums[sta]; i&gt;sta; i--)&#123;</span><br><span class="line">                <span class="keyword">if</span>(i&gt;=len<span class="number">-1</span>) <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">if</span>(tmp &lt; i+nums[i])&#123;</span><br><span class="line">                    tmp = i+nums[i];</span><br><span class="line">                    tmps = i;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            sta = tmps;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> times;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-05-07</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1038,7 +1042,7 @@ Explanation: The minimum number of jumps to reach the last index is 2.
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">332</span>
+          <span class="site-state-item-count">333</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

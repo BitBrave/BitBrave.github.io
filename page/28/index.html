@@ -177,6 +177,83 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(848.%20Shifting%20Letters)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(848.%20Shifting%20Letters)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(848. Shifting Letters)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-848-Shifting-Letters-题解"><a href="#LeetCode-848-Shifting-Letters-题解" class="headerlink" title="LeetCode(848. Shifting Letters)题解"></a>LeetCode(848. Shifting Letters)题解</h1><p>We have a string <code>S</code> of lowercase letters, and an integer array <code>shifts</code>.</p>
+<p>Call the <em>shift</em> of a letter, the next letter in the alphabet, (wrapping around so that <code>&#39;z&#39;</code> becomes <code>&#39;a&#39;</code>). </p>
+<p>For example, <code>shift(&#39;a&#39;) = &#39;b&#39;</code>, <code>shift(&#39;t&#39;) = &#39;u&#39;</code>, and <code>shift(&#39;z&#39;) = &#39;a&#39;</code>.</p>
+<p>Now for each <code>shifts[i] = x</code>, we want to shift the first <code>i+1</code> letters of <code>S</code>, <code>x</code> times.</p>
+<p>Return the final string after all such shifts to <code>S</code> are applied.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Input: S &#x3D; &quot;abc&quot;, shifts &#x3D; [3,5,9]</span><br><span class="line">Output: &quot;rpl&quot;</span><br><span class="line">Explanation: </span><br><span class="line">We start with &quot;abc&quot;.</span><br><span class="line">After shifting the first 1 letters of S by 3, we have &quot;dbc&quot;.</span><br><span class="line">After shifting the first 2 letters of S by 5, we have &quot;igc&quot;.</span><br><span class="line">After shifting the first 3 letters of S by 9, we have &quot;rpl&quot;, the answer.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Note:</strong></p>
+<ol>
+<li><code>1 &lt;= S.length = shifts.length &lt;= 20000</code></li>
+<li><code>0 &lt;= shifts[i] &lt;= 10 ^ 9</code></li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给定一个字符串，和一个等长的数组，要求将字符串的每个0~i之间的字符向右移动数组内Array[i]长度。</p>
+<p>这个题理解起来并不难，做起来也很简单，但是很容易超时，因此一定要将每个字符要移动的次数统一算出来，再进行移位，不然很多重复工，无法AC。</p>
+<p>代码如下，时间复杂度$O(n)$，空间复杂度$O(n)$：</p>
+<p><code>Runtime: 56 ms, faster than 65.74% of C++ online submissions for Shifting Letters. Memory Usage: 11.6 MB, less than 75.00% of C++ online submissions for Shifting Letters.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">string</span> <span class="title">shiftingLetters</span><span class="params">(<span class="built_in">string</span> S, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; shifts)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = S.<span class="built_in">size</span>(), sum_ = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=len<span class="number">-1</span>; i&gt;<span class="number">-1</span>; i--)&#123;</span><br><span class="line">            sum_ = (sum_+shifts[i]) % <span class="number">26</span>;</span><br><span class="line">            shifts[i] = sum_;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            shifts[i] %= <span class="number">26</span>;</span><br><span class="line">            S[i] = <span class="string">'a'</span> + (S[i]+shifts[i]-<span class="string">'a'</span>) % <span class="number">26</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> S;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p><strong>BitBrave， 2019-09-09</strong></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(85.%20Maximal%20Rectangle)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -926,86 +1003,6 @@ Output: 1-&gt;2-&gt;2-&gt;4-&gt;3-&gt;5</code></pre><h2 id="解题思路"><a hre
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(865.%20Smallest%20Subtree%20with%20all%20the%20Deepest%20Nodes)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(865.%20Smallest%20Subtree%20with%20all%20the%20Deepest%20Nodes)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(865. Smallest Subtree with all the Deepest Nodes)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-865-Smallest-Subtree-with-all-the-Deepest-Nodes-题解"><a href="#LeetCode-865-Smallest-Subtree-with-all-the-Deepest-Nodes-题解" class="headerlink" title="LeetCode(865. Smallest Subtree with all the Deepest Nodes)题解"></a>LeetCode(865. Smallest Subtree with all the Deepest Nodes)题解</h1><p>Given a binary tree rooted at <code>root</code>, the <em>depth</em> of each node is the shortest distance to the root.</p>
-<p>A node is <em>deepest</em> if it has the largest depth possible among any node in the entire tree.</p>
-<p>The subtree of a node is that node, plus the set of all descendants of that node.</p>
-<p>Return the node with the largest depth such that it contains all the deepest nodes in its subtree.</p>
-<p><strong>Example 1:</strong></p>
-<p><img src="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/07/01/sketch1.png" alt=""></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Input: [3,5,1,6,2,0,8,null,null,7,4]</span><br><span class="line">Output: [2,7,4]</span><br><span class="line">We return the node with value 2, colored in yellow in the diagram.</span><br><span class="line">The nodes colored in blue are the deepest nodes of the tree.</span><br><span class="line">The input &quot;[3, 5, 1, 6, 2, 0, 8, null, null, 7, 4]&quot; is a serialization of the given tree.</span><br><span class="line">The output &quot;[2, 7, 4]&quot; is a serialization of the subtree rooted at the node with value 2.</span><br><span class="line">Both the input and output have TreeNode type.</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Note:</strong></p>
-<ul>
-<li>The number of nodes in the tree will be between 1 and 500.</li>
-<li>The values of each node are unique.</li>
-</ul>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>在二叉树中，节点的深度是节点离根节点的最短距离。现在给定一个二叉树，要求返回所有节点中深度最深的节点所在的最小子树。</p>
-<p>这个题可以使用如下做法：首先是计算树的最大深度，花费O(n)，然后DFS遍历路径，记录达到最大深度的路径的节点的路径，时间O(n)，空间O(n)，但最终存储下来的是O(n2)。然后遍历这些路径，找出公共的节点，就是索引最靠后同时又在所有路径中都出现的节点，这就是最小子树的根节点，返回这个根节点即可。花费时间O(n)2。</p>
-<p>因此，代码如下，时间复杂度O(n2)，空间复杂度O(n2)。</p>
-<p>Runtime: 16 ms, faster than 9.05% of C++ online submissions for Smallest Subtree with all the Deepest Nodes.</p>
-<p>Memory Usage: 21 MB, less than 7.14% of C++ online submissions for Smallest Subtree with all the Deepest Nodes.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;TreeNode*&gt;&gt; R;</span><br><span class="line">    <span class="keyword">int</span> deepest;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">dDFS</span><span class="params">(TreeNode* root)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">max</span>(dDFS(root-&gt;left), dDFS(root-&gt;right)) + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">DFS</span><span class="params">(TreeNode* root, <span class="built_in">vector</span>&lt;TreeNode*&gt; p)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="literal">NULL</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(p.<span class="built_in">size</span>() == deepest) R.push_back(p);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        p.push_back(root);</span><br><span class="line">        DFS(root-&gt;left, p);</span><br><span class="line">        DFS(root-&gt;right, p);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function">TreeNode* <span class="title">subtreeWithAllDeepest</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        deepest = dDFS(root);</span><br><span class="line">        DFS(root, <span class="built_in">vector</span>&lt;TreeNode*&gt;());</span><br><span class="line">        <span class="keyword">int</span> len = R.<span class="built_in">size</span>(), tl = R[<span class="number">0</span>].<span class="built_in">size</span>(), ret = <span class="number">999</span>;</span><br><span class="line">        <span class="keyword">if</span>(len == <span class="number">2</span>) <span class="keyword">return</span> R[<span class="number">0</span>][tl<span class="number">-1</span>];</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">2</span>; i&lt;len; i+=<span class="number">2</span>)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>; j&lt;tl; j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(R[<span class="number">0</span>][j] != R[i][j]) ret = <span class="built_in">min</span>(ret, j<span class="number">-1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> R[<span class="number">0</span>][ret];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2019-10-18</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1078,7 +1075,7 @@ Output: 1-&gt;2-&gt;2-&gt;4-&gt;3-&gt;5</code></pre><h2 id="解题思路"><a hre
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">332</span>
+          <span class="site-state-item-count">333</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
