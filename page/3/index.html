@@ -177,6 +177,95 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/09/LeetCode(377.%20Combination%20Sum%20IV)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/04/09/LeetCode(377.%20Combination%20Sum%20IV)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(377. Combination Sum IV)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-04-09 12:12:54 / 修改时间：12:53:45" itemprop="dateCreated datePublished" datetime="2020-04-09T12:12:54+08:00">2020-04-09</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-377-Combination-Sum-IV-题解"><a href="#LeetCode-377-Combination-Sum-IV-题解" class="headerlink" title="LeetCode(\377. Combination Sum IV)题解"></a>LeetCode(\377. Combination Sum IV)题解</h1><p>Given an integer array with all positive numbers and no duplicates, find the number of possible combinations that add up to a positive integer target.</p>
+<p><strong>Example:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">nums &#x3D; [1, 2, 3]</span><br><span class="line">target &#x3D; 4</span><br><span class="line"></span><br><span class="line">The possible combination ways are:</span><br><span class="line">(1, 1, 1, 1)</span><br><span class="line">(1, 1, 2)</span><br><span class="line">(1, 2, 1)</span><br><span class="line">(1, 3)</span><br><span class="line">(2, 1, 1)</span><br><span class="line">(2, 2)</span><br><span class="line">(3, 1)</span><br><span class="line"></span><br><span class="line">Note that different sequences are counted as different combinations.</span><br><span class="line"></span><br><span class="line">Therefore the output is 7.</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Follow up:</strong><br>What if negative numbers are allowed in the given array?<br>How does it change the problem?<br>What limitation we need to add to the question to allow negative numbers?</p>
+<p><strong>Credits:</strong><br>Special thanks to <a href="https://leetcode.com/pbrother/" target="_blank" rel="noopener">@pbrother</a> for adding this problem and creating all test cases.</p>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Medium</p>
+<p>给定一个不包含重复数的正整数数组，从中选取一些整数，可以重复选取，使得其和为target，选择的顺序不同带来不同的答案，求解最后可以得到多少个这样的子数组。</p>
+<p>下面我按照做题的思路逐步论述这道题。</p>
+<p>这个题看到的第一时间尝试使用回溯法。设计一个递归函数返回符合target目标的所有合法序列的总数。考虑选第一个数，假设现在要选出所有的合法序列，我们选择一个数作为第一个。然后target减少，进入下一层递归，然后又从整个数组中选择一个数，再进入下一层递归···，这样因为每一层递归在同层对应的位置上选择的数都是不一样的（因为所有元素不同），所以最后得到的序列一定是不一样的。</p>
+<p>结束递归就是，target小于0，或者等于0，等于0说明这一路选择的序列是合法的，ans+1即可。因此代码就很容易写了。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">helper</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> target, <span class="keyword">int</span>&amp; ans)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (target == <span class="number">0</span>) &#123;</span><br><span class="line">            ans++;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (target &lt; <span class="number">0</span>) <span class="keyword">return</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// select</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> n : nums) &#123;</span><br><span class="line">            helper(nums, target - n, ans);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">combinationSum4</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        helper(nums, target, res);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>毫无疑问，TLE了···。</p>
+<p>那我们就对上面的进行优化，查看每个target，因为都是从同一个数组中选择数据。所以，我们可以记录下target的值，子问题的搜索次数。稍微修改下代码。用一个dp的vector记录target的值，初始化dp[0] = 1. 当然dp[target] &gt; 0总是。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">helper</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> target, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; dp)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (dp[target] &gt; <span class="number">0</span>) <span class="keyword">return</span> dp[target];</span><br><span class="line">        <span class="keyword">if</span> (target == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//if (target &lt; 0) return 0; // no effect</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">// select</span></span><br><span class="line">        <span class="keyword">int</span> ans = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> n : nums) &#123;</span><br><span class="line">            <span class="keyword">if</span> (n &gt; target) <span class="keyword">continue</span>;</span><br><span class="line">            ans += helper(nums, target - n, dp);</span><br><span class="line">        &#125;</span><br><span class="line">        dp[target] = ans;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">combinationSum4</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; dp = <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(target + <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">        dp[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">        helper(nums, target, dp);</span><br><span class="line">        <span class="keyword">return</span> dp[target];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>结果还是TLE，这是因为，虽然优化了子问题的搜索方式，但是对于子问题的规模并没有变，即使查看所有的子问题（遍历一遍），查看是否已经解决了所花费的时间都还是很大。当然还有其它的优化方式，比如将数组排序，然后如果当前数大于target就可以不用再向后找了之类的。</p>
+<h4 id="DP解法"><a href="#DP解法" class="headerlink" title="DP解法"></a>DP解法</h4><p>这个题其实可以使用DP解决。我们设定f(i)表示在整个数组寻找的合法的数组满足target=i的数目。那么如何来设定转移方程，即f(i)如何填充呢？</p>
+<p>其实我们可以这样想，f(i)现在要选一个数作为序列的第一个，那么假如选择了nums[k]，那么剩下的target为i-nums[k]。因为序列第一个是nums[k]，加在后面的f(i-nums[k])对应的序列的前面即可，肯定是不重复的。然后我们选择另一个元素nums[p]，那么又得到一个后面的子序列个数。</p>
+<p>所以我们可以填充$f(i) = \sum f(i-nums[k])\ \ (0=&lt;k&lt;n, i-nums[k]&gt;=0)$ </p>
+<p>然后又同志可能会问，因为这个选择的序列是可以排列的，不同的排列是不同的序列啊，如果nums[k]不是放在第一个呢？其实这时候如果不是nums[k]在第一个，那就是别的，那就对应别的f(XX)了啊，我们一样会遍历到这个情况的。</p>
+<h3 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h3><p>因此改写代码如下(这里int会超限，因此改为unsigned long也可, long都不行)，时间上，$O(target * N)$，空间上，$O(target)$。</p>
+<p><code>Runtime: 0 ms, faster than 100.00% of C++ online submissions for Combination Sum IV.</code></p>
+<p><code>Memory Usage: 6.5 MB, less than 100.00% of C++ online submissions for Combination Sum IV.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">combinationSum4</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">unsigned</span> <span class="keyword">long</span>&gt; dp = <span class="built_in">vector</span>&lt;<span class="keyword">unsigned</span> <span class="keyword">long</span>&gt;(target + <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">        dp[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> t=<span class="number">1</span>; t&lt;=target; ++t) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">auto</span> n : nums) &#123;</span><br><span class="line">                <span class="keyword">if</span> (n &gt; t) <span class="keyword">continue</span>;</span><br><span class="line">                dp[t] += dp[t - n];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> dp[target];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2020-04-09.</p>
+<p>注：这个题最后说如果存在负数，应该怎么改，其实如果有负数的时候，那么有可能满足target的条件有无数个。因此需要设定一个上界，如果答案数满足了上界了，就不再寻找了。此外就算遇到n&gt;t即DP代码中n&gt;target的情况，也不跳过，而是继续寻找，但是负数有可能会重复加上，因此可以判断每次加入一个负数，两个负数,····。然后后面就不再加入负数了等操作。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/08/LeetCode(818.%20Race%20Car)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -959,88 +1048,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/28/LeetCode(354.%20Russian%20Doll%20Envelopes)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/03/28/LeetCode(354.%20Russian%20Doll%20Envelopes)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(354. Russian Doll Envelopes)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-03-28 18:43:01 / 修改时间：18:43:16" itemprop="dateCreated datePublished" datetime="2020-03-28T18:43:01+08:00">2020-03-28</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-354-Russian-Doll-Envelopes-题解"><a href="#LeetCode-354-Russian-Doll-Envelopes-题解" class="headerlink" title="LeetCode(\354. Russian Doll Envelopes)题解"></a>LeetCode(\354. Russian Doll Envelopes)题解</h1><p>You have a number of envelopes with widths and heights given as a pair of integers <code>(w, h)</code>. One envelope can fit into another if and only if both the width and height of one envelope is greater than the width and height of the other envelope.</p>
-<p>What is the maximum number of envelopes can you Russian doll? (put one inside other)</p>
-<p><strong>Note:</strong><br>Rotation is not allowed.</p>
-<p><strong>Example:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: [[5,4],[6,4],[6,7],[2,3]]</span><br><span class="line">Output: 3 </span><br><span class="line">Explanation: The maximum number of envelopes you can Russian doll is 3 ([2,3] &#x3D;&gt; [5,4] &#x3D;&gt; [6,7]).</span><br></pre></td></tr></table></figure>
-
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Hard</p>
-<p>给出一堆信封，每个信封有长宽两种大小，一个信封A可以包裹另一个信封B的条件是A的长宽都严格大于B对应的长和宽。请问这堆信封里一次性最长可以包裹几个信封。</p>
-<p>这个题分析可以发现就是在信封中选择最长的递增子序列，因为有长宽两个因素在，很难直接选取最长递增子序列。我们可以首先将信封选择一个维度比如长度进行排序。然后再对另一个维度的数进行递增子序列选取即可。</p>
-<p>这里我的方式是：对所有信封按照长度升序排序，对于相同长度的信封，宽度大的在前面。这是为了减少比较，后面因为相同长或宽的信封是不能包裹的。那么后续在判断两个信封时，如果前后两个信封的宽度前小后大可推断长度一定是不相同的，因为按照上述的排序方式，只有宽度前大后小的两个信封长度才可能相等。</p>
-<p>可以使用DP解决，构造一个dp数组，dp[i]表示前i个信封中以i为最外层包裹的话有多少包裹层数，只需要遍历前面的i-1个即可。</p>
-<p>如何证明这种算法是正确的呢？加入这种算法不是最优的，那么说明我们最终构造的序列漏掉了某个可以满足包裹的信封，但是算法中如果存在这样的，最终一定会计入。</p>
-<h2 id="DP时空复杂度"><a href="#DP时空复杂度" class="headerlink" title="DP时空复杂度"></a>DP时空复杂度</h2><p>代码如下，时间上O(N2)，空间上O(N)。</p>
-<p><code>Runtime: 1156 ms</code></p>
-<p><code>Memory Usage: 46.1 MB</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; a, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a[<span class="number">0</span>] &lt; b[<span class="number">0</span>] <span class="keyword">or</span> (a[<span class="number">0</span>] == b[<span class="number">0</span>] <span class="keyword">and</span> a[<span class="number">1</span>] &gt; b[<span class="number">1</span>]);</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxEnvelopes</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; envelopes)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = envelopes.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span> (len == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">dp</span><span class="params">(len, <span class="number">1</span>)</span></span>;</span><br><span class="line">        </span><br><span class="line">        sort(envelopes.<span class="built_in">begin</span>(), envelopes.<span class="built_in">end</span>(), cmp);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;len; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=i<span class="number">-1</span>; j&gt;=<span class="number">0</span>; j--) &#123;</span><br><span class="line">                <span class="keyword">if</span> (envelopes[j][<span class="number">1</span>] &lt; envelopes[i][<span class="number">1</span>]) &#123;</span><br><span class="line">                    dp[i] = <span class="built_in">max</span>(dp[i], dp[j] + <span class="number">1</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//int res = 1;</span></span><br><span class="line">        <span class="comment">//for (int d : dp) res = max(res, d);</span></span><br><span class="line">        <span class="comment">//return res;</span></span><br><span class="line">        <span class="keyword">return</span> *max_element(dp.<span class="built_in">begin</span>(), dp.<span class="built_in">end</span>());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>还有一种不使用DP，还是将信封按照上述一样的方式排序，然后从前到后开始选择信封，每次遍历到一个信封，查看信封的宽度在已经选择的信封中的位置，如果是最大的，直接放入，如果不是，就查看第一个大于等于这个信封的信封宽度，如果等于不用管，如果大于，就将其替换为当前信封。这是为了后续选择时候，在保证相同信封包裹数的情况下，最外围的信封宽度尽可能小，因为长度肯定都是小于。这样最后返回选择的信封的数目即可。</p>
-<h2 id="二分时空复杂度"><a href="#二分时空复杂度" class="headerlink" title="二分时空复杂度"></a>二分时空复杂度</h2><p>代码如下，时间上O(NlogN)，空间上O(N).</p>
-<p><code>Runtime: 308 ms, faster than 57.33% of C++ online submissions for Russian Doll Envelopes.</code></p>
-<p><code>Memory Usage: 47.3 MB, less than 16.67% of C++ online submissions for Russian Doll Envelopes.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; a, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a[<span class="number">0</span>] &lt; b[<span class="number">0</span>] <span class="keyword">or</span> (a[<span class="number">0</span>] == b[<span class="number">0</span>] <span class="keyword">and</span> a[<span class="number">1</span>] &gt; b[<span class="number">1</span>]);</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxEnvelopes</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; envelopes)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = envelopes.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span> (len == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; dp;</span><br><span class="line">        </span><br><span class="line">        sort(envelopes.<span class="built_in">begin</span>(), envelopes.<span class="built_in">end</span>(), cmp);</span><br><span class="line">        <span class="keyword">for</span> (<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; e : envelopes) &#123;</span><br><span class="line">            <span class="comment">// vector&lt;int&gt;::iterator </span></span><br><span class="line">            <span class="comment">// 二分搜索递增序列，返回序列中大于等于输入数的第一个数</span></span><br><span class="line">            <span class="keyword">auto</span> iter = lower_bound(dp.<span class="built_in">begin</span>(), dp.<span class="built_in">end</span>(), e[<span class="number">1</span>]); </span><br><span class="line">            <span class="keyword">if</span> (iter == dp.<span class="built_in">end</span>()) dp.push_back(e[<span class="number">1</span>]);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (e[<span class="number">1</span>] &lt; *iter) *iter = e[<span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> dp.<span class="built_in">size</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2020-03-28.</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1113,7 +1120,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">333</span>
+          <span class="site-state-item-count">334</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
