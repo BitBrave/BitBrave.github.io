@@ -177,6 +177,260 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(875.%20Koko%20Eating%20Bananas)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(875.%20Koko%20Eating%20Bananas)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(875. Koko Eating Bananas)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-875-Koko-Eating-Bananas-题解"><a href="#LeetCode-875-Koko-Eating-Bananas-题解" class="headerlink" title="LeetCode(875. Koko Eating Bananas)题解"></a>LeetCode(875. Koko Eating Bananas)题解</h1><p>Koko loves to eat bananas.  There are <code>N</code> piles of bananas, the <code>i</code>-th pile has <code>piles[i]</code> bananas.  The guards have gone and will come back in <code>H</code> hours.</p>
+<p>Koko can decide her bananas-per-hour eating speed of <code>K</code>.  Each hour, she chooses some pile of bananas, and eats K bananas from that pile.  If the pile has less than <code>K</code> bananas, she eats all of them instead, and won’t eat any more bananas during this hour.</p>
+<p>Koko likes to eat slowly, but still wants to finish eating all the bananas before the guards come back.</p>
+<p>Return the minimum integer <code>K</code> such that she can eat all the bananas within <code>H</code> hours.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: piles &#x3D; [3,6,7,11], H &#x3D; 8</span><br><span class="line">Output: 4</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: piles &#x3D; [30,11,23,4,20], H &#x3D; 5</span><br><span class="line">Output: 30</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 3:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: piles &#x3D; [30,11,23,4,20], H &#x3D; 6</span><br><span class="line">Output: 23</span><br></pre></td></tr></table></figure>
+
+<p><strong>Note:</strong></p>
+<ul>
+<li><code>1 &lt;= piles.length &lt;= 10^4</code></li>
+<li><code>piles.length &lt;= H &lt;= 10^9</code></li>
+<li><code>1 &lt;= piles[i] &lt;= 10^9</code></li>
+</ul>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Koko喜欢吃香蕉。有N堆香蕉，第i堆有成堆的香蕉。守卫走了，将在H小时后回来。Koko可以决定她每小时的香蕉进食速度K.她每小时选择一堆香蕉，然后从那一堆中吃K根香蕉。如果堆中的香蕉少于K个，她将全部吃掉，并且在此小时内不再吃香蕉。Koko喜欢慢慢吃东西，但仍想在警卫回来之前吃完所有香蕉。返回最小整数K，以便她可以在H小时内吃掉所有香蕉。</p>
+<p>因为Koko每小时最多吃一堆香蕉，H一定大于等于香蕉的堆数。如果要在H个小时之内吃完所有的香蕉，最基本的只要保证每小时Koko都吃掉一堆就可以了，因此K的答案一定小于等于Max(piles[i])。同时K&gt;=1。</p>
+<p>确定了K的范围，就可以进行二分搜索了，得到上下界，如果上下界相同，表示得到了界。否则就没有，然后取中间数，查看是否满足H个小时的限制，如果满足，表示一定大于等于这个数，如果不满足，表示答案一定小于这个数。直接找左区间、右区间即可。</p>
+<p>代码如下，设最大的香蕉数为N，香蕉堆数为M，则时间复杂度为O(MlogN)。空间复杂度O(1)。</p>
+<p><code>Runtime: 68 ms, faster than 45.77% of C++ online submissions for Koko Eating Bananas.</code></p>
+<p><code>Memory Usage: 10.2 MB, less than 100.00% of C++ online submissions for Koko Eating Bananas.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minEatingSpeed</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; piles, <span class="keyword">int</span> H)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> spend_time, len = piles.<span class="built_in">size</span>(), sta = <span class="number">1</span>, <span class="built_in">end</span> = <span class="number">0</span>, mid;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> p : piles) <span class="built_in">end</span> = <span class="built_in">max</span>(p, <span class="built_in">end</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span>(sta &lt; <span class="built_in">end</span>)&#123;</span><br><span class="line">            mid = (sta + <span class="built_in">end</span>) / <span class="number">2</span>;</span><br><span class="line">            spend_time = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> p : piles) spend_time += <span class="built_in">ceil</span>(<span class="number">1.0</span> * p / mid);</span><br><span class="line">            <span class="keyword">if</span>(spend_time &gt; H) sta = mid + <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="built_in">end</span> = mid;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">end</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2019-10-22</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(877.%20Stone%20Game)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(877.%20Stone%20Game)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(877. Stone Game)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-877-Stone-Game-题解"><a href="#LeetCode-877-Stone-Game-题解" class="headerlink" title="LeetCode(877. Stone Game)题解"></a>LeetCode(877. Stone Game)题解</h1><p>Alex and Lee play a game with piles of stones.  There are an even number of piles <strong>arranged in a row</strong>, and each pile has a positive integer number of stones <code>piles[i]</code>.</p>
+<p>The objective of the game is to end with the most stones.  The total number of stones is odd, so there are no ties.</p>
+<p>Alex and Lee take turns, with Alex starting first.  Each turn, a player takes the entire pile of stones from either the beginning or the end of the row.  This continues until there are no more piles left, at which point the person with the most stones wins.</p>
+<p>Assuming Alex and Lee play optimally, return <code>True</code> if and only if Alex wins the game.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Input: [5,3,4,5]</span><br><span class="line">Output: true</span><br><span class="line">Explanation: </span><br><span class="line">Alex starts first, and can only take the first 5 or the last 5.</span><br><span class="line">Say he takes the first 5, so that the row becomes [3, 4, 5].</span><br><span class="line">If Lee takes 3, then the board is [4, 5], and Alex takes 5 to win with 10 points.</span><br><span class="line">If Lee takes the last 5, then the board is [3, 4], and Alex takes 4 to win with 9 points.</span><br><span class="line">This demonstrated that taking the first 5 was a winning move for Alex, so we return true.</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Note:</strong></p>
+<ol>
+<li><code>2 &lt;= piles.length &lt;= 500</code></li>
+<li><code>piles.length</code> is even.</li>
+<li><code>1 &lt;= piles[i] &lt;= 500</code></li>
+<li><code>sum(piles)</code> is odd.</li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>有一个从左到右一堆堆排列的石子，每堆石子有不同的数量，但是石子的总数是奇数，石子的堆数是偶数。现在A和B玩一个游戏，从A开始，轮流从左边或者右边选一堆石子，最后每个人都有相同堆数的石子，但是因为石子的数目是奇数，因此两个人的石子数不可能一样。最后，得到石子多的人获得游戏的胜利，假设A和B都是按照最优的策略选择石子，判断A是否能获胜。</p>
+<p>这个题可以用常规的DP来做，转一下思路，A寻找最大的值，而B是从A得到的值中取值。</p>
+<p>也可以如下思路，这个石子的数量是奇数但是堆数是偶数，所以AB一定有个胜负，如果A胜利，则不管，如果是B胜利，就将选择顺序对调，还是A胜利。因此A一定总是胜利的。比如如下策略：将初始的石子按顺序编号，按照从1到N。分别计算奇数序号堆的石子总数和偶数序号堆的石子总数，一定有一堆大的，选择大的那一系列石子堆，则可以保证最后得到最多的石子。</p>
+<p>这个在<a href="[https://github.com/MisterBooo/LeetCodeAnimation/blob/master/notes/LeetCode%E7%AC%AC877%E5%8F%B7%E9%97%AE%E9%A2%98%EF%BC%9A%E7%9F%B3%E5%AD%90%E6%B8%B8%E6%88%8F.md](https://github.com/MisterBooo/LeetCodeAnimation/blob/master/notes/LeetCode第877号问题：石子游戏.md)">这个链接里</a>里有详细的解说。</p>
+<p>代码如下。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">stoneGame</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; piles)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p> BitBrave, 2019-10-05</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(886.%20Possible%20Bipartition)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(886.%20Possible%20Bipartition)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(886. Possible Bipartition)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-886-Possible-Bipartition-题解"><a href="#LeetCode-886-Possible-Bipartition-题解" class="headerlink" title="LeetCode(886. Possible Bipartition)题解"></a>LeetCode(886. Possible Bipartition)题解</h1><p>Given a set of <code>N</code> people (numbered <code>1, 2, ..., N</code>), we would like to split everyone into two groups of <strong>any</strong> size.</p>
+<p>Each person may dislike some other people, and they should not go into the same group. </p>
+<p>Formally, if <code>dislikes[i] = [a, b]</code>, it means it is not allowed to put the people numbered <code>a</code> and <code>b</code> into the same group.</p>
+<p>Return <code>true</code> if and only if it is possible to split everyone into two groups in this way.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: N &#x3D; 4, dislikes &#x3D; [[1,2],[1,3],[2,4]]</span><br><span class="line">Output: true</span><br><span class="line">Explanation: group1 [1,4], group2 [2,3]</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: N &#x3D; 3, dislikes &#x3D; [[1,2],[1,3],[2,3]]</span><br><span class="line">Output: false</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 3:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: N &#x3D; 5, dislikes &#x3D; [[1,2],[2,3],[3,4],[4,5],[1,5]]</span><br><span class="line">Output: false</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Note:</strong></p>
+<ol>
+<li><code>1 &lt;= N &lt;= 2000</code></li>
+<li><code>0 &lt;= dislikes.length &lt;= 10000</code></li>
+<li><code>1 &lt;= dislikes[i][j] &lt;= N</code></li>
+<li><code>dislikes[i][0] &lt; dislikes[i][1]</code></li>
+<li>There does not exist <code>i != j</code> for which <code>dislikes[i] == dislikes[j]</code>.</li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给定一组N个人（编号为1，2，…，N），我们想将每个人分成两组，任何规模。每个人都可能不喜欢其他人，因此不应将他们归为一类。形式上，如果dislike[i] = [a，b]，则意味着不允许将编号为a和b的人员放在同一组中。当且仅当可以以这种方式将每个人分成两组时才返回True，否则返回False。</p>
+<p>我们假设如果两个人之间相互不喜欢，那么就在这两个人之间连一条线，最终会形成多个图组成的多个图集合。而如果图出现奇数点的环路，则表示不能满足题目要求，因为无法将其分成两个集合，使得连线的两个点在不在同一个组合里。</p>
+<p>代码如下，使用一个矩阵记录点之间的相连情况，同时在遍历过程中记录已经找到的点。因此总的时间复杂度为O(n)，空间复杂度O(n2)。</p>
+<p><code>Runtime: 472 ms, faster than 5.04% of C++ online submissions for Possible Bipartition.</code></p>
+<p><code>Memory Usage: 59.1 MB, less than 28.57% of C++ online submissions for Possible Bipartition.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">bool</span>&gt;&gt; G;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">bool</span>&gt; visit;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; len;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">DFS</span><span class="params">(<span class="keyword">int</span> p, <span class="keyword">int</span> N, <span class="keyword">int</span> last_p, <span class="keyword">int</span> num)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(visit[p]) <span class="keyword">return</span> (num-len[p]) &amp; <span class="number">1</span>;</span><br><span class="line">    </span><br><span class="line">        visit[p] = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;N; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(G[p][i] == <span class="literal">false</span> || i == last_p) <span class="keyword">continue</span>;</span><br><span class="line">            len[i] = len[p] + <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span>(DFS(i, N, p, num + <span class="number">1</span>)) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">possibleBipartition</span><span class="params">(<span class="keyword">int</span> N, <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; dislikes)</span> </span>&#123;</span><br><span class="line">        G = <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">bool</span>&gt;&gt;(N, <span class="built_in">vector</span>&lt;<span class="keyword">bool</span>&gt;(N, <span class="literal">false</span>));</span><br><span class="line">        visit = <span class="built_in">vector</span>&lt;<span class="keyword">bool</span>&gt;(N, <span class="literal">false</span>);</span><br><span class="line">        len = <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(N, <span class="number">0</span>);</span><br><span class="line">        len[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; d : dislikes)&#123;</span><br><span class="line">            G[d[<span class="number">0</span>]<span class="number">-1</span>][d[<span class="number">1</span>]<span class="number">-1</span>] = G[d[<span class="number">1</span>]<span class="number">-1</span>][d[<span class="number">0</span>]<span class="number">-1</span>] = <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;N; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(visit[i]) <span class="keyword">continue</span>;</span><br><span class="line">            <span class="keyword">if</span>(DFS(i, N, <span class="number">-1</span>, <span class="number">0</span>)) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2019-10-23</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(881.%20Boats%20to%20Save%20People)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -765,277 +1019,6 @@ Explanation: We define the gray code sequence to begin with 0.
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(90.%20Subsets%20II)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(90.%20Subsets%20II)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(90. Subsets II)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-90-Subsets-II-题解"><a href="#LeetCode-90-Subsets-II-题解" class="headerlink" title="LeetCode(90. Subsets II)题解"></a>LeetCode(90. Subsets II)题解</h1><hr>
-<p>Given a collection of integers that might contain duplicates, nums, return all possible subsets (the power set).</p>
-<p>Note: The solution set must not contain duplicate subsets.</p>
-<p>Example:</p>
-<p>Input: [1,2,2]<br>Output:<br>    [<br>        [2],<br>        [1],<br>        [1,2,2],<br>        [2,2],<br>        [1,2],<br>        []<br>    ]</p>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个有重复数的数组集合，求出其所有的子集，子集不能有重复。</p>
-<p>可以将数组先排序。然后使用递归的办法，对于每个数，有加入或者不加入之分。而如果有重复的话，就有加入一次，加入两次，加入多次之分。递归时判断一下即可。</p>
-<p>代码如下：</p>
-<p>Runtime: 8 ms, faster than 92.10% of C++ online submissions for Subsets II.<br>Memory Usage: 18.2 MB, less than 5.00% of C++ online submissions for Subsets II.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">subsetsWithDup_</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> sta, <span class="keyword">int</span> len, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; tmp, <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; res)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(sta == len)&#123;</span><br><span class="line">            res.push_back(tmp);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> n = sta + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span>(n&lt;len &amp;&amp; nums[sta] == nums[n]) n++;</span><br><span class="line">        </span><br><span class="line">        subsetsWithDup_(nums, n, len, tmp, res);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=sta; i&lt;n; i++)&#123;</span><br><span class="line">            tmp.push_back(nums[sta]);</span><br><span class="line">            subsetsWithDup_(nums, n, len, tmp, res);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">subsetsWithDup</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        sort(nums.<span class="built_in">begin</span>(), nums.<span class="built_in">end</span>());</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; res;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; tmp;</span><br><span class="line">        <span class="keyword">int</span> len = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span>(len == <span class="number">0</span>) <span class="keyword">return</span> res;</span><br><span class="line">        subsetsWithDup_(nums, <span class="number">0</span>, len, tmp, res);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-06-21</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(904.%20Fruit%20Into%20Baskets)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(904.%20Fruit%20Into%20Baskets)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(904. Fruit Into Baskets)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-904-Fruit-Into-Baskets-题解"><a href="#LeetCode-904-Fruit-Into-Baskets-题解" class="headerlink" title="LeetCode(904. Fruit Into Baskets)题解"></a>LeetCode(904. Fruit Into Baskets)题解</h1><p>In a row of trees, the <code>i</code>-th tree produces fruit with type <code>tree[i]</code>.</p>
-<p>You <strong>start at any tree of your choice</strong>, then repeatedly perform the following steps:</p>
-<ol>
-<li>Add one piece of fruit from this tree to your baskets.  If you cannot, stop.</li>
-<li>Move to the next tree to the right of the current tree.  If there is no tree to the right, stop.</li>
-</ol>
-<p>Note that you do not have any choice after the initial choice of starting tree: you must perform step 1, then step 2, then back to step 1, then step 2, and so on until you stop.</p>
-<p>You have two baskets, and each basket can carry any quantity of fruit, but you want each basket to only carry one type of fruit each.</p>
-<p>What is the total amount of fruit you can collect with this procedure?</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: [1,2,1]</span><br><span class="line">Output: 3</span><br><span class="line">Explanation: We can collect [1,2,1].</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Input: [0,1,2,2]</span><br><span class="line">Output: 3</span><br><span class="line">Explanation: We can collect [1,2,2].</span><br><span class="line">If we started at the first tree, we would only collect [0, 1].</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 3:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Input: [1,2,3,2,2]</span><br><span class="line">Output: 4</span><br><span class="line">Explanation: We can collect [2,3,2,2].</span><br><span class="line">If we started at the first tree, we would only collect [1, 2].</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 4:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Input: [3,3,3,1,2,1,1,2,3,3,4]</span><br><span class="line">Output: 5</span><br><span class="line">Explanation: We can collect [1,2,1,1,2].</span><br><span class="line">If we started at the first tree or the eighth tree, we would only collect 4 fruits.</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Note:</strong></p>
-<ol>
-<li><code>1 &lt;= tree.length &lt;= 40000</code></li>
-<li><code>0 &lt;= tree[i] &lt; tree.length</code></li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出一个数组，每个元素代表一棵树，树上结的果子的类型就是元素值。现在有两个无限大的篮子。现在随便选一个位置，然后依次向右走边，不能跳过，将采集到的果子装入篮子。但是每个篮子只能装一种果子。现在问，这样能得到最多多少棵树的果子。</p>
-<p>这个题仔细思考一下，抽象一下，就是给定一个数组，要求找出由最多两个元素组成的最长的子数组的长度。</p>
-<p>因此，可以使用双指针法维持两个指针sta和end，sta记录已经遍历的数组中end位置的元素的前面的边界，end表示当前遍历到的位置。type记录当前遍历数组的最近的符合条件的子数组元素类型数目，val记录当前合法子数组中处理end所指元素中另一个元素（如果有的话），num记录当前遍历数组的最近的符合条件的子数组元素长度，ret则记录最终答案。</p>
-<ul>
-<li>如果数组长度为1，那么算法就结束了，直接返回1即可。否则从左到右从头遍历数组。</li>
-<li>初始化sta指向第一个，end都指向第二个，type=1，ret=1，num=1, val = -1。</li>
-<li>将end与前一个元素比较，如果相同表示这个元素是和之前一样类型，直接end++，num++。</li>
-<li>若end与前一个不相等，这时候查看type，</li>
-<li>如果为1，就表示当前合法数组内只有一种类型的值，可以继续加，因此end++，num++，但是元素类型多了一个，所以type++。此时，需要记录end的元素与其它元素的交界，方便后续操作，记录sta=end（注意是end未++的赋值），val=end前一个元素值（即数组的另一个元素）。</li>
-<li>如果type为2，判断当前值是否是val，如果是就end++，num++，sta=end（注意是end未++的赋值），val=end前一个元素值（即数组的另一个元素）。</li>
-<li>如果type为2，并且end的元素和val也不一样，那表示当前子数组内元素类型已经有两种了，就不能再加第三种了，因此需要更新信息。ret=max(ret, num)将上一个子数组的长度更新到ret内。新的子数组表示如下：num = end-sta+1，type=2。然后end++。方便后续操作，记录sta=end（注意是end未++的赋值）。然后重复上述第一步执行。</li>
-</ul>
-<p>代码如下，时间复杂度O(N)，空间复杂度O(1)。</p>
-<p><code>Runtime: 124 ms, faster than 93.08% of C++ online submissions for Fruit Into Baskets.</code></p>
-<p><code>Memory Usage: 14.9 MB, less than 93.55% of C++ online submissions for Fruit Into Baskets.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">totalFruit</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; tree)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> ret = <span class="number">1</span>, num = <span class="number">1</span>, type = <span class="number">1</span>, val = <span class="number">-1</span>, len = tree.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> sta = <span class="number">0</span>, <span class="built_in">end</span> = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(; <span class="built_in">end</span>&lt;len; <span class="built_in">end</span>++)&#123;</span><br><span class="line">            <span class="comment">//cout&lt;&lt;"zoudao"&lt;&lt;tree[end]&lt;&lt;" sta "&lt;&lt;tree[sta]&lt;&lt;" val "&lt;&lt;val&lt;&lt;" dangqian "&lt;&lt; num&lt;&lt;endl;</span></span><br><span class="line">            <span class="keyword">if</span>(tree[<span class="built_in">end</span>] == tree[<span class="built_in">end</span><span class="number">-1</span>]) num++;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(type == <span class="number">1</span>)&#123;</span><br><span class="line">                num++;</span><br><span class="line">                type++;</span><br><span class="line">                sta = <span class="built_in">end</span>;</span><br><span class="line">                val = tree[<span class="built_in">end</span><span class="number">-1</span>];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(val == tree[<span class="built_in">end</span>])&#123;</span><br><span class="line">                num++;</span><br><span class="line">                sta = <span class="built_in">end</span>;</span><br><span class="line">                val = tree[<span class="built_in">end</span><span class="number">-1</span>];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                ret = <span class="built_in">max</span>(ret, num);</span><br><span class="line">                num = <span class="built_in">end</span> - sta + <span class="number">1</span>;</span><br><span class="line">                sta = <span class="built_in">end</span>;</span><br><span class="line">                val = tree[<span class="built_in">end</span><span class="number">-1</span>];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">max</span>(ret, num);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-
-
-<p>BitBrave，2019-11-15</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(916.%20Word%20Subsets)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(916.%20Word%20Subsets)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(916. Word Subsets)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-916-Word-Subsets-题解"><a href="#LeetCode-916-Word-Subsets-题解" class="headerlink" title="LeetCode(916. Word Subsets)题解"></a>LeetCode(916. Word Subsets)题解</h1><p>We are given two arrays <code>A</code> and <code>B</code> of words.  Each word is a string of lowercase letters.</p>
-<p>Now, say that word <code>b</code> is a subset of word <code>a</code> if every letter in <code>b</code> occurs in <code>a</code>, <strong>including multiplicity</strong>.  For example, <code>&quot;wrr&quot;</code> is a subset of <code>&quot;warrior&quot;</code>, but is not a subset of <code>&quot;world&quot;</code>.</p>
-<p>Now say a word <code>a</code> from <code>A</code> is <em>universal</em> if for every <code>b</code> in <code>B</code>, <code>b</code> is a subset of <code>a</code>. </p>
-<p>Return a list of all universal words in <code>A</code>.  You can return the words in any order.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: A &#x3D; [&quot;amazon&quot;,&quot;apple&quot;,&quot;facebook&quot;,&quot;google&quot;,&quot;leetcode&quot;], B &#x3D; [&quot;e&quot;,&quot;o&quot;]</span><br><span class="line">Output: [&quot;facebook&quot;,&quot;google&quot;,&quot;leetcode&quot;]</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: A &#x3D; [&quot;amazon&quot;,&quot;apple&quot;,&quot;facebook&quot;,&quot;google&quot;,&quot;leetcode&quot;], B &#x3D; [&quot;l&quot;,&quot;e&quot;]</span><br><span class="line">Output: [&quot;apple&quot;,&quot;google&quot;,&quot;leetcode&quot;]</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 3:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: A &#x3D; [&quot;amazon&quot;,&quot;apple&quot;,&quot;facebook&quot;,&quot;google&quot;,&quot;leetcode&quot;], B &#x3D; [&quot;e&quot;,&quot;oo&quot;]</span><br><span class="line">Output: [&quot;facebook&quot;,&quot;google&quot;]</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 4:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: A &#x3D; [&quot;amazon&quot;,&quot;apple&quot;,&quot;facebook&quot;,&quot;google&quot;,&quot;leetcode&quot;], B &#x3D; [&quot;lo&quot;,&quot;eo&quot;]</span><br><span class="line">Output: [&quot;google&quot;,&quot;leetcode&quot;]</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 5:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: A &#x3D; [&quot;amazon&quot;,&quot;apple&quot;,&quot;facebook&quot;,&quot;google&quot;,&quot;leetcode&quot;], B &#x3D; [&quot;ec&quot;,&quot;oc&quot;,&quot;ceo&quot;]</span><br><span class="line">Output: [&quot;facebook&quot;,&quot;leetcode&quot;]</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Note:</strong></p>
-<ol>
-<li><code>1 &lt;= A.length, B.length &lt;= 10000</code></li>
-<li><code>1 &lt;= A[i].length, B[i].length &lt;= 10</code></li>
-<li><code>A[i]</code> and <code>B[i]</code> consist only of lowercase letters.</li>
-<li>All words in <code>A[i]</code> are unique: there isn’t <code>i != j</code> with <code>A[i] == A[j]</code>.</li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出两个字符串数组A和B，对于B中每个字符串，如果A中的某个字符串的组成元素和对应的个数均大于等于B中任意一个字符串的组成元素和对应个数，就表示A中这个字符串是宇宙字符串。要求找出所有的字符串。</p>
-<p>这个可以使用暴力枚举，使用python中的Counter类，将B中所有字符串建立一个dict，其中存储出现的每个字符和其在某个字符串中出现的最大次数，然后对A中每个字符串也单独做这样的处理，然后对比这两个dict，如果A中的全包围B中，表示A中的这个字符串是我们想要的结果。</p>
-<p>设A中字符串数目为N，B中为M，每个字符串长度为K，那么时间复杂度为O(N*26)=O(N)，空间复杂度O(1)。因为最多26个字母。</p>
-<p>最普通的代码如下。</p>
-<p><code>Runtime: 884 ms, faster than 70.83% of Python3 online submissions for Word Subsets.</code></p>
-<p><code>Memory Usage: 16.4 MB, less than 50.00% of Python3 online submissions for Word Subsets.</code></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">isUniversal</span><span class="params">(self, A, B)</span>:</span></span><br><span class="line">        <span class="comment">#print(A)</span></span><br><span class="line">        <span class="keyword">for</span> b <span class="keyword">in</span> B.keys():</span><br><span class="line">            <span class="keyword">if</span> (b <span class="keyword">not</span> <span class="keyword">in</span> A) <span class="keyword">or</span> (A[b] &lt; B[b]): <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wordSubsets</span><span class="params">(self, A: List[str], B: List[str])</span> -&gt; List[str]:</span></span><br><span class="line">        dicB = &#123;&#125;</span><br><span class="line">        <span class="keyword">for</span> b <span class="keyword">in</span> B:</span><br><span class="line">            b = dict(Counter(b))</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> b.keys():</span><br><span class="line">                <span class="keyword">if</span> i <span class="keyword">in</span> dicB: dicB[i] = max(dicB[i], b[i])</span><br><span class="line">                <span class="keyword">else</span>: dicB[i] = b[i]</span><br><span class="line">        <span class="comment">#print(dicB)   </span></span><br><span class="line">        ret = [a <span class="keyword">for</span> a <span class="keyword">in</span> A <span class="keyword">if</span> self.isUniversal(dict(Counter(a)), dicB)]</span><br><span class="line">        <span class="keyword">return</span> ret</span><br></pre></td></tr></table></figure>
-
-<p>如果精简一点，就如下。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">isUniversal</span><span class="params">(self, A, B)</span>:</span></span><br><span class="line">        <span class="comment">#print(A)</span></span><br><span class="line">        <span class="keyword">for</span> b <span class="keyword">in</span> B.keys():</span><br><span class="line">            <span class="keyword">if</span> A.get(b, <span class="number">0</span>) &lt; B[b]: <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        <span class="comment">#return False if sum([int(True if B[b] &gt; A.get(b, 0) else False) for b in B]) else True</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wordSubsets</span><span class="params">(self, A: List[str], B: List[str])</span> -&gt; List[str]:</span></span><br><span class="line">        dicB = &#123;&#125;</span><br><span class="line">        <span class="keyword">for</span> b <span class="keyword">in</span> [dict(Counter(b)) <span class="keyword">for</span> b <span class="keyword">in</span> B]:</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> b.keys():</span><br><span class="line">                dicB[i] = max(dicB.get(i,<span class="number">0</span>), b[i])</span><br><span class="line">        <span class="comment">#print(dicB)   </span></span><br><span class="line">        <span class="keyword">return</span> [a <span class="keyword">for</span> a <span class="keyword">in</span> A <span class="keyword">if</span> self.isUniversal(dict(Counter(a)), dicB)]</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2019-11-09</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1108,7 +1091,7 @@ Explanation: We define the gray code sequence to begin with 0.
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">334</span>
+          <span class="site-state-item-count">337</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

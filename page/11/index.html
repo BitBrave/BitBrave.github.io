@@ -177,6 +177,278 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(1140.%20Stone%20Game%20II)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(1140.%20Stone%20Game%20II)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1140. Stone Game II)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-1140-Stone-Game-II-题解"><a href="#LeetCode-1140-Stone-Game-II-题解" class="headerlink" title="LeetCode(\1140. Stone Game II)题解"></a>LeetCode(\1140. Stone Game II)题解</h1><p>Alex and Lee continue their games with piles of stones. There are a number of piles <strong>arranged in a row</strong>, and each pile has a positive integer number of stones <code>piles[i]</code>. The objective of the game is to end with the most stones. </p>
+<p>Alex and Lee take turns, with Alex starting first. Initially, <code>M = 1</code>.</p>
+<p>On each player’s turn, that player can take <strong>all the stones</strong> in the <strong>first</strong> <code>X</code> remaining piles, where <code>1 &lt;= X &lt;= 2M</code>. Then, we set <code>M = max(M, X)</code>.</p>
+<p>The game continues until all the stones have been taken.</p>
+<p>Assuming Alex and Lee play optimally, return the maximum number of stones Alex can get.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: piles &#x3D; [2,7,9,4,4]</span><br><span class="line">Output: 10</span><br><span class="line">Explanation:  If Alex takes one pile at the beginning, Lee takes two piles, then Alex takes 2 piles again. Alex can get 2 + 4 + 4 &#x3D; 10 piles in total. If Alex takes two piles at the beginning, then Lee can take all three piles left. In this case, Alex get 2 + 7 &#x3D; 9 piles in total. So we return 10 since it&#39;s larger.</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>1 &lt;= piles.length &lt;= 100</code></li>
+<li><code>1 &lt;= piles[i] &lt;= 10 ^ 4</code></li>
+</ul>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一堆石子，每堆石子有对应的石子数，A和L轮流选X堆，A先选。然后1&lt;=X&lt;=2M，然后更新M=max(M, X)，初始化M=1。两个人都使用最优的办法，那么问A能得到最多的石子是多少。</p>
+<p>这个题我觉得难度挺大的，是网上参考了解法解决的。</p>
+<h3 id="解法一：记忆化递归，DFS"><a href="#解法一：记忆化递归，DFS" class="headerlink" title="解法一：记忆化递归，DFS"></a>解法一：记忆化递归，DFS</h3><p>我们假设一个函数dfs(i，M)来表示第一个选的人从第i堆石子开始，可选堆数为1和2M时，能得到的最大石子数。那么第二个先选的人就只能得到第i堆开始的剩余石子总数-函数返回值了。对于A来说，我们直接调用dfs(0,1)即可。那如何构建dfs呢，首先从第i堆开始选，我们可以遍历1到2M，假设依次选定X堆，那么能得到的最大数就是max(sum[i:]-dfs(i+X, max(X, M)))。这就可以将问题变为子问题了。</p>
+<p>同时，因为子问题有很多重复的，因此我们可以记住一些子问题的固定解，避免重复计算。使用一个map，索引为i，开始选石子的堆数位置，然后val也是一个map，索引是此时的M值，然后val是对应的结果。</p>
+<p>代码如下，时间复杂度O(n3)，空间复杂度O(n2)，因为M的值肯定不会超过n/2（n为石子堆数），因为如果等于n/2时，选的人肯定就直接将剩下的石子全部拿了。</p>
+<p><code>Runtime: 52 ms, faster than 9.79% of C++ online submissions for Stone Game II.</code></p>
+<p><code>Memory Usage: 10.3 MB, less than 100.00% of C++ online submissions for Stone Game II.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> len;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; acum;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; p;</span><br><span class="line">    <span class="built_in">unordered_map</span>&lt;<span class="keyword">int</span>, <span class="built_in">unordered_map</span>&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt;&gt; M;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> sta, <span class="keyword">int</span> m)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (sta &gt;= len) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span>(M.<span class="built_in">find</span>(sta) != M.<span class="built_in">end</span>() <span class="keyword">and</span> M[sta].<span class="built_in">find</span>(m) != M[sta].<span class="built_in">end</span>()) <span class="keyword">return</span> M[sta][m];</span><br><span class="line">        M[sta][m] = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> x=<span class="number">1</span>; x&lt;=<span class="number">2</span>*m; x++)&#123;</span><br><span class="line">            M[sta][m] = <span class="built_in">max</span>(M[sta][m], acum[len]-acum[sta]-dfs(sta+x, <span class="built_in">max</span>(m, x)));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> M[sta][m];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">stoneGameII</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; piles)</span> </span>&#123;</span><br><span class="line">        len = piles.<span class="built_in">size</span>();</span><br><span class="line">        acum = <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(len + <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">        p = piles;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++) acum[i+<span class="number">1</span>] += acum[i] + piles[i];</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> dfs(<span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="解法二：动态规划"><a href="#解法二：动态规划" class="headerlink" title="解法二：动态规划"></a>解法二：动态规划</h3><p>一般来说，解决同样一个问题，递归总是要比非递归函数花费更多的时间。将上面的记忆化递归也就是自顶向下改变成自底向上，就可以变成DP问题了。</p>
+<p>我们设定一个二维数组D，其中D[i][j]表示从第i堆石子开始选，初始化为m=j的时候，第一个选的人能得到的最多的石子。那么状态转移方程则如下。</p>
+<p>D[i][j] = max(D[i, j], acum[len]-acum[i]-D[i+x][max(m,i)]); 1&lt;= x &lt;=m; 注意判断是否越界，如果i+x或者max(m,i)越界，就直接break。</p>
+<p>分析可知，我们是直接从最后边计算，当M=1时。结果则直接返回D[0][1]即可。</p>
+<p>代码如下，时间复杂度O(n3)，空间复杂度O(n2)，因为M的值肯定不会超过n/2（n为石子堆数），因为如果等于n/2时，选的人肯定就直接将剩下的石子全部拿了。</p>
+<p><code>Runtime: 12 ms, faster than 54.62% of C++ online submissions for Stone Game II.</code></p>
+<p><code>Memory Usage: 9 MB, less than 100.00% of C++ online submissions for Stone Game II.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">stoneGameII</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; piles)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = piles.<span class="built_in">size</span>();</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; acum = <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(len + <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">D</span><span class="params">(len+<span class="number">1</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(len+<span class="number">1</span>, <span class="number">0</span>))</span></span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++) acum[i+<span class="number">1</span>] += acum[i] + piles[i];</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=len; j&gt;=<span class="number">0</span>; j--)&#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> i=len<span class="number">-1</span>; i&gt;=<span class="number">0</span>; i--)&#123;</span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> x=<span class="number">1</span>; x &lt;= <span class="number">2</span>*j; x++)&#123;</span><br><span class="line">                    <span class="keyword">if</span> (i+x &gt; len) <span class="keyword">break</span>;</span><br><span class="line">                    <span class="keyword">else</span> D[i][j] = <span class="built_in">max</span>(D[i][j], acum[len]-acum[i]-D[i+x][<span class="built_in">max</span>(j, x)]);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> D[<span class="number">0</span>][<span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>BitBrave，2019-12-14</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(115.%20Distinct%20Subsequences)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(115.%20Distinct%20Subsequences)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(115. Distinct Subsequences)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-115-Distinct-Subsequences-题解"><a href="#LeetCode-115-Distinct-Subsequences-题解" class="headerlink" title="LeetCode(115. Distinct Subsequences)题解"></a>LeetCode(115. Distinct Subsequences)题解</h1><hr>
+<p>Given a string S and a string T, count the number of distinct subsequences of S which equals T.</p>
+<p>A subsequence of a string is a new string which is formed from the original string by deleting some (can be none) of the characters without disturbing the relative positions of the remaining characters. (ie, “ACE” is a subsequence of “ABCDE” while “AEC” is not).</p>
+<p>Example 1:</p>
+<pre><code>Input: S = &quot;rabbbit&quot;, T = &quot;rabbit&quot;
+Output: 3</code></pre><p>Explanation:</p>
+<pre><code>As shown below, there are 3 ways you can generate &quot;rabbit&quot; from S.
+(The caret symbol ^ means the chosen letters)
+
+rabbbit
+^^^^ ^^
+rabbbit
+^^ ^^^^
+rabbbit
+^^^ ^^^</code></pre><p>Example 2:</p>
+<p>Input: S = “babgbag”, T = “bag”<br>Output: 5<br>Explanation:</p>
+<pre><code>As shown below, there are 5 ways you can generate &quot;bag&quot; from S.
+(The caret symbol ^ means the chosen letters)
+
+babgbag
+^^ ^
+babgbag
+^^    ^
+babgbag
+^    ^^
+babgbag
+^  ^^
+babgbag
+    ^^^</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出字符串S，和T，判断S中有几个子字符串是T中的。</p>
+<p>可以使用DP的方法求解。使用一个二维数组D,DP[i][j]表示S前i个字符中有几个子字符串是和T前j个字符匹配的。</p>
+<p>初始化D[0][0]=1, D[0][1-T.size()] = 0, D[0-S.size()][0] = 0;</p>
+<p>然后对于D[i][j]操作如下：</p>
+<p>1 S[i-1] != T[j-1]; 表示不匹配，那么直接等于之前的情况，D[i][j] = D[i-1][j]<br>2 S[i-1] == T[j-1]; 表示匹配，那么有两种情况，一是最后的匹配用上了S[i-1]，一是没用上。因此D[i][j] = D[i-1][j] + D[i-1][j-1];</p>
+<p>上述观察只用到了相邻的值，因此，可以直接使用一个S.size()<em>2数组. 降低空间复杂度。因为S.size()&gt;T.size(),因此最好使用2</em>T.size()数组。</p>
+<p>代码如下</p>
+<p>Runtime: 16 ms, faster than 29.32% of C++ online submissions for Distinct Subsequences.<br>Memory Usage: 8.8 MB, less than 79.23% of C++ online submissions for Distinct Subsequences.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">numDistinct</span><span class="params">(<span class="built_in">string</span> s, <span class="built_in">string</span> t)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> slen = s.<span class="built_in">size</span>(), tlen = t.<span class="built_in">size</span>();</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">D</span><span class="params">(<span class="number">2</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(tlen + <span class="number">1</span>, <span class="number">0</span>))</span></span>;</span><br><span class="line">        D[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;slen; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;tlen; j++)&#123;</span><br><span class="line">                D[<span class="number">1</span>][j+<span class="number">1</span>] = D[<span class="number">0</span>][j+<span class="number">1</span>];</span><br><span class="line">                <span class="keyword">if</span>(INT_MAX - D[<span class="number">1</span>][j+<span class="number">1</span>] &gt;=  (s[i] == t[j] ? D[<span class="number">0</span>][j] : <span class="number">0</span>)) D[<span class="number">1</span>][j+<span class="number">1</span>] += (s[i] == t[j] ? D[<span class="number">0</span>][j] : <span class="number">0</span>);</span><br><span class="line">                <span class="keyword">else</span> D[<span class="number">1</span>][j+<span class="number">1</span>] = INT_MAX;</span><br><span class="line">            &#125; </span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>; j&lt;tlen+<span class="number">1</span>; j++) D[<span class="number">0</span>][j] = D[<span class="number">1</span>][j];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> D[<span class="number">1</span>][tlen];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-07-02</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(1139.%20Largest%201-Bordered%20Square)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(1139.%20Largest%201-Bordered%20Square)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1139. Largest 1-Bordered Square)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-1139-Largest-1-Bordered-Square-题解"><a href="#LeetCode-1139-Largest-1-Bordered-Square-题解" class="headerlink" title="LeetCode(\1139. Largest 1-Bordered Square)题解"></a>LeetCode(\1139. Largest 1-Bordered Square)题解</h1><p>Given a 2D <code>grid</code> of <code>0</code>s and <code>1</code>s, return the number of elements in the largest <strong>square</strong> subgrid that has all <code>1</code>s on its <strong>border</strong>, or <code>0</code> if such a subgrid doesn’t exist in the <code>grid</code>.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: grid &#x3D; [[1,1,1],[1,0,1],[1,1,1]]</span><br><span class="line">Output: 9</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: grid &#x3D; [[1,1,0,0]]</span><br><span class="line">Output: 1</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>1 &lt;= grid.length &lt;= 100</code></li>
+<li><code>1 &lt;= grid[0].length &lt;= 100</code></li>
+<li><code>grid[i][j]</code> is <code>0</code> or <code>1</code></li>
+</ul>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个由0和1组成的数组，找出其中由1圈成的最大的正方形的面积。</p>
+<p>这个题可以使用DP完成，从上到下，从左到右对每一个元素，我们分别计算以这个元素为正方形右下角时的最大正方形面积。分别找出元素对应的向上的列和向左的行的连续1组成的元素，然后计算对应边长的合法正方形面积。</p>
+<p>这个题的DP思想体现在哪里呢？按照上述办法计算时，我们需要计算指定元素为右下角时的最大正方形，这需要O(N2)时间，全部计算一遍就需要O(N4)，但是我们分别维护两个等大的DP数组，记录元素对应向上数的连续1的个数，元素对应向左数的行的连续1的个数。而这是DP可以计算的，总共花费O(n2)时间，最后计算上述答案时只需要O(n3)时间。</p>
+<p>代码如下，时间复杂度O(n3)，空间复杂度O(n2)。</p>
+<p><code>Runtime: 16 ms, faster than 73.07% of C++ online submissions for Largest 1-Bordered Square.</code></p>
+<p><code>Memory Usage: 10.8 MB, less than 100.00% of C++ online submissions for Largest 1-Bordered Square.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">largest1_</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; Row, <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; Col, <span class="keyword">int</span> r, <span class="keyword">int</span> c)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> ret = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> m = <span class="built_in">min</span>(Row[r][c], Col[r][c]);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;m; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">min</span>(Col[r][c-i], Row[r-i][c]) &gt; i) ret = <span class="built_in">max</span>(ret, (i+<span class="number">1</span>) * (i+<span class="number">1</span>));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">largest1BorderedSquare</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; grid)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> rlen = grid.<span class="built_in">size</span>(), clen = grid[<span class="number">0</span>].<span class="built_in">size</span>(), ret = <span class="number">0</span>;</span><br><span class="line">        vector&lt;vector&lt;int&gt;&gt; Row(rlen+1, vector&lt;int&gt;(clen+1,0)), Col(rlen+1, vector&lt;int&gt;(clen+1,0));</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> r=<span class="number">0</span>; r&lt;rlen; r++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> c=<span class="number">0</span>; c&lt;clen; c++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (grid[r][c]==<span class="number">0</span>) &#123;</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                Row[r+<span class="number">1</span>][c+<span class="number">1</span>] = Row[r+<span class="number">1</span>][c] + <span class="number">1</span>;</span><br><span class="line">                Col[r+<span class="number">1</span>][c+<span class="number">1</span>] = Col[r][c+<span class="number">1</span>] + <span class="number">1</span>;</span><br><span class="line">                </span><br><span class="line">                ret = <span class="built_in">max</span>(ret, largest1_(Row, Col, r+<span class="number">1</span>, c+<span class="number">1</span>));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>BitBrave，2019-12-18</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(114.%20Flatten%20Binary%20Tree%20to%20Linked%20List)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -773,275 +1045,6 @@ Explanation: M = 1000, CM = 900, XC = 90 and IV = 4.</code></pre><h2 id="题目�
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(120.%20Triangle)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(120.%20Triangle)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(120. Triangle)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-120-Triangle-题解"><a href="#LeetCode-120-Triangle-题解" class="headerlink" title="LeetCode(120. Triangle)题解"></a>LeetCode(120. Triangle)题解</h1><hr>
-<p>Given a triangle, find the minimum path sum from top to bottom. Each step you may move to adjacent numbers on the row below.</p>
-<p>For example, given the following triangle</p>
-<pre><code>[
-       [2],
-      [3,4],
-     [6,5,7],
-    [4,1,8,3]
-]</code></pre><p>The minimum path sum from top to bottom is 11 (i.e., 2 + 3 + 5 + 1 = 11).</p>
-<p>Note:</p>
-<pre><code>Bonus point if you are able to do this using only O(n) extra space, where n is the total number of rows in the triangle.</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个三角形T，从顶到底找一个最短的路径，只能从相邻的往下走。要求额外空间不能超过O(n).</p>
-<p>这里可以使用DP的办法。首先不要考虑空间的限制。观察三角形，0行一个数，1行两个数，2行三个数，···，n行n+1个数。我们用一个二维数组来记录，D[i][j]表示当前走到第i行中以第j个数为终点的最短路径值，其中j的取值范围为0-i。因此可以有如下最优子结构。</p>
-<p>如果j=0，D[i][j] = D[i-1][0] + T[i][0]</p>
-<p>如果j=i，D[i][j] = D[i-1][i-1] + T[i][i]</p>
-<p>其它情况， D[i][j] = min(D[i-1][j-1], D[i-1][j]) + T[i][j]</p>
-<p>初始情况D[0][0] = T[0][0]</p>
-<p>观察最优子结构，可以发现每次只用到了上一行相邻的位置元素。因此我们可以把矩阵缩小到2*n，达到O(n)的空间复杂度。</p>
-<p>代码如下：</p>
-<p>Runtime: 8 ms, faster than 76.88% of C++ online submissions for Triangle.<br>Memory Usage: 9.6 MB, less than 93.97% of C++ online submissions for Triangle.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minimumTotal</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; triangle)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = triangle.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span>(n == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">D</span><span class="params">(<span class="number">2</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(n, <span class="number">0</span>))</span></span>;</span><br><span class="line">        D[<span class="number">0</span>][<span class="number">0</span>] = triangle[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;n; i++)&#123;</span><br><span class="line">            D[<span class="number">1</span>][<span class="number">0</span>] = D[<span class="number">0</span>][<span class="number">0</span>] + triangle[i][<span class="number">0</span>];</span><br><span class="line">            D[<span class="number">1</span>][i] = D[<span class="number">0</span>][i<span class="number">-1</span>] + triangle[i][i];</span><br><span class="line">            <span class="comment">//cout&lt;&lt;D[1][0]&lt;&lt;" "&lt;&lt;D[1][i]&lt;&lt;endl;</span></span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>; j&lt;i; j++) &#123;</span><br><span class="line">                D[<span class="number">1</span>][j] = <span class="built_in">min</span>(D[<span class="number">0</span>][j<span class="number">-1</span>], D[<span class="number">0</span>][j]) + triangle[i][j];</span><br><span class="line">                <span class="comment">//cout&lt;&lt;D[1][j]&lt;&lt;endl;</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;=i; j++) D[<span class="number">0</span>][j] = D[<span class="number">1</span>][j];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> *min_element(D[<span class="number">0</span>].<span class="built_in">begin</span>(),D[<span class="number">0</span>].<span class="built_in">end</span>());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-07-04</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(123.%20Best%20Time%20to%20Buy%20and%20Sell%20Stock%20III)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(123.%20Best%20Time%20to%20Buy%20and%20Sell%20Stock%20III)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(123. Best Time to Buy and Sell Stock III)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Leetcode-123-Best-Time-to-Buy-and-Sell-Stock-III-题解"><a href="#Leetcode-123-Best-Time-to-Buy-and-Sell-Stock-III-题解" class="headerlink" title="Leetcode(123. Best Time to Buy and Sell Stock III)题解"></a>Leetcode(123. Best Time to Buy and Sell Stock III)题解</h1><hr>
-<p>Say you have an array for which the ith element is the price of a given stock on day i.</p>
-<p>Design an algorithm to find the maximum profit. You may complete at most two transactions.</p>
-<p>Note: You may not engage in multiple transactions at the same time (i.e., you must sell the stock before you buy again).</p>
-<p>Example 1:</p>
-<pre><code>Input: [3,3,5,0,0,3,1,4]
-Output: 6
-Explanation: Buy on day 4 (price = 0) and sell on day 6 (price = 3), profit = 3-0 = 3.
-            Then buy on day 7 (price = 1) and sell on day 8 (price = 4), profit = 4-1 = 3.</code></pre><p>Example 2:</p>
-<pre><code>Input: [1,2,3,4,5]
-Output: 4
-Explanation: Buy on day 1 (price = 1) and sell on day 5 (price = 5), profit = 5-1 = 4.
-            Note that you cannot buy on day 1, buy on day 2 and sell them later, as you are
-            engaging multiple transactions at the same time. You must sell before buying again.</code></pre><p>Example 3:</p>
-<pre><code>Input: [7,6,4,3,1]
-Output: 0
-Explanation: In this case, no transaction is done, i.e. max profit = 0.</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个数组记录一个股票每天的价格，每个元素代表当天的股价。现在要求最多发生两次交易（可以少于两次），求得可以得到的最大收益。</p>
-<p>这个题可以使用DP的方式得到。我们将数组拆分为两半。左边发生最多1次交易，右边发生最多一次交易,发生一次交易的算法可以用DP在O(n)内得到。然后二次的收益相加计算。每次分两半一共需要总的时间为O(n2). 最后选择最大分割方法。</p>
-<p>这其实是可以优化的。我们用两个数组分别记录左边到右边发生最多1次交易的情况下得到的收益，数组分别长n+1. Left[i]表示从第1到i天内最多一次交易下的最大收益，i=0表示左边不交易。Right[j]表示从第j+1天到n天内最多一次交易下的最大收益，j=n表示右边不交易。这两个数组可以使用简单的DP得到。选择Max(Left[i]+Right[i]). 总的时间复杂度为O(n).</p>
-<p>代码如下：</p>
-<p>Runtime: 8 ms, faster than 83.96% of C++ online submissions for Best Time to Buy and Sell Stock III.<br>Memory Usage: 9.8 MB, less than 41.95% of C++ online submissions for Best Time to Buy and Sell Stock III.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxProfit</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; prices)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>, n = prices.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span>(n &lt;= <span class="number">1</span>) <span class="keyword">return</span> res;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> premin = prices[<span class="number">0</span>], m = <span class="number">0</span>;</span><br><span class="line">        vector&lt;int&gt; Left(n+1, 0), Right(n+1, 0);</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;n; i++)&#123;</span><br><span class="line">            Left[i+<span class="number">1</span>] = <span class="built_in">max</span>(m, prices[i]-premin);</span><br><span class="line">            premin = <span class="built_in">min</span>(premin, prices[i]);</span><br><span class="line">            m = <span class="built_in">max</span>(m, Left[i+<span class="number">1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">        premin = prices[n<span class="number">-1</span>], m = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=n<span class="number">-2</span>; i&gt;=<span class="number">0</span>; i--)&#123;</span><br><span class="line">            Right[i] = <span class="built_in">max</span>(m, premin - prices[i]);</span><br><span class="line">            premin = <span class="built_in">max</span>(premin, prices[i]);</span><br><span class="line">            m = <span class="built_in">max</span>(m, Right[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        res = Left[<span class="number">0</span>]+Right[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;n; i++) res = <span class="built_in">max</span>(res, Left[i]+Right[i]);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-07-04</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(1247.%20Minimum%20Swaps%20to%20Make%20Strings%20Equal)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(1247.%20Minimum%20Swaps%20to%20Make%20Strings%20Equal)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1247. Minimum Swaps to Make Strings Equal)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-1247-Minimum-Swaps-to-Make-Strings-Equal-题解"><a href="#LeetCode-1247-Minimum-Swaps-to-Make-Strings-Equal-题解" class="headerlink" title="LeetCode(\1247. Minimum Swaps to Make Strings Equal)题解"></a>LeetCode(\1247. Minimum Swaps to Make Strings Equal)题解</h1><p>You are given two strings <code>s1</code> and <code>s2</code> of equal length consisting of letters <code>&quot;x&quot;</code> and <code>&quot;y&quot;</code> <strong>only</strong>. Your task is to make these two strings equal to each other. You can swap any two characters that belong to <strong>different</strong> strings, which means: swap <code>s1[i]</code> and <code>s2[j]</code>.</p>
-<p>Return the minimum number of swaps required to make <code>s1</code> and <code>s2</code> equal, or return <code>-1</code> if it is impossible to do so.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Input: s1 &#x3D; &quot;xx&quot;, s2 &#x3D; &quot;yy&quot;</span><br><span class="line">Output: 1</span><br><span class="line">Explanation: </span><br><span class="line">Swap s1[0] and s2[1], s1 &#x3D; &quot;yx&quot;, s2 &#x3D; &quot;yx&quot;.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong> </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Input: s1 &#x3D; &quot;xy&quot;, s2 &#x3D; &quot;yx&quot;</span><br><span class="line">Output: 2</span><br><span class="line">Explanation: </span><br><span class="line">Swap s1[0] and s2[0], s1 &#x3D; &quot;yy&quot;, s2 &#x3D; &quot;xx&quot;.</span><br><span class="line">Swap s1[0] and s2[1], s1 &#x3D; &quot;xy&quot;, s2 &#x3D; &quot;xy&quot;.</span><br><span class="line">Note that you can&#39;t swap s1[0] and s1[1] to make s1 equal to &quot;yx&quot;, cause we can only swap chars in different strings.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 3:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: s1 &#x3D; &quot;xx&quot;, s2 &#x3D; &quot;xy&quot;</span><br><span class="line">Output: -1</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 4:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: s1 &#x3D; &quot;xxyyxyxyxx&quot;, s2 &#x3D; &quot;xyyxyxxxyx&quot;</span><br><span class="line">Output: 4</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Constraints:</strong></p>
-<ul>
-<li><code>1 &lt;= s1.length, s2.length &lt;= 1000</code></li>
-<li><code>s1, s2</code> only contain <code>&#39;x&#39;</code> or <code>&#39;y&#39;</code>.</li>
-</ul>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>有两个长度相同的字符串 s1 和 s2，且它们其中 只含有 字符 “x” 和 “y”，你需要通过「交换字符」的方式使这两个字符串相同。</p>
-<p>每次「交换字符」的时候，你都可以在两个字符串中各选一个字符进行交换。</p>
-<p>交换只能发生在两个不同的字符串之间，绝对不能发生在同一个字符串内部。也就是说，我们可以交换 s1[i] 和 s2[j]，但不能交换 s1[i] 和 s1[j]。</p>
-<p>最后，请你返回使 s1 和 s2 相同的最小交换次数，如果没有方法能够使得这两个字符串相同，则返回 -1 。</p>
-<p>首先判断什么情况下必定不可能使得s1 s2相同：</p>
-<ol>
-<li><p>如果两者长度都不相等</p>
-</li>
-<li><p>x或y的总个数为奇数</p>
-</li>
-</ol>
-<p>如果上述条件满足任意一个，则直接返回-1。</p>
-<p>然后分析一下题目，s1和s2只由两种字符组成， x和y。</p>
-<p>所以s1和s2不相等的单个字符情况只有： </p>
-<ol>
-<li><p>s1[i] = y, s2[i] = x， 即yx，用一个变量pair1统计这种情况出现的次数</p>
-</li>
-<li><p>s1[i] = x, s2[i] = y,   即xy，用一个变量pair2统计这种情况出现的次数</p>
-</li>
-</ol>
-<p>得到pair1和pair2之后，分析一下：</p>
-<p>显然如果有n对pair1或n对pair2，当n为偶数的情况时，只需交换 n // 2 次，</p>
-<p>比如 有 s1 = yy, s2 = xx, 此时pair2 = 2， 只需交换s1[0]和s2[1]即可使得s1和s2相等。</p>
-<p>当pair1和pair2都为奇数时（如果有解则pair1和pair2奇偶性必定相同），则最后剩下的yx和xy要交换两次。</p>
-<p>比如 有 s1 = yx, s2 = xy，此时pair1 = 1， pair2 也为1，需要交换两次才能使s1和s2相等。</p>
-<p>代码如下，时间复杂度O(n)，空间复杂度O(1).</p>
-<p><code>Runtime: 4 ms, faster than 58.27% of C++ online submissions for Minimum Swaps to Make Strings Equal.</code></p>
-<p><code>Memory Usage: 8.4 MB, less than 100.00% of C++ online submissions for Minimum Swaps to Make Strings Equal.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minimumSwap</span><span class="params">(<span class="built_in">string</span> s1, <span class="built_in">string</span> s2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = s1.<span class="built_in">size</span>(), res = <span class="number">0</span>, xy = <span class="number">0</span>, yx = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (s1[i] == <span class="string">'x'</span> <span class="keyword">and</span> s2[i] == <span class="string">'y'</span>) xy++;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s1[i] == <span class="string">'y'</span> <span class="keyword">and</span> s2[i] == <span class="string">'x'</span>) yx++;</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">if</span> ((xy + yx) % <span class="number">2</span>) <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        res = xy / <span class="number">2</span> + yx / <span class="number">2</span> + xy % <span class="number">2</span> + yx % <span class="number">2</span>;  </span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2020-01-01</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1114,7 +1117,7 @@ Explanation: In this case, no transaction is done, i.e. max profit = 0.</code></
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">334</span>
+          <span class="site-state-item-count">337</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

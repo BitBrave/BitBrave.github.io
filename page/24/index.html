@@ -177,6 +177,237 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(72.%20Edit%20Distance)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(72.%20Edit%20Distance)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(72. Edit Distance)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-72-Edit-Distance-题解"><a href="#LeetCode-72-Edit-Distance-题解" class="headerlink" title="LeetCode(72. Edit Distance)题解"></a>LeetCode(72. Edit Distance)题解</h1><hr>
+<p>Given two words word1 and word2, find the minimum number of operations required to convert word1 to word2.</p>
+<p>You have the following 3 operations permitted on a word:</p>
+<pre><code>Insert a character
+Delete a character
+Replace a character</code></pre><p>Example 1:</p>
+<pre><code>Input: word1 = &quot;horse&quot;, word2 = &quot;ros&quot;
+Output: 3
+Explanation: 
+horse -&gt; rorse (replace &apos;h&apos; with &apos;r&apos;)
+rorse -&gt; rose (remove &apos;r&apos;)
+rose -&gt; ros (remove &apos;e&apos;)</code></pre><p>Example 2:</p>
+<pre><code>Input: word1 = &quot;intention&quot;, word2 = &quot;execution&quot;
+Output: 5
+Explanation: 
+intention -&gt; inention (remove &apos;t&apos;)
+inention -&gt; enention (replace &apos;i&apos; with &apos;e&apos;)
+enention -&gt; exention (replace &apos;n&apos; with &apos;x&apos;)
+exention -&gt; exection (replace &apos;n&apos; with &apos;c&apos;)
+exection -&gt; execution (insert &apos;u&apos;)</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Hard，求编辑距离。两个字符串AB配对，可以通过跳过插入错配等方式计算两个字符串的编辑距离。如果完全一样就为0，如果有一个错配，插入，跳过，编辑距离就+1.距离应该尽可能小。</p>
+<p>本题是典型的DP问题。可以用一个大小分别为两个字符串的长度的矩阵D，D[i][j]表示A字符串0～i和B字符串0～j之间的编辑距离，那么最优子结构性质就为D[i][j] = min(D[i-1][j-1]+A[i]==B[j] ? 0:1, D[i][j-1]+1, D[i-1][j]+1).而处理边界问题时，可以将矩阵设为两个字符串长度+1，然后D[0][j]表示A空字符串与B比较，那么D[0][i] = i+1,同理D[i][0] = i+1.</p>
+<p>因为更新后面的值只用到了两列，因此可以只使用两列数组就可以了。</p>
+<p>代码如下：</p>
+<p>Runtime: 12 ms, faster than 90.67% of C++ online submissions for Edit Distance.<br>Memory Usage: 9.5 MB, less than 78.82% of C++ online submissions for Edit Distance.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minDistance</span><span class="params">(<span class="built_in">string</span> word1, <span class="built_in">string</span> word2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len1 = word1.<span class="built_in">size</span>(), len2 = word2.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span>(len1 ==<span class="number">0</span> || len2 == <span class="number">0</span>) <span class="keyword">return</span> <span class="built_in">max</span>(len1, len2);</span><br><span class="line">        <span class="comment">//if(len1&gt;len2)&#123;</span></span><br><span class="line">        <span class="comment">//    swap(word1, word2);</span></span><br><span class="line">        <span class="comment">//    swap(len1, len2);</span></span><br><span class="line">        <span class="comment">//&#125;</span></span><br><span class="line">        </span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">res</span><span class="params">(len1+<span class="number">1</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(<span class="number">2</span>))</span></span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len1+<span class="number">1</span>; i++) res[i][<span class="number">0</span>] = i;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;len2; j++)&#123;</span><br><span class="line">            res[<span class="number">0</span>][<span class="number">1</span>] = j + <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len1; i++)&#123;</span><br><span class="line">                res[i+<span class="number">1</span>][<span class="number">1</span>] = res[i][<span class="number">0</span>] + (word1[i]==word2[j] ? <span class="number">0</span>:<span class="number">1</span>);</span><br><span class="line">                res[i+<span class="number">1</span>][<span class="number">1</span>] = <span class="built_in">min</span>(res[i+<span class="number">1</span>][<span class="number">1</span>], <span class="number">1</span> + <span class="built_in">min</span>(res[i][<span class="number">1</span>], res[i+<span class="number">1</span>][<span class="number">0</span>]));</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len1+<span class="number">1</span>; i++) res[i][<span class="number">0</span>] = res[i][<span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res[len1][<span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-06-07</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(713.%20Subarray%20Product%20Less%20Than%20K)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(713.%20Subarray%20Product%20Less%20Than%20K)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(713. Subarray Product Less Than K)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-713-Subarray-Product-Less-Than-K-题解"><a href="#LeetCode-713-Subarray-Product-Less-Than-K-题解" class="headerlink" title="LeetCode(713. Subarray Product Less Than K)题解"></a>LeetCode(713. Subarray Product Less Than K)题解</h1><hr>
+<p>Your are given an array of positive integers nums.</p>
+<p>Count and print the number of (contiguous) subarrays where the product of all the elements in the subarray is less than k.</p>
+<pre><code>Example 1:
+Input: nums = [10, 5, 2, 6], k = 100
+Output: 8
+Explanation: The 8 subarrays that have product less than 100 are: [10], [5], [2], [6], [10, 5], [5, 2], [2, 6], [5, 2, 6].
+Note that [10, 5, 2] is not included as the product of 100 is not strictly less than k.</code></pre><p>Note:</p>
+<pre><code>0 &lt; nums.length &lt;= 50000.
+0 &lt; nums[i] &lt; 1000.
+0 &lt;= k &lt; 10^6.</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出一个数组，找出其中所有的子数组个数，其元素乘积小于K。</p>
+<p>这个可以用一个二指针法得到。res=0表示最优结果，首先，两个指针left和right都在最左边，然后right向右边走。当left和right中的元素乘积小于s时，res += right-left+1. 如果大于等于，left++. 直到小于，然后right继续++。如果left&gt;right, right++。</p>
+<h2 id="时间复杂度O-n-空间复杂度O-1"><a href="#时间复杂度O-n-空间复杂度O-1" class="headerlink" title="时间复杂度O(n), 空间复杂度O(1)."></a>时间复杂度O(n), 空间复杂度O(1).</h2><p>代码如下：</p>
+<p>Runtime: 136 ms, faster than 29.80% of C++ online submissions for Subarray Product Less Than K.<br>Memory Usage: 18.1 MB, less than 100.00% of C++ online submissions for Subarray Product Less Than K.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">numSubarrayProductLessThanK</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span>(len &lt;= <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>, left = <span class="number">0</span>, right = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> pro = nums[right];</span><br><span class="line">        <span class="keyword">while</span>(right &lt; len &amp;&amp; left &lt; len)&#123;</span><br><span class="line">            <span class="keyword">if</span>(left&gt;right)&#123;</span><br><span class="line">                right++;</span><br><span class="line">                pro *= nums[right];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(pro&lt;k)&#123;</span><br><span class="line">                res += right - left + <span class="number">1</span>;</span><br><span class="line">                right++;</span><br><span class="line">                <span class="keyword">if</span>(right &lt; len) pro *= nums[right];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                pro /= nums[left];</span><br><span class="line">                left++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-08-21</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(714.%20Best%20Time%20to%20Buy%20and%20Sell%20Stock%20with%20Transaction%20Fee)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(714.%20Best%20Time%20to%20Buy%20and%20Sell%20Stock%20with%20Transaction%20Fee)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(714. Best Time to Buy and Sell Stock with Transaction Fee)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-714-Best-Time-to-Buy-and-Sell-Stock-with-Transaction-Fee-题解"><a href="#LeetCode-714-Best-Time-to-Buy-and-Sell-Stock-with-Transaction-Fee-题解" class="headerlink" title="LeetCode(714. Best Time to Buy and Sell Stock with Transaction Fee)题解"></a>LeetCode(714. Best Time to Buy and Sell Stock with Transaction Fee)题解</h1><hr>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出一系列的股票交易价格，每次股票交易会有交易fee，求买卖股票能获得的最大的收益。</p>
+<p>可以使用DP，使用res[i][0]表示第i天未持有股票下的最大收益，而res[i][1]表示第i天持有股票下的最大收益。则状态转移方程如下：</p>
+<p>res[i][0] = max(res[i-1][0], res[i-1][1]+prices[i]);<br>res[i][1] = max(res[i-1][1], res[i-1][0]-prices[i]-fee);</p>
+<p>时间复杂度O(n), 空间复杂度O(n).</p>
+<p>代码如下：</p>
+<p>Runtime: 224 ms, faster than 5.37% of C++ online submissions for Best Time to Buy and Sell Stock with Transaction Fee.<br>Memory Usage: 50.9 MB, less than 5.88% of C++ online submissions for Best Time to Buy and Sell Stock with Transaction Fee.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxProfit</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; prices, <span class="keyword">int</span> fee)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = prices.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span>(len == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">res</span><span class="params">(len, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(<span class="number">2</span>, <span class="number">0</span>))</span></span>;</span><br><span class="line">        res[<span class="number">0</span>][<span class="number">1</span>] = -prices[<span class="number">0</span>] - fee;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;len; i++)&#123;</span><br><span class="line">            res[i][<span class="number">0</span>] = <span class="built_in">max</span>(res[i<span class="number">-1</span>][<span class="number">0</span>], res[i<span class="number">-1</span>][<span class="number">1</span>]+prices[i]);</span><br><span class="line">            res[i][<span class="number">1</span>] = <span class="built_in">max</span>(res[i<span class="number">-1</span>][<span class="number">1</span>], res[i<span class="number">-1</span>][<span class="number">0</span>]-prices[i]-fee);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res[len<span class="number">-1</span>][<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>优化，这里可以进行优化，可以看到，res中每次值只与上一个值状态有关，使用res0表示res[i]0, 使用res1表示res[i][1]. 优化如下。</p>
+<p>时间复杂度O(n), 空间复杂度O(1).</p>
+<p>代码如下：</p>
+<p>Runtime: 140 ms, faster than 64.38% of C++ online submissions for Best Time to Buy and Sell Stock with Transaction Fee.<br>Memory Usage: 14.9 MB, less than 100.00% of C++ online submissions for Best Time to Buy and Sell Stock with Transaction Fee.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxProfit</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; prices, <span class="keyword">int</span> fee)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = prices.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span>(len == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> res0 = <span class="number">0</span>, res1 = -prices[<span class="number">0</span>] - fee;</span><br><span class="line">        <span class="keyword">int</span> tmp;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;len; i++)&#123;</span><br><span class="line">            tmp = <span class="built_in">max</span>(res0, res1+prices[i]);</span><br><span class="line">            res1 = <span class="built_in">max</span>(res1, res0-prices[i]-fee);</span><br><span class="line">            res0 = tmp;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res0;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2019-08-22</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(718.%20Maximum%20Length%20of%20Repeated%20Subarray)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -754,236 +985,6 @@ If there is such window, you are guaranteed that there will always be only one u
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(756.%20Pyramid%20Transition%20Matrix)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(756.%20Pyramid%20Transition%20Matrix)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(756. Pyramid Transition Matrix)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-756-Pyramid-Transition-Matrix-题解"><a href="#LeetCode-756-Pyramid-Transition-Matrix-题解" class="headerlink" title="LeetCode(756. Pyramid Transition Matrix)题解"></a>LeetCode(756. Pyramid Transition Matrix)题解</h1><p>We are stacking blocks to form a pyramid. Each block has a color which is a one letter string.</p>
-<p>We are allowed to place any color block <code>C</code> on top of two adjacent blocks of colors <code>A</code> and <code>B</code>, if and only if <code>ABC</code> is an allowed triple.</p>
-<p>We start with a bottom row of <code>bottom</code>, represented as a single string. We also start with a list of allowed triples <code>allowed</code>. Each allowed triple is represented as a string of length 3.</p>
-<p>Return true if we can build the pyramid all the way to the top, otherwise false.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Input: bottom &#x3D; &quot;BCD&quot;, allowed &#x3D; [&quot;BCG&quot;, &quot;CDE&quot;, &quot;GEA&quot;, &quot;FFF&quot;]</span><br><span class="line">Output: true</span><br><span class="line">Explanation:</span><br><span class="line">We can stack the pyramid like this:</span><br><span class="line">    A</span><br><span class="line">   &#x2F; \</span><br><span class="line">  G   E</span><br><span class="line"> &#x2F; \ &#x2F; \</span><br><span class="line">B   C   D</span><br><span class="line"></span><br><span class="line">We are allowed to place G on top of B and C because BCG is an allowed triple.  Similarly, we can place E on top of C and D, then A on top of G and E.</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Input: bottom &#x3D; &quot;AABA&quot;, allowed &#x3D; [&quot;AAA&quot;, &quot;AAB&quot;, &quot;ABA&quot;, &quot;ABB&quot;, &quot;BAC&quot;]</span><br><span class="line">Output: false</span><br><span class="line">Explanation:</span><br><span class="line">We can&#39;t stack the pyramid to the top.</span><br><span class="line">Note that there could be allowed triples (A, B, C) and (A, B, D) with C !&#x3D; D.</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Note:</strong></p>
-<ol>
-<li><code>bottom</code> will be a string with length in range <code>[2, 8]</code>.</li>
-<li><code>allowed</code> will have length in range <code>[0, 200]</code>.</li>
-<li>Letters in all strings will be chosen from the set <code>{&#39;A&#39;, &#39;B&#39;, &#39;C&#39;, &#39;D&#39;, &#39;E&#39;, &#39;F&#39;, &#39;G&#39;}</code>.</li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>我们正在堆叠块以形成金字塔。每个块都有一个字母字符串的颜色。当且仅当ABC是允许的三元组时，我们才可以将任何颜色块C放置在两个相邻的颜色A和B块之上。我们从底部的底部一行开始，以单个字符串表示。我们还从允许的三元组列表开始。每个允许的三元组都表示为长度为3的字符串。如果我们可以一路建造金字塔，则返回true，否则返回false。</p>
-<p>这个题可以直接使用DFS，首先将允许的三元组变为一个set，然后每次遍历情况，使用DFS一层层往上填充，如果能填充到最后，则返回true，不能则返回false。</p>
-<p>代码如下，时间复杂度理论上为所有的可能情况。空间复杂度就O(n)。</p>
-<p><code>Runtime: 68 ms, faster than 6.33% of Python3 online submissions for Pyramid Transition Matrix.</code></p>
-<p><code>Memory Usage: 15.3 MB, less than 50.00% of Python3 online submissions for Pyramid Transition Matrix.</code></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    Set = set()</span><br><span class="line">    A = [<span class="string">'A'</span>, <span class="string">'B'</span>, <span class="string">'C'</span>, <span class="string">'D'</span>, <span class="string">'E'</span>, <span class="string">'F'</span>, <span class="string">'G'</span>]</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">DFS</span><span class="params">(self, S: str)</span> -&gt; bool:</span></span><br><span class="line">        <span class="keyword">if</span> len(S) == <span class="number">1</span>: <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">        ret = [<span class="string">""</span>]</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(len(S) - <span class="number">1</span>):</span><br><span class="line">            T = [a <span class="keyword">for</span> a <span class="keyword">in</span> self.A <span class="keyword">if</span> S[i] + S[i+<span class="number">1</span>] + a <span class="keyword">in</span> self.Set]</span><br><span class="line">            <span class="keyword">if</span> len(T) == <span class="number">0</span>: <span class="keyword">return</span> <span class="literal">False</span> </span><br><span class="line">            R = []</span><br><span class="line">            <span class="keyword">for</span> t <span class="keyword">in</span> T:</span><br><span class="line">                R += ([r + t <span class="keyword">for</span> r <span class="keyword">in</span> ret])</span><br><span class="line">            ret = R  </span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> r <span class="keyword">in</span> ret:</span><br><span class="line">            <span class="keyword">if</span> self.DFS(r): <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">pyramidTransition</span><span class="params">(self, bottom: str, allowed: List[str])</span> -&gt; bool:</span></span><br><span class="line">        self.Set = set(allowed)</span><br><span class="line">        <span class="keyword">return</span> self.DFS(bottom)</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-10-12</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(763.%20Partition%20Labels)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(763.%20Partition%20Labels)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(763. Partition Labels)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-763-Partition-Labels-题解"><a href="#LeetCode-763-Partition-Labels-题解" class="headerlink" title="LeetCode(763. Partition Labels)题解"></a>LeetCode(763. Partition Labels)题解</h1><p>A string <code>S</code> of lowercase letters is given. We want to partition this string into as many parts as possible so that each letter appears in at most one part, and return a list of integers representing the size of these parts.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Input: S &#x3D; &quot;ababcbacadefegdehijhklij&quot;</span><br><span class="line">Output: [9,7,8]</span><br><span class="line">Explanation:</span><br><span class="line">The partition is &quot;ababcbaca&quot;, &quot;defegde&quot;, &quot;hijhklij&quot;.</span><br><span class="line">This is a partition so that each letter appears in at most one part.</span><br><span class="line">A partition like &quot;ababcbacadefegde&quot;, &quot;hijhklij&quot; is incorrect, because it splits S into less parts.</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Note:</strong></p>
-<ol>
-<li><code>S</code> will have length in range <code>[1, 500]</code>.</li>
-<li><code>S</code> will consist of lowercase letters (<code>&#39;a&#39;</code> to <code>&#39;z&#39;</code>) only.</li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给定一个全部是小写字母的标签，然后对其进行分区。每个字母只能最多在一个分区内出现，问最后要分成多少区。</p>
-<p>这个题可以使用类似于Greedy的方法做。首先遍历整个字符串，记录每个字符在字符串中出现的最晚位置。</p>
-<p>遍历完成后，再次从头遍历一遍字符串，每遇到一个字符，都查看这个字符在字符串中的最后一个位置，然后查看这个位置到当前字符之间的所有字符，维持一个最大值，使得所有字符都一个区间内。这样走到最后就是一个分区。然后继续向下走，直到最后。</p>
-<p>代码如下，时间复杂度O(n)，空间复杂度O(1)。</p>
-<p><code>Runtime: 0 ms, faster than 100.00% of C++ online submissions for Partition Labels.</code></p>
-<p><code>Memory Usage: 8.6 MB, less than 96.77% of C++ online submissions for Partition Labels.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">partitionLabels</span><span class="params">(<span class="built_in">string</span> S)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = S.<span class="built_in">size</span>();</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; ret, lastP(<span class="number">26</span>, <span class="number">-1</span>);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++) lastP[S[i]-<span class="string">'a'</span>] = i;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> L, j;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            j = i;</span><br><span class="line">            L = lastP[S[j]-<span class="string">'a'</span>];</span><br><span class="line">            <span class="keyword">while</span>(j &lt; L)&#123;</span><br><span class="line">                L = <span class="built_in">max</span>(lastP[S[j]-<span class="string">'a'</span>], L);</span><br><span class="line">                j++;</span><br><span class="line">            &#125;</span><br><span class="line">            ret.push_back(L - i + <span class="number">1</span>);            </span><br><span class="line">            i = j;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-10-16</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(77.%20Combinations)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(77.%20Combinations)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(77. Combinations)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-77-Combinations-题解"><a href="#LeetCode-77-Combinations-题解" class="headerlink" title="LeetCode(77. Combinations)题解"></a>LeetCode(77. Combinations)题解</h1><hr>
-<p>Given two integers n and k, return all possible combinations of k numbers out of 1 … n.</p>
-<p>Example:</p>
-<p>Input: n = 4, k = 2<br>Output:<br>    [<br>    [2,4],<br>    [3,4],<br>    [2,3],<br>    [1,2],<br>    [1,3],<br>    [1,4],<br>    ]</p>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Medium，题目要求计算一个组合C(n，k)，从1到n中选k个数，将各种方式排出来。</p>
-<p>可以使用递归的办法，首先拿出一个数，再从剩下的n-1个数里面选k-1个，知道k=0直接返回，然后将这些数组成一个vector。</p>
-<p>代码如下：</p>
-<p>Runtime: 132 ms, faster than 20.87% of C++ online submissions for Combinations.<br>Memory Usage: 68.6 MB, less than 15.54% of C++ online submissions for Combinations.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">combine_</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &gt; &amp;res, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; tmp, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; Item, <span class="keyword">int</span> sta, <span class="keyword">int</span> <span class="built_in">end</span>, <span class="keyword">int</span> n, <span class="keyword">int</span> k, <span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(k==<span class="number">0</span> || k&gt;n) &#123;</span><br><span class="line">            <span class="keyword">if</span>(tmp.<span class="built_in">size</span>()==target) res.push_back(tmp);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        combine_(res, tmp, Item, sta+<span class="number">1</span>, <span class="built_in">end</span>, n<span class="number">-1</span>, k, target);</span><br><span class="line">        tmp.push_back(Item[sta]);</span><br><span class="line">        combine_(res, tmp, Item, sta+<span class="number">1</span>, <span class="built_in">end</span>, n<span class="number">-1</span>, k<span class="number">-1</span>, target);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">combine</span><span class="params">(<span class="keyword">int</span> n, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">Item</span><span class="params">(n, <span class="number">1</span>)</span></span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;n; i++) Item[i] += i;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; res;</span><br><span class="line">        combine_(res, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(), Item, <span class="number">0</span>, n<span class="number">-1</span>, n, k, k);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>Bitbrave, 2019-06-12</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1056,7 +1057,7 @@ If there is such window, you are guaranteed that there will always be only one u
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">334</span>
+          <span class="site-state-item-count">337</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
