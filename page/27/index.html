@@ -177,6 +177,89 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(814.%20Binary%20Tree%20Pruning)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(814.%20Binary%20Tree%20Pruning)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(814. Binary Tree Pruning)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-814-Binary-Tree-Pruning-题解"><a href="#LeetCode-814-Binary-Tree-Pruning-题解" class="headerlink" title="LeetCode(814. Binary Tree Pruning)题解"></a>LeetCode(814. Binary Tree Pruning)题解</h1><hr>
+<p>We are given the head node root of a binary tree, where additionally every node’s value is either a 0 or a 1.</p>
+<p>Return the same tree where every subtree (of the given tree) not containing a 1 has been removed.</p>
+<p>(Recall that the subtree of a node X is X, plus every node that is a descendant of X.)</p>
+<pre><code>Example 1:
+Input: [1,null,0,0,1]
+Output: [1,null,0,null,1]
+
+Explanation: 
+Only the red nodes satisfy the property &quot;every subtree not containing a 1&quot;.
+The diagram on the right represents the answer.</code></pre><p><img src="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/04/06/1028_2.png" alt=""></p>
+<pre><code>Example 2:
+Input: [1,0,1,0,0,0,1]
+Output: [1,null,1,null,1]</code></pre><p><img src="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/04/06/1028_1.png" alt=""></p>
+<pre><code>Example 3:
+Input: [1,1,0,1,1,0,1,0]
+Output: [1,1,0,1,1,null,1]</code></pre><p><img src="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/04/05/1028.png" alt=""></p>
+<p>Note:</p>
+<pre><code>The binary tree will have at most 100 nodes.
+The value of each node will only be 0 or 1.</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>除去二叉树中所有元素为0的子树。</p>
+<p>这个使用遍历的办法可以达到，使用Map遍历遇到的节点，记录该节点及其子树是否全部为0组成，如果全部为0，那么久表示这颗树需要删除，否则就不用删除。</p>
+<p>代码如下，时间复杂度O(n), 空间复杂度O(n):</p>
+<p>Runtime: 8 ms, faster than 5.19% of C++ online submissions for Binary Tree Pruning.<br>Memory Usage: 11.1 MB, less than 7.14% of C++ online submissions for Binary Tree Pruning.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">    <span class="built_in">map</span>&lt;TreeNode*, <span class="keyword">bool</span>&gt; M;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isAll0</span><span class="params">(TreeNode* root)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(M.<span class="built_in">find</span>(root) != M.<span class="built_in">end</span>()) <span class="keyword">return</span> M[root];</span><br><span class="line">        <span class="keyword">bool</span> l = isAll0(root-&gt;left), r = isAll0(root-&gt;right);</span><br><span class="line">        <span class="keyword">if</span>(l &amp;&amp; r)&#123;</span><br><span class="line">            M[root] = <span class="literal">true</span> &amp;&amp; root-&gt;val == <span class="number">0</span>;</span><br><span class="line">            root-&gt;left = <span class="literal">NULL</span>;</span><br><span class="line">            root-&gt;right = <span class="literal">NULL</span>;</span><br><span class="line">            <span class="keyword">return</span> M[root];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(l) root-&gt;left = <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">if</span>(r) root-&gt;right = <span class="literal">NULL</span>;</span><br><span class="line">        M[root] = <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">TreeNode* <span class="title">pruneTree</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        M[<span class="literal">NULL</span>] = <span class="literal">true</span>;</span><br><span class="line">        isAll0(root);</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-08-27</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(815.%20Bus%20Routes)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -406,6 +489,83 @@ Output: 2-&gt;3</code></pre><h2 id="解题思路"><a href="#解题思路" class=
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(820.%20Short%20Encoding%20of%20Words)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(820.%20Short%20Encoding%20of%20Words)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(820. Short Encoding of Words)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-820-Short-Encoding-of-Words-题解"><a href="#LeetCode-820-Short-Encoding-of-Words-题解" class="headerlink" title="LeetCode(820. Short Encoding of Words)题解"></a>LeetCode(820. Short Encoding of Words)题解</h1><p>Given a list of words, we may encode it by writing a reference string <code>S</code> and a list of indexes <code>A</code>.</p>
+<p>For example, if the list of words is <code>[&quot;time&quot;, &quot;me&quot;, &quot;bell&quot;]</code>, we can write it as <code>S = &quot;time#bell#&quot;</code> and <code>indexes = [0, 2, 5]</code>.</p>
+<p>Then for each index, we will recover the word by reading from the reference string from that index until we reach a <code>&quot;#&quot;</code> character.</p>
+<p>What is the length of the shortest reference string S possible that encodes the given words?</p>
+<p><strong>Example:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: words &#x3D; [&quot;time&quot;, &quot;me&quot;, &quot;bell&quot;]</span><br><span class="line">Output: 10</span><br><span class="line">Explanation: S &#x3D; &quot;time#bell#&quot; and indexes &#x3D; [0, 2, 5].</span><br></pre></td></tr></table></figure>
+
+<p><strong>Note:</strong></p>
+<ol>
+<li><code>1 &lt;= words.length &lt;= 2000</code>.</li>
+<li><code>1 &lt;= words[i].length &lt;= 7</code>.</li>
+<li><code>Each word has only lowercase letters.</code></li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出一个字符串列表，用一个大的字符串去表示这些字符串，给出一个等长的列表，然后每个字符串对应一个索引，这个索引到“#”之间的字符 就是原有的对应的字符串。求这样的字符串的最短是多少。</p>
+<p>可以知道，如果我们将每个字符串依次排列就以“#”链接，可以得到一个长字符串，可以表示每个字符串。但是这样并不是最短的，就和example一样，字符串之间有公共的字母。但是可以注意到的是，字符串之间如果公用一个“#”，那么这两个字符串之间一定是一个是另一个的后缀。那么我们可以用一个set来记录这些字符串。然后查看每个字符串的后缀，如果在set内，就删除这个。遍历完成之后，将set内所有字符串用“#”即可满足条件了。</p>
+<p>代码如下，时间复杂度$O(n^2)$,空间复杂度$O(n)$：</p>
+<p><code>Runtime: 124 ms, faster than 30.03% of C++ online submissions for Short Encoding of Words. Memory Usage: 16.6 MB, less than 100.00% of C++ online submissions for Short Encoding of Words.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minimumLengthEncoding</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&amp; words)</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="built_in">set</span>&lt;<span class="built_in">string</span>&gt; <span class="title">S</span><span class="params">(words.<span class="built_in">begin</span>(), words.<span class="built_in">end</span>())</span></span>;</span><br><span class="line">        <span class="built_in">string</span> t;</span><br><span class="line">        <span class="keyword">int</span> l, res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="built_in">string</span> s:words)&#123;</span><br><span class="line">            l = s.<span class="built_in">size</span>();</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;l; i++)&#123;</span><br><span class="line">                t = s.substr(i);</span><br><span class="line">                <span class="keyword">if</span>(S.<span class="built_in">find</span>(t) != S.<span class="built_in">end</span>()) S.erase(t);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="built_in">string</span> s:S) res += s.<span class="built_in">size</span>() + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-09-08</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(822.%20Card%20Flipping%20Game)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -467,83 +627,6 @@ Output: 2-&gt;3</code></pre><h2 id="解题思路"><a href="#解题思路" class=
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">flipgame</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; fronts, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; backs)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = fronts.<span class="built_in">size</span>(), res = INT_MAX;</span><br><span class="line">        <span class="built_in">set</span>&lt;<span class="keyword">int</span>&gt; S;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(fronts[i] == backs[i]) S.insert(backs[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(fronts[i] == backs[i]) <span class="keyword">continue</span>;</span><br><span class="line">            <span class="keyword">if</span>(S.<span class="built_in">find</span>(fronts[i]) == S.<span class="built_in">end</span>()) res = <span class="built_in">min</span>(res, fronts[i]);</span><br><span class="line">            <span class="keyword">if</span>(S.<span class="built_in">find</span>(backs[i]) == S.<span class="built_in">end</span>()) res = <span class="built_in">min</span>(res, backs[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res == INT_MAX ? <span class="number">0</span> : res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 <p>BitBrave，2019-09-15</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(820.%20Short%20Encoding%20of%20Words)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(820.%20Short%20Encoding%20of%20Words)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(820. Short Encoding of Words)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-820-Short-Encoding-of-Words-题解"><a href="#LeetCode-820-Short-Encoding-of-Words-题解" class="headerlink" title="LeetCode(820. Short Encoding of Words)题解"></a>LeetCode(820. Short Encoding of Words)题解</h1><p>Given a list of words, we may encode it by writing a reference string <code>S</code> and a list of indexes <code>A</code>.</p>
-<p>For example, if the list of words is <code>[&quot;time&quot;, &quot;me&quot;, &quot;bell&quot;]</code>, we can write it as <code>S = &quot;time#bell#&quot;</code> and <code>indexes = [0, 2, 5]</code>.</p>
-<p>Then for each index, we will recover the word by reading from the reference string from that index until we reach a <code>&quot;#&quot;</code> character.</p>
-<p>What is the length of the shortest reference string S possible that encodes the given words?</p>
-<p><strong>Example:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: words &#x3D; [&quot;time&quot;, &quot;me&quot;, &quot;bell&quot;]</span><br><span class="line">Output: 10</span><br><span class="line">Explanation: S &#x3D; &quot;time#bell#&quot; and indexes &#x3D; [0, 2, 5].</span><br></pre></td></tr></table></figure>
-
-<p><strong>Note:</strong></p>
-<ol>
-<li><code>1 &lt;= words.length &lt;= 2000</code>.</li>
-<li><code>1 &lt;= words[i].length &lt;= 7</code>.</li>
-<li><code>Each word has only lowercase letters.</code></li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出一个字符串列表，用一个大的字符串去表示这些字符串，给出一个等长的列表，然后每个字符串对应一个索引，这个索引到“#”之间的字符 就是原有的对应的字符串。求这样的字符串的最短是多少。</p>
-<p>可以知道，如果我们将每个字符串依次排列就以“#”链接，可以得到一个长字符串，可以表示每个字符串。但是这样并不是最短的，就和example一样，字符串之间有公共的字母。但是可以注意到的是，字符串之间如果公用一个“#”，那么这两个字符串之间一定是一个是另一个的后缀。那么我们可以用一个set来记录这些字符串。然后查看每个字符串的后缀，如果在set内，就删除这个。遍历完成之后，将set内所有字符串用“#”即可满足条件了。</p>
-<p>代码如下，时间复杂度$O(n^2)$,空间复杂度$O(n)$：</p>
-<p><code>Runtime: 124 ms, faster than 30.03% of C++ online submissions for Short Encoding of Words. Memory Usage: 16.6 MB, less than 100.00% of C++ online submissions for Short Encoding of Words.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minimumLengthEncoding</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&amp; words)</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="built_in">set</span>&lt;<span class="built_in">string</span>&gt; <span class="title">S</span><span class="params">(words.<span class="built_in">begin</span>(), words.<span class="built_in">end</span>())</span></span>;</span><br><span class="line">        <span class="built_in">string</span> t;</span><br><span class="line">        <span class="keyword">int</span> l, res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="built_in">string</span> s:words)&#123;</span><br><span class="line">            l = s.<span class="built_in">size</span>();</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;l; i++)&#123;</span><br><span class="line">                t = s.substr(i);</span><br><span class="line">                <span class="keyword">if</span>(S.<span class="built_in">find</span>(t) != S.<span class="built_in">end</span>()) S.erase(t);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="built_in">string</span> s:S) res += s.<span class="built_in">size</span>() + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-09-08</p>
 
       
     </div>
@@ -878,94 +961,6 @@ Output: 2-&gt;3</code></pre><h2 id="解题思路"><a href="#解题思路" class=
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(837.%20New%2021%20Game)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(837.%20New%2021%20Game)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(837. New 21 Game)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-837-New-21-Game-题解"><a href="#LeetCode-837-New-21-Game-题解" class="headerlink" title="LeetCode(837. New 21 Game)题解"></a>LeetCode(837. New 21 Game)题解</h1><p>Alice plays the following game, loosely based on the card game “21”.</p>
-<p>Alice starts with <code>0</code> points, and draws numbers while she has less than <code>K</code> points.  During each draw, she gains an integer number of points randomly from the range <code>[1, W]</code>, where <code>W</code> is an integer.  Each draw is independent and the outcomes have equal probabilities.</p>
-<p>Alice stops drawing numbers when she gets <code>K</code> or more points.  What is the probability that she has <code>N</code>or less points?</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: N &#x3D; 10, K &#x3D; 1, W &#x3D; 10</span><br><span class="line">Output: 1.00000</span><br><span class="line">Explanation:  Alice gets a single card, then stops.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Input: N &#x3D; 6, K &#x3D; 1, W &#x3D; 10</span><br><span class="line">Output: 0.60000</span><br><span class="line">Explanation:  Alice gets a single card, then stops.</span><br><span class="line">In 6 out of W &#x3D; 10 possibilities, she is at or below N &#x3D; 6 points.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 3:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: N &#x3D; 21, K &#x3D; 17, W &#x3D; 10</span><br><span class="line">Output: 0.73278</span><br></pre></td></tr></table></figure>
-
-<p><strong>Note:</strong></p>
-<ol>
-<li><code>0 &lt;= K &lt;= N &lt;= 10000</code></li>
-<li><code>1 &lt;= W &lt;= 10000</code></li>
-<li>Answers will be accepted as correct if they are within <code>10^-5</code> of the correct answer.</li>
-<li>The judging time limit has been reduced for this question.</li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>新21点，给定三个数N，W，K，其中N小于等于K。每次从[1,W]中随机选一个数，累积的超过或者等于K时就停止，这时候求对应的和小于等于N的概率。</p>
-<p>可以知道，当K大于N时，概率一定是0。</p>
-<p>这个题可以用DP的方法求解：我们维护一个一维数组dp，其中dp[i]表示当目标为i时的概率，由于最后一次的选择的排数的范围为[i-w,i-1]，这时可选的牌有[1,w]，所以最后的点数和是[i,w+i-1]，对应我们是要求大于等于K的数，所以最后的累加范围是[K,K+W-1]，所以我们的结果便是返回dp[i]（K&lt;=i&lt;=K+W-1）的和。最后还有一个小技巧，由于最后的范围是[K,K+W-1]，如果N&gt;=K+W-1（意味着在最后一次累加和[K-W,K-1]选择时，无论选择[1,W]中的任何数，最后的累加和一定在[K,N]范围内，在这种条件下[K,K+W-1]是[K,N]的子集，所以直接返回1，如果N&lt;K+W-1，那么我们最后的答案就只用累加[K,N]的dp值即可，所以申请长度为N+1的数组即可）。</p>
-<p>而DP的计算，按照正常的思路，代码如下：时间复杂度$O(n^2)$，空间复杂度$O(n)$:</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">new21Game</span><span class="params">(<span class="keyword">int</span> N, <span class="keyword">int</span> K, <span class="keyword">int</span> W)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(N&gt;=K+W<span class="number">-1</span> || K==<span class="number">0</span>) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">double</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">double</span>&gt; <span class="title">D</span><span class="params">(N+<span class="number">1</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">        D[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;=K; i++)&#123;</span><br><span class="line">            <span class="comment">//if(i&lt;=W) D[i] = 1.0/W;</span></span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=i<span class="number">-1</span>; j&gt;=<span class="number">0</span> &amp;&amp; i-j&lt;=W; j--) D[i] += <span class="number">1.0</span>/W * D[j];</span><br><span class="line">        &#125;</span><br><span class="line">        res = D[K];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=K+<span class="number">1</span>; i&lt;=N; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=K<span class="number">-1</span>; j&gt;=<span class="number">0</span> &amp;&amp; i-j&lt;=W; j--) D[i] += <span class="number">1.0</span>/W * D[j];</span><br><span class="line">            res += D[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>但是上述代码会超时，因为重复了很多无意义的计算，仔细观察第二个for循环，发现可以使用一个sum_维持最多W长度的局部概率值和，可以替代掉第二个for循环。</p>
-<p>因此优化的代码如下，时间复杂度$O(n)$，空间复杂度$O(n)$:</p>
-<p><code>Runtime: 4 ms, faster than 82.13% of C++ online submissions for New 21 Game. Memory Usage: 11.6 MB, less than 100.00% of C++ online submissions for New 21 Game.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">new21Game</span><span class="params">(<span class="keyword">int</span> N, <span class="keyword">int</span> K, <span class="keyword">int</span> W)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(N&gt;=K+W<span class="number">-1</span> || K==<span class="number">0</span>) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">double</span> res = <span class="number">0</span>, sum_ = <span class="number">0</span>;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">double</span>&gt; <span class="title">D</span><span class="params">(N+<span class="number">1</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;=N; i++)&#123;</span><br><span class="line">            D[i] = i&lt;=W ? sum_/W + <span class="number">1.0</span>/W : sum_/W;</span><br><span class="line">            <span class="keyword">if</span>(i&lt;K) sum_ += D[i];</span><br><span class="line">            <span class="keyword">else</span> res += D[i];</span><br><span class="line">            <span class="keyword">if</span>(i&gt;W) sum_ -= D[i-W];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-09-13</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1038,9 +1033,17 @@ Output: 2-&gt;3</code></pre><h2 id="解题思路"><a href="#解题思路" class=
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">337</span>
+          <span class="site-state-item-count">338</span>
           <span class="site-state-item-name">日志</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span>
       </div>
   </nav>
 </div>
