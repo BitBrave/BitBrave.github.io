@@ -177,79 +177,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(86.%20Partition%20List)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(86.%20Partition%20List)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(86. Partition List)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-86-Partition-List-题解"><a href="#LeetCode-86-Partition-List-题解" class="headerlink" title="LeetCode(86. Partition List)题解"></a>LeetCode(86. Partition List)题解</h1><hr>
-<p>Given a linked list and a value x, partition it such that all nodes less than x come before nodes greater than or equal to x.</p>
-<p>You should preserve the original relative order of the nodes in each of the two partitions.</p>
-<p>Example:</p>
-<pre><code>Input: head = 1-&gt;4-&gt;3-&gt;2-&gt;5-&gt;2, x = 3
-Output: 1-&gt;2-&gt;2-&gt;4-&gt;3-&gt;5</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给定一个链表和一个值X，将链表中节点值小于X的都排在节点大于等于X的节点的前面。在此基础上，各个节点保持相应的原始次序。</p>
-<p>使用两个指针A和B，分别记录小于X和大于等于X的节点的链表的开始。一开始都为NULL。</p>
-<p>从左到右遍历链表，如果当前节点S的值小于X，然后判断A，如果A为NULL，则表示这是第一个小于X的节点。直接A = S，如果A不为空则A-&gt;next = S; A = A-&gt;next;</p>
-<p>反之，如果当前节点S的值大于等于X，然后判断B，如果B为NULL，则表示这是第一个大于等于X的节点。直接B = S，如果B不为空则B-&gt;next = S; B = B-&gt;next;</p>
-<p>最后遍历完成之后，如果AB都为空，返回NULL。如果A为空，B-&gt;next = NULL,返回B对应的头链表指针。如果B为空，A-&gt;next=NULL, 返回A对应的头指针。都不为空格则，A-&gt;next = B的头指针，B-&gt;next = NULL;</p>
-<p>因此在使用A，B的时候，要记录下对应链表的头指针。</p>
-<p>代码如下：</p>
-<p>Runtime: 4 ms, faster than 98.82% of C++ online submissions for Partition List.<br>Memory Usage: 8.7 MB, less than 22.67% of C++ online submissions for Partition List.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode *next;</span></span><br><span class="line"><span class="comment"> *     ListNode(int x) : val(x), next(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">ListNode* <span class="title">partition</span><span class="params">(ListNode* head, <span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (head == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">        ListNode *A = <span class="literal">NULL</span>, *A1 = <span class="literal">NULL</span>, *B = <span class="literal">NULL</span>, *B1 = <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">while</span> (head != <span class="literal">NULL</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span>(head-&gt;val &lt; x)&#123;</span><br><span class="line">                <span class="keyword">if</span>(A == <span class="literal">NULL</span>)&#123;</span><br><span class="line">                    A = head;</span><br><span class="line">                    A1 = A;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> &#123;</span><br><span class="line">                    A-&gt;next = head;</span><br><span class="line">                    A = A-&gt;next;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">if</span>(B == <span class="literal">NULL</span>)&#123;</span><br><span class="line">                    B = head;</span><br><span class="line">                    B1 = B;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> &#123;</span><br><span class="line">                    B-&gt;next = head;</span><br><span class="line">                    B = B-&gt;next;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            head = head-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(A == <span class="literal">NULL</span>)&#123;</span><br><span class="line">            B-&gt;next = <span class="literal">NULL</span>;</span><br><span class="line">            <span class="keyword">return</span> B1;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(B == <span class="literal">NULL</span>)&#123;</span><br><span class="line">            A-&gt;next = <span class="literal">NULL</span>;</span><br><span class="line">            <span class="keyword">return</span> A1;</span><br><span class="line">        &#125;</span><br><span class="line">        A-&gt;next = B1;</span><br><span class="line">        B-&gt;next = <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">return</span> A1;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-06-21</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(858.%20Mirror%20Reflection)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -320,6 +247,87 @@ Output: 1-&gt;2-&gt;2-&gt;4-&gt;3-&gt;5</code></pre><h2 id="解题思路"><a hre
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span>   </span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">gcd</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (a % b == <span class="number">0</span>) ? b : gcd(b, a % b);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">mirrorReflection</span><span class="params">(<span class="keyword">int</span> p, <span class="keyword">int</span> q)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> r = gcd(p, q);</span><br><span class="line">        p = p / r;</span><br><span class="line">        q = q / r;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span> - p % <span class="number">2</span> + q % <span class="number">2</span>; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 <p>BitBrave，2019-10-08</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(863.%20All%20Nodes%20Distance%20K%20in%20Binary%20Tree)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(863.%20All%20Nodes%20Distance%20K%20in%20Binary%20Tree)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(863. All Nodes Distance K in Binary Tree)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-863-All-Nodes-Distance-K-in-Binary-Tree-题解"><a href="#LeetCode-863-All-Nodes-Distance-K-in-Binary-Tree-题解" class="headerlink" title="LeetCode(863. All Nodes Distance K in Binary Tree)题解"></a>LeetCode(863. All Nodes Distance K in Binary Tree)题解</h1><p>We are given a binary tree (with root node <code>root</code>), a <code>target</code> node, and an integer value <code>K</code>.</p>
+<p>Return a list of the values of all nodes that have a distance <code>K</code> from the <code>target</code> node.  The answer can be returned in any order.</p>
+<p> <img src="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/06/28/sketch0.png" alt=""></p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Input: root &#x3D; [3,5,1,6,2,0,8,null,null,7,4], target &#x3D; 5, K &#x3D; 2</span><br><span class="line"></span><br><span class="line">Output: [7,4,1]</span><br><span class="line"></span><br><span class="line">Explanation: </span><br><span class="line">The nodes that are a distance 2 from the target node (with value 5)</span><br><span class="line">have values 7, 4, and 1.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Note that the inputs &quot;root&quot; and &quot;target&quot; are actually TreeNodes.</span><br><span class="line">The descriptions of the inputs above are just serializations of these objects.</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Note:</strong></p>
+<ol>
+<li>The given tree is non-empty.</li>
+<li>Each node in the tree has unique values <code>0 &lt;= node.val &lt;= 500</code>.</li>
+<li>The <code>target</code> node is a node in the tree.</li>
+<li><code>0 &lt;= K &lt;= 1000</code>.</li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给定一个二叉树和二叉树中的一个节点，找出树中离这个节点K距离的所有点。</p>
+<p>这个题可以使用递归解决。</p>
+<p>首先使用一个递归函数，输入根节点，目标节点，使用DFS寻找到根节点与目标节点的路径。得到路径之后，使用一个新的递归函数，输入一个节点，寻找以这个节点为根节点的情况下离根节点距离为L的节点，可以使用BFS。这时候，可以输入目标节点，长度K，或者目标节点的父节点的另一个孩子节点，长度K-2，爷爷节点的另一个孩子节点，长度N-3，····以此类推即可。</p>
+<p>代码如下，时间复杂度O(n)，空间复杂度O(n)。</p>
+<p><code>Runtime: 8 ms, faster than 70.58% of C++ online submissions for All Nodes Distance K in Binary Tree.</code></p>
+<p><code>Memory Usage: 15 MB, less than 100.00% of C++ online submissions for All Nodes Distance K in Binary Tree.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">    <span class="built_in">vector</span>&lt;TreeNode *&gt; path;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; res;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">findPath</span><span class="params">(TreeNode* root, TreeNode* target)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        path.push_back(root);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(root == target) <span class="keyword">return</span> <span class="literal">true</span>;        </span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(findPath(root-&gt;left, target)) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(findPath(root-&gt;right, target)) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        </span><br><span class="line">        path.pop_back();</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">findK</span><span class="params">(TreeNode* root, <span class="keyword">int</span> K)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="literal">NULL</span> <span class="keyword">or</span> K &lt; <span class="number">0</span>) <span class="keyword">return</span>;</span><br><span class="line">        <span class="keyword">if</span>(K == <span class="number">0</span>)&#123;</span><br><span class="line">            res.push_back(root-&gt;val);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        findK(root-&gt;left, K<span class="number">-1</span>);</span><br><span class="line">        findK(root-&gt;right, K<span class="number">-1</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125; </span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">distanceK</span><span class="params">(TreeNode* root, TreeNode* target, <span class="keyword">int</span> K)</span> </span>&#123;</span><br><span class="line">        findPath(root, target);</span><br><span class="line">        <span class="keyword">int</span> len = path.<span class="built_in">size</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(len-K<span class="number">-1</span> &gt;= <span class="number">0</span>) res.push_back(path[len-K<span class="number">-1</span>]-&gt;val);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=len-K; i&lt;len<span class="number">-1</span>; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(i &lt; <span class="number">0</span>) <span class="keyword">continue</span>;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span>(path[i+<span class="number">1</span>] == path[i]-&gt;left) findK(path[i]-&gt;right, K-len+i);</span><br><span class="line">            <span class="keyword">else</span> findK(path[i]-&gt;left, K-len+i);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(K != <span class="number">0</span>)findK(path[len<span class="number">-1</span>], K);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2019-10-10</p>
 
       
     </div>
@@ -419,7 +427,7 @@ Output: 1-&gt;2-&gt;2-&gt;4-&gt;3-&gt;5</code></pre><h2 id="解题思路"><a hre
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(863.%20All%20Nodes%20Distance%20K%20in%20Binary%20Tree)%E9%A2%98%E8%A7%A3/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(86.%20Partition%20List)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
@@ -433,7 +441,7 @@ Output: 1-&gt;2-&gt;2-&gt;4-&gt;3-&gt;5</code></pre><h2 id="解题思路"><a hre
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2020/01/24/LeetCode(863.%20All%20Nodes%20Distance%20K%20in%20Binary%20Tree)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(863. All Nodes Distance K in Binary Tree)题解</a>
+            <a href="/2020/01/24/LeetCode(86.%20Partition%20List)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(86. Partition List)题解</a>
         </h1>
 
         <div class="post-meta">
@@ -457,30 +465,102 @@ Output: 1-&gt;2-&gt;2-&gt;4-&gt;3-&gt;5</code></pre><h2 id="解题思路"><a hre
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="LeetCode-863-All-Nodes-Distance-K-in-Binary-Tree-题解"><a href="#LeetCode-863-All-Nodes-Distance-K-in-Binary-Tree-题解" class="headerlink" title="LeetCode(863. All Nodes Distance K in Binary Tree)题解"></a>LeetCode(863. All Nodes Distance K in Binary Tree)题解</h1><p>We are given a binary tree (with root node <code>root</code>), a <code>target</code> node, and an integer value <code>K</code>.</p>
-<p>Return a list of the values of all nodes that have a distance <code>K</code> from the <code>target</code> node.  The answer can be returned in any order.</p>
-<p> <img src="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/06/28/sketch0.png" alt=""></p>
+          <h1 id="LeetCode-86-Partition-List-题解"><a href="#LeetCode-86-Partition-List-题解" class="headerlink" title="LeetCode(86. Partition List)题解"></a>LeetCode(86. Partition List)题解</h1><hr>
+<p>Given a linked list and a value x, partition it such that all nodes less than x come before nodes greater than or equal to x.</p>
+<p>You should preserve the original relative order of the nodes in each of the two partitions.</p>
+<p>Example:</p>
+<pre><code>Input: head = 1-&gt;4-&gt;3-&gt;2-&gt;5-&gt;2, x = 3
+Output: 1-&gt;2-&gt;2-&gt;4-&gt;3-&gt;5</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给定一个链表和一个值X，将链表中节点值小于X的都排在节点大于等于X的节点的前面。在此基础上，各个节点保持相应的原始次序。</p>
+<p>使用两个指针A和B，分别记录小于X和大于等于X的节点的链表的开始。一开始都为NULL。</p>
+<p>从左到右遍历链表，如果当前节点S的值小于X，然后判断A，如果A为NULL，则表示这是第一个小于X的节点。直接A = S，如果A不为空则A-&gt;next = S; A = A-&gt;next;</p>
+<p>反之，如果当前节点S的值大于等于X，然后判断B，如果B为NULL，则表示这是第一个大于等于X的节点。直接B = S，如果B不为空则B-&gt;next = S; B = B-&gt;next;</p>
+<p>最后遍历完成之后，如果AB都为空，返回NULL。如果A为空，B-&gt;next = NULL,返回B对应的头链表指针。如果B为空，A-&gt;next=NULL, 返回A对应的头指针。都不为空格则，A-&gt;next = B的头指针，B-&gt;next = NULL;</p>
+<p>因此在使用A，B的时候，要记录下对应链表的头指针。</p>
+<p>代码如下：</p>
+<p>Runtime: 4 ms, faster than 98.82% of C++ online submissions for Partition List.<br>Memory Usage: 8.7 MB, less than 22.67% of C++ online submissions for Partition List.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode *next;</span></span><br><span class="line"><span class="comment"> *     ListNode(int x) : val(x), next(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">ListNode* <span class="title">partition</span><span class="params">(ListNode* head, <span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (head == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">        ListNode *A = <span class="literal">NULL</span>, *A1 = <span class="literal">NULL</span>, *B = <span class="literal">NULL</span>, *B1 = <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">while</span> (head != <span class="literal">NULL</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span>(head-&gt;val &lt; x)&#123;</span><br><span class="line">                <span class="keyword">if</span>(A == <span class="literal">NULL</span>)&#123;</span><br><span class="line">                    A = head;</span><br><span class="line">                    A1 = A;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> &#123;</span><br><span class="line">                    A-&gt;next = head;</span><br><span class="line">                    A = A-&gt;next;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">if</span>(B == <span class="literal">NULL</span>)&#123;</span><br><span class="line">                    B = head;</span><br><span class="line">                    B1 = B;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> &#123;</span><br><span class="line">                    B-&gt;next = head;</span><br><span class="line">                    B = B-&gt;next;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            head = head-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(A == <span class="literal">NULL</span>)&#123;</span><br><span class="line">            B-&gt;next = <span class="literal">NULL</span>;</span><br><span class="line">            <span class="keyword">return</span> B1;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(B == <span class="literal">NULL</span>)&#123;</span><br><span class="line">            A-&gt;next = <span class="literal">NULL</span>;</span><br><span class="line">            <span class="keyword">return</span> A1;</span><br><span class="line">        &#125;</span><br><span class="line">        A-&gt;next = B1;</span><br><span class="line">        B-&gt;next = <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">return</span> A1;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-06-21</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(865.%20Smallest%20Subtree%20with%20all%20the%20Deepest%20Nodes)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(865.%20Smallest%20Subtree%20with%20all%20the%20Deepest%20Nodes)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(865. Smallest Subtree with all the Deepest Nodes)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-865-Smallest-Subtree-with-all-the-Deepest-Nodes-题解"><a href="#LeetCode-865-Smallest-Subtree-with-all-the-Deepest-Nodes-题解" class="headerlink" title="LeetCode(865. Smallest Subtree with all the Deepest Nodes)题解"></a>LeetCode(865. Smallest Subtree with all the Deepest Nodes)题解</h1><p>Given a binary tree rooted at <code>root</code>, the <em>depth</em> of each node is the shortest distance to the root.</p>
+<p>A node is <em>deepest</em> if it has the largest depth possible among any node in the entire tree.</p>
+<p>The subtree of a node is that node, plus the set of all descendants of that node.</p>
+<p>Return the node with the largest depth such that it contains all the deepest nodes in its subtree.</p>
 <p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Input: root &#x3D; [3,5,1,6,2,0,8,null,null,7,4], target &#x3D; 5, K &#x3D; 2</span><br><span class="line"></span><br><span class="line">Output: [7,4,1]</span><br><span class="line"></span><br><span class="line">Explanation: </span><br><span class="line">The nodes that are a distance 2 from the target node (with value 5)</span><br><span class="line">have values 7, 4, and 1.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Note that the inputs &quot;root&quot; and &quot;target&quot; are actually TreeNodes.</span><br><span class="line">The descriptions of the inputs above are just serializations of these objects.</span><br></pre></td></tr></table></figure>
+<p><img src="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/07/01/sketch1.png" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Input: [3,5,1,6,2,0,8,null,null,7,4]</span><br><span class="line">Output: [2,7,4]</span><br><span class="line">We return the node with value 2, colored in yellow in the diagram.</span><br><span class="line">The nodes colored in blue are the deepest nodes of the tree.</span><br><span class="line">The input &quot;[3, 5, 1, 6, 2, 0, 8, null, null, 7, 4]&quot; is a serialization of the given tree.</span><br><span class="line">The output &quot;[2, 7, 4]&quot; is a serialization of the subtree rooted at the node with value 2.</span><br><span class="line">Both the input and output have TreeNode type.</span><br></pre></td></tr></table></figure>
 
 
 
 <p><strong>Note:</strong></p>
-<ol>
-<li>The given tree is non-empty.</li>
-<li>Each node in the tree has unique values <code>0 &lt;= node.val &lt;= 500</code>.</li>
-<li>The <code>target</code> node is a node in the tree.</li>
-<li><code>0 &lt;= K &lt;= 1000</code>.</li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给定一个二叉树和二叉树中的一个节点，找出树中离这个节点K距离的所有点。</p>
-<p>这个题可以使用递归解决。</p>
-<p>首先使用一个递归函数，输入根节点，目标节点，使用DFS寻找到根节点与目标节点的路径。得到路径之后，使用一个新的递归函数，输入一个节点，寻找以这个节点为根节点的情况下离根节点距离为L的节点，可以使用BFS。这时候，可以输入目标节点，长度K，或者目标节点的父节点的另一个孩子节点，长度K-2，爷爷节点的另一个孩子节点，长度N-3，····以此类推即可。</p>
-<p>代码如下，时间复杂度O(n)，空间复杂度O(n)。</p>
-<p><code>Runtime: 8 ms, faster than 70.58% of C++ online submissions for All Nodes Distance K in Binary Tree.</code></p>
-<p><code>Memory Usage: 15 MB, less than 100.00% of C++ online submissions for All Nodes Distance K in Binary Tree.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">    <span class="built_in">vector</span>&lt;TreeNode *&gt; path;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; res;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">findPath</span><span class="params">(TreeNode* root, TreeNode* target)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        path.push_back(root);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(root == target) <span class="keyword">return</span> <span class="literal">true</span>;        </span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(findPath(root-&gt;left, target)) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(findPath(root-&gt;right, target)) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        </span><br><span class="line">        path.pop_back();</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">findK</span><span class="params">(TreeNode* root, <span class="keyword">int</span> K)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="literal">NULL</span> <span class="keyword">or</span> K &lt; <span class="number">0</span>) <span class="keyword">return</span>;</span><br><span class="line">        <span class="keyword">if</span>(K == <span class="number">0</span>)&#123;</span><br><span class="line">            res.push_back(root-&gt;val);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        findK(root-&gt;left, K<span class="number">-1</span>);</span><br><span class="line">        findK(root-&gt;right, K<span class="number">-1</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125; </span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">distanceK</span><span class="params">(TreeNode* root, TreeNode* target, <span class="keyword">int</span> K)</span> </span>&#123;</span><br><span class="line">        findPath(root, target);</span><br><span class="line">        <span class="keyword">int</span> len = path.<span class="built_in">size</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(len-K<span class="number">-1</span> &gt;= <span class="number">0</span>) res.push_back(path[len-K<span class="number">-1</span>]-&gt;val);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=len-K; i&lt;len<span class="number">-1</span>; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(i &lt; <span class="number">0</span>) <span class="keyword">continue</span>;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span>(path[i+<span class="number">1</span>] == path[i]-&gt;left) findK(path[i]-&gt;right, K-len+i);</span><br><span class="line">            <span class="keyword">else</span> findK(path[i]-&gt;left, K-len+i);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(K != <span class="number">0</span>)findK(path[len<span class="number">-1</span>], K);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>The number of nodes in the tree will be between 1 and 500.</li>
+<li>The values of each node are unique.</li>
+</ul>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>在二叉树中，节点的深度是节点离根节点的最短距离。现在给定一个二叉树，要求返回所有节点中深度最深的节点所在的最小子树。</p>
+<p>这个题可以使用如下做法：首先是计算树的最大深度，花费O(n)，然后DFS遍历路径，记录达到最大深度的路径的节点的路径，时间O(n)，空间O(n)，但最终存储下来的是O(n2)。然后遍历这些路径，找出公共的节点，就是索引最靠后同时又在所有路径中都出现的节点，这就是最小子树的根节点，返回这个根节点即可。花费时间O(n)2。</p>
+<p>因此，代码如下，时间复杂度O(n2)，空间复杂度O(n2)。</p>
+<p>Runtime: 16 ms, faster than 9.05% of C++ online submissions for Smallest Subtree with all the Deepest Nodes.</p>
+<p>Memory Usage: 21 MB, less than 7.14% of C++ online submissions for Smallest Subtree with all the Deepest Nodes.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;TreeNode*&gt;&gt; R;</span><br><span class="line">    <span class="keyword">int</span> deepest;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">dDFS</span><span class="params">(TreeNode* root)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">max</span>(dDFS(root-&gt;left), dDFS(root-&gt;right)) + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">DFS</span><span class="params">(TreeNode* root, <span class="built_in">vector</span>&lt;TreeNode*&gt; p)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="literal">NULL</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(p.<span class="built_in">size</span>() == deepest) R.push_back(p);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        p.push_back(root);</span><br><span class="line">        DFS(root-&gt;left, p);</span><br><span class="line">        DFS(root-&gt;right, p);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function">TreeNode* <span class="title">subtreeWithAllDeepest</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        deepest = dDFS(root);</span><br><span class="line">        DFS(root, <span class="built_in">vector</span>&lt;TreeNode*&gt;());</span><br><span class="line">        <span class="keyword">int</span> len = R.<span class="built_in">size</span>(), tl = R[<span class="number">0</span>].<span class="built_in">size</span>(), ret = <span class="number">999</span>;</span><br><span class="line">        <span class="keyword">if</span>(len == <span class="number">2</span>) <span class="keyword">return</span> R[<span class="number">0</span>][tl<span class="number">-1</span>];</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">2</span>; i&lt;len; i+=<span class="number">2</span>)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>; j&lt;tl; j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(R[<span class="number">0</span>][j] != R[i][j]) ret = <span class="built_in">min</span>(ret, j<span class="number">-1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> R[<span class="number">0</span>][ret];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
-<p>BitBrave，2019-10-10</p>
+<p>BitBrave，2019-10-18</p>
 
       
     </div>
@@ -588,7 +668,7 @@ Output: 1-&gt;2-&gt;2-&gt;4-&gt;3-&gt;5</code></pre><h2 id="解题思路"><a hre
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(865.%20Smallest%20Subtree%20with%20all%20the%20Deepest%20Nodes)%E9%A2%98%E8%A7%A3/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(870.%20Advantage%20Shuffle)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
@@ -602,7 +682,7 @@ Output: 1-&gt;2-&gt;2-&gt;4-&gt;3-&gt;5</code></pre><h2 id="解题思路"><a hre
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2020/01/24/LeetCode(865.%20Smallest%20Subtree%20with%20all%20the%20Deepest%20Nodes)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(865. Smallest Subtree with all the Deepest Nodes)题解</a>
+            <a href="/2020/01/24/LeetCode(870.%20Advantage%20Shuffle)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(870. Advantage Shuffle)题解</a>
         </h1>
 
         <div class="post-meta">
@@ -626,29 +706,41 @@ Output: 1-&gt;2-&gt;2-&gt;4-&gt;3-&gt;5</code></pre><h2 id="解题思路"><a hre
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="LeetCode-865-Smallest-Subtree-with-all-the-Deepest-Nodes-题解"><a href="#LeetCode-865-Smallest-Subtree-with-all-the-Deepest-Nodes-题解" class="headerlink" title="LeetCode(865. Smallest Subtree with all the Deepest Nodes)题解"></a>LeetCode(865. Smallest Subtree with all the Deepest Nodes)题解</h1><p>Given a binary tree rooted at <code>root</code>, the <em>depth</em> of each node is the shortest distance to the root.</p>
-<p>A node is <em>deepest</em> if it has the largest depth possible among any node in the entire tree.</p>
-<p>The subtree of a node is that node, plus the set of all descendants of that node.</p>
-<p>Return the node with the largest depth such that it contains all the deepest nodes in its subtree.</p>
+          <h2 id="LeetCode-870-Advantage-Shuffle-题解"><a href="#LeetCode-870-Advantage-Shuffle-题解" class="headerlink" title="LeetCode(870. Advantage Shuffle)题解"></a>LeetCode(870. Advantage Shuffle)题解</h2><p>Given two arrays <code>A</code> and <code>B</code> of equal size, the <em>advantage of A with respect to B</em> is the number of indices <code>i</code> for which <code>A[i] &gt; B[i]</code>.</p>
+<p>Return <strong>any</strong> permutation of <code>A</code> that maximizes its advantage with respect to <code>B</code>.</p>
 <p><strong>Example 1:</strong></p>
-<p><img src="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/07/01/sketch1.png" alt=""></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Input: [3,5,1,6,2,0,8,null,null,7,4]</span><br><span class="line">Output: [2,7,4]</span><br><span class="line">We return the node with value 2, colored in yellow in the diagram.</span><br><span class="line">The nodes colored in blue are the deepest nodes of the tree.</span><br><span class="line">The input &quot;[3, 5, 1, 6, 2, 0, 8, null, null, 7, 4]&quot; is a serialization of the given tree.</span><br><span class="line">The output &quot;[2, 7, 4]&quot; is a serialization of the subtree rooted at the node with value 2.</span><br><span class="line">Both the input and output have TreeNode type.</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: A &#x3D; [2,7,11,15], B &#x3D; [1,10,4,11]</span><br><span class="line">Output: [2,11,7,15]</span><br></pre></td></tr></table></figure>
 
-
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: A &#x3D; [12,24,8,32], B &#x3D; [13,25,32,11]</span><br><span class="line">Output: [24,32,8,12]</span><br></pre></td></tr></table></figure>
 
 <p><strong>Note:</strong></p>
+<ol>
+<li><p><code>1 &lt;= A.length = B.length &lt;= 10000</code></p>
+</li>
+<li><p><code>0 &lt;= A[i] &lt;= 10^9</code></p>
+</li>
+<li><p><code>0 &lt;= B[i] &lt;= 10^9</code></p>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2></li>
+</ol>
+<p>给定两个等长的数组A和B，其中A的优势就是A中对应位置的元素大于B中对应位置的元素的数量。现在对A重排列，最大化A的优势。如果有多个答案，返回其中任意一个即可。</p>
+<p>这个题直观上就可以使用Greedy做，我们对于B中的一个元素B[i]，如果A中有比它大的元素，那么我们只选择比它大的元素中最小的那个即可，这样可以最大限度地保留A能覆盖其它B中元素的可能性。</p>
+<p>因此，算法如下，将A，B都升序排序。然后分别遍历AB中的元素，A中使用i，B中使用j。初始化i=0，j=0.</p>
+<p>然后如下判断——</p>
 <ul>
-<li>The number of nodes in the tree will be between 1 and 500.</li>
-<li>The values of each node are unique.</li>
+<li><p>i==len(A)，表明已经遍历完成了，直接结束算法。</p>
+</li>
+<li><p>A[i]&gt;B[j]，表示此时可以覆盖，直接i = i+1，j = j+1.</p>
+</li>
+<li><p>A[i]&lt;=B[j]，表示此时不能覆盖，就在不超过len(A)的情况下不断增加i，判断A[i]是否可以大于B[j]，如果到最后都不能大于，则表明A中剩下的数已经都不能大于B中任何数了，就直接结束算法。如果走到一个i的值，有A[i]大于B[j]，就直接使用这个与最开始的i进行交换即可。然后i = i+1，j = j+1.</p>
+</li>
 </ul>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>在二叉树中，节点的深度是节点离根节点的最短距离。现在给定一个二叉树，要求返回所有节点中深度最深的节点所在的最小子树。</p>
-<p>这个题可以使用如下做法：首先是计算树的最大深度，花费O(n)，然后DFS遍历路径，记录达到最大深度的路径的节点的路径，时间O(n)，空间O(n)，但最终存储下来的是O(n2)。然后遍历这些路径，找出公共的节点，就是索引最靠后同时又在所有路径中都出现的节点，这就是最小子树的根节点，返回这个根节点即可。花费时间O(n)2。</p>
-<p>因此，代码如下，时间复杂度O(n2)，空间复杂度O(n2)。</p>
-<p>Runtime: 16 ms, faster than 9.05% of C++ online submissions for Smallest Subtree with all the Deepest Nodes.</p>
-<p>Memory Usage: 21 MB, less than 7.14% of C++ online submissions for Smallest Subtree with all the Deepest Nodes.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;TreeNode*&gt;&gt; R;</span><br><span class="line">    <span class="keyword">int</span> deepest;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">dDFS</span><span class="params">(TreeNode* root)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">max</span>(dDFS(root-&gt;left), dDFS(root-&gt;right)) + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">DFS</span><span class="params">(TreeNode* root, <span class="built_in">vector</span>&lt;TreeNode*&gt; p)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="literal">NULL</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(p.<span class="built_in">size</span>() == deepest) R.push_back(p);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        p.push_back(root);</span><br><span class="line">        DFS(root-&gt;left, p);</span><br><span class="line">        DFS(root-&gt;right, p);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function">TreeNode* <span class="title">subtreeWithAllDeepest</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        deepest = dDFS(root);</span><br><span class="line">        DFS(root, <span class="built_in">vector</span>&lt;TreeNode*&gt;());</span><br><span class="line">        <span class="keyword">int</span> len = R.<span class="built_in">size</span>(), tl = R[<span class="number">0</span>].<span class="built_in">size</span>(), ret = <span class="number">999</span>;</span><br><span class="line">        <span class="keyword">if</span>(len == <span class="number">2</span>) <span class="keyword">return</span> R[<span class="number">0</span>][tl<span class="number">-1</span>];</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">2</span>; i&lt;len; i+=<span class="number">2</span>)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>; j&lt;tl; j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(R[<span class="number">0</span>][j] != R[i][j]) ret = <span class="built_in">min</span>(ret, j<span class="number">-1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> R[<span class="number">0</span>][ret];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>代码如下，排序时间复杂度O(nlogn)，加上判断的时间O(n)，总的时间复杂度为O(nlogn)，但是因为最后返回的数组要按照B的顺序，因此要把A重新排位置，这就需要一开始记住B原数组的位置，因此需要使用一个数组记录，空间复杂度O(n)。</p>
+<p><code>Runtime: 156 ms, faster than 90.29% of C++ online submissions for Advantage Shuffle.</code></p>
+<p><code>Memory Usage: 14.3 MB, less than 100.00% of C++ online submissions for Advantage Shuffle.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; B_;</span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> B_[a] &lt; B_[b];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">advantageCount</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; B)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = A.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> i, j, b = len - <span class="number">1</span>;</span><br><span class="line">        </span><br><span class="line">        vector&lt;int&gt; ret(len, -1), p(len, -1);</span><br><span class="line">        B_ = B;</span><br><span class="line">        <span class="keyword">for</span>(i=<span class="number">0</span>; i&lt;len; i++) p[i] = i;</span><br><span class="line">        sort(A.<span class="built_in">begin</span>(), A.<span class="built_in">end</span>());</span><br><span class="line">        sort(p.<span class="built_in">begin</span>(), p.<span class="built_in">end</span>(), cmp);</span><br><span class="line">        </span><br><span class="line">        i = j = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(i &lt; len)&#123;</span><br><span class="line">            <span class="keyword">while</span>(i &lt; len &amp;&amp; A[i] &lt;= B[p[j]]) ret[p[b--]] = A[i++];</span><br><span class="line">            <span class="keyword">if</span>(i &lt; len) ret[p[j++]] = A[i++];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
-<p>BitBrave，2019-10-18</p>
+<p>BitBrave,2019-10-24</p>
 
       
     </div>
@@ -753,98 +845,6 @@ Output: false</code></pre><h2 id="解题思路"><a href="#解题思路" class="h
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isSame</span><span class="params">(<span class="built_in">string</span> s1, <span class="built_in">string</span> s2)</span></span>&#123;</span><br><span class="line">        sort(s1.<span class="built_in">begin</span>(), s1.<span class="built_in">end</span>());</span><br><span class="line">        sort(s2.<span class="built_in">begin</span>(), s2.<span class="built_in">end</span>());</span><br><span class="line">        <span class="keyword">return</span> s1==s2;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isScramble</span><span class="params">(<span class="built_in">string</span> s1, <span class="built_in">string</span> s2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(!isSame(s1, s2)) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> len = s2.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span>(len&lt;=<span class="number">2</span>) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">bool</span> ret = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;len; i++)&#123;</span><br><span class="line">            ret = isScramble(s1.substr(<span class="number">0</span>,i), s2.substr(<span class="number">0</span>,i));</span><br><span class="line">            <span class="keyword">if</span>(ret) ret = ret &amp; isScramble(s1.substr(i,len-i), s2.substr(i,len-i));</span><br><span class="line">            <span class="keyword">if</span>(ret) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            </span><br><span class="line">            ret = isScramble(s1.substr(len-i,i), s2.substr(<span class="number">0</span>,i));</span><br><span class="line">            <span class="keyword">if</span>(ret) ret = ret &amp; isScramble(s1.substr(<span class="number">0</span>,len-i), s2.substr(i,len-i));</span><br><span class="line">            <span class="keyword">if</span>(ret) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 <p>BitBrave，2019-05-04。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(870.%20Advantage%20Shuffle)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(870.%20Advantage%20Shuffle)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(870. Advantage Shuffle)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="LeetCode-870-Advantage-Shuffle-题解"><a href="#LeetCode-870-Advantage-Shuffle-题解" class="headerlink" title="LeetCode(870. Advantage Shuffle)题解"></a>LeetCode(870. Advantage Shuffle)题解</h2><p>Given two arrays <code>A</code> and <code>B</code> of equal size, the <em>advantage of A with respect to B</em> is the number of indices <code>i</code> for which <code>A[i] &gt; B[i]</code>.</p>
-<p>Return <strong>any</strong> permutation of <code>A</code> that maximizes its advantage with respect to <code>B</code>.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: A &#x3D; [2,7,11,15], B &#x3D; [1,10,4,11]</span><br><span class="line">Output: [2,11,7,15]</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: A &#x3D; [12,24,8,32], B &#x3D; [13,25,32,11]</span><br><span class="line">Output: [24,32,8,12]</span><br></pre></td></tr></table></figure>
-
-<p><strong>Note:</strong></p>
-<ol>
-<li><p><code>1 &lt;= A.length = B.length &lt;= 10000</code></p>
-</li>
-<li><p><code>0 &lt;= A[i] &lt;= 10^9</code></p>
-</li>
-<li><p><code>0 &lt;= B[i] &lt;= 10^9</code></p>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2></li>
-</ol>
-<p>给定两个等长的数组A和B，其中A的优势就是A中对应位置的元素大于B中对应位置的元素的数量。现在对A重排列，最大化A的优势。如果有多个答案，返回其中任意一个即可。</p>
-<p>这个题直观上就可以使用Greedy做，我们对于B中的一个元素B[i]，如果A中有比它大的元素，那么我们只选择比它大的元素中最小的那个即可，这样可以最大限度地保留A能覆盖其它B中元素的可能性。</p>
-<p>因此，算法如下，将A，B都升序排序。然后分别遍历AB中的元素，A中使用i，B中使用j。初始化i=0，j=0.</p>
-<p>然后如下判断——</p>
-<ul>
-<li><p>i==len(A)，表明已经遍历完成了，直接结束算法。</p>
-</li>
-<li><p>A[i]&gt;B[j]，表示此时可以覆盖，直接i = i+1，j = j+1.</p>
-</li>
-<li><p>A[i]&lt;=B[j]，表示此时不能覆盖，就在不超过len(A)的情况下不断增加i，判断A[i]是否可以大于B[j]，如果到最后都不能大于，则表明A中剩下的数已经都不能大于B中任何数了，就直接结束算法。如果走到一个i的值，有A[i]大于B[j]，就直接使用这个与最开始的i进行交换即可。然后i = i+1，j = j+1.</p>
-</li>
-</ul>
-<p>代码如下，排序时间复杂度O(nlogn)，加上判断的时间O(n)，总的时间复杂度为O(nlogn)，但是因为最后返回的数组要按照B的顺序，因此要把A重新排位置，这就需要一开始记住B原数组的位置，因此需要使用一个数组记录，空间复杂度O(n)。</p>
-<p><code>Runtime: 156 ms, faster than 90.29% of C++ online submissions for Advantage Shuffle.</code></p>
-<p><code>Memory Usage: 14.3 MB, less than 100.00% of C++ online submissions for Advantage Shuffle.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; B_;</span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> B_[a] &lt; B_[b];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">advantageCount</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; B)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = A.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> i, j, b = len - <span class="number">1</span>;</span><br><span class="line">        </span><br><span class="line">        vector&lt;int&gt; ret(len, -1), p(len, -1);</span><br><span class="line">        B_ = B;</span><br><span class="line">        <span class="keyword">for</span>(i=<span class="number">0</span>; i&lt;len; i++) p[i] = i;</span><br><span class="line">        sort(A.<span class="built_in">begin</span>(), A.<span class="built_in">end</span>());</span><br><span class="line">        sort(p.<span class="built_in">begin</span>(), p.<span class="built_in">end</span>(), cmp);</span><br><span class="line">        </span><br><span class="line">        i = j = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(i &lt; len)&#123;</span><br><span class="line">            <span class="keyword">while</span>(i &lt; len &amp;&amp; A[i] &lt;= B[p[j]]) ret[p[b--]] = A[i++];</span><br><span class="line">            <span class="keyword">if</span>(i &lt; len) ret[p[j++]] = A[i++];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave,2019-10-24</p>
 
       
     </div>

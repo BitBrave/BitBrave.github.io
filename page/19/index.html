@@ -799,6 +799,81 @@ Output: 1</code></pre><p>Note:</p>
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(416.%20Partition%20Equal%20Subset%20Sum)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(416.%20Partition%20Equal%20Subset%20Sum)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(416. Partition Equal Subset Sum)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-416-Partition-Equal-Subset-Sum-题解"><a href="#LeetCode-416-Partition-Equal-Subset-Sum-题解" class="headerlink" title="LeetCode(416. Partition Equal Subset Sum)题解"></a>LeetCode(416. Partition Equal Subset Sum)题解</h1><hr>
+<p>Given a non-empty array containing only positive integers, find if the array can be partitioned into two subsets such that the sum of elements in both subsets is equal.</p>
+<p>Note:</p>
+<pre><code>Each of the array element will not exceed 100.
+The array size will not exceed 200.</code></pre><p>Example 1:</p>
+<pre><code>Input: [1, 5, 11, 5]
+
+Output: true
+
+Explanation: The array can be partitioned as [1, 5, 5] and [11].</code></pre><p>Example 2:</p>
+<pre><code>Input: [1, 2, 3, 5]</code></pre><p>Output: false</p>
+<pre><code>Explanation: The array cannot be partitioned into equal sum subsets.</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>将一个集合分成元素和相同的两个子集。</p>
+<p>分成两个相同子集，那么这个原本的集合元素之和应该为偶数，每个子集和为这个数的二分之一，那么这个题就是找一些元素，看看能不能满足其和为这个数的二分之一。这个题能使用DP的办法。类似于一个背包的题目，背包容量为数组中元素和的一半+1，这样只要看是否有元素可以正好填满背包即可．但是每个元素只能用一次，所以在尝试放一个元素的时候还要避免他对尝试放其他位置时对自己的影响．所以在尝试放一个元素到背包的时候需要从容量最大的位置开始，如果（当前位置－当前元素大小）位置可以通过放置之前的元素达到，则当前位置也可以通过放置当前元素正好达到这个位置．状态转移方程为：dp[i] = dp[i] || dp[i - nums[k]];</p>
+<p>代码如下：时间复杂度o(n*sum(n)),空间复杂度o(sum(n))</p>
+<p>Runtime: 176 ms, faster than 24.77% of C++ online submissions for Partition Equal Subset Sum.<br>Memory Usage: 8.4 MB, less than 94.12% of C++ online submissions for Partition Equal Subset Sum.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">canPartition</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = nums.<span class="built_in">size</span>(), tar = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i:nums) tar += i;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(tar &amp; <span class="number">1</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">else</span> tar /= <span class="number">2</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">bool</span>&gt; <span class="title">res</span><span class="params">(tar+<span class="number">1</span>, <span class="literal">false</span>)</span></span>;</span><br><span class="line">        res[<span class="number">0</span>] = <span class="literal">true</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=tar; j&gt;=nums[i]; j--)&#123;</span><br><span class="line">                res[j] = res[j] || res[j-nums[i]];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res[tar];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-08-25</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(42.%20Trapping%20Rain%20Water)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -858,81 +933,6 @@ Output: 6</code></pre><h2 id="题意理解"><a href="#题意理解" class="heade
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">trap</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; <span class="built_in">height</span>)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = <span class="built_in">height</span>.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> tmp, res = <span class="number">0</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(len&lt;<span class="number">3</span>) <span class="keyword">return</span> res;</span><br><span class="line">        </span><br><span class="line">        <span class="built_in">stack</span>&lt;<span class="keyword">int</span>&gt; S;</span><br><span class="line">        S.push(<span class="number">0</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;len; i++)&#123;</span><br><span class="line">            tmp = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">while</span>(!S.empty() &amp;&amp; <span class="built_in">height</span>[S.top()]&lt;=<span class="built_in">height</span>[i])&#123;</span><br><span class="line">                res += (<span class="built_in">height</span>[S.top()]-tmp) * (i-S.top()<span class="number">-1</span>);</span><br><span class="line">                tmp = <span class="built_in">height</span>[S.top()];</span><br><span class="line">                S.pop();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(!S.empty()) res += (<span class="built_in">height</span>[i]-tmp) * (i-S.top()<span class="number">-1</span>);</span><br><span class="line">            S.push(i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 <p>BitBrave，2019-5-24。完全自己的思路，nice</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(416.%20Partition%20Equal%20Subset%20Sum)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(416.%20Partition%20Equal%20Subset%20Sum)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(416. Partition Equal Subset Sum)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-416-Partition-Equal-Subset-Sum-题解"><a href="#LeetCode-416-Partition-Equal-Subset-Sum-题解" class="headerlink" title="LeetCode(416. Partition Equal Subset Sum)题解"></a>LeetCode(416. Partition Equal Subset Sum)题解</h1><hr>
-<p>Given a non-empty array containing only positive integers, find if the array can be partitioned into two subsets such that the sum of elements in both subsets is equal.</p>
-<p>Note:</p>
-<pre><code>Each of the array element will not exceed 100.
-The array size will not exceed 200.</code></pre><p>Example 1:</p>
-<pre><code>Input: [1, 5, 11, 5]
-
-Output: true
-
-Explanation: The array can be partitioned as [1, 5, 5] and [11].</code></pre><p>Example 2:</p>
-<pre><code>Input: [1, 2, 3, 5]</code></pre><p>Output: false</p>
-<pre><code>Explanation: The array cannot be partitioned into equal sum subsets.</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>将一个集合分成元素和相同的两个子集。</p>
-<p>分成两个相同子集，那么这个原本的集合元素之和应该为偶数，每个子集和为这个数的二分之一，那么这个题就是找一些元素，看看能不能满足其和为这个数的二分之一。这个题能使用DP的办法。类似于一个背包的题目，背包容量为数组中元素和的一半+1，这样只要看是否有元素可以正好填满背包即可．但是每个元素只能用一次，所以在尝试放一个元素的时候还要避免他对尝试放其他位置时对自己的影响．所以在尝试放一个元素到背包的时候需要从容量最大的位置开始，如果（当前位置－当前元素大小）位置可以通过放置之前的元素达到，则当前位置也可以通过放置当前元素正好达到这个位置．状态转移方程为：dp[i] = dp[i] || dp[i - nums[k]];</p>
-<p>代码如下：时间复杂度o(n*sum(n)),空间复杂度o(sum(n))</p>
-<p>Runtime: 176 ms, faster than 24.77% of C++ online submissions for Partition Equal Subset Sum.<br>Memory Usage: 8.4 MB, less than 94.12% of C++ online submissions for Partition Equal Subset Sum.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">canPartition</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = nums.<span class="built_in">size</span>(), tar = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i:nums) tar += i;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(tar &amp; <span class="number">1</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">else</span> tar /= <span class="number">2</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">bool</span>&gt; <span class="title">res</span><span class="params">(tar+<span class="number">1</span>, <span class="literal">false</span>)</span></span>;</span><br><span class="line">        res[<span class="number">0</span>] = <span class="literal">true</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=tar; j&gt;=nums[i]; j--)&#123;</span><br><span class="line">                res[j] = res[j] || res[j-nums[i]];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res[tar];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-08-25</p>
 
       
     </div>
