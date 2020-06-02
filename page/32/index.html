@@ -177,6 +177,90 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(931.%20Minimum%20Falling%20Path%20Sum)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(931.%20Minimum%20Falling%20Path%20Sum)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(931. Minimum Falling Path Sum)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-931-Minimum-Falling-Path-Sum-题解"><a href="#LeetCode-931-Minimum-Falling-Path-Sum-题解" class="headerlink" title="LeetCode(931. Minimum Falling Path Sum)题解"></a>LeetCode(931. Minimum Falling Path Sum)题解</h1><p>Given a <strong>square</strong> array of integers <code>A</code>, we want the <strong>minimum</strong> sum of a <em>falling path</em> through <code>A</code>.</p>
+<p>A falling path starts at any element in the first row, and chooses one element from each row.  The next row’s choice must be in a column that is different from the previous row’s column by at most one.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Input: [[1,2,3],[4,5,6],[7,8,9]]</span><br><span class="line">Output: 12</span><br><span class="line">Explanation: </span><br><span class="line">The possible falling paths are:</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>[1,4,7], [1,4,8], [1,5,7], [1,5,8], [1,5,9]</code></li>
+<li><code>[2,4,7], [2,4,8], [2,5,7], [2,5,8], [2,5,9], [2,6,8], [2,6,9]</code></li>
+<li><code>[3,5,7], [3,5,8], [3,5,9], [3,6,8], [3,6,9]</code></li>
+</ul>
+<p>The falling path with the smallest sum is <code>[1,4,7]</code>, so the answer is <code>12</code>.</p>
+<p><strong>Note:</strong></p>
+<ol>
+<li><code>1 &lt;= A.length == A[0].length &lt;= 100</code></li>
+<li><code>-100 &lt;= A[i][j] &lt;= 100</code></li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给定一个二维数组A，每个元素都是整数，现在从第一行选定一个位置下降到最后一行，每个值表示选定这个位置的代价。选路的时候，下一行的位置和上一行的位置列之间相差最多一个。现在计算返回一条最短路径。</p>
+<p>这个明显就是DP。我们维护一个和A同等大小的数组，DP[i][j]表示第i行以第j列位置为终点的最短路径代价。最后只需要遍历最后一行的数据，选择最小的即可。</p>
+<p>那么初始状态为，DP[0][i] = A[0][i].</p>
+<p>转移方程为，DP[\i][j] = A[i][j]+min(DP[\i-1][j-1], DP[\i-1][j], DP[\i-1][j+1]).</p>
+<p>可知，转移只用到了上一层结果，因此可以使用一个2*col的数组记录。</p>
+<p>代码如下，数组大小N2，时间复杂度O(N2)，空间复杂度O(N)。</p>
+<p><code>Runtime: 8 ms, faster than 99.60% of C++ online submissions for Minimum Falling Path Sum.</code></p>
+<p><code>Memory Usage: 9.7 MB, less than 100.00% of C++ online submissions for Minimum Falling Path Sum.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minFallingPathSum</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; A)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> row = A.<span class="built_in">size</span>(), col = A[<span class="number">0</span>].<span class="built_in">size</span>();</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">ret</span><span class="params">(<span class="number">2</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(col + <span class="number">2</span>, INT_MAX))</span></span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;col; j++) ret[<span class="number">0</span>][j+<span class="number">1</span>] = A[<span class="number">0</span>][j];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;row; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;col; j++)&#123;</span><br><span class="line">                ret[<span class="number">1</span>][j+<span class="number">1</span>] = A[i][j] + <span class="built_in">min</span>(ret[<span class="number">0</span>][j], <span class="built_in">min</span>(ret[<span class="number">0</span>][j+<span class="number">1</span>], ret[<span class="number">0</span>][j+<span class="number">2</span>]));</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;col+<span class="number">2</span>; j++) ret[<span class="number">0</span>][j] = ret[<span class="number">1</span>][j];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> *min_element(ret[<span class="number">0</span>].<span class="built_in">begin</span>(), ret[<span class="number">0</span>].<span class="built_in">end</span>());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2019-11-09</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(932.%20Beautiful%20Array)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -279,7 +363,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(931.%20Minimum%20Falling%20Path%20Sum)%E9%A2%98%E8%A7%A3/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(939.%20Minimum%20Area%20Rectangle)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
@@ -293,7 +377,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2020/01/24/LeetCode(931.%20Minimum%20Falling%20Path%20Sum)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(931. Minimum Falling Path Sum)题解</a>
+            <a href="/2020/01/24/LeetCode(939.%20Minimum%20Area%20Rectangle)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(939. Minimum Area Rectangle)题解</a>
         </h1>
 
         <div class="post-meta">
@@ -317,33 +401,31 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="LeetCode-931-Minimum-Falling-Path-Sum-题解"><a href="#LeetCode-931-Minimum-Falling-Path-Sum-题解" class="headerlink" title="LeetCode(931. Minimum Falling Path Sum)题解"></a>LeetCode(931. Minimum Falling Path Sum)题解</h1><p>Given a <strong>square</strong> array of integers <code>A</code>, we want the <strong>minimum</strong> sum of a <em>falling path</em> through <code>A</code>.</p>
-<p>A falling path starts at any element in the first row, and chooses one element from each row.  The next row’s choice must be in a column that is different from the previous row’s column by at most one.</p>
+          <h1 id="LeetCode-939-Minimum-Area-Rectangle-题解"><a href="#LeetCode-939-Minimum-Area-Rectangle-题解" class="headerlink" title="LeetCode(939. Minimum Area Rectangle)题解"></a>LeetCode(939. Minimum Area Rectangle)题解</h1><p>Given a set of points in the xy-plane, determine the minimum area of a rectangle formed from these points, with sides parallel to the x and y axes.</p>
+<p>If there isn’t any rectangle, return 0.</p>
 <p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Input: [[1,2,3],[4,5,6],[7,8,9]]</span><br><span class="line">Output: 12</span><br><span class="line">Explanation: </span><br><span class="line">The possible falling paths are:</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: [[1,1],[1,3],[3,1],[3,3],[2,2]]</span><br><span class="line">Output: 4</span><br></pre></td></tr></table></figure>
 
-<ul>
-<li><code>[1,4,7], [1,4,8], [1,5,7], [1,5,8], [1,5,9]</code></li>
-<li><code>[2,4,7], [2,4,8], [2,5,7], [2,5,8], [2,5,9], [2,6,8], [2,6,9]</code></li>
-<li><code>[3,5,7], [3,5,8], [3,5,9], [3,6,8], [3,6,9]</code></li>
-</ul>
-<p>The falling path with the smallest sum is <code>[1,4,7]</code>, so the answer is <code>12</code>.</p>
-<p><strong>Note:</strong></p>
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: [[1,1],[1,3],[3,1],[3,3],[4,1],[4,3]]</span><br><span class="line">Output: 2</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Note</strong>:</p>
 <ol>
-<li><code>1 &lt;= A.length == A[0].length &lt;= 100</code></li>
-<li><code>-100 &lt;= A[i][j] &lt;= 100</code></li>
+<li><code>1 &lt;= points.length &lt;= 500</code></li>
+<li><code>0 &lt;= points[i][0] &lt;= 40000</code></li>
+<li><code>0 &lt;= points[i][1] &lt;= 40000</code></li>
+<li>All points are distinct.</li>
 </ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给定一个二维数组A，每个元素都是整数，现在从第一行选定一个位置下降到最后一行，每个值表示选定这个位置的代价。选路的时候，下一行的位置和上一行的位置列之间相差最多一个。现在计算返回一条最短路径。</p>
-<p>这个明显就是DP。我们维护一个和A同等大小的数组，DP[i][j]表示第i行以第j列位置为终点的最短路径代价。最后只需要遍历最后一行的数据，选择最小的即可。</p>
-<p>那么初始状态为，DP[0][i] = A[0][i].</p>
-<p>转移方程为，DP[\i][j] = A[i][j]+min(DP[\i-1][j-1], DP[\i-1][j], DP[\i-1][j+1]).</p>
-<p>可知，转移只用到了上一层结果，因此可以使用一个2*col的数组记录。</p>
-<p>代码如下，数组大小N2，时间复杂度O(N2)，空间复杂度O(N)。</p>
-<p><code>Runtime: 8 ms, faster than 99.60% of C++ online submissions for Minimum Falling Path Sum.</code></p>
-<p><code>Memory Usage: 9.7 MB, less than 100.00% of C++ online submissions for Minimum Falling Path Sum.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minFallingPathSum</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; A)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> row = A.<span class="built_in">size</span>(), col = A[<span class="number">0</span>].<span class="built_in">size</span>();</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">ret</span><span class="params">(<span class="number">2</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(col + <span class="number">2</span>, INT_MAX))</span></span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;col; j++) ret[<span class="number">0</span>][j+<span class="number">1</span>] = A[<span class="number">0</span>][j];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;row; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;col; j++)&#123;</span><br><span class="line">                ret[<span class="number">1</span>][j+<span class="number">1</span>] = A[i][j] + <span class="built_in">min</span>(ret[<span class="number">0</span>][j], <span class="built_in">min</span>(ret[<span class="number">0</span>][j+<span class="number">1</span>], ret[<span class="number">0</span>][j+<span class="number">2</span>]));</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;col+<span class="number">2</span>; j++) ret[<span class="number">0</span>][j] = ret[<span class="number">1</span>][j];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> *min_element(ret[<span class="number">0</span>].<span class="built_in">begin</span>(), ret[<span class="number">0</span>].<span class="built_in">end</span>());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一些二维平面上的点，计算其组成的最小矩形点，矩形的四边必须平行于X和Y轴，如果不存在就返回0.</p>
+<p>这个题可以直接使用暴力枚举，但是也要注意方法。 每次选定要两个点，将其作为对角点，有了对角点之后查看另外两个点是否在数组中，如果在就记录其面积，如果不在的话就放弃这两个点，再次选择一对。这个过程中要一直记录最小的面积。</p>
+<p>代码如下，时间复杂度O(N2)，空间复杂度O(n).</p>
+<p><code>Runtime: 576 ms, faster than 30.14% of C++ online submissions for Minimum Area Rectangle.</code></p>
+<p><code>Memory Usage: 18 MB, less than 75.00% of C++ online submissions for Minimum Area Rectangle.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minAreaRect</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; points)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> ret = INT_MAX, len = points.<span class="built_in">size</span>();</span><br><span class="line">        <span class="built_in">set</span>&lt;pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt;&gt; S;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; p : points)&#123;</span><br><span class="line">            S.insert(make_pair(p[<span class="number">0</span>], p[<span class="number">1</span>]));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=i+<span class="number">1</span>; j&lt;len; j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(points[i][<span class="number">0</span>] == points[j][<span class="number">0</span>] <span class="keyword">or</span> points[i][<span class="number">1</span>] == points[j][<span class="number">1</span>]) <span class="keyword">continue</span>;</span><br><span class="line">                <span class="keyword">if</span>(S.<span class="built_in">find</span>(make_pair(points[i][<span class="number">0</span>], points[j][<span class="number">1</span>])) == S.<span class="built_in">end</span>() <span class="keyword">or</span> S.<span class="built_in">find</span>(make_pair(points[j][<span class="number">0</span>], points[i][<span class="number">1</span>])) == S.<span class="built_in">end</span>()) <span class="keyword">continue</span>;</span><br><span class="line">                ret = <span class="built_in">min</span>(ret, <span class="built_in">abs</span>((points[i][<span class="number">0</span>]-points[j][<span class="number">0</span>]) * (points[i][<span class="number">1</span>]-points[j][<span class="number">1</span>])));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> INT_MAX == ret ? <span class="number">0</span> : ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
-<p>BitBrave，2019-11-09</p>
+<p>BitBrave, 2019-11-07</p>
 
       
     </div>
@@ -435,7 +517,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(939.%20Minimum%20Area%20Rectangle)%E9%A2%98%E8%A7%A3/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(945.%20Minimum%20Increment%20to%20Make%20Array%20Unique)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
@@ -449,7 +531,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2020/01/24/LeetCode(939.%20Minimum%20Area%20Rectangle)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(939. Minimum Area Rectangle)题解</a>
+            <a href="/2020/01/24/LeetCode(945.%20Minimum%20Increment%20to%20Make%20Array%20Unique)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(945. Minimum Increment to Make Array Unique)题解</a>
         </h1>
 
         <div class="post-meta">
@@ -473,31 +555,30 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="LeetCode-939-Minimum-Area-Rectangle-题解"><a href="#LeetCode-939-Minimum-Area-Rectangle-题解" class="headerlink" title="LeetCode(939. Minimum Area Rectangle)题解"></a>LeetCode(939. Minimum Area Rectangle)题解</h1><p>Given a set of points in the xy-plane, determine the minimum area of a rectangle formed from these points, with sides parallel to the x and y axes.</p>
-<p>If there isn’t any rectangle, return 0.</p>
+          <h1 id="LeetCode-945-Minimum-Increment-to-Make-Array-Unique-题解"><a href="#LeetCode-945-Minimum-Increment-to-Make-Array-Unique-题解" class="headerlink" title="LeetCode(945. Minimum Increment to Make Array Unique)题解"></a>LeetCode(945. Minimum Increment to Make Array Unique)题解</h1><p>Given an array of integers A, a <em>move</em> consists of choosing any <code>A[i]</code>, and incrementing it by <code>1</code>.</p>
+<p>Return the least number of moves to make every value in <code>A</code> unique.</p>
 <p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: [[1,1],[1,3],[3,1],[3,3],[2,2]]</span><br><span class="line">Output: 4</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: [1,2,2]</span><br><span class="line">Output: 1</span><br><span class="line">Explanation:  After 1 move, the array could be [1, 2, 3].</span><br></pre></td></tr></table></figure>
 
 <p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: [[1,1],[1,3],[3,1],[3,3],[4,1],[4,3]]</span><br><span class="line">Output: 2</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Input: [3,2,1,2,1,7]</span><br><span class="line">Output: 6</span><br><span class="line">Explanation:  After 6 moves, the array could be [3, 4, 1, 2, 5, 7].</span><br><span class="line">It can be shown with 5 or less moves that it is impossible for the array to have all unique values.</span><br></pre></td></tr></table></figure>
 
 
 
-<p><strong>Note</strong>:</p>
+<p><strong>Note:</strong></p>
 <ol>
-<li><code>1 &lt;= points.length &lt;= 500</code></li>
-<li><code>0 &lt;= points[i][0] &lt;= 40000</code></li>
-<li><code>0 &lt;= points[i][1] &lt;= 40000</code></li>
-<li>All points are distinct.</li>
+<li><code>0 &lt;= A.length &lt;= 40000</code></li>
+<li><code>0 &lt;= A[i] &lt; 40000</code></li>
 </ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一些二维平面上的点，计算其组成的最小矩形点，矩形的四边必须平行于X和Y轴，如果不存在就返回0.</p>
-<p>这个题可以直接使用暴力枚举，但是也要注意方法。 每次选定要两个点，将其作为对角点，有了对角点之后查看另外两个点是否在数组中，如果在就记录其面积，如果不在的话就放弃这两个点，再次选择一对。这个过程中要一直记录最小的面积。</p>
-<p>代码如下，时间复杂度O(N2)，空间复杂度O(n).</p>
-<p><code>Runtime: 576 ms, faster than 30.14% of C++ online submissions for Minimum Area Rectangle.</code></p>
-<p><code>Memory Usage: 18 MB, less than 75.00% of C++ online submissions for Minimum Area Rectangle.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minAreaRect</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; points)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> ret = INT_MAX, len = points.<span class="built_in">size</span>();</span><br><span class="line">        <span class="built_in">set</span>&lt;pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt;&gt; S;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; p : points)&#123;</span><br><span class="line">            S.insert(make_pair(p[<span class="number">0</span>], p[<span class="number">1</span>]));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=i+<span class="number">1</span>; j&lt;len; j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(points[i][<span class="number">0</span>] == points[j][<span class="number">0</span>] <span class="keyword">or</span> points[i][<span class="number">1</span>] == points[j][<span class="number">1</span>]) <span class="keyword">continue</span>;</span><br><span class="line">                <span class="keyword">if</span>(S.<span class="built_in">find</span>(make_pair(points[i][<span class="number">0</span>], points[j][<span class="number">1</span>])) == S.<span class="built_in">end</span>() <span class="keyword">or</span> S.<span class="built_in">find</span>(make_pair(points[j][<span class="number">0</span>], points[i][<span class="number">1</span>])) == S.<span class="built_in">end</span>()) <span class="keyword">continue</span>;</span><br><span class="line">                ret = <span class="built_in">min</span>(ret, <span class="built_in">abs</span>((points[i][<span class="number">0</span>]-points[j][<span class="number">0</span>]) * (points[i][<span class="number">1</span>]-points[j][<span class="number">1</span>])));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> INT_MAX == ret ? <span class="number">0</span> : ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给定一个数组，对其中每次元素可以执行一个操作，即元素值+1。求使用最少的操作使得数组内的元素都不一样。</p>
+<p>这个题可以使用排序，首先将所有的元素从小到大排序，然后从左到右遍历。遍历到A[i]，如果和A[i-1]一样或者比A[i]小，就表示A[i]这个数需要调整，因为我们从左到右，第一次遇到需要调整的一定是两个相同元素（因为元素是从小到大排列的），那么如果遇到相同的，我们就将后面的元素+1，尽可能执行最少的加法操作。然后再向后走如果发现A[i]比A[i-1]就表示这个数肯定重复了两次以上。那么久仍旧将A[i]调整到恰好比A[i-1]大1即可。即加A[i-1]-A[i]次即可。就这样走到最后，返回ret。</p>
+<p>如何证明这个算法是正确的呢？可以这样想，如果要想使得两个数不同，那么其中任意一个数不同即可，即+1.如果三个相同的数要不同，那么其中一个数必然要加1，另一个必然要两次加1.而比如1,1,2,3,4这样五个数，可以直接将1加到5加四次，也可以1,2,3,4各自都加1，这是一样的，因为加法是可以移植的。我们这里采用的就是第二种算法。</p>
+<p>代码如下，时间复杂度O(nlpgn)，空间复杂度O(1)。</p>
+<p><code>Runtime: 76 ms, faster than 88.16% of C++ online submissions for Minimum Increment to Make Array Unique.</code></p>
+<p><code>Memory Usage: 12 MB, less than 100.00% of C++ online submissions for Minimum Increment to Make Array Unique.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minIncrementForUnique</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> ret = <span class="number">0</span>, len = A.<span class="built_in">size</span>();</span><br><span class="line">        sort(A.<span class="built_in">begin</span>(), A.<span class="built_in">end</span>());</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(A[i] &gt; A[i<span class="number">-1</span>]) <span class="keyword">continue</span>;</span><br><span class="line">            ret += A[i<span class="number">-1</span>] - A[i] + <span class="number">1</span>;</span><br><span class="line">            A[i] = A[i<span class="number">-1</span>] + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
-<p>BitBrave, 2019-11-07</p>
+<p>BitBrave，2019-11-14</p>
 
       
     </div>
@@ -687,7 +768,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(945.%20Minimum%20Increment%20to%20Make%20Array%20Unique)%E9%A2%98%E8%A7%A3/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(951.%20Flip%20Equivalent%20Binary%20Trees)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
@@ -701,7 +782,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2020/01/24/LeetCode(945.%20Minimum%20Increment%20to%20Make%20Array%20Unique)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(945. Minimum Increment to Make Array Unique)题解</a>
+            <a href="/2020/01/24/LeetCode(951.%20Flip%20Equivalent%20Binary%20Trees)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(951. Flip Equivalent Binary Trees)题解</a>
         </h1>
 
         <div class="post-meta">
@@ -725,30 +806,33 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="LeetCode-945-Minimum-Increment-to-Make-Array-Unique-题解"><a href="#LeetCode-945-Minimum-Increment-to-Make-Array-Unique-题解" class="headerlink" title="LeetCode(945. Minimum Increment to Make Array Unique)题解"></a>LeetCode(945. Minimum Increment to Make Array Unique)题解</h1><p>Given an array of integers A, a <em>move</em> consists of choosing any <code>A[i]</code>, and incrementing it by <code>1</code>.</p>
-<p>Return the least number of moves to make every value in <code>A</code> unique.</p>
+          <h1 id="LeetCode-951-Flip-Equivalent-Binary-Trees-题解"><a href="#LeetCode-951-Flip-Equivalent-Binary-Trees-题解" class="headerlink" title="LeetCode(951. Flip Equivalent Binary Trees)题解"></a>LeetCode(951. Flip Equivalent Binary Trees)题解</h1><p>For a binary tree T, we can define a flip operation as follows: choose any node, and swap the left and right child subtrees.</p>
+<p>A binary tree X is <em>flip equivalent</em> to a binary tree Y if and only if we can make X equal to Y after some number of flip operations.</p>
+<p>Write a function that determines whether two binary trees are <em>flip equivalent</em>.  The trees are given by root nodes <code>root1</code> and <code>root2</code>.</p>
 <p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: [1,2,2]</span><br><span class="line">Output: 1</span><br><span class="line">Explanation:  After 1 move, the array could be [1, 2, 3].</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: root1 &#x3D; [1,2,3,4,5,6,null,null,null,7,8], root2 &#x3D; [1,3,2,null,6,4,5,null,null,null,null,8,7]</span><br><span class="line">Output: true</span><br><span class="line">Explanation: We flipped at nodes with values 1, 3, and 5.</span><br></pre></td></tr></table></figure>
 
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Input: [3,2,1,2,1,7]</span><br><span class="line">Output: 6</span><br><span class="line">Explanation:  After 6 moves, the array could be [3, 4, 1, 2, 5, 7].</span><br><span class="line">It can be shown with 5 or less moves that it is impossible for the array to have all unique values.</span><br></pre></td></tr></table></figure>
-
-
-
+<p> <img src="https://assets.leetcode.com/uploads/2018/11/29/tree_ex.png" alt=""></p>
 <p><strong>Note:</strong></p>
 <ol>
-<li><code>0 &lt;= A.length &lt;= 40000</code></li>
-<li><code>0 &lt;= A[i] &lt; 40000</code></li>
+<li>Each tree will have at most <code>100</code> nodes.</li>
+<li>Each value in each tree will be a unique integer in the range <code>[0, 99]</code>.</li>
 </ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给定一个数组，对其中每次元素可以执行一个操作，即元素值+1。求使用最少的操作使得数组内的元素都不一样。</p>
-<p>这个题可以使用排序，首先将所有的元素从小到大排序，然后从左到右遍历。遍历到A[i]，如果和A[i-1]一样或者比A[i]小，就表示A[i]这个数需要调整，因为我们从左到右，第一次遇到需要调整的一定是两个相同元素（因为元素是从小到大排列的），那么如果遇到相同的，我们就将后面的元素+1，尽可能执行最少的加法操作。然后再向后走如果发现A[i]比A[i-1]就表示这个数肯定重复了两次以上。那么久仍旧将A[i]调整到恰好比A[i-1]大1即可。即加A[i-1]-A[i]次即可。就这样走到最后，返回ret。</p>
-<p>如何证明这个算法是正确的呢？可以这样想，如果要想使得两个数不同，那么其中任意一个数不同即可，即+1.如果三个相同的数要不同，那么其中一个数必然要加1，另一个必然要两次加1.而比如1,1,2,3,4这样五个数，可以直接将1加到5加四次，也可以1,2,3,4各自都加1，这是一样的，因为加法是可以移植的。我们这里采用的就是第二种算法。</p>
-<p>代码如下，时间复杂度O(nlpgn)，空间复杂度O(1)。</p>
-<p><code>Runtime: 76 ms, faster than 88.16% of C++ online submissions for Minimum Increment to Make Array Unique.</code></p>
-<p><code>Memory Usage: 12 MB, less than 100.00% of C++ online submissions for Minimum Increment to Make Array Unique.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minIncrementForUnique</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> ret = <span class="number">0</span>, len = A.<span class="built_in">size</span>();</span><br><span class="line">        sort(A.<span class="built_in">begin</span>(), A.<span class="built_in">end</span>());</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(A[i] &gt; A[i<span class="number">-1</span>]) <span class="keyword">continue</span>;</span><br><span class="line">            ret += A[i<span class="number">-1</span>] - A[i] + <span class="number">1</span>;</span><br><span class="line">            A[i] = A[i<span class="number">-1</span>] + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出两个二叉树，每个二叉树内，各个节点的值都是不一样的。现在有一种操作，选定一个节点，将节点的左右子树进行交换。问，对一些节点进行交换，是否可以将两个二叉树变成一样的（一样的结构和值）？</p>
+<p>这个题是个很明显的递归问题。假设函数就是返回两个二叉树是否可以变成相同的。</p>
+<ul>
+<li>首先看看两个根节点是否为空，如果都为空返回True，有一个为空返回Flase。都不为空进行下一步。</li>
+<li>查看根节点的值是否一样，不一样就返回False，否则进行下一步。</li>
+<li>将两个节点的左子树根节点作为参数同样运行这个函数，再将右子树根节点一起作为参数放入函数。查看返回结果，如果都是True，则返回True。否则就将一个节点的左子树和另一个节点右子树根节点一起，分别放入函数，看返回值，如果都为True，返回True，否则False。</li>
+</ul>
+<p>代码如下，时间复杂度O(N)，空间复杂度O(1)。这里有可能会让人觉得函数在运行的时候，搜寻子树明明进行了四次调用，时间复杂度肯定高，但是可以观察到，如果到达下一层的时候，两个数值不一样，就直接返回，不会继续递归，因此函数是线性往下走的。</p>
+<p><code>Runtime: 0 ms, faster than 100.00% of C++ online submissions for Flip Equivalent Binary Trees.</code></p>
+<p><code>Memory Usage: 11.6 MB, less than 100.00% of C++ online submissions for Flip Equivalent Binary Trees.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">flipEquiv</span><span class="params">(TreeNode* root1, TreeNode* root2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root1 == <span class="literal">NULL</span> || root2 == <span class="literal">NULL</span>) <span class="keyword">return</span> root1 == <span class="literal">NULL</span> <span class="keyword">and</span> root2 == <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">if</span>(root1-&gt;val != root2-&gt;val) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">return</span> flipEquiv(root1-&gt;left, root2-&gt;left) <span class="keyword">and</span> flipEquiv(root1-&gt;right, root2-&gt;right) <span class="keyword">or</span> flipEquiv(root1-&gt;right, root2-&gt;left) <span class="keyword">and</span> flipEquiv(root1-&gt;left, root2-&gt;right);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
-<p>BitBrave，2019-11-14</p>
+
+
+<p>BitBrave， 2019-11-21</p>
 
       
     </div>
@@ -915,90 +999,6 @@ Output:
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span>  collections <span class="keyword">import</span> Counter</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">canReorderDoubled</span><span class="params">(self, A: List[int])</span> -&gt; bool:</span></span><br><span class="line">        A = [abs(a) <span class="keyword">for</span> a <span class="keyword">in</span> A]</span><br><span class="line">        C = Counter(A)</span><br><span class="line">        L = sorted(C)</span><br><span class="line">        <span class="keyword">for</span> l <span class="keyword">in</span> L:</span><br><span class="line">            <span class="keyword">if</span> C[l] == <span class="number">0</span>: <span class="keyword">continue</span> <span class="comment"># 可注释掉</span></span><br><span class="line">            <span class="keyword">if</span> C.get(<span class="number">2</span>*l, <span class="number">0</span>) &lt; C[l]: <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">            C[<span class="number">2</span>*l] -= C[l]</span><br><span class="line">            </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br></pre></td></tr></table></figure>
 
 <p>BitBrave，2019-11-28</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(951.%20Flip%20Equivalent%20Binary%20Trees)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(951.%20Flip%20Equivalent%20Binary%20Trees)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(951. Flip Equivalent Binary Trees)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-951-Flip-Equivalent-Binary-Trees-题解"><a href="#LeetCode-951-Flip-Equivalent-Binary-Trees-题解" class="headerlink" title="LeetCode(951. Flip Equivalent Binary Trees)题解"></a>LeetCode(951. Flip Equivalent Binary Trees)题解</h1><p>For a binary tree T, we can define a flip operation as follows: choose any node, and swap the left and right child subtrees.</p>
-<p>A binary tree X is <em>flip equivalent</em> to a binary tree Y if and only if we can make X equal to Y after some number of flip operations.</p>
-<p>Write a function that determines whether two binary trees are <em>flip equivalent</em>.  The trees are given by root nodes <code>root1</code> and <code>root2</code>.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: root1 &#x3D; [1,2,3,4,5,6,null,null,null,7,8], root2 &#x3D; [1,3,2,null,6,4,5,null,null,null,null,8,7]</span><br><span class="line">Output: true</span><br><span class="line">Explanation: We flipped at nodes with values 1, 3, and 5.</span><br></pre></td></tr></table></figure>
-
-<p> <img src="https://assets.leetcode.com/uploads/2018/11/29/tree_ex.png" alt=""></p>
-<p><strong>Note:</strong></p>
-<ol>
-<li>Each tree will have at most <code>100</code> nodes.</li>
-<li>Each value in each tree will be a unique integer in the range <code>[0, 99]</code>.</li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出两个二叉树，每个二叉树内，各个节点的值都是不一样的。现在有一种操作，选定一个节点，将节点的左右子树进行交换。问，对一些节点进行交换，是否可以将两个二叉树变成一样的（一样的结构和值）？</p>
-<p>这个题是个很明显的递归问题。假设函数就是返回两个二叉树是否可以变成相同的。</p>
-<ul>
-<li>首先看看两个根节点是否为空，如果都为空返回True，有一个为空返回Flase。都不为空进行下一步。</li>
-<li>查看根节点的值是否一样，不一样就返回False，否则进行下一步。</li>
-<li>将两个节点的左子树根节点作为参数同样运行这个函数，再将右子树根节点一起作为参数放入函数。查看返回结果，如果都是True，则返回True。否则就将一个节点的左子树和另一个节点右子树根节点一起，分别放入函数，看返回值，如果都为True，返回True，否则False。</li>
-</ul>
-<p>代码如下，时间复杂度O(N)，空间复杂度O(1)。这里有可能会让人觉得函数在运行的时候，搜寻子树明明进行了四次调用，时间复杂度肯定高，但是可以观察到，如果到达下一层的时候，两个数值不一样，就直接返回，不会继续递归，因此函数是线性往下走的。</p>
-<p><code>Runtime: 0 ms, faster than 100.00% of C++ online submissions for Flip Equivalent Binary Trees.</code></p>
-<p><code>Memory Usage: 11.6 MB, less than 100.00% of C++ online submissions for Flip Equivalent Binary Trees.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">flipEquiv</span><span class="params">(TreeNode* root1, TreeNode* root2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root1 == <span class="literal">NULL</span> || root2 == <span class="literal">NULL</span>) <span class="keyword">return</span> root1 == <span class="literal">NULL</span> <span class="keyword">and</span> root2 == <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">if</span>(root1-&gt;val != root2-&gt;val) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">return</span> flipEquiv(root1-&gt;left, root2-&gt;left) <span class="keyword">and</span> flipEquiv(root1-&gt;right, root2-&gt;right) <span class="keyword">or</span> flipEquiv(root1-&gt;right, root2-&gt;left) <span class="keyword">and</span> flipEquiv(root1-&gt;left, root2-&gt;right);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-
-
-<p>BitBrave， 2019-11-21</p>
 
       
     </div>

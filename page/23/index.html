@@ -177,7 +177,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(64.%20Minimum%20Path%20Sum)%E9%A2%98%E8%A7%A3/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(65.%20Valid%20Number)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
@@ -191,7 +191,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2020/01/24/LeetCode(64.%20Minimum%20Path%20Sum)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(64. Minimum Path Sum)题解</a>
+            <a href="/2020/01/24/LeetCode(65.%20Valid%20Number)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(65. Valid Number)题解</a>
         </h1>
 
         <div class="post-meta">
@@ -215,105 +215,36 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="LeetCode-64-Minimum-Path-Sum-题解"><a href="#LeetCode-64-Minimum-Path-Sum-题解" class="headerlink" title="LeetCode(64. Minimum Path Sum)题解"></a>LeetCode(64. Minimum Path Sum)题解</h1><hr>
-<p>Given a m x n grid filled with non-negative numbers, find a path from top left to bottom right which minimizes the sum of all numbers along its path.</p>
-<p>Note: You can only move either down or right at any point in time.</p>
-<p>Example:</p>
-<pre><code>Input:
-[
-[1,3,1],
-[1,5,1],
-[4,2,1]
-]
-Output: 7
-Explanation: Because the path 1→3→1→1→1 minimizes the sum.</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Medium，给一个矩阵D，每个值非负，从左上走到右下，只能向下或向右，求出最短的路线的值（走过的点的值之和）。</p>
-<p>还是使用DP，用一个矩阵M，给一个m*n大小，每个位置记录走到当前位置有的最短值。则位置i，j处的最优子结构为：M[i][j] = D[i][j] + min(M[i-1][j] + M[i][j-1]).</p>
-<p>这里同样可以使用一个m*2的数组降低内存，更丧心病狂的就是直接在给定的矩阵上改变就行了，不用申请新的内存。</p>
-<p>代码如下：</p>
-<p>Runtime: 8 ms, faster than 97.16% of C++ online submissions for Minimum Path Sum.<br>Memory Usage: 10.4 MB, less than 93.98% of C++ online submissions for Minimum Path Sum.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minPathSum</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; grid)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> row = grid.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span>(row == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> col = grid[<span class="number">0</span>].<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span>(col == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;row; i++) grid[i][<span class="number">0</span>] += grid[i<span class="number">-1</span>][<span class="number">0</span>]; <span class="comment">// col</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>; j&lt;col; j++) grid[<span class="number">0</span>][j] += grid[<span class="number">0</span>][j<span class="number">-1</span>]; <span class="comment">// row</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;row; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>; j&lt;col; j++) grid[i][j] += <span class="built_in">min</span>(grid[i][j<span class="number">-1</span>], grid[i<span class="number">-1</span>][j]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> grid[row<span class="number">-1</span>][col<span class="number">-1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+          <h1 id="LeetCode-65-Valid-Number-题解"><a href="#LeetCode-65-Valid-Number-题解" class="headerlink" title="LeetCode(65. Valid Number)题解"></a>LeetCode(65. Valid Number)题解</h1><hr>
+<p>Validate if a given string can be interpreted as a decimal number.</p>
+<pre><code>Some examples:
+&quot;0&quot; =&gt; true
+&quot; 0.1 &quot; =&gt; true
+&quot;abc&quot; =&gt; false
+&quot;1 a&quot; =&gt; false
+&quot;2e10&quot; =&gt; true
+&quot; -90e3   &quot; =&gt; true
+&quot; 1e&quot; =&gt; false
+&quot;e3&quot; =&gt; false
+&quot; 6e-1&quot; =&gt; true
+&quot; 99e2.5 &quot; =&gt; false
+&quot;53.5e93&quot; =&gt; true
+&quot; --6 &quot; =&gt; false
+&quot;-+3&quot; =&gt; false
+&quot;95a54e53&quot; =&gt; false</code></pre><p>Note: It is intended for the problem statement to be ambiguous. You should gather all requirements up front before implementing one. However, here is a list of characters that can be in a valid decimal number:</p>
+<pre><code>Numbers 0-9
+Exponent - &quot;e&quot;
+Positive/negative sign - &quot;+&quot;/&quot;-&quot;
+Decimal point - &quot;.&quot;
+Of course, the context of these characters also matters in the input.</code></pre><p>Update (2015-02-10):<br>The signature of the C++ function had been updated. If you still see your function signature accepts a const char * argument, please click the reload button to reset your code definition.</p>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Hard， 给一个字符串判断是不是数字。</p>
+<p>这个题的难度我觉得主要在于+-和e还有.上。如果一个字符串有别的字母，那么字符串肯定不是数字。而如果只有数字，那就是肯定是可以组成数的，关键就在于如何判断出现上述字符之后的字符串的判断。</p>
+<p>我的思路是使用递归，从左到右遍历字符串。用一个位记录是否出现了e，出现了那么这之后就不能再出现除了数字之外的任意字符了，除非是在紧挨着e之后出现的-/+。+-只能出现在开头或者挨着e之后。小数点最多只能出现一次。</p>
+<p>代码如下,这题太恶心了，字符串各种判断的条件太恶心，估计就恶心人这一点是Hard吧：</p>
+<p>Runtime: 4 ms, faster than 95.51% of C++ online submissions for Valid Number.<br>Memory Usage: 10.3 MB, less than 48.86% of C++ online submissions for Valid Number.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isNumber_</span><span class="params">(<span class="built_in">string</span> s, <span class="keyword">int</span> sta, <span class="keyword">int</span> len, <span class="keyword">bool</span> <span class="built_in">exp</span>, <span class="keyword">bool</span> <span class="built_in">point</span>)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(sta&gt;<span class="number">0</span> &amp;&amp; sta==len) <span class="keyword">return</span> s[sta<span class="number">-1</span>]&gt;=<span class="string">'0'</span> &amp;&amp; s[sta<span class="number">-1</span>]&lt;=<span class="string">'9'</span> || s[sta<span class="number">-1</span>]==<span class="string">'.'</span>;</span><br><span class="line">        <span class="keyword">if</span>(s[sta]&gt;=<span class="string">'0'</span> &amp;&amp; s[sta]&lt;=<span class="string">'9'</span>) <span class="keyword">return</span> isNumber_(s, sta+<span class="number">1</span>, len, <span class="built_in">exp</span>, <span class="built_in">point</span>);</span><br><span class="line">        <span class="keyword">if</span>(s[sta] == <span class="string">'.'</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(<span class="built_in">point</span> || <span class="built_in">exp</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            <span class="built_in">point</span> = <span class="literal">true</span>;</span><br><span class="line">            <span class="keyword">return</span> isNumber_(s, sta+<span class="number">1</span>, len, <span class="built_in">exp</span>, <span class="built_in">point</span>); </span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(s[sta] == <span class="string">'e'</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(<span class="built_in">exp</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            <span class="keyword">if</span>(sta&gt;<span class="number">0</span> &amp;&amp; !(s[sta<span class="number">-1</span>]&gt;=<span class="string">'0'</span> &amp;&amp; s[sta<span class="number">-1</span>]&lt;=<span class="string">'9'</span>))&#123;</span><br><span class="line">                <span class="keyword">if</span>(!(sta&gt;<span class="number">1</span> &amp;&amp; s[sta<span class="number">-2</span>]&gt;=<span class="string">'0'</span> &amp;&amp; s[sta<span class="number">-2</span>]&lt;=<span class="string">'9'</span>)) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="built_in">exp</span> = <span class="literal">true</span>;</span><br><span class="line">            <span class="keyword">return</span> isNumber_(s, sta+<span class="number">1</span>, len, <span class="built_in">exp</span>, <span class="built_in">point</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(s[sta]==<span class="string">'+'</span> || s[sta]==<span class="string">'-'</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(sta &gt; <span class="number">0</span> &amp;&amp; s[sta<span class="number">-1</span>]==<span class="string">'e'</span>) <span class="keyword">return</span> isNumber_(s, sta+<span class="number">1</span>, len, <span class="built_in">exp</span>, <span class="built_in">point</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isNumber</span><span class="params">(<span class="built_in">string</span> s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = s.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span>(len == <span class="number">0</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">while</span>(len&gt;<span class="number">0</span> &amp;&amp; s[<span class="number">0</span>]==<span class="string">' '</span>)&#123;</span><br><span class="line">            s = s.substr(<span class="number">1</span>);</span><br><span class="line">            len--;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">while</span>(len&gt;<span class="number">0</span> &amp;&amp; s[len<span class="number">-1</span>]==<span class="string">' '</span>)&#123;</span><br><span class="line">            s.erase(len<span class="number">-1</span>, <span class="number">1</span>);</span><br><span class="line">            len--;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(len == <span class="number">0</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">if</span>(s[<span class="number">0</span>]==<span class="string">'+'</span> || s[<span class="number">0</span>]==<span class="string">'-'</span>)&#123;</span><br><span class="line">            len--;</span><br><span class="line">            s = s.substr(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(len == <span class="number">0</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">if</span>(s[<span class="number">0</span>]==<span class="string">'e'</span> || len==<span class="number">1</span> &amp;&amp; s[<span class="number">0</span>]==<span class="string">'.'</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">return</span> isNumber_(s, <span class="number">0</span>, len, <span class="literal">false</span>, <span class="literal">false</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
-<p>BitBrave, 2019-06-04</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(654.%20Maximum%20Binary%20Tree)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(654.%20Maximum%20Binary%20Tree)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(654. Maximum Binary Tree)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-654-Maximum-Binary-Tree-题解"><a href="#LeetCode-654-Maximum-Binary-Tree-题解" class="headerlink" title="LeetCode(654. Maximum Binary Tree)题解"></a>LeetCode(654. Maximum Binary Tree)题解</h1><p>Given an integer array with no duplicates. A maximum tree building on this array is defined as follow:</p>
-<ol>
-<li>The root is the maximum number in the array.</li>
-<li>The left subtree is the maximum tree constructed from left part subarray divided by the maximum number.</li>
-<li>The right subtree is the maximum tree constructed from right part subarray divided by the maximum number.</li>
-</ol>
-<p>Construct the maximum tree by the given array and output the root node of this tree.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Input: [3,2,1,6,0,5]</span><br><span class="line">Output: return the tree root node representing the following tree:</span><br><span class="line"></span><br><span class="line">      6</span><br><span class="line">    &#x2F;   \</span><br><span class="line">   3     5</span><br><span class="line">    \    &#x2F; </span><br><span class="line">     2  0   </span><br><span class="line">       \</span><br><span class="line">        1</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Note:</strong></p>
-<ol>
-<li>The size of the given array will be in the range [1,1000].</li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出一个数组，构建一个最大值数组，即任意一个子树包括整个树，根节点的值都比其余节点的值要大。构建的方法就是首先选择数组中最大的值作为根节点，最大值左边的值放入左子树，右边的值放入右子树。</p>
-<p>因此根据上述方法可以直接构建。代码如下，时间复杂度O(n2)，空间复杂度O(1)。</p>
-<p><code>Runtime: 72 ms, faster than 63.36% of C++ online submissions for Maximum Binary Tree.</code></p>
-<p><code>Memory Usage: 28.5 MB, less than 86.11% of C++ online submissions for Maximum Binary Tree.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">TreeNode* <span class="title">constructMaximumBinaryTree_</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A, <span class="keyword">int</span> sta, <span class="keyword">int</span> <span class="built_in">end</span>)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(sta &gt; <span class="built_in">end</span>) <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">int</span> m = sta;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=sta+<span class="number">1</span>; i&lt;=<span class="built_in">end</span>; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(A[m] &lt; A[i]) m = i;</span><br><span class="line">        &#125;</span><br><span class="line">        TreeNode* root = <span class="keyword">new</span> TreeNode(A[m]);</span><br><span class="line">        root-&gt;left = constructMaximumBinaryTree_(A, sta, m<span class="number">-1</span>);</span><br><span class="line">        root-&gt;right = constructMaximumBinaryTree_(A, m+<span class="number">1</span>, <span class="built_in">end</span>);</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">TreeNode* <span class="title">constructMaximumBinaryTree</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> constructMaximumBinaryTree_(nums, <span class="number">0</span>, nums.<span class="built_in">size</span>()<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave， 2019-11-27</p>
+<p>BitBrave, 2019-06-05</p>
 
       
     </div>
@@ -404,7 +335,7 @@ Output: &quot;10101&quot;</code></pre><h2 id="解题思路"><a href="#解题思�
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(69.%20Sqrt(x))%E9%A2%98%E8%A7%A3/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(654.%20Maximum%20Binary%20Tree)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
@@ -418,7 +349,7 @@ Output: &quot;10101&quot;</code></pre><h2 id="解题思路"><a href="#解题思�
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2020/01/24/LeetCode(69.%20Sqrt(x))%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(69. Sqrt(x))题解</a>
+            <a href="/2020/01/24/LeetCode(654.%20Maximum%20Binary%20Tree)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(654. Maximum Binary Tree)题解</a>
         </h1>
 
         <div class="post-meta">
@@ -442,28 +373,29 @@ Output: &quot;10101&quot;</code></pre><h2 id="解题思路"><a href="#解题思�
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="LeetCode-69-Sqrt-x-题解"><a href="#LeetCode-69-Sqrt-x-题解" class="headerlink" title="LeetCode(69. Sqrt(x))题解"></a>LeetCode(69. Sqrt(x))题解</h1><hr>
-<p>Implement int sqrt(int x).</p>
-<p>Compute and return the square root of x, where x is guaranteed to be a non-negative integer.</p>
-<p>Since the return type is an integer, the decimal digits are truncated and only the integer part of the result is returned.</p>
-<p>Example 1:</p>
-<pre><code>Input: 4
-Output: 2</code></pre><p>Example 2:</p>
-<pre><code>Input: 8
-Output: 2
-Explanation: The square root of 8 is 2.82842..., and since 
-            the decimal part is truncated, 2 is returned.</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>求一个数的平方根，如果是小数就返回整数部分。</p>
-<p>超简单，直接使用STL就可以。</p>
-<p>代码如下：</p>
-<p>Runtime: 4 ms, faster than 93.46% of C++ online submissions for Sqrt(x).<br>Memory Usage: 8.3 MB, less than 51.55% of C++ online submissions for Sqrt(x).</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">mySqrt</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">sqrt</span>(x);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+          <h1 id="LeetCode-654-Maximum-Binary-Tree-题解"><a href="#LeetCode-654-Maximum-Binary-Tree-题解" class="headerlink" title="LeetCode(654. Maximum Binary Tree)题解"></a>LeetCode(654. Maximum Binary Tree)题解</h1><p>Given an integer array with no duplicates. A maximum tree building on this array is defined as follow:</p>
+<ol>
+<li>The root is the maximum number in the array.</li>
+<li>The left subtree is the maximum tree constructed from left part subarray divided by the maximum number.</li>
+<li>The right subtree is the maximum tree constructed from right part subarray divided by the maximum number.</li>
+</ol>
+<p>Construct the maximum tree by the given array and output the root node of this tree.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Input: [3,2,1,6,0,5]</span><br><span class="line">Output: return the tree root node representing the following tree:</span><br><span class="line"></span><br><span class="line">      6</span><br><span class="line">    &#x2F;   \</span><br><span class="line">   3     5</span><br><span class="line">    \    &#x2F; </span><br><span class="line">     2  0   </span><br><span class="line">       \</span><br><span class="line">        1</span><br></pre></td></tr></table></figure>
 
-<p>或者可以自己写一个。</p>
-<p>代码如下：</p>
-<p>Runtime: 84 ms, faster than 5.82% of C++ online submissions for Sqrt(x).<br>Memory Usage: 8.3 MB, less than 51.24% of C++ online submissions for Sqrt(x).</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">mySqrt</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span>(x / res &gt;= res) res++;</span><br><span class="line">        <span class="keyword">return</span> res - <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
-<p>BitBrave, 2019-06-06</p>
+
+<p><strong>Note:</strong></p>
+<ol>
+<li>The size of the given array will be in the range [1,1000].</li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出一个数组，构建一个最大值数组，即任意一个子树包括整个树，根节点的值都比其余节点的值要大。构建的方法就是首先选择数组中最大的值作为根节点，最大值左边的值放入左子树，右边的值放入右子树。</p>
+<p>因此根据上述方法可以直接构建。代码如下，时间复杂度O(n2)，空间复杂度O(1)。</p>
+<p><code>Runtime: 72 ms, faster than 63.36% of C++ online submissions for Maximum Binary Tree.</code></p>
+<p><code>Memory Usage: 28.5 MB, less than 86.11% of C++ online submissions for Maximum Binary Tree.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">TreeNode* <span class="title">constructMaximumBinaryTree_</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A, <span class="keyword">int</span> sta, <span class="keyword">int</span> <span class="built_in">end</span>)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(sta &gt; <span class="built_in">end</span>) <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">int</span> m = sta;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=sta+<span class="number">1</span>; i&lt;=<span class="built_in">end</span>; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(A[m] &lt; A[i]) m = i;</span><br><span class="line">        &#125;</span><br><span class="line">        TreeNode* root = <span class="keyword">new</span> TreeNode(A[m]);</span><br><span class="line">        root-&gt;left = constructMaximumBinaryTree_(A, sta, m<span class="number">-1</span>);</span><br><span class="line">        root-&gt;right = constructMaximumBinaryTree_(A, m+<span class="number">1</span>, <span class="built_in">end</span>);</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">TreeNode* <span class="title">constructMaximumBinaryTree</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> constructMaximumBinaryTree_(nums, <span class="number">0</span>, nums.<span class="built_in">size</span>()<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave， 2019-11-27</p>
 
       
     </div>
@@ -673,7 +605,7 @@ Output:
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(701.%20Insert%20into%20a%20Binary%20Search%20Tree)%E9%A2%98%E8%A7%A3/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(69.%20Sqrt(x))%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
@@ -687,7 +619,7 @@ Output:
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2020/01/24/LeetCode(701.%20Insert%20into%20a%20Binary%20Search%20Tree)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(701. Insert into a Binary Search Tree)题解</a>
+            <a href="/2020/01/24/LeetCode(69.%20Sqrt(x))%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(69. Sqrt(x))题解</a>
         </h1>
 
         <div class="post-meta">
@@ -711,33 +643,28 @@ Output:
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="LeetCode-701-Insert-into-a-Binary-Search-Tree-题解"><a href="#LeetCode-701-Insert-into-a-Binary-Search-Tree-题解" class="headerlink" title="LeetCode(701. Insert into a Binary Search Tree)题解"></a>LeetCode(701. Insert into a Binary Search Tree)题解</h1><hr>
-<p>Given the root node of a binary search tree (BST) and a value to be inserted into the tree, insert the value into the BST. Return the root node of the BST after the insertion. It is guaranteed that the new value does not exist in the original BST.</p>
-<pre><code>Note that there may exist multiple valid ways for the insertion, as long as the tree remains a BST after insertion. You can return any of them.</code></pre><p>For example, </p>
-<pre><code>Given the tree:
-        4
-       / \
-      2   7
-     / \
-    1   3</code></pre><p>And the value to insert: 5<br>You can return this binary search tree:</p>
-<pre><code>     4
-   /   \
-  2     7
- / \   /
-1   3 5</code></pre><p>This tree is also valid:</p>
-<pre><code>     5
-   /   \
-  2     7
- / \   
-1   3
-     \
-     4</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个二叉搜索树，插入一个值。</p>
-<p>可以使用递归的办法，从根节点开始，判断根节点和要插入之的大小，如果大于就相当于将该值插入右子树，数据规模减半，反之插入左子树，如果右子树或者左子树为空，就直接插入。</p>
-<p>代码如下</p>
-<p>Runtime: 80 ms, faster than 94.67% of C++ online submissions for Insert into a Binary Search Tree.<br>Memory Usage: 32.9 MB, less than 75.00% of C++ online submissions for Insert into a Binary Search Tree.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">TreeNode* <span class="title">insertIntoBST</span><span class="params">(TreeNode* root, <span class="keyword">int</span> val)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(val &gt; root-&gt;val)&#123;</span><br><span class="line">            <span class="keyword">if</span>(root-&gt;right == <span class="literal">NULL</span>)</span><br><span class="line">                root-&gt;right = <span class="keyword">new</span> TreeNode(val);</span><br><span class="line">            <span class="keyword">else</span> insertIntoBST(root-&gt;right, val);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">if</span>(root-&gt;left == <span class="literal">NULL</span>)</span><br><span class="line">                root-&gt;left = <span class="keyword">new</span> TreeNode(val);</span><br><span class="line">            <span class="keyword">else</span> insertIntoBST(root-&gt;left, val);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+          <h1 id="LeetCode-69-Sqrt-x-题解"><a href="#LeetCode-69-Sqrt-x-题解" class="headerlink" title="LeetCode(69. Sqrt(x))题解"></a>LeetCode(69. Sqrt(x))题解</h1><hr>
+<p>Implement int sqrt(int x).</p>
+<p>Compute and return the square root of x, where x is guaranteed to be a non-negative integer.</p>
+<p>Since the return type is an integer, the decimal digits are truncated and only the integer part of the result is returned.</p>
+<p>Example 1:</p>
+<pre><code>Input: 4
+Output: 2</code></pre><p>Example 2:</p>
+<pre><code>Input: 8
+Output: 2
+Explanation: The square root of 8 is 2.82842..., and since 
+            the decimal part is truncated, 2 is returned.</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>求一个数的平方根，如果是小数就返回整数部分。</p>
+<p>超简单，直接使用STL就可以。</p>
+<p>代码如下：</p>
+<p>Runtime: 4 ms, faster than 93.46% of C++ online submissions for Sqrt(x).<br>Memory Usage: 8.3 MB, less than 51.55% of C++ online submissions for Sqrt(x).</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">mySqrt</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">sqrt</span>(x);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
-<p>BitBrave, 2019-08-15</p>
+<p>或者可以自己写一个。</p>
+<p>代码如下：</p>
+<p>Runtime: 84 ms, faster than 5.82% of C++ online submissions for Sqrt(x).<br>Memory Usage: 8.3 MB, less than 51.24% of C++ online submissions for Sqrt(x).</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">mySqrt</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span>(x / res &gt;= res) res++;</span><br><span class="line">        <span class="keyword">return</span> res - <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-06-06</p>
 
       
     </div>
@@ -836,7 +763,7 @@ Explanation: There are three ways to climb to the top.
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(712.%20Minimum%20ASCII%20Delete%20Sum%20for%20Two%20Strings)%E9%A2%98%E8%A7%A3/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(701.%20Insert%20into%20a%20Binary%20Search%20Tree)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
@@ -850,7 +777,7 @@ Explanation: There are three ways to climb to the top.
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2020/01/24/LeetCode(712.%20Minimum%20ASCII%20Delete%20Sum%20for%20Two%20Strings)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(712. Minimum ASCII Delete Sum for Two Strings)题解</a>
+            <a href="/2020/01/24/LeetCode(701.%20Insert%20into%20a%20Binary%20Search%20Tree)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(701. Insert into a Binary Search Tree)题解</a>
         </h1>
 
         <div class="post-meta">
@@ -874,23 +801,33 @@ Explanation: There are three ways to climb to the top.
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="LeetCode-712-Minimum-ASCII-Delete-Sum-for-Two-Strings-题解"><a href="#LeetCode-712-Minimum-ASCII-Delete-Sum-for-Two-Strings-题解" class="headerlink" title="LeetCode(712. Minimum ASCII Delete Sum for Two Strings)题解"></a>LeetCode(712. Minimum ASCII Delete Sum for Two Strings)题解</h1><hr>
-<p>Given two strings s1, s2, find the lowest ASCII sum of deleted characters to make two strings equal.</p>
-<p>Example 1:<br>    Input: s1 = “sea”, s2 = “eat”<br>    Output: 231<br>    Explanation: Deleting “s” from “sea” adds the ASCII value of “s” (115) to the sum.<br>    Deleting “t” from “eat” adds 116 to the sum.<br>    At the end, both strings are equal, and 115 + 116 = 231 is the minimum sum possible to achieve this.</p>
-<p>Example 2:<br>    Input: s1 = “delete”, s2 = “leet”<br>    Output: 403<br>    Explanation: Deleting “dee” from “delete” to turn the string into “let”,<br>    adds 100[d]+101[e]+101[e] to the sum.  Deleting “e” from “leet” adds 101[e] to the sum.<br>    At the end, both strings are equal to “let”, and the answer is 100+101+101+101 = 403.<br>    If instead we turned both strings into “lee” or “eet”, we would get answers of 433 or 417, which are higher.<br>Note:</p>
-<pre><code>0 &lt; s1.length, s2.length &lt;= 1000.
-All elements of each string will have an ASCII value in [97, 122].</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>从两个字符串中删除最少的字符值Ascall值之和最小的字符，使得两个字符串相等。</p>
-<p>这个题明显只能使用DP，构建一个DP[s1.size()+1][s2.size()+1]的矩阵，DP[i][j]表示字符串s1[1，i]和s2[1，j]之间的最优解。那么这个状态转移方程就可以写作如下：</p>
-<p>如果s1为空，s2必须删掉所有字符，DP[i][j]为s2的字符值之和。</p>
-<p>如果s2为空，s1必须删掉所有字符，DP[i][j]为s1的字符值之和。</p>
-<p>都不为空，那么当前可以选择删除s1[i]，表明s1[1，i-1]和s2[1，j]之间的最优值，或者删除s2[j]，表明s1[1，i]和s2[1，j-1]之间的最优值. </p>
-<p>又或者两个都删除表明选择s1[1，i-1]和s2[1，j-1]之间的最优值，但这时候如果s1[i] == s2[j]，那么当前不用删除，直接匹配即可。</p>
-<p>优化的话，可以看到每次都只需要挨着的值，因此可以将其优化为DP[2][s2.size()+1].</p>
-<h3 id="时间复杂度O-mn-空间复杂度O-n"><a href="#时间复杂度O-mn-空间复杂度O-n" class="headerlink" title="时间复杂度O(mn), 空间复杂度O(n)"></a>时间复杂度O(mn), 空间复杂度O(n)</h3><p>代码如下</p>
-<p>Runtime: 36 ms, faster than 24.38% of C++ online submissions for Minimum ASCII Delete Sum for Two Strings.<br>Memory Usage: 9 MB, less than 77.78% of C++ online submissions for Minimum ASCII Delete Sum for Two Strings.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minimumDeleteSum</span><span class="params">(<span class="built_in">string</span> s1, <span class="built_in">string</span> s2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len1 = s1.<span class="built_in">size</span>(), len2 = s2.<span class="built_in">size</span>();</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">res</span><span class="params">(<span class="number">2</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(len2+<span class="number">1</span>, <span class="number">0</span>))</span></span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;len2; j++) res[<span class="number">0</span>][j+<span class="number">1</span>] = s2[j] + res[<span class="number">0</span>][j];</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len1; i++)&#123;</span><br><span class="line">            res[<span class="number">1</span>][<span class="number">0</span>] = s1[i] + res[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;len2; j++)&#123;</span><br><span class="line">                res[<span class="number">1</span>][j+<span class="number">1</span>] = <span class="built_in">min</span>(res[<span class="number">0</span>][j+<span class="number">1</span>]+s1[i], res[<span class="number">1</span>][j]+s2[j]);</span><br><span class="line">                res[<span class="number">1</span>][j+<span class="number">1</span>] = <span class="built_in">min</span>(res[<span class="number">1</span>][j+<span class="number">1</span>], res[<span class="number">0</span>][j] + (s1[i]==s2[j] ? <span class="number">0</span>:(s1[i]+s2[j])));</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;=len2; j++) res[<span class="number">0</span>][j] = res[<span class="number">1</span>][j];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res[<span class="number">1</span>][len2];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+          <h1 id="LeetCode-701-Insert-into-a-Binary-Search-Tree-题解"><a href="#LeetCode-701-Insert-into-a-Binary-Search-Tree-题解" class="headerlink" title="LeetCode(701. Insert into a Binary Search Tree)题解"></a>LeetCode(701. Insert into a Binary Search Tree)题解</h1><hr>
+<p>Given the root node of a binary search tree (BST) and a value to be inserted into the tree, insert the value into the BST. Return the root node of the BST after the insertion. It is guaranteed that the new value does not exist in the original BST.</p>
+<pre><code>Note that there may exist multiple valid ways for the insertion, as long as the tree remains a BST after insertion. You can return any of them.</code></pre><p>For example, </p>
+<pre><code>Given the tree:
+        4
+       / \
+      2   7
+     / \
+    1   3</code></pre><p>And the value to insert: 5<br>You can return this binary search tree:</p>
+<pre><code>     4
+   /   \
+  2     7
+ / \   /
+1   3 5</code></pre><p>This tree is also valid:</p>
+<pre><code>     5
+   /   \
+  2     7
+ / \   
+1   3
+     \
+     4</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个二叉搜索树，插入一个值。</p>
+<p>可以使用递归的办法，从根节点开始，判断根节点和要插入之的大小，如果大于就相当于将该值插入右子树，数据规模减半，反之插入左子树，如果右子树或者左子树为空，就直接插入。</p>
+<p>代码如下</p>
+<p>Runtime: 80 ms, faster than 94.67% of C++ online submissions for Insert into a Binary Search Tree.<br>Memory Usage: 32.9 MB, less than 75.00% of C++ online submissions for Insert into a Binary Search Tree.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">TreeNode* <span class="title">insertIntoBST</span><span class="params">(TreeNode* root, <span class="keyword">int</span> val)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(val &gt; root-&gt;val)&#123;</span><br><span class="line">            <span class="keyword">if</span>(root-&gt;right == <span class="literal">NULL</span>)</span><br><span class="line">                root-&gt;right = <span class="keyword">new</span> TreeNode(val);</span><br><span class="line">            <span class="keyword">else</span> insertIntoBST(root-&gt;right, val);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">if</span>(root-&gt;left == <span class="literal">NULL</span>)</span><br><span class="line">                root-&gt;left = <span class="keyword">new</span> TreeNode(val);</span><br><span class="line">            <span class="keyword">else</span> insertIntoBST(root-&gt;left, val);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
-<p>BitBrave, 2019-08-23</p>
+<p>BitBrave, 2019-08-15</p>
 
       
     </div>
@@ -976,6 +913,80 @@ Output: &quot;/a/b/c&quot;</code></pre><h2 id="解题思路"><a href="#解题思
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">string</span> <span class="title">simplifyPath</span><span class="params">(<span class="built_in">string</span> path)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">string</span> res = <span class="string">""</span>, tmp;</span><br><span class="line">        <span class="keyword">int</span> len = path.<span class="built_in">size</span>(), sta = <span class="number">0</span>, <span class="built_in">end</span> = <span class="number">0</span>, t;</span><br><span class="line">        <span class="keyword">if</span>(len == <span class="number">0</span>) <span class="keyword">return</span> res;</span><br><span class="line">        <span class="keyword">if</span>(path[<span class="number">0</span>] != <span class="string">'/'</span>) &#123;</span><br><span class="line">            path = <span class="string">'/'</span> + path;</span><br><span class="line">            len++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(path[len<span class="number">-1</span>]!=<span class="string">'/'</span>)&#123;</span><br><span class="line">            path += <span class="string">'/'</span>;</span><br><span class="line">            len++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(path[i<span class="number">-1</span>]==<span class="string">'/'</span> &amp;&amp; path[i]==<span class="string">'/'</span>)&#123;</span><br><span class="line">                path.erase(i, <span class="number">1</span>);</span><br><span class="line">                i--;</span><br><span class="line">                len--;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(i&gt;<span class="number">1</span> &amp;&amp; path[i<span class="number">-2</span>]==<span class="string">'/'</span> &amp;&amp; path[i<span class="number">-1</span>]==<span class="string">'.'</span> &amp;&amp; path[i]==<span class="string">'/'</span>)&#123;</span><br><span class="line">                path.erase(i<span class="number">-1</span>, <span class="number">2</span>);</span><br><span class="line">                i -= <span class="number">2</span>;</span><br><span class="line">                len -= <span class="number">2</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">end</span> = path.<span class="built_in">find</span>(<span class="string">'/'</span>, sta);</span><br><span class="line">        <span class="keyword">while</span>(<span class="built_in">end</span>!=<span class="number">-1</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(<span class="built_in">end</span><span class="number">-2</span>==sta &amp;&amp; path[sta]==<span class="string">'.'</span> &amp;&amp; path[sta]==<span class="string">'.'</span>)&#123;</span><br><span class="line">                sta = <span class="built_in">end</span> + <span class="number">1</span>;</span><br><span class="line">                <span class="built_in">end</span> = path.<span class="built_in">find</span>(<span class="string">'/'</span>, sta);</span><br><span class="line">                t = res.rfind(<span class="string">'/'</span>, res.<span class="built_in">size</span>()<span class="number">-2</span>);</span><br><span class="line">                </span><br><span class="line">                <span class="keyword">if</span>(t!=<span class="number">-1</span>) res = res.substr(<span class="number">0</span>, t+<span class="number">1</span>);</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            res += path.substr(sta, <span class="built_in">end</span>-sta+<span class="number">1</span>);</span><br><span class="line">            sta = <span class="built_in">end</span> + <span class="number">1</span>;</span><br><span class="line">            <span class="built_in">end</span> = path.<span class="built_in">find</span>(<span class="string">'/'</span>, sta);</span><br><span class="line">        &#125;</span><br><span class="line">        res += path.substr(sta);</span><br><span class="line">        <span class="keyword">if</span>(res.<span class="built_in">size</span>()&gt;<span class="number">1</span> &amp;&amp; res[res.<span class="built_in">size</span>()==<span class="string">'/'</span>]) res = res.substr(<span class="number">0</span>, res.<span class="built_in">size</span>()<span class="number">-1</span>);</span><br><span class="line">        <span class="keyword">if</span>(res==<span class="string">""</span>) res = <span class="string">"/"</span>;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 <p>BitBrave, 2019-06-07</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(712.%20Minimum%20ASCII%20Delete%20Sum%20for%20Two%20Strings)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(712.%20Minimum%20ASCII%20Delete%20Sum%20for%20Two%20Strings)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(712. Minimum ASCII Delete Sum for Two Strings)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-712-Minimum-ASCII-Delete-Sum-for-Two-Strings-题解"><a href="#LeetCode-712-Minimum-ASCII-Delete-Sum-for-Two-Strings-题解" class="headerlink" title="LeetCode(712. Minimum ASCII Delete Sum for Two Strings)题解"></a>LeetCode(712. Minimum ASCII Delete Sum for Two Strings)题解</h1><hr>
+<p>Given two strings s1, s2, find the lowest ASCII sum of deleted characters to make two strings equal.</p>
+<p>Example 1:<br>    Input: s1 = “sea”, s2 = “eat”<br>    Output: 231<br>    Explanation: Deleting “s” from “sea” adds the ASCII value of “s” (115) to the sum.<br>    Deleting “t” from “eat” adds 116 to the sum.<br>    At the end, both strings are equal, and 115 + 116 = 231 is the minimum sum possible to achieve this.</p>
+<p>Example 2:<br>    Input: s1 = “delete”, s2 = “leet”<br>    Output: 403<br>    Explanation: Deleting “dee” from “delete” to turn the string into “let”,<br>    adds 100[d]+101[e]+101[e] to the sum.  Deleting “e” from “leet” adds 101[e] to the sum.<br>    At the end, both strings are equal to “let”, and the answer is 100+101+101+101 = 403.<br>    If instead we turned both strings into “lee” or “eet”, we would get answers of 433 or 417, which are higher.<br>Note:</p>
+<pre><code>0 &lt; s1.length, s2.length &lt;= 1000.
+All elements of each string will have an ASCII value in [97, 122].</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>从两个字符串中删除最少的字符值Ascall值之和最小的字符，使得两个字符串相等。</p>
+<p>这个题明显只能使用DP，构建一个DP[s1.size()+1][s2.size()+1]的矩阵，DP[i][j]表示字符串s1[1，i]和s2[1，j]之间的最优解。那么这个状态转移方程就可以写作如下：</p>
+<p>如果s1为空，s2必须删掉所有字符，DP[i][j]为s2的字符值之和。</p>
+<p>如果s2为空，s1必须删掉所有字符，DP[i][j]为s1的字符值之和。</p>
+<p>都不为空，那么当前可以选择删除s1[i]，表明s1[1，i-1]和s2[1，j]之间的最优值，或者删除s2[j]，表明s1[1，i]和s2[1，j-1]之间的最优值. </p>
+<p>又或者两个都删除表明选择s1[1，i-1]和s2[1，j-1]之间的最优值，但这时候如果s1[i] == s2[j]，那么当前不用删除，直接匹配即可。</p>
+<p>优化的话，可以看到每次都只需要挨着的值，因此可以将其优化为DP[2][s2.size()+1].</p>
+<h3 id="时间复杂度O-mn-空间复杂度O-n"><a href="#时间复杂度O-mn-空间复杂度O-n" class="headerlink" title="时间复杂度O(mn), 空间复杂度O(n)"></a>时间复杂度O(mn), 空间复杂度O(n)</h3><p>代码如下</p>
+<p>Runtime: 36 ms, faster than 24.38% of C++ online submissions for Minimum ASCII Delete Sum for Two Strings.<br>Memory Usage: 9 MB, less than 77.78% of C++ online submissions for Minimum ASCII Delete Sum for Two Strings.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minimumDeleteSum</span><span class="params">(<span class="built_in">string</span> s1, <span class="built_in">string</span> s2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len1 = s1.<span class="built_in">size</span>(), len2 = s2.<span class="built_in">size</span>();</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">res</span><span class="params">(<span class="number">2</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(len2+<span class="number">1</span>, <span class="number">0</span>))</span></span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;len2; j++) res[<span class="number">0</span>][j+<span class="number">1</span>] = s2[j] + res[<span class="number">0</span>][j];</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len1; i++)&#123;</span><br><span class="line">            res[<span class="number">1</span>][<span class="number">0</span>] = s1[i] + res[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;len2; j++)&#123;</span><br><span class="line">                res[<span class="number">1</span>][j+<span class="number">1</span>] = <span class="built_in">min</span>(res[<span class="number">0</span>][j+<span class="number">1</span>]+s1[i], res[<span class="number">1</span>][j]+s2[j]);</span><br><span class="line">                res[<span class="number">1</span>][j+<span class="number">1</span>] = <span class="built_in">min</span>(res[<span class="number">1</span>][j+<span class="number">1</span>], res[<span class="number">0</span>][j] + (s1[i]==s2[j] ? <span class="number">0</span>:(s1[i]+s2[j])));</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;=len2; j++) res[<span class="number">0</span>][j] = res[<span class="number">1</span>][j];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res[<span class="number">1</span>][len2];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-08-23</p>
 
       
     </div>

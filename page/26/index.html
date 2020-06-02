@@ -177,7 +177,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(795.%20Number%20of%20Subarrays%20with%20Bounded%20Maximum)%E9%A2%98%E8%A7%A3/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(80.%20Remove%20Duplicates%20from%20Sorted%20Array%20II)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
@@ -191,7 +191,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2020/01/24/LeetCode(795.%20Number%20of%20Subarrays%20with%20Bounded%20Maximum)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(795. Number of Subarrays with Bounded Maximum)题解</a>
+            <a href="/2020/01/24/LeetCode(80.%20Remove%20Duplicates%20from%20Sorted%20Array%20II)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(80. Remove Duplicates from Sorted Array II)题解</a>
         </h1>
 
         <div class="post-meta">
@@ -215,44 +215,31 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="LeetCode-795-Number-of-Subarrays-with-Bounded-Maximum-题解"><a href="#LeetCode-795-Number-of-Subarrays-with-Bounded-Maximum-题解" class="headerlink" title="LeetCode(\795. Number of Subarrays with Bounded Maximum)题解"></a>LeetCode(\795. Number of Subarrays with Bounded Maximum)题解</h1><p>We are given an array <code>A</code> of positive integers, and two positive integers <code>L</code> and <code>R</code> (<code>L &lt;= R</code>).</p>
-<p>Return the number of (contiguous, non-empty) subarrays such that the value of the maximum array element in that subarray is at least <code>L</code> and at most <code>R</code>.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Example :</span><br><span class="line">Input: </span><br><span class="line">A &#x3D; [2, 1, 4, 3]</span><br><span class="line">L &#x3D; 2</span><br><span class="line">R &#x3D; 3</span><br><span class="line">Output: 3</span><br><span class="line">Explanation: There are three subarrays that meet the requirements: [2], [2, 1], [3].</span><br></pre></td></tr></table></figure>
+          <h1 id="LeetCode-80-Remove-Duplicates-from-Sorted-Array-II-题解"><a href="#LeetCode-80-Remove-Duplicates-from-Sorted-Array-II-题解" class="headerlink" title="LeetCode(80. Remove Duplicates from Sorted Array II)题解"></a>LeetCode(80. Remove Duplicates from Sorted Array II)题解</h1><hr>
+<p>Given a sorted array nums, remove the duplicates in-place such that duplicates appeared at most twice and return the new length.</p>
+<p>Do not allocate extra space for another array, you must do this by modifying the input array in-place with O(1) extra memory.</p>
+<p>Example 1:</p>
+<pre><code>Given nums = [1,1,1,2,2,3],
 
-<p><strong>Note:</strong></p>
-<ul>
-<li>L, R and <code>A[i]</code> will be an integer in the range <code>[0, 10^9]</code>.</li>
-<li>The length of <code>A</code> will be in the range of <code>[1, 50000]</code>.</li>
-</ul>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个正数数组A，以及两个L和R。现在从A中取出不同的子数组（子数组必须元素在A内连续），子数组内的元素之和必须在[L,R]区间内，问有多少种这样的子数组。</p>
-<p>这个题可以使用简单的遍历，首先想如果A中某个位置的元素大于R，那么这个元素就将A分割成了两个子数组，在左边和右边分别找就可以了，更深入之后可以假设从左到右遍历，遇到一个值就这样判断：</p>
-<p>我们维护一个值k记录一个位置，表示当前遍历到位置i-1时，和k之间的元素之和都小于等于R，同时记录这个结果值S，维护一个结果值ret，初始化S=i=k=ret=0。</p>
-<ul>
-<li><p>我们寻找元素中连续子数组之和小于等于R的子数组个数。那么遍历到i时——</p>
-</li>
-<li><p>计算S+A[i]，如果小于等于R，就ret += i-k+1，i++。否则表示这个序列和不满足，就不断S -= S[k]，然后k++直到S + A[i]小于等于R，然后再执行ret += i-k+1，i++。如果直到k==i时都不满足，则直接k=i+1，i++，S=0。</p>
-</li>
-<li><p>这样走到最后，计算出数组中所有元素和小于等于R的连续子数组个数ret，这时候，再计算A中连续子树组元素之和小于L的个数，初始化S=i=k=0。</p>
-</li>
-<li><p>计算S+A[i]，如果小于L，就ret -= i-k+1，i++。否则表示这个序列和不满足，就不断S -= S[k]，然后k++直到S + A[i]小于L，然后再执行ret += i-k+1，i++。如果直到k==i时都不满足，则直接k=i+1，i++，S=0。</p>
-</li>
-<li><p>这样走到最后，就可以得到所有元素和在[L, R]的连续子数组的个数了。</p>
-</li>
-</ul>
-<p>代码如下，时间复杂度O(n)，因为从初始化开始k和i数一直在不断增大，最多增加N次，同时空间复杂度O(n)。</p>
-<p><code>Runtime: 36 ms, faster than 86.26% of C++ online submissions for Number of Subarrays with Bounded Maximum.</code></p>
-<p><code>Memory Usage: 12.3 MB, less than 66.67% of C++ online submissions for Number of Subarrays with Bounded Maximum.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">numSubarrayBoundedMax</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A, <span class="keyword">int</span> L, <span class="keyword">int</span> R)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> S = <span class="number">0</span>, k = <span class="number">0</span>, ret = <span class="number">0</span>, len = A.<span class="built_in">size</span>();</span><br><span class="line">        <span class="comment">// &lt;=R</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">while</span>(k&lt;=i &amp;&amp; S+A[i]&gt;R) k++;</span><br><span class="line">            ret += i - k + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// &lt;L</span></span><br><span class="line">        S = k = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">while</span>(k&lt;=i &amp;&amp; S+A[i]&gt;=L) k++;</span><br><span class="line">            ret -= i - k + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+Your function should return length = 5, with the first five elements of nums being 1, 1, 2, 2 and 3 respectively.</code></pre><p>It doesn’t matter what you leave beyond the returned length.<br>Example 2:</p>
+<pre><code>Given nums = [0,0,1,1,1,1,2,3,3],
 
-<p>同时也可以优化到一个循环里去，如下。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">numSubarrayBoundedMax</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A, <span class="keyword">int</span> L, <span class="keyword">int</span> R)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> SL = <span class="number">0</span>, SR = <span class="number">0</span>, kr = <span class="number">0</span>, kl = <span class="number">0</span>, ret = <span class="number">0</span>, len = A.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">while</span>(kr&lt;=i &amp;&amp; SR+A[i]&gt;R) kr++;    <span class="comment">// &lt;=R   </span></span><br><span class="line">            <span class="keyword">while</span>(kl&lt;=i &amp;&amp; SL+A[i]&gt;=L) kl++; <span class="comment">// &lt;L</span></span><br><span class="line">            </span><br><span class="line">            ret += kl - kr;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+Your function should return length = 7, with the first seven elements of nums being modified to 0, 0, 1, 1, 2, 3 and 3 respectively.</code></pre><p>It doesn’t matter what values are set beyond the returned length.<br>Clarification:</p>
+<p>Confused why the returned value is an integer but your answer is an array?</p>
+<pre><code>Note that the input array is passed in by reference, which means modification to the input array will be known to the caller as well.</code></pre><p>Internally you can think of this:</p>
+<pre><code>// nums is passed in by reference. (i.e., without making a copy)
+int len = removeDuplicates(nums);
 
-<p>BitBrave,2019-10-25</p>
-<ul>
-<li>A[i]&gt;R，表示这个元素不符合条件，i++，S=0，k=i+1</li>
-<li>A[i]==R，表示这个元素更好符合条件，但是只能组成一个单数组。i++，S=0，k=i+1，ret += 1</li>
-<li>A[i]&lt;R，表示这个数组符合条件，并且可以和前面的元素组合形成多个子数组。计算Sum(A[k..i])的和，</li>
-</ul>
+// any modification to nums in your function would be known by the caller.
+// using the length returned by your function, it prints the first len elements.
+for (int i = 0; i &lt; len; i++) {
+    print(nums[i]);
+}</code></pre><h1 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h1><p>要求给定一个数组，已经排序好的。将其中重复的去掉，每个数字最多重复两次。不能使用额外的内存，只能在O(1)的空间复杂度内完成。</p>
+<p>可以使用一个变量c记录当前数字重复的次数。从左到右遍历数组。当前遇到的若和前面的数字不一样，表示没有重复，c=1.如果和前面一样则c++。如果此时c&gt;2表示重复超过了两次，则将此数删掉。</p>
+<p>代码如如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">removeDuplicates</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> c = <span class="number">1</span>, len = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(nums[i]!=nums[i<span class="number">-1</span>])&#123;</span><br><span class="line">                c = <span class="number">1</span>;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            c++;</span><br><span class="line">            <span class="keyword">if</span>(c&gt;<span class="number">2</span>)&#123;</span><br><span class="line">                nums.erase(nums.<span class="built_in">begin</span>()+i);</span><br><span class="line">                i--;</span><br><span class="line">                c--;</span><br><span class="line">                len--;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> nums.<span class="built_in">size</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-06-017</p>
 
       
     </div>
@@ -847,89 +834,6 @@ Would this affect the run-time complexity? How and why?</code></pre><h2 id="解�
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(814.%20Binary%20Tree%20Pruning)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(814.%20Binary%20Tree%20Pruning)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(814. Binary Tree Pruning)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-814-Binary-Tree-Pruning-题解"><a href="#LeetCode-814-Binary-Tree-Pruning-题解" class="headerlink" title="LeetCode(814. Binary Tree Pruning)题解"></a>LeetCode(814. Binary Tree Pruning)题解</h1><hr>
-<p>We are given the head node root of a binary tree, where additionally every node’s value is either a 0 or a 1.</p>
-<p>Return the same tree where every subtree (of the given tree) not containing a 1 has been removed.</p>
-<p>(Recall that the subtree of a node X is X, plus every node that is a descendant of X.)</p>
-<pre><code>Example 1:
-Input: [1,null,0,0,1]
-Output: [1,null,0,null,1]
-
-Explanation: 
-Only the red nodes satisfy the property &quot;every subtree not containing a 1&quot;.
-The diagram on the right represents the answer.</code></pre><p><img src="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/04/06/1028_2.png" alt=""></p>
-<pre><code>Example 2:
-Input: [1,0,1,0,0,0,1]
-Output: [1,null,1,null,1]</code></pre><p><img src="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/04/06/1028_1.png" alt=""></p>
-<pre><code>Example 3:
-Input: [1,1,0,1,1,0,1,0]
-Output: [1,1,0,1,1,null,1]</code></pre><p><img src="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/04/05/1028.png" alt=""></p>
-<p>Note:</p>
-<pre><code>The binary tree will have at most 100 nodes.
-The value of each node will only be 0 or 1.</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>除去二叉树中所有元素为0的子树。</p>
-<p>这个使用遍历的办法可以达到，使用Map遍历遇到的节点，记录该节点及其子树是否全部为0组成，如果全部为0，那么久表示这颗树需要删除，否则就不用删除。</p>
-<p>代码如下，时间复杂度O(n), 空间复杂度O(n):</p>
-<p>Runtime: 8 ms, faster than 5.19% of C++ online submissions for Binary Tree Pruning.<br>Memory Usage: 11.1 MB, less than 7.14% of C++ online submissions for Binary Tree Pruning.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">    <span class="built_in">map</span>&lt;TreeNode*, <span class="keyword">bool</span>&gt; M;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isAll0</span><span class="params">(TreeNode* root)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(M.<span class="built_in">find</span>(root) != M.<span class="built_in">end</span>()) <span class="keyword">return</span> M[root];</span><br><span class="line">        <span class="keyword">bool</span> l = isAll0(root-&gt;left), r = isAll0(root-&gt;right);</span><br><span class="line">        <span class="keyword">if</span>(l &amp;&amp; r)&#123;</span><br><span class="line">            M[root] = <span class="literal">true</span> &amp;&amp; root-&gt;val == <span class="number">0</span>;</span><br><span class="line">            root-&gt;left = <span class="literal">NULL</span>;</span><br><span class="line">            root-&gt;right = <span class="literal">NULL</span>;</span><br><span class="line">            <span class="keyword">return</span> M[root];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(l) root-&gt;left = <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">if</span>(r) root-&gt;right = <span class="literal">NULL</span>;</span><br><span class="line">        M[root] = <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">TreeNode* <span class="title">pruneTree</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        M[<span class="literal">NULL</span>] = <span class="literal">true</span>;</span><br><span class="line">        isAll0(root);</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-08-27</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(813.%20Largest%20Sum%20of%20Averages)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -998,6 +902,89 @@ Answers within 10^-6 of the correct answer will be accepted as correct.</code></
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">largestSumOfAverages</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A, <span class="keyword">int</span> K)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = A.<span class="built_in">size</span>();  </span><br><span class="line">        vector&lt;double&gt; DP(len+1, 0), Sum(len+1, 0);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;=len; i++)&#123;</span><br><span class="line">            Sum[i] = Sum[i<span class="number">-1</span>] + A[i<span class="number">-1</span>]; </span><br><span class="line">            DP[i] = Sum[i] / i;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(len&lt;=K) <span class="keyword">return</span> Sum[len];</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">1</span>; k &lt; K; k++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = len; i &gt;= <span class="number">1</span>; i--) &#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> j = i; j &gt;=<span class="number">0</span>; j--) &#123;</span><br><span class="line">                    DP[i] = <span class="built_in">max</span>(DP[i], DP[j]+(Sum[i]-Sum[j])/(i-j)); </span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> DP[len];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 <p>BitBrave, 2019-09-03</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(814.%20Binary%20Tree%20Pruning)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(814.%20Binary%20Tree%20Pruning)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(814. Binary Tree Pruning)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-814-Binary-Tree-Pruning-题解"><a href="#LeetCode-814-Binary-Tree-Pruning-题解" class="headerlink" title="LeetCode(814. Binary Tree Pruning)题解"></a>LeetCode(814. Binary Tree Pruning)题解</h1><hr>
+<p>We are given the head node root of a binary tree, where additionally every node’s value is either a 0 or a 1.</p>
+<p>Return the same tree where every subtree (of the given tree) not containing a 1 has been removed.</p>
+<p>(Recall that the subtree of a node X is X, plus every node that is a descendant of X.)</p>
+<pre><code>Example 1:
+Input: [1,null,0,0,1]
+Output: [1,null,0,null,1]
+
+Explanation: 
+Only the red nodes satisfy the property &quot;every subtree not containing a 1&quot;.
+The diagram on the right represents the answer.</code></pre><p><img src="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/04/06/1028_2.png" alt=""></p>
+<pre><code>Example 2:
+Input: [1,0,1,0,0,0,1]
+Output: [1,null,1,null,1]</code></pre><p><img src="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/04/06/1028_1.png" alt=""></p>
+<pre><code>Example 3:
+Input: [1,1,0,1,1,0,1,0]
+Output: [1,1,0,1,1,null,1]</code></pre><p><img src="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/04/05/1028.png" alt=""></p>
+<p>Note:</p>
+<pre><code>The binary tree will have at most 100 nodes.
+The value of each node will only be 0 or 1.</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>除去二叉树中所有元素为0的子树。</p>
+<p>这个使用遍历的办法可以达到，使用Map遍历遇到的节点，记录该节点及其子树是否全部为0组成，如果全部为0，那么久表示这颗树需要删除，否则就不用删除。</p>
+<p>代码如下，时间复杂度O(n), 空间复杂度O(n):</p>
+<p>Runtime: 8 ms, faster than 5.19% of C++ online submissions for Binary Tree Pruning.<br>Memory Usage: 11.1 MB, less than 7.14% of C++ online submissions for Binary Tree Pruning.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">    <span class="built_in">map</span>&lt;TreeNode*, <span class="keyword">bool</span>&gt; M;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isAll0</span><span class="params">(TreeNode* root)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(M.<span class="built_in">find</span>(root) != M.<span class="built_in">end</span>()) <span class="keyword">return</span> M[root];</span><br><span class="line">        <span class="keyword">bool</span> l = isAll0(root-&gt;left), r = isAll0(root-&gt;right);</span><br><span class="line">        <span class="keyword">if</span>(l &amp;&amp; r)&#123;</span><br><span class="line">            M[root] = <span class="literal">true</span> &amp;&amp; root-&gt;val == <span class="number">0</span>;</span><br><span class="line">            root-&gt;left = <span class="literal">NULL</span>;</span><br><span class="line">            root-&gt;right = <span class="literal">NULL</span>;</span><br><span class="line">            <span class="keyword">return</span> M[root];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(l) root-&gt;left = <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">if</span>(r) root-&gt;right = <span class="literal">NULL</span>;</span><br><span class="line">        M[root] = <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">TreeNode* <span class="title">pruneTree</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        M[<span class="literal">NULL</span>] = <span class="literal">true</span>;</span><br><span class="line">        isAll0(root);</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-08-27</p>
 
       
     </div>

@@ -177,6 +177,84 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(25.%20Reverse%20Nodes%20in%20k-Group)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(25.%20Reverse%20Nodes%20in%20k-Group)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(25. Reverse Nodes in k-Group)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-25-Reverse-Nodes-in-k-Group-题解"><a href="#LeetCode-25-Reverse-Nodes-in-k-Group-题解" class="headerlink" title="LeetCode(25. Reverse Nodes in k-Group)题解"></a>LeetCode(25. Reverse Nodes in k-Group)题解</h1><hr>
+<p>原文如下<br>Given a linked list, reverse the nodes of a linked list k at a time and return its modified list.</p>
+<p>k is a positive integer and is less than or equal to the length of the linked list. If the number of nodes is not a multiple of k then left-out nodes in the end should remain as it is.</p>
+<p>Example:</p>
+<pre><code>Given this linked list: 1-&gt;2-&gt;3-&gt;4-&gt;5
+
+For k = 2, you should return: 2-&gt;1-&gt;4-&gt;3-&gt;5
+
+For k = 3, you should return: 3-&gt;2-&gt;1-&gt;4-&gt;5</code></pre><p>Note:</p>
+<p>Only constant extra memory is allowed.<br>You may not alter the values in the list’s nodes, only nodes itself may be changed.</p>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>这是一个Hard的题，要求给定一个链表和一个数K，将链表依次的K个节点反链接。比如1-&gt;2-3-&gt;4-&gt;5，K=2，得出的结果就是2-&gt;1-&gt;4-&gt;3-&gt;5.要求就是只能扩展常量内存，不要交换值，要交换节点。</p>
+<p>其实很简单，主要是指针指来指去有点麻烦而已。既然内存是常量限制，而K是不定的，那么我能想到的就是使用递归了。假设这有一个函数reverse，输入一个头指针sta，一个尾指针end，可以将一个链表反向由sta-&gt;…-&gt;end变成end-&gt;…sta，那么直接在主函数内调用这个就可以了。但是要注意的是，sta和end在打的链表内各自还有指向与被指向的地方。所以要注意a-&gt;sta-&gt;…-&gt;end-&gt;b，变为a-&gt;end-&gt;…sta-&gt;b。</p>
+<p>接下来介绍函数void reverse(ListNode* sta, ListNode* end)，其中sta是头指针，end是尾指针。函数的递归策略如下：</p>
+<p>a）首先判断sta-&gt;next是否是end，如果是表示sta直接指向了end，这时候需要反转，通过一个temp指针实现sta-&gt;end-&gt;XXX到end-&gt;sta-&gt;XXX，然后直接返回。<br>b）如果sta和end之间还隔着很多节点，那么就运行递归函数reverse(sta-&gt;next, end)，但是为了处理方便，后面需要交换，所以令temp=sta-&gt;next; reverse(temp, end)<br>c）当b完成后，实际上此时的链表为sta-&gt;temp，end-&gt;…temp-&gt;XXX（原本格式为sta-&gt;temp-&gt;…end-&gt;XXX），需要转为end-&gt;…-&gt;temp-&gt;sta-&gt;XXX; 即将sta插入temp与XXX之间，直接运行sta-&gt;next = temp-&gt;next;temp-&gt;next = sta;即可。最后返回</p>
+<p>而在主函数中，我们先将一次反转的end指针找到，所以利用K计数法，每K次运行一次reverse，注意第一次返回的end指针是头指针，总的函数需要返回这个，后面reverse返回的end指针前面连接了总的大链表的指针。</p>
+<p>因此我们需要用一个s_sta来记录end需要反转的节点之前的节点，在进入reverse之前，大链表结构为s_sta-&gt;sta-&gt;…-&gt;end-&gt;XXX，reverse之后，大链表的结构为s_sta-&gt;sta, end-&gt;…-&gt;sta-&gt;XXX。此时同理，需要将大链表串联起来，直接使用s_sta-&gt;next = end，即可。然后令s_sta = sta; sta = s_sta-&gt;next; end = sta;开始新一轮的寻找end指针的循环。如果不到K次，直接end = end-&gt;next; 即可。</p>
+<p>代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode *next;</span></span><br><span class="line"><span class="comment"> *     ListNode(int x) : val(x), next(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">reverse</span><span class="params">(ListNode* sta, ListNode* <span class="built_in">end</span>)</span></span>&#123;</span><br><span class="line">        ListNode* temp = sta-&gt;next;</span><br><span class="line">        <span class="keyword">if</span>(sta-&gt;next == <span class="built_in">end</span>)&#123;</span><br><span class="line">            sta-&gt;next = <span class="built_in">end</span>-&gt;next;</span><br><span class="line">            <span class="built_in">end</span>-&gt;next = sta;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        reverse(temp, <span class="built_in">end</span>);</span><br><span class="line">        sta-&gt;next = temp-&gt;next;</span><br><span class="line">        temp-&gt;next = sta;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">ListNode* <span class="title">reverseKGroup</span><span class="params">(ListNode* head, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(head==<span class="literal">NULL</span> || k&lt;=<span class="number">1</span>) <span class="keyword">return</span> head;</span><br><span class="line">        ListNode *sta = head, *<span class="built_in">end</span> = head, *s_sta = <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">int</span> c = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span>(<span class="built_in">end</span>!=<span class="literal">NULL</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(c % k == <span class="number">0</span>) &#123;</span><br><span class="line">                reverse(sta, <span class="built_in">end</span>);</span><br><span class="line">                <span class="keyword">if</span>(s_sta!=<span class="literal">NULL</span>) s_sta-&gt;next = <span class="built_in">end</span>;</span><br><span class="line">                head = s_sta!=<span class="literal">NULL</span> ? head:<span class="built_in">end</span>;</span><br><span class="line">                s_sta = sta;</span><br><span class="line">                sta = s_sta-&gt;next;</span><br><span class="line">                <span class="built_in">end</span> = sta;</span><br><span class="line">                c = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="built_in">end</span> = <span class="built_in">end</span>-&gt;next;</span><br><span class="line">                c++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> head;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>PS：在写解题报告的过程中，再次阅读代码会发现很多可以优化的地方，使得代码更有可读性，我写这个时候就发现不少可以优化的地方，看来写报告是一个不错的复盘的方式。</p>
+<p>BitBrave，2019-04-28。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(26.%20Remove%20Duplicates%20from%20Sorted%20Array)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -246,84 +324,6 @@ for (int i = 0; i &lt; len; i++) {
 <h2 id="解法二"><a href="#解法二" class="headerlink" title="解法二"></a>解法二</h2><p>根据题意我们只要将vector前面正确length内的容器内放入正确的数就可以了，因此可以用一个位置来记录，当发现一样的数的时候，将后面的数直接覆盖前面的就可以了。</p>
 <p>代码如下(24ms)：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">removeDuplicates</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(nums.<span class="built_in">size</span>() &lt;= <span class="number">1</span>) <span class="keyword">return</span> nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> len = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> i=<span class="number">0</span>, count = len;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>; j&lt;len; j++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(nums[j<span class="number">-1</span>]!=nums[j]) nums[++i] = nums[j];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> i+<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(25.%20Reverse%20Nodes%20in%20k-Group)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(25.%20Reverse%20Nodes%20in%20k-Group)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(25. Reverse Nodes in k-Group)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-25-Reverse-Nodes-in-k-Group-题解"><a href="#LeetCode-25-Reverse-Nodes-in-k-Group-题解" class="headerlink" title="LeetCode(25. Reverse Nodes in k-Group)题解"></a>LeetCode(25. Reverse Nodes in k-Group)题解</h1><hr>
-<p>原文如下<br>Given a linked list, reverse the nodes of a linked list k at a time and return its modified list.</p>
-<p>k is a positive integer and is less than or equal to the length of the linked list. If the number of nodes is not a multiple of k then left-out nodes in the end should remain as it is.</p>
-<p>Example:</p>
-<pre><code>Given this linked list: 1-&gt;2-&gt;3-&gt;4-&gt;5
-
-For k = 2, you should return: 2-&gt;1-&gt;4-&gt;3-&gt;5
-
-For k = 3, you should return: 3-&gt;2-&gt;1-&gt;4-&gt;5</code></pre><p>Note:</p>
-<p>Only constant extra memory is allowed.<br>You may not alter the values in the list’s nodes, only nodes itself may be changed.</p>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>这是一个Hard的题，要求给定一个链表和一个数K，将链表依次的K个节点反链接。比如1-&gt;2-3-&gt;4-&gt;5，K=2，得出的结果就是2-&gt;1-&gt;4-&gt;3-&gt;5.要求就是只能扩展常量内存，不要交换值，要交换节点。</p>
-<p>其实很简单，主要是指针指来指去有点麻烦而已。既然内存是常量限制，而K是不定的，那么我能想到的就是使用递归了。假设这有一个函数reverse，输入一个头指针sta，一个尾指针end，可以将一个链表反向由sta-&gt;…-&gt;end变成end-&gt;…sta，那么直接在主函数内调用这个就可以了。但是要注意的是，sta和end在打的链表内各自还有指向与被指向的地方。所以要注意a-&gt;sta-&gt;…-&gt;end-&gt;b，变为a-&gt;end-&gt;…sta-&gt;b。</p>
-<p>接下来介绍函数void reverse(ListNode* sta, ListNode* end)，其中sta是头指针，end是尾指针。函数的递归策略如下：</p>
-<p>a）首先判断sta-&gt;next是否是end，如果是表示sta直接指向了end，这时候需要反转，通过一个temp指针实现sta-&gt;end-&gt;XXX到end-&gt;sta-&gt;XXX，然后直接返回。<br>b）如果sta和end之间还隔着很多节点，那么就运行递归函数reverse(sta-&gt;next, end)，但是为了处理方便，后面需要交换，所以令temp=sta-&gt;next; reverse(temp, end)<br>c）当b完成后，实际上此时的链表为sta-&gt;temp，end-&gt;…temp-&gt;XXX（原本格式为sta-&gt;temp-&gt;…end-&gt;XXX），需要转为end-&gt;…-&gt;temp-&gt;sta-&gt;XXX; 即将sta插入temp与XXX之间，直接运行sta-&gt;next = temp-&gt;next;temp-&gt;next = sta;即可。最后返回</p>
-<p>而在主函数中，我们先将一次反转的end指针找到，所以利用K计数法，每K次运行一次reverse，注意第一次返回的end指针是头指针，总的函数需要返回这个，后面reverse返回的end指针前面连接了总的大链表的指针。</p>
-<p>因此我们需要用一个s_sta来记录end需要反转的节点之前的节点，在进入reverse之前，大链表结构为s_sta-&gt;sta-&gt;…-&gt;end-&gt;XXX，reverse之后，大链表的结构为s_sta-&gt;sta, end-&gt;…-&gt;sta-&gt;XXX。此时同理，需要将大链表串联起来，直接使用s_sta-&gt;next = end，即可。然后令s_sta = sta; sta = s_sta-&gt;next; end = sta;开始新一轮的寻找end指针的循环。如果不到K次，直接end = end-&gt;next; 即可。</p>
-<p>代码如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode *next;</span></span><br><span class="line"><span class="comment"> *     ListNode(int x) : val(x), next(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">reverse</span><span class="params">(ListNode* sta, ListNode* <span class="built_in">end</span>)</span></span>&#123;</span><br><span class="line">        ListNode* temp = sta-&gt;next;</span><br><span class="line">        <span class="keyword">if</span>(sta-&gt;next == <span class="built_in">end</span>)&#123;</span><br><span class="line">            sta-&gt;next = <span class="built_in">end</span>-&gt;next;</span><br><span class="line">            <span class="built_in">end</span>-&gt;next = sta;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        reverse(temp, <span class="built_in">end</span>);</span><br><span class="line">        sta-&gt;next = temp-&gt;next;</span><br><span class="line">        temp-&gt;next = sta;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">ListNode* <span class="title">reverseKGroup</span><span class="params">(ListNode* head, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(head==<span class="literal">NULL</span> || k&lt;=<span class="number">1</span>) <span class="keyword">return</span> head;</span><br><span class="line">        ListNode *sta = head, *<span class="built_in">end</span> = head, *s_sta = <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">int</span> c = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span>(<span class="built_in">end</span>!=<span class="literal">NULL</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(c % k == <span class="number">0</span>) &#123;</span><br><span class="line">                reverse(sta, <span class="built_in">end</span>);</span><br><span class="line">                <span class="keyword">if</span>(s_sta!=<span class="literal">NULL</span>) s_sta-&gt;next = <span class="built_in">end</span>;</span><br><span class="line">                head = s_sta!=<span class="literal">NULL</span> ? head:<span class="built_in">end</span>;</span><br><span class="line">                s_sta = sta;</span><br><span class="line">                sta = s_sta-&gt;next;</span><br><span class="line">                <span class="built_in">end</span> = sta;</span><br><span class="line">                c = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="built_in">end</span> = <span class="built_in">end</span>-&gt;next;</span><br><span class="line">                c++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> head;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>PS：在写解题报告的过程中，再次阅读代码会发现很多可以优化的地方，使得代码更有可读性，我写这个时候就发现不少可以优化的地方，看来写报告是一个不错的复盘的方式。</p>
-<p>BitBrave，2019-04-28。</p>
-
       
     </div>
 
@@ -492,7 +492,7 @@ Explanation: 13 = 4 + 9.</code></pre><h2 id="解题思路"><a href="#解题思�
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(28.%20Implement%20strStr())%E9%A2%98%E8%A7%A3/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(27.%20Remove%20Element)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
@@ -506,7 +506,7 @@ Explanation: 13 = 4 + 9.</code></pre><h2 id="解题思路"><a href="#解题思�
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2020/01/24/LeetCode(28.%20Implement%20strStr())%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(28. Implement strStr())题解</a>
+            <a href="/2020/01/24/LeetCode(27.%20Remove%20Element)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(27. Remove Element)题解</a>
         </h1>
 
         <div class="post-meta">
@@ -530,24 +530,34 @@ Explanation: 13 = 4 + 9.</code></pre><h2 id="解题思路"><a href="#解题思�
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="LeetCode-28-Implement-strStr-题解"><a href="#LeetCode-28-Implement-strStr-题解" class="headerlink" title="LeetCode(28. Implement strStr())题解"></a>LeetCode(28. Implement strStr())题解</h1><hr>
-<p>原文如下：<br>Implement strStr().</p>
-<p>Return the index of the first occurrence of needle in haystack, or -1 if needle is not part of haystack.</p>
+          <h1 id="LeetCode-27-Remove-Element-题解"><a href="#LeetCode-27-Remove-Element-题解" class="headerlink" title="LeetCode(27. Remove Element)题解"></a>LeetCode(27. Remove Element)题解</h1><hr>
+<p>原文如下<br>Do not allocate extra space for another array, you must do this by modifying the input array in-place with O(1) extra memory.</p>
+<p>The order of elements can be changed. It doesn’t matter what you leave beyond the new length.</p>
 <p>Example 1:</p>
-<pre><code>Input: haystack = &quot;hello&quot;, needle = &quot;ll&quot;
-Output: 2</code></pre><p>Example 2:</p>
-<pre><code>Input: haystack = &quot;aaaaa&quot;, needle = &quot;bba&quot;
-Output: -1</code></pre><p>Clarification:</p>
-<p>What should we return when needle is an empty string? This is a great question to ask during an interview.</p>
-<p>For the purpose of this problem, we will return 0 when needle is an empty string. This is consistent to C’s strstr() and Java’s indexOf().</p>
-<h2 id="题意思路"><a href="#题意思路" class="headerlink" title="题意思路"></a>题意思路</h2><p>Easy题。第一次想得有点多，还是老思路，不应该自己造轮子。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isMatch</span><span class="params">(<span class="keyword">int</span> sta, <span class="built_in">string</span> h, <span class="keyword">int</span> hl, <span class="built_in">string</span> n, <span class="keyword">int</span> nl)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> j = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(sta&lt;hl &amp;&amp; j&lt;nl &amp;&amp; h[sta++]==n[j++]);</span><br><span class="line">        <span class="keyword">return</span> j==nl &amp;&amp; h[sta<span class="number">-1</span>]==n[j<span class="number">-1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">strStr</span><span class="params">(<span class="built_in">string</span> haystack, <span class="built_in">string</span> needle)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> hl = haystack.<span class="built_in">size</span>(), nl = needle.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;=hl-nl; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(isMatch(i, haystack, hl, needle, nl)) <span class="keyword">return</span> i;</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<pre><code>Given nums = [3,2,2,3], val = 3,
 
-<p>其实有个更简单方式，利用string的substr。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">strStr</span><span class="params">(<span class="built_in">string</span> haystack, <span class="built_in">string</span> needle)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> hl = haystack.<span class="built_in">size</span>(), nl = needle.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;=hl-nl; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(haystack.substr(i, nl)==needle) <span class="keyword">return</span> i;</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+Your function should return length = 2, with the first two elements of nums being 2.</code></pre><p>It doesn’t matter what you leave beyond the returned length.<br>Example 2:</p>
+<pre><code>Given nums = [0,1,2,2,3,0,4,2], val = 2,
 
-<p>BitBrave, 2019-04-24。</p>
+Your function should return length = 5, with the first five elements of nums containing 0, 1, 3, 0, and 4.</code></pre><p>Note that the order of those five elements can be arbitrary.</p>
+<p>It doesn’t matter what values are set beyond the returned length.<br>Clarification:</p>
+<p>Confused why the returned value is an integer but your answer is an array?</p>
+<p>Note that the input array is passed in by reference, which means modification to the input array will be known to the caller as well.</p>
+<p>Internally you can think of this:</p>
+<pre><code>// nums is passed in by reference. (i.e., without making a copy)
+int len = removeElement(nums, val);
 
+// any modification to nums in your function would be known by the caller.
+// using the length returned by your function, it prints the first len elements.
+for (int i = 0; i &lt; len; i++) {
+    print(nums[i]);
+}</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>这是一个easy题，直接使用vector的erase函数即可，在遍历的时候发现与val一样的数直接删除，注意的是函数不仅要返回正确的length，还要返回正确的vector。同时不要花费太多的space。</p>
+<p>这是一种方式，（4ms），代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">removeElement</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> val)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = nums.<span class="built_in">size</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(nums[i]!=val) <span class="keyword">continue</span>;</span><br><span class="line">            nums.erase(nums.<span class="built_in">begin</span>()+i);</span><br><span class="line">            i--;</span><br><span class="line">            len--;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> len;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="解法二"><a href="#解法二" class="headerlink" title="解法二"></a>解法二</h2><p>根据题意我们只要将vector前面正确length内的容器内放入正确的数就可以了，因此可以用一个位置来记录，当发现与一样的数的时候，将后面的数直接覆盖前面的就可以了。</p>
+<p>代码如下(4ms)：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">removeElement</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> val)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;len; j++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(nums[j]!=val) nums[i++] = nums[j];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> i;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
       
     </div>
 
@@ -645,6 +655,80 @@ Assume we are dealing with an environment which could only store integers within
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(28.%20Implement%20strStr())%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(28.%20Implement%20strStr())%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(28. Implement strStr())题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-28-Implement-strStr-题解"><a href="#LeetCode-28-Implement-strStr-题解" class="headerlink" title="LeetCode(28. Implement strStr())题解"></a>LeetCode(28. Implement strStr())题解</h1><hr>
+<p>原文如下：<br>Implement strStr().</p>
+<p>Return the index of the first occurrence of needle in haystack, or -1 if needle is not part of haystack.</p>
+<p>Example 1:</p>
+<pre><code>Input: haystack = &quot;hello&quot;, needle = &quot;ll&quot;
+Output: 2</code></pre><p>Example 2:</p>
+<pre><code>Input: haystack = &quot;aaaaa&quot;, needle = &quot;bba&quot;
+Output: -1</code></pre><p>Clarification:</p>
+<p>What should we return when needle is an empty string? This is a great question to ask during an interview.</p>
+<p>For the purpose of this problem, we will return 0 when needle is an empty string. This is consistent to C’s strstr() and Java’s indexOf().</p>
+<h2 id="题意思路"><a href="#题意思路" class="headerlink" title="题意思路"></a>题意思路</h2><p>Easy题。第一次想得有点多，还是老思路，不应该自己造轮子。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isMatch</span><span class="params">(<span class="keyword">int</span> sta, <span class="built_in">string</span> h, <span class="keyword">int</span> hl, <span class="built_in">string</span> n, <span class="keyword">int</span> nl)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> j = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(sta&lt;hl &amp;&amp; j&lt;nl &amp;&amp; h[sta++]==n[j++]);</span><br><span class="line">        <span class="keyword">return</span> j==nl &amp;&amp; h[sta<span class="number">-1</span>]==n[j<span class="number">-1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">strStr</span><span class="params">(<span class="built_in">string</span> haystack, <span class="built_in">string</span> needle)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> hl = haystack.<span class="built_in">size</span>(), nl = needle.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;=hl-nl; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(isMatch(i, haystack, hl, needle, nl)) <span class="keyword">return</span> i;</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>其实有个更简单方式，利用string的substr。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">strStr</span><span class="params">(<span class="built_in">string</span> haystack, <span class="built_in">string</span> needle)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> hl = haystack.<span class="built_in">size</span>(), nl = needle.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;=hl-nl; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(haystack.substr(i, nl)==needle) <span class="keyword">return</span> i;</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-04-24。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(30.%20Substring%20with%20Concatenation%20of%20All%20Words)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -704,90 +788,6 @@ Output: []</code></pre><h2 id="解题思路"><a href="#解题思路" class="head
 
 <p>BitBrave，2019-05-05。</p>
 
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(27.%20Remove%20Element)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(27.%20Remove%20Element)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(27. Remove Element)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-27-Remove-Element-题解"><a href="#LeetCode-27-Remove-Element-题解" class="headerlink" title="LeetCode(27. Remove Element)题解"></a>LeetCode(27. Remove Element)题解</h1><hr>
-<p>原文如下<br>Do not allocate extra space for another array, you must do this by modifying the input array in-place with O(1) extra memory.</p>
-<p>The order of elements can be changed. It doesn’t matter what you leave beyond the new length.</p>
-<p>Example 1:</p>
-<pre><code>Given nums = [3,2,2,3], val = 3,
-
-Your function should return length = 2, with the first two elements of nums being 2.</code></pre><p>It doesn’t matter what you leave beyond the returned length.<br>Example 2:</p>
-<pre><code>Given nums = [0,1,2,2,3,0,4,2], val = 2,
-
-Your function should return length = 5, with the first five elements of nums containing 0, 1, 3, 0, and 4.</code></pre><p>Note that the order of those five elements can be arbitrary.</p>
-<p>It doesn’t matter what values are set beyond the returned length.<br>Clarification:</p>
-<p>Confused why the returned value is an integer but your answer is an array?</p>
-<p>Note that the input array is passed in by reference, which means modification to the input array will be known to the caller as well.</p>
-<p>Internally you can think of this:</p>
-<pre><code>// nums is passed in by reference. (i.e., without making a copy)
-int len = removeElement(nums, val);
-
-// any modification to nums in your function would be known by the caller.
-// using the length returned by your function, it prints the first len elements.
-for (int i = 0; i &lt; len; i++) {
-    print(nums[i]);
-}</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>这是一个easy题，直接使用vector的erase函数即可，在遍历的时候发现与val一样的数直接删除，注意的是函数不仅要返回正确的length，还要返回正确的vector。同时不要花费太多的space。</p>
-<p>这是一种方式，（4ms），代码如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">removeElement</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> val)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = nums.<span class="built_in">size</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(nums[i]!=val) <span class="keyword">continue</span>;</span><br><span class="line">            nums.erase(nums.<span class="built_in">begin</span>()+i);</span><br><span class="line">            i--;</span><br><span class="line">            len--;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> len;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<h2 id="解法二"><a href="#解法二" class="headerlink" title="解法二"></a>解法二</h2><p>根据题意我们只要将vector前面正确length内的容器内放入正确的数就可以了，因此可以用一个位置来记录，当发现与一样的数的时候，将后面的数直接覆盖前面的就可以了。</p>
-<p>代码如下(4ms)：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">removeElement</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> val)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;len; j++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(nums[j]!=val) nums[i++] = nums[j];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> i;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
       
     </div>
 
