@@ -177,6 +177,91 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(853.%20Car%20Fleet)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(853.%20Car%20Fleet)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(853. Car Fleet)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-853-Car-Fleet-题解"><a href="#LeetCode-853-Car-Fleet-题解" class="headerlink" title="LeetCode(853. Car Fleet)题解"></a>LeetCode(853. Car Fleet)题解</h1><p><code>N</code> cars are going to the same destination along a one lane road.  The destination is <code>target</code> miles away.</p>
+<p>Each car <code>i</code> has a constant speed <code>speed[i]</code> (in miles per hour), and initial position <code>position[i]</code> miles towards the target along the road.</p>
+<p>A car can never pass another car ahead of it, but it can catch up to it, and drive bumper to bumper at the same speed.</p>
+<p>The distance between these two cars is ignored - they are assumed to have the same position.</p>
+<p>A <em>car fleet</em> is some non-empty set of cars driving at the same position and same speed.  Note that a single car is also a car fleet.</p>
+<p>If a car catches up to a car fleet right at the destination point, it will still be considered as one car fleet.</p>
+<p>How many car fleets will arrive at the destination?</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Input: target &#x3D; 12, position &#x3D; [10,8,0,5,3], speed &#x3D; [2,4,1,1,3]</span><br><span class="line">Output: 3</span><br><span class="line">Explanation:</span><br><span class="line">The cars starting at 10 and 8 become a fleet, meeting each other at 12.</span><br><span class="line">The car starting at 0 doesn&#39;t catch up to any other car, so it is a fleet by itself.</span><br><span class="line">The cars starting at 5 and 3 become a fleet, meeting each other at 6.</span><br><span class="line">Note that no other cars meet these fleets before the destination, so the answer is 3.</span><br></pre></td></tr></table></figure>
+
+
+<p><strong>Note:</strong></p>
+<ol>
+<li><code>0 &lt;= N &lt;= 10 ^ 4</code></li>
+<li><code>0 &lt; target &lt;= 10 ^ 6</code></li>
+<li><code>0 &lt; speed[i] &lt;= 10 ^ 6</code></li>
+<li><code>0 &lt;= position[i] &lt; target</code></li>
+<li>All initial positions are different.</li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>N辆车沿着一条车道行驶到同一目的地。目的地是目标英里。每辆汽车均具有恒定的speed[i]（以英里/小时为单位），初始位置position[i]沿道路朝向目标。一辆汽车永远无法超越前面的另一辆汽车，但它可以追上它，并以相同的速度驾驶。忽略这两辆车之间的距离-假定它们具有相同的位置。车队是在相同位置和相同速度下行驶的一些非空车组。请注意，单车也是车队。如果汽车正好赶上目的地的车队，它将仍被视为一个车队。多少车队将到达目的地？</p>
+<p>我们可以这样理解，以时间为横轴，路程为纵轴画一个平面直角坐标系，那么每辆车的行驶就对应这个坐标中的一条直线。与y轴的交点就是车的出发位置，斜率就是车的速度。那么在到达target（y轴target位置与X轴平行的直线）之前，所有后来居上超过先前直线的直线都表示超车，根据题意就可以删除这条直线。因此，每遇到相交的两条直线，就删除与y轴相交更低的那条线。最后坐标系中的所有直线在target之下都不相交，直线的数量就是问题的解。</p>
+<p>因此，这道题可以使用排序的方法来做，将车辆按照出发距离排序，然后从头到尾遍历，对于每一辆车，看后续的车是否在target之前有超过的，有就将其删除。</p>
+<p>代码如下，时间复杂度O(n)，空间复杂度O(n)。</p>
+<p><code>Runtime: 48 ms, faster than 73.22% of C++ online submissions for Car Fleet.</code></p>
+<p><code>Memory Usage: 10.5 MB, less than 100.00% of C++ online submissions for Car Fleet.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; P;</span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> P[a] &gt; P[b];</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">carFleet</span><span class="params">(<span class="keyword">int</span> target, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; <span class="built_in">position</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; speed)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = <span class="built_in">position</span>.<span class="built_in">size</span>();</span><br><span class="line">        P = <span class="built_in">position</span>;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">car</span><span class="params">(len)</span></span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++) car[i] = i;</span><br><span class="line">        sort(car.<span class="built_in">begin</span>(), car.<span class="built_in">end</span>(), cmp);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(car[i] == <span class="number">-1</span>) <span class="keyword">continue</span>;</span><br><span class="line">            <span class="keyword">double</span> X = (target - <span class="built_in">position</span>[car[i]])*<span class="number">1.0</span> / speed[car[i]];</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=i+<span class="number">1</span>; j&lt;len; j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(car[j] == <span class="number">-1</span>) <span class="keyword">continue</span>;</span><br><span class="line">                <span class="keyword">if</span>(X*speed[car[j]] + <span class="built_in">position</span>[car[j]] &gt;= target) car[j] = <span class="number">-1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> c : car)&#123;</span><br><span class="line">            <span class="keyword">if</span>(c != <span class="number">-1</span>) res++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2019-10-14</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(850.%20Rectangle%20Area%20II)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -943,98 +1028,6 @@ Output: false</code></pre><h2 id="解题思路"><a href="#解题思路" class="h
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(870.%20Advantage%20Shuffle)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(870.%20Advantage%20Shuffle)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(870. Advantage Shuffle)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="LeetCode-870-Advantage-Shuffle-题解"><a href="#LeetCode-870-Advantage-Shuffle-题解" class="headerlink" title="LeetCode(870. Advantage Shuffle)题解"></a>LeetCode(870. Advantage Shuffle)题解</h2><p>Given two arrays <code>A</code> and <code>B</code> of equal size, the <em>advantage of A with respect to B</em> is the number of indices <code>i</code> for which <code>A[i] &gt; B[i]</code>.</p>
-<p>Return <strong>any</strong> permutation of <code>A</code> that maximizes its advantage with respect to <code>B</code>.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: A &#x3D; [2,7,11,15], B &#x3D; [1,10,4,11]</span><br><span class="line">Output: [2,11,7,15]</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: A &#x3D; [12,24,8,32], B &#x3D; [13,25,32,11]</span><br><span class="line">Output: [24,32,8,12]</span><br></pre></td></tr></table></figure>
-
-<p><strong>Note:</strong></p>
-<ol>
-<li><p><code>1 &lt;= A.length = B.length &lt;= 10000</code></p>
-</li>
-<li><p><code>0 &lt;= A[i] &lt;= 10^9</code></p>
-</li>
-<li><p><code>0 &lt;= B[i] &lt;= 10^9</code></p>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2></li>
-</ol>
-<p>给定两个等长的数组A和B，其中A的优势就是A中对应位置的元素大于B中对应位置的元素的数量。现在对A重排列，最大化A的优势。如果有多个答案，返回其中任意一个即可。</p>
-<p>这个题直观上就可以使用Greedy做，我们对于B中的一个元素B[i]，如果A中有比它大的元素，那么我们只选择比它大的元素中最小的那个即可，这样可以最大限度地保留A能覆盖其它B中元素的可能性。</p>
-<p>因此，算法如下，将A，B都升序排序。然后分别遍历AB中的元素，A中使用i，B中使用j。初始化i=0，j=0.</p>
-<p>然后如下判断——</p>
-<ul>
-<li><p>i==len(A)，表明已经遍历完成了，直接结束算法。</p>
-</li>
-<li><p>A[i]&gt;B[j]，表示此时可以覆盖，直接i = i+1，j = j+1.</p>
-</li>
-<li><p>A[i]&lt;=B[j]，表示此时不能覆盖，就在不超过len(A)的情况下不断增加i，判断A[i]是否可以大于B[j]，如果到最后都不能大于，则表明A中剩下的数已经都不能大于B中任何数了，就直接结束算法。如果走到一个i的值，有A[i]大于B[j]，就直接使用这个与最开始的i进行交换即可。然后i = i+1，j = j+1.</p>
-</li>
-</ul>
-<p>代码如下，排序时间复杂度O(nlogn)，加上判断的时间O(n)，总的时间复杂度为O(nlogn)，但是因为最后返回的数组要按照B的顺序，因此要把A重新排位置，这就需要一开始记住B原数组的位置，因此需要使用一个数组记录，空间复杂度O(n)。</p>
-<p><code>Runtime: 156 ms, faster than 90.29% of C++ online submissions for Advantage Shuffle.</code></p>
-<p><code>Memory Usage: 14.3 MB, less than 100.00% of C++ online submissions for Advantage Shuffle.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; B_;</span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> B_[a] &lt; B_[b];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">advantageCount</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; B)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = A.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> i, j, b = len - <span class="number">1</span>;</span><br><span class="line">        </span><br><span class="line">        vector&lt;int&gt; ret(len, -1), p(len, -1);</span><br><span class="line">        B_ = B;</span><br><span class="line">        <span class="keyword">for</span>(i=<span class="number">0</span>; i&lt;len; i++) p[i] = i;</span><br><span class="line">        sort(A.<span class="built_in">begin</span>(), A.<span class="built_in">end</span>());</span><br><span class="line">        sort(p.<span class="built_in">begin</span>(), p.<span class="built_in">end</span>(), cmp);</span><br><span class="line">        </span><br><span class="line">        i = j = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(i &lt; len)&#123;</span><br><span class="line">            <span class="keyword">while</span>(i &lt; len &amp;&amp; A[i] &lt;= B[p[j]]) ret[p[b--]] = A[i++];</span><br><span class="line">            <span class="keyword">if</span>(i &lt; len) ret[p[j++]] = A[i++];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave,2019-10-24</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1107,12 +1100,12 @@ Output: false</code></pre><h2 id="解题思路"><a href="#解题思路" class="h
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">339</span>
+          <span class="site-state-item-count">340</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">12</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>

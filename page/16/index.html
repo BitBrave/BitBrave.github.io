@@ -177,6 +177,78 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(199.%20Binary%20Tree%20Right%20Side%20View)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(199.%20Binary%20Tree%20Right%20Side%20View)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(199. Binary Tree Right Side View)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-199-Binary-Tree-Right-Side-View-题解"><a href="#LeetCode-199-Binary-Tree-Right-Side-View-题解" class="headerlink" title="LeetCode(199. Binary Tree Right Side View)题解"></a>LeetCode(199. Binary Tree Right Side View)题解</h1><hr>
+<p>Given a binary tree, imagine yourself standing on the right side of it, return the values of the nodes you can see ordered from top to bottom.</p>
+<p>Example:</p>
+<pre><code>Input: [1,2,3,null,5,null,4]
+Output: [1, 3, 4]</code></pre><p>Explanation:</p>
+<pre><code>   1            &lt;---
+ /   \
+2     3         &lt;---
+ \     \
+  5     4       &lt;---</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个二叉树，返回最右边的元素。</p>
+<p>可以使用BFS，每次遍历一层的元素，每次将最后一个元素记录下来即可。</p>
+<p>代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">rightSideView</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; res;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="literal">NULL</span>) <span class="keyword">return</span> res;</span><br><span class="line">        </span><br><span class="line">        <span class="built_in">queue</span>&lt;TreeNode*&gt; Q;</span><br><span class="line">        Q.push(root);</span><br><span class="line">        <span class="keyword">while</span>(!Q.empty())&#123;</span><br><span class="line">            <span class="keyword">int</span> c = Q.<span class="built_in">size</span>();</span><br><span class="line">            <span class="keyword">while</span>(c-- &gt; <span class="number">1</span>)&#123;</span><br><span class="line">                root = Q.front(); Q.pop();</span><br><span class="line">                <span class="keyword">if</span>(root-&gt;left != <span class="literal">NULL</span>) Q.push(root-&gt;left);</span><br><span class="line">                <span class="keyword">if</span>(root-&gt;right != <span class="literal">NULL</span>) Q.push(root-&gt;right);</span><br><span class="line">            &#125;</span><br><span class="line">            root = Q.front(); Q.pop();</span><br><span class="line">            <span class="keyword">if</span>(root-&gt;left != <span class="literal">NULL</span>) Q.push(root-&gt;left);</span><br><span class="line">            <span class="keyword">if</span>(root-&gt;right != <span class="literal">NULL</span>) Q.push(root-&gt;right);</span><br><span class="line">            res.push_back(root-&gt;val);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-07-24</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(213.%20House%20Robber%20II)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -850,85 +922,6 @@ p and q are different and both values will exist in the binary tree.</code></pre
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(23.%20Merge%20k%20Sorted%20Lists)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img.duoziwang.com/2017/05/20/B28913465.jpg">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(23.%20Merge%20k%20Sorted%20Lists)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(23. Merge k Sorted Lists)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-23-Merge-k-Sorted-Lists-题解"><a href="#LeetCode-23-Merge-k-Sorted-Lists-题解" class="headerlink" title="LeetCode(23. Merge k Sorted Lists)题解"></a>LeetCode(23. Merge k Sorted Lists)题解</h1><hr>
-<p>原文如下：<br>Merge k sorted linked lists and return it as one sorted list. Analyze and describe its complexity.</p>
-<p>Example:</p>
-<pre><code>Input:
-[
-1-&gt;4-&gt;5,
-1-&gt;3-&gt;4,
-2-&gt;6
-]
-Output: 1-&gt;1-&gt;2-&gt;3-&gt;4-&gt;4-&gt;5-&gt;6</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>这是一个Hard的题目，要求对N个局部有序的链表进行合并得到一个大的有序链表。刚刚看到这个题的时候有点怵，倒不是说解法有什么困难，主要是怕写出来的code超时。但是不得不说LeetCode是很宽容的，这个题用最简单的方法就可以完成，虽然速度，慢了点。这里假设有N个链表，每个链表长度为M。</p>
-<h2 id="解法1"><a href="#解法1" class="headerlink" title="解法1"></a>解法1</h2><p>可以这样做，每次取出两个两个链表，进行合并，两个都是局部有序的，因此只需要一次遍历就能完成，第一次花费O(2m)的时间，然后返回新的合并链表的头指针，重复这个过程第二次O(3m),第三次O(4m)….直到最后，总的时间复杂度为：O(2m)+O(3m)+O(4m)+ …+\O(nm) = O(n2m)。</p>
-<p>代码如下，168ms，faster than 27%examples，Memory 10.7M, less than 99.8% examples.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode *next;</span></span><br><span class="line"><span class="comment"> *     ListNode(int x) : val(x), next(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">ListNode* <span class="title">merge2Lists</span><span class="params">(ListNode* a, ListNode* b)</span></span>&#123;</span><br><span class="line">        ListNode* head = <span class="literal">NULL</span>, *m = <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">if</span>(a==<span class="literal">NULL</span>) <span class="keyword">return</span> b;</span><br><span class="line">        <span class="keyword">if</span>(b==<span class="literal">NULL</span>) <span class="keyword">return</span> a;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(a-&gt;val &lt;= b-&gt;val)&#123;</span><br><span class="line">            head = a;</span><br><span class="line">            m = head;</span><br><span class="line">            a = a-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            head = b;</span><br><span class="line">            m = head;</span><br><span class="line">            b = b-&gt;next;</span><br><span class="line">        &#125;;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span>(a!=<span class="literal">NULL</span> &amp;&amp; b!=<span class="literal">NULL</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(a-&gt;val &lt;= b-&gt;val)&#123;</span><br><span class="line">                m-&gt;next = a;</span><br><span class="line">                a = a-&gt;next;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                m-&gt;next = b;</span><br><span class="line">                b = b-&gt;next;</span><br><span class="line">            &#125;</span><br><span class="line">            m = m-&gt;next;</span><br><span class="line">        &#125;;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(a==<span class="literal">NULL</span>) m-&gt;next = b;</span><br><span class="line">        <span class="keyword">if</span>(b==<span class="literal">NULL</span>) m-&gt;next = a;</span><br><span class="line">       </span><br><span class="line">        <span class="keyword">return</span> head;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">ListNode* <span class="title">mergeKLists</span><span class="params">(<span class="built_in">vector</span>&lt;ListNode*&gt;&amp; lists)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(lists.<span class="built_in">size</span>()==<span class="number">0</span>) <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> len = lists.<span class="built_in">size</span>();</span><br><span class="line">        ListNode* m = lists[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;len; i++)&#123;</span><br><span class="line">            m = merge2Lists(m, lists[i]);</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">return</span> m;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<h2 id="解法2"><a href="#解法2" class="headerlink" title="解法2"></a>解法2</h2><p>因为担心时间问题，我还想了另外一种解法，就是使用heap(一种完全二叉树)，具体方式如下：c++的STL内heap的使用见<a href="https://blog.csdn.net/zsc2014030403015/article/details/45872737" target="_blank" rel="noopener">链接</a></p>
-<p>将N个链表头指针根据存的值的大小建立一个最小堆。花费时间自顶向下则为O(nlogn)，自底向上则为O(n).<a href="https://www.jianshu.com/p/7cf64b02c0a4" target="_blank" rel="noopener">证明在此</a></p>
-<p>每次堆头部的指针所指向的值肯定是所有链表内最小的，取出这个值，然后代替以其链表下一个值，若是对应链表内最后一个则取堆内最后一个位置的指针填充堆头位置，然后重新建立整理一下堆，每次整理花费O(logn)</p>
-<p>一共nm个链表节点，总的时间复杂度为O(n)/O(nlogn)+nm*O(logn)=O(nmlogn).</p>
-<p>代码如下，注意pop_heap(&amp;M[0],&amp;M[tlen],cmp);函数不返回值，而是将根节点的值交换到数组的最后一个，运行完了之后时候直接在取出M[tlen-1]即可。同理push_heap(&amp;M[0],&amp;M[tlen],cmp);也是一样，将需要插入的数放入M[tlen]后运行push_heap即可。<br>这样的code效果：24ms，faster than 99%examples，Memory 11.1M, less than 99.5% examples.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode *next;</span></span><br><span class="line"><span class="comment"> *     ListNode(int x) : val(x), next(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(ListNode* a, ListNode* b)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> a-&gt;val &gt; b-&gt;val;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function">ListNode* <span class="title">mergeKLists</span><span class="params">(<span class="built_in">vector</span>&lt;ListNode*&gt;&amp; lists)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(lists.<span class="built_in">size</span>()==<span class="number">0</span>) <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> len = lists.<span class="built_in">size</span>(), tlen = <span class="number">0</span>;</span><br><span class="line">        </span><br><span class="line">        ListNode **M = <span class="keyword">new</span> ListNode*[len];</span><br><span class="line">        ListNode *head = <span class="literal">NULL</span>, *m = <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(lists[i]!=<span class="literal">NULL</span>) M[tlen++]=lists[i];</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">if</span>(tlen == <span class="number">0</span>) <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">        make_heap(&amp;M[<span class="number">0</span>],&amp;M[tlen],cmp);</span><br><span class="line"></span><br><span class="line">        pop_heap(&amp;M[<span class="number">0</span>],&amp;M[tlen],cmp);</span><br><span class="line">        head = M[tlen<span class="number">-1</span>];</span><br><span class="line">        m = head;</span><br><span class="line">        <span class="keyword">if</span>(M[tlen<span class="number">-1</span>]-&gt;next != <span class="literal">NULL</span>) &#123;</span><br><span class="line">            M[tlen<span class="number">-1</span>] = M[tlen<span class="number">-1</span>]-&gt;next;</span><br><span class="line">            push_heap(&amp;M[<span class="number">0</span>],&amp;M[tlen],cmp);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> tlen--;</span><br><span class="line">        <span class="keyword">while</span>(tlen&gt;<span class="number">0</span>)&#123;</span><br><span class="line">            pop_heap(&amp;M[<span class="number">0</span>],&amp;M[tlen],cmp);</span><br><span class="line">            </span><br><span class="line">            m-&gt;next = M[tlen<span class="number">-1</span>];</span><br><span class="line">            m = m-&gt;next;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span>(M[tlen<span class="number">-1</span>]-&gt;next != <span class="literal">NULL</span>) &#123;</span><br><span class="line">                M[tlen<span class="number">-1</span>] = M[tlen<span class="number">-1</span>]-&gt;next;</span><br><span class="line">                push_heap(&amp;M[<span class="number">0</span>],&amp;M[tlen],cmp);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> tlen--;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> head;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-04-25, 完全是由自己做出来的，非常开心。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1001,12 +994,12 @@ Output: 1-&gt;1-&gt;2-&gt;3-&gt;4-&gt;4-&gt;5-&gt;6</code></pre><h2 id="解题�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">339</span>
+          <span class="site-state-item-count">340</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">12</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
