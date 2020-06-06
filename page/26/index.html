@@ -168,6 +168,85 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(79.%20Word%20Search)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(79.%20Word%20Search)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(79. Word Search)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-79-Word-Search-题解"><a href="#LeetCode-79-Word-Search-题解" class="headerlink" title="LeetCode(79. Word Search)题解"></a>LeetCode(79. Word Search)题解</h1><hr>
+<p>Given a 2D board and a word, find if the word exists in the grid.</p>
+<p>The word can be constructed from letters of sequentially adjacent cell, where “adjacent” cells are those horizontally or vertically neighboring. The same letter cell may not be used more than once.</p>
+<p>Example:</p>
+<pre><code>board =
+[
+[&apos;A&apos;,&apos;B&apos;,&apos;C&apos;,&apos;E&apos;],
+[&apos;S&apos;,&apos;F&apos;,&apos;C&apos;,&apos;S&apos;],
+[&apos;A&apos;,&apos;D&apos;,&apos;E&apos;,&apos;E&apos;]
+]
+
+Given word = &quot;ABCCED&quot;, return true.
+Given word = &quot;SEE&quot;, return true.
+Given word = &quot;ABCB&quot;, return false.</code></pre><h1 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h1><p>给一个记录多个字符的二维矩阵，再给出一个字符串，从矩阵中任意一个位置开始搜索，上下左右皆可，每个位置只能走一遍最多。查看是否可以在矩阵中找到这样一个字符串，找到返回true，没有返回false。</p>
+<p>使用DFS，当前位置不符合返回true，否则从上下左右中继续寻找下一个。比如设置一个函数，传入参数矩阵，一个对应的位置矩阵，当前要比较的矩阵的位置，当前要比较的字符。有以下几种情况。</p>
+<p>位置已经遍历过了，返回false。</p>
+<p>位置还没有被遍历：</p>
+<p>1 字符不合适，返回false<br>2 向上走，能OK就返回true。否则向下走，能OK就返回true，向左走，能OK就返回true，向右走，能OK就返回true，否则返回false。</p>
+<p>代码如如下：<br>Runtime: 296 ms, faster than 26.74% of C++ online submissions for Word Search.<br>Memory Usage: 159.2 MB, less than 11.37% of C++ online submissions for Word Search.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">dfs</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">char</span>&gt;&gt;&amp; board, <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">bool</span>&gt;&gt;&amp; pos, <span class="keyword">int</span> row, <span class="keyword">int</span> col, <span class="keyword">int</span> i, <span class="keyword">int</span> j, <span class="built_in">string</span> <span class="keyword">word</span>, <span class="keyword">int</span> sta, <span class="keyword">int</span> len)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(sta&gt;=len) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">if</span>(i&lt;<span class="number">0</span> || i&gt;=row) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">if</span>(j&lt;<span class="number">0</span> || j&gt;=col) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">if</span>(pos[i][j] == <span class="literal">false</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">if</span>(board[i][j]!=<span class="keyword">word</span>[sta]) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        </span><br><span class="line">        pos[i][j] = <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">if</span>(dfs(board, pos, row, col, i<span class="number">-1</span>, j, <span class="keyword">word</span>, sta+<span class="number">1</span>, len)) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">if</span>(dfs(board, pos, row, col, i, j<span class="number">-1</span>, <span class="keyword">word</span>, sta+<span class="number">1</span>, len)) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">if</span>(dfs(board, pos, row, col, i+<span class="number">1</span>, j, <span class="keyword">word</span>, sta+<span class="number">1</span>, len)) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">if</span>(dfs(board, pos, row, col, i, j+<span class="number">1</span>, <span class="keyword">word</span>, sta+<span class="number">1</span>, len)) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        pos[i][j] = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">exist</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">char</span>&gt;&gt;&amp; board, <span class="built_in">string</span> <span class="keyword">word</span>)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> row = board.<span class="built_in">size</span>(), col = board[<span class="number">0</span>].<span class="built_in">size</span>(), len = <span class="keyword">word</span>.<span class="built_in">size</span>();</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">bool</span>&gt;&gt; <span class="title">pos</span><span class="params">(row, <span class="built_in">vector</span>&lt;<span class="keyword">bool</span>&gt;(col, <span class="literal">true</span>))</span></span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;row; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;col; j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(dfs(board, pos, row, col, i, j, <span class="keyword">word</span>, <span class="number">0</span>, len)) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-06-017</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(789.%20Escape%20The%20Ghosts)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -903,86 +982,6 @@ Answers within 10^-6 of the true value will be accepted as correct.</code></pre>
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(809.%20Expressive%20Words)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(809.%20Expressive%20Words)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(809. Expressive Words)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-809-Expressive-Words-题解"><a href="#LeetCode-809-Expressive-Words-题解" class="headerlink" title="LeetCode(809. Expressive Words)题解"></a>LeetCode(809. Expressive Words)题解</h1><hr>
-<p>Sometimes people repeat letters to represent extra feeling, such as “hello” -&gt; “heeellooo”, “hi” -&gt; “hiiii”.  In these strings like “heeellooo”, we have groups of adjacent letters that are all the same:  “h”, “eee”, “ll”, “ooo”.</p>
-<p>For some given string S, a query word is stretchy if it can be made to be equal to S by any number of applications of the following extension operation: choose a group consisting of characters c, and add some number of characters c to the group so that the size of the group is 3 or more.</p>
-<p>For example, starting with “hello”, we could do an extension on the group “o” to get “hellooo”, but we cannot get “helloo” since the group “oo” has size less than 3.  Also, we could do another extension like “ll” -&gt; “lllll” to get “helllllooo”.  If S = “helllllooo”, then the query word “hello” would be stretchy because of these two extension operations: query = “hello” -&gt; “hellooo” -&gt; “helllllooo” = S.</p>
-<p>Given a list of query words, return the number of words that are stretchy. </p>
-<pre><code>Example:
-Input: 
-S = &quot;heeellooo&quot;
-words = [&quot;hello&quot;, &quot;hi&quot;, &quot;helo&quot;]
-Output: 1
-Explanation: 
-We can extend &quot;e&quot; and &quot;o&quot; in the word &quot;hello&quot; to get &quot;heeellooo&quot;.
-We can&apos;t extend &quot;helo&quot; to get &quot;heeellooo&quot; because the group &quot;ll&quot; is not size 3 or more.</code></pre><p>Notes:</p>
-<pre><code>0 &lt;= len(S) &lt;= 100.
-0 &lt;= len(words) &lt;= 100.
-0 &lt;= len(words[i]) &lt;= 100.
-S and all words in words consist only of lowercase letters</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个字符串，和一个字符串集合，查看是否可以用集合中的某个字符串内的组合通过加一些相同的字符（加过之后的组合长度要大于等于3）之后是否可以等于给定的字符串。返回符合条件的个数。</p>
-<p>单纯的字符串分析题，首先看一个字符串和给定的字符串的比较，长度一致肯定不可能，然后再挨个字符比较即可。</p>
-<p>代码如下，时间复杂度O(n2), 空间复杂度O(1)，算上递归就是O(n).</p>
-<p>Runtime: 16 ms, faster than 10.92% of C++ online submissions for Expressive Words.<br>Memory Usage: 18.1 MB, less than 14.29% of C++ online submissions for Expressive Words.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isMatch</span><span class="params">(<span class="built_in">string</span> a, <span class="keyword">int</span> al, <span class="keyword">int</span> alen, <span class="built_in">string</span> b, <span class="keyword">int</span> bl, <span class="keyword">int</span> blen)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(al == alen) <span class="keyword">return</span> bl == blen;</span><br><span class="line">        <span class="keyword">if</span>(bl == blen) <span class="keyword">return</span> al == alen;</span><br><span class="line">        <span class="keyword">if</span>(a[al] != b[bl]) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">int</span> b_num = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span>(bl+b_num &lt; blen &amp;&amp; b[bl]==b[bl+b_num]) b_num++;</span><br><span class="line">        <span class="keyword">int</span> a_num = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span>(al+a_num &lt; alen &amp;&amp; a[al]==a[al+a_num]) a_num++;</span><br><span class="line">        <span class="keyword">if</span>(a_num==b_num || a_num&gt;<span class="number">2</span>) <span class="keyword">return</span> isMatch(a, al+a_num, alen, b, bl+b_num, blen);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">expressiveWords</span><span class="params">(<span class="built_in">string</span> S, <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&amp; words)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = words.<span class="built_in">size</span>(), res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(S.<span class="built_in">size</span>()&lt;=words[i].<span class="built_in">size</span>()) <span class="keyword">continue</span>;</span><br><span class="line">            <span class="keyword">if</span>(isMatch(S, <span class="number">0</span>, S.<span class="built_in">size</span>(), words[i], <span class="number">0</span>, words[i].<span class="built_in">size</span>())) res++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-09-01</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1053,12 +1052,12 @@ S and all words in words consist only of lowercase letters</code></pre><h2 id="�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">341</span>
+          <span class="site-state-item-count">342</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
