@@ -168,6 +168,181 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/30/LeetCode(239.%20Sliding%20Window%20Maximum)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/04/30/LeetCode(239.%20Sliding%20Window%20Maximum)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(239. Sliding Window Maximum)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-04-30 23:00:54 / 修改时间：23:34:45" itemprop="dateCreated datePublished" datetime="2020-04-30T23:00:54+08:00">2020-04-30</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-239-Sliding-Window-Maximum-题解"><a href="#LeetCode-239-Sliding-Window-Maximum-题解" class="headerlink" title="LeetCode(\239. Sliding Window Maximum)题解"></a>LeetCode(\239. Sliding Window Maximum)题解</h1><p>Given an array <em>nums</em>, there is a sliding window of size <em>k</em> which is moving from the very left of the array to the very right. You can only see the <em>k</em> numbers in the window. Each time the sliding window moves right by one position. Return the max sliding window.</p>
+<p><strong>Follow up:</strong><br>Could you solve it in linear time?</p>
+<p><strong>Example:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Input: nums &#x3D; [1,3,-1,-3,5,3,6,7], and k &#x3D; 3</span><br><span class="line">Output: [3,3,5,5,6,7] </span><br><span class="line">Explanation: </span><br><span class="line"></span><br><span class="line">Window position                Max</span><br><span class="line">---------------               -----</span><br><span class="line">[1  3  -1] -3  5  3  6  7       3</span><br><span class="line"> 1 [3  -1  -3] 5  3  6  7       3</span><br><span class="line"> 1  3 [-1  -3  5] 3  6  7       5</span><br><span class="line"> 1  3  -1 [-3  5  3] 6  7       5</span><br><span class="line"> 1  3  -1  -3 [5  3  6] 7       6</span><br><span class="line"> 1  3  -1  -3  5 [3  6  7]      7</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>1 &lt;= nums.length &lt;= 10^5</code></li>
+<li><code>-10^4 &lt;= nums[i] &lt;= 10^4</code></li>
+<li><code>1 &lt;= k &lt;= nums.length</code></li>
+</ul>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Hard</p>
+<p>一串数组中，有一个一定长度的滑动窗口从左滑到右，每次一步。输出每个滑动窗口内的最大数。</p>
+<p>这个题可以使用双端队列的方式，按照单调栈的方式解决。我们维护一个双端队列，里面从前到后是一个单调递减序列，第一个值存的是当前滑动窗口的元素最大值。当向后走时，出去的值如果在队列里，就去掉，如果新加入的值大于当前队列的最后面的值，就不断弹出尾部的值，直到队列为空或者队列的尾部元素大于当前元素，然后加入新加入滑动窗口的值。记住是从第一个数就开始存双端队列的，所以在第一个滑动窗口内，双端队列里就应该是一个递减序列了。</p>
+<p>这其实是单调栈的思想，但是因为要栈底元素，所以用一个双端对列比较好，注意栈里存的是元素的位置，这样比较好判断。其实也可以用两个普通栈实现单调队列的，只不过不用这么麻烦而已。</p>
+<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间上，O(N)，空间上，O(K)，N为数组长度，K为滑动窗口长度。</p>
+<p><code>Runtime: 36 ms, faster than 99.81% of C++ online submissions for Sliding Window Maximum.</code></p>
+<p><code>Memory Usage: 16.4 MB, less than 21.31% of C++ online submissions for Sliding Window Maximum.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">maxSlidingWindow</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="built_in">deque</span>&lt;<span class="keyword">int</span>&gt; Q;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; res;</span><br><span class="line"></span><br><span class="line">        Q.push_back(<span class="number">0</span>);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;k; i++) &#123;</span><br><span class="line">            <span class="keyword">while</span> (!Q.empty() <span class="keyword">and</span> (nums[Q.back()] &lt; nums[i])) Q.pop_back();</span><br><span class="line">            Q.push_back(i);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        res.push_back(nums[Q.front()]);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=k; i&lt;len; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (i-k==Q.front()) Q.pop_front();</span><br><span class="line">            <span class="keyword">while</span> (!Q.empty() <span class="keyword">and</span> (nums[Q.back()] &lt; nums[i])) Q.pop_back();</span><br><span class="line">            Q.push_back(i);</span><br><span class="line">            res.push_back(nums[Q.front()]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2020-04-30</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/23/LeetCode(218.%20The%20Skyline%20Problem)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/04/23/LeetCode(218.%20The%20Skyline%20Problem)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(218. The Skyline Problem)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-04-23 19:31:07 / 修改时间：21:43:34" itemprop="dateCreated datePublished" datetime="2020-04-23T19:31:07+08:00">2020-04-23</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-218-The-Skyline-Problem-题解"><a href="#LeetCode-218-The-Skyline-Problem-题解" class="headerlink" title="LeetCode(\218. The Skyline Problem)题解"></a>LeetCode(\218. The Skyline Problem)题解</h1><p>A city’s skyline is the outer contour of the silhouette formed by all the buildings in that city when viewed from a distance. Now suppose you are <strong>given the locations and height of all the buildings</strong> as shown on a cityscape photo (Figure A), write a program to <strong>output the skyline</strong> formed by these buildings collectively (Figure B).</p>
+<p><a href="https://leetcode.com/static/images/problemset/skyline1.jpg" target="_blank" rel="noopener"><img src="https://assets.leetcode.com/uploads/2018/10/22/skyline1.png" alt="Buildings"> </a><a href="https://leetcode.com/static/images/problemset/skyline2.jpg" target="_blank" rel="noopener"><img src="https://assets.leetcode.com/uploads/2018/10/22/skyline2.png" alt="Skyline Contour"></a></p>
+<p>The geometric information of each building is represented by a triplet of integers <code>[Li, Ri, Hi]</code>, where <code>Li</code> and <code>Ri</code> are the x coordinates of the left and right edge of the ith building, respectively, and <code>Hi</code> is its height. It is guaranteed that <code>0 ≤ Li, Ri ≤ INT_MAX</code>, <code>0 &lt; Hi ≤ INT_MAX</code>, and <code>Ri - Li &gt; 0</code>. You may assume all buildings are perfect rectangles grounded on an absolutely flat surface at height 0.</p>
+<p>For instance, the dimensions of all buildings in Figure A are recorded as: <code>[ [2 9 10], [3 7 15], [5 12 12], [15 20 10], [19 24 8] ]</code>.</p>
+<p>The output is a list of “<strong>key points</strong>“ (red dots in Figure B) in the format of <code>[ [x1,y1], [x2, y2], [x3, y3], ... ]</code> that uniquely defines a skyline. <strong>A key point is the left endpoint of a horizontal line segment</strong>. Note that the last key point, where the rightmost building ends, is merely used to mark the termination of the skyline, and always has zero height. Also, the ground in between any two adjacent buildings should be considered part of the skyline contour.</p>
+<p>For instance, the skyline in Figure B should be represented as:<code>[ [2 10], [3 15], [7 12], [12 0], [15 10], [20 8], [24, 0] ]</code>.</p>
+<p><strong>Notes:</strong></p>
+<ul>
+<li>The number of buildings in any input list is guaranteed to be in the range <code>[0, 10000]</code>.</li>
+<li>The input list is already sorted in ascending order by the left x position <code>Li</code>.</li>
+<li>The output list must be sorted by the x position.</li>
+<li>There must be no consecutive horizontal lines of equal height in the output skyline. For instance, <code>[...[2 3], [4 5], [7 5], [11 5], [12 7]...]</code> is not acceptable; the three lines of height 5 should be merged into one in the final output as such: <code>[...[2 3], [4 5], [12 7], ...]</code></li>
+</ul>
+<p>城市的天际线是从远处观看该城市中所有建筑物形成的轮廓的外部轮廓。现在，假设您获得了城市风光照片（图A）上显示的所有建筑物的位置和高度，请编写一个程序以输出由这些建筑物形成的天际线。</p>
+<p>每个建筑物的几何信息用三元组 [Li，Ri，Hi] 表示，其中 Li 和 Ri 分别是第 i 座建筑物左右边缘的 x 坐标，Hi 是其高度。可以保证 0 ≤ Li, Ri ≤ INT_MAX, 0 &lt; Hi ≤ INT_MAX 和 Ri - Li &gt; 0。您可以假设所有建筑物都是在绝对平坦且高度为 0 的表面上的完美矩形。</p>
+<p>例如，图A中所有建筑物的尺寸记录为：[ [2 9 10], [3 7 15], [5 12 12], [15 20 10], [19 24 8] ] 。</p>
+<p>输出是以 [ [x1,y1], [x2, y2], [x3, y3], … ] 格式的“关键点”（图B中的红点）的列表，它们唯一地定义了天际线。关键点是水平线段的左端点。请注意，最右侧建筑物的最后一个关键点仅用于标记天际线的终点，并始终为零高度。此外，任何两个相邻建筑物之间的地面都应被视为天际线轮廓的一部分。</p>
+<p>例如，图B中的天际线应该表示为：[ [2 10], [3 15], [7 12], [12 0], [15 10], [20 8], [24, 0] ]。</p>
+<p>说明:</p>
+<ul>
+<li>任何输入列表中的建筑物数量保证在 [0, 10000] 范围内。</li>
+<li>输入列表已经按左 x 坐标 Li  进行升序排列。</li>
+<li>输出列表必须按 x 位排序。</li>
+<li>输出天际线中不得有连续的相同高度的水平线。例如 […[2 3], [4 5], [7 5], [11 5], [12 7]…] 是不正确的答案；三条高度为 5 的线应该在最终输出中合并为一个：[…[2 3], [4 5], [12 7], …]</li>
+</ul>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Hard</p>
+<p>得到城市天际线数据。这个题我自己没有想出来解法。还是看了很多大神的帖子才明白，这里奉上B站大佬的视频讲解。<a href="https://www.bilibili.com/video/BV1hb411c7Q4?from=search&amp;seid=17949222998842037774" target="_blank" rel="noopener">https://www.bilibili.com/video/BV1hb411c7Q4?from=search&amp;seid=17949222998842037774</a>。实在是佩服。</p>
+<p>本题为几何问题，一般来说，几何问题使用扫描线法解决是比较常用的思路。这个题可以使用DP和扫描线两种。这里讲解更为简单的扫描线。</p>
+<p>观察答案，都是一个天际线的左端，纵坐标是一个建筑物的高度，横坐标是一个建筑物的左边界X或者右边界Y。再对答案的观察多一点，从左往右走，会发现如果是一个天际线坐标的X是一个建筑物的左边界的话，那么高度一定是此时最高的天际线，如果天际线的X是一个建筑物的右边界的话，那高度一定是将这个建筑物去掉之后剩下的天际线中最高的。如果此时已经没有建筑物了，比如走到最后一个建筑时，那么去掉这个建筑之后天际线为0，那高度就是为0。</p>
+<p>所以，先不考虑如何实现，那么算法的策略就如下所示：我们假设有一个平行于Y轴，垂直于X轴的也就是和建筑物平行的线，从第一个建筑的左边界左到右扫描过到最后一个建筑的右边界。在第一个建筑物的左边界时，没有别的建筑物天际线，因此直接就将左上角坐标放入答案中。然后继续向右走，遇到一个建筑物的左边界时，查看这个建筑物的天际线是不是最高的，如果是，那就说明这个是一个左上角点，就将其放入答案内。如果遇到一个建筑物的右边界时，就查看去掉这个建筑物，剩下的最高的天际线是多少，然后把右边界和剩下最高天际线高度作为一个组合放入答案内。走到最后一个建筑物的右边界时，去掉建筑物就不剩天际线了，此时就直接将高度为0就可以。</p>
+<p>上述算法的前提是。我们将所有建筑物按照其左边界和右边界排序。具体的方式如下：将一个建筑物分成两部分，左边界加上高度，右边界加上高度，成为两个组合。然后将所有N个建筑转化而成的2N个组合按照边界值从小到大排序。这里有一些特殊情况，如果有两个组合的边界值相等，那么如果两个都是左边界，那就高度高的在前面，因为我们遇到左边界就需要更新天际线，如果高度矮的在前面会多更新值，就不对了。如果两个都是右边界，那就反过来，高度矮的在前面，这样也是为了防止多更新值。如果是一左一右，那就左边界在前，这样是为了防止遇到右边界更新到低的位置，但是同位置上其实有更高的左边界天际线，所以要左边界在前。因此，我们可以在排序的时候，建立组合时将左边界对应的高度设为正的，右边界对应的高度设为负数，这样排序就方便了。</p>
+<p>同时，如何保存天际线的高度的呢，我们需要一个可以快速找出最高天际线，删除其中某一个特定位置的天际线的操作的数据结构。这里可以自己写一个Heap，同时也可以使用muliset，C++的STL自带的multiset可以自动排序，同时满足删除操作。</p>
+<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间上，排序加后续的遍历O(NlogN)+O(NlogN)。空间上，O(N)。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">getSkyline</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; buildings)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">typedef</span> pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; Event;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> len = buildings.<span class="built_in">size</span>();</span><br><span class="line">        <span class="built_in">vector</span>&lt;Event&gt; ev;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Fill ev</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> build : buildings) &#123;</span><br><span class="line">            ev.emplace_back(build[<span class="number">0</span>], build[<span class="number">2</span>]); <span class="comment">// Enter event</span></span><br><span class="line">            ev.emplace_back(build[<span class="number">1</span>], -build[<span class="number">2</span>]); <span class="comment">// Leave event</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// Sorted ev by X</span></span><br><span class="line">        sort(ev.<span class="built_in">begin</span>(), ev.<span class="built_in">end</span>(), [](<span class="keyword">const</span> Event&amp; a, <span class="keyword">const</span> Event&amp; b) &#123;</span><br><span class="line">            <span class="keyword">if</span> (a.first == b.first) <span class="keyword">return</span> a.second &gt; b.second;</span><br><span class="line">            <span class="keyword">return</span> a.first &lt; b.first;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="built_in">multiset</span>&lt;<span class="keyword">int</span>, greater&lt;<span class="keyword">int</span>&gt;&gt; hs;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; res;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> e : ev) &#123;</span><br><span class="line">            <span class="keyword">int</span> x = e.first, h = e.second;</span><br><span class="line">            <span class="keyword">if</span> (h &gt; <span class="number">0</span>) &#123; <span class="comment">// Enter event</span></span><br><span class="line">                <span class="keyword">int</span> maxheight = hs.empty() ? <span class="number">0</span> : *hs.<span class="built_in">begin</span>();</span><br><span class="line">                <span class="keyword">if</span> (h &gt; maxheight)</span><br><span class="line">                    res.push_back(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(&#123;x, h&#125;)); </span><br><span class="line">                hs.insert(h);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123; <span class="comment">// Leave event</span></span><br><span class="line">                h = -h;</span><br><span class="line">                hs.erase(hs.equal_range(h).first);</span><br><span class="line">                <span class="keyword">int</span> maxheight = hs.empty() ? <span class="number">0</span> : *hs.<span class="built_in">begin</span>();</span><br><span class="line">                <span class="keyword">if</span> (h &gt; maxheight)</span><br><span class="line">                    res.push_back(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(&#123;x, maxheight&#125;));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2020-04-23</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/21/LeetCode(201.%20Bitwise%20AND%20of%20Numbers%20Range)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -853,186 +1028,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/09/LeetCode(377.%20Combination%20Sum%20IV)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/04/09/LeetCode(377.%20Combination%20Sum%20IV)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(377. Combination Sum IV)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-04-09 12:12:54 / 修改时间：12:53:45" itemprop="dateCreated datePublished" datetime="2020-04-09T12:12:54+08:00">2020-04-09</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-377-Combination-Sum-IV-题解"><a href="#LeetCode-377-Combination-Sum-IV-题解" class="headerlink" title="LeetCode(\377. Combination Sum IV)题解"></a>LeetCode(\377. Combination Sum IV)题解</h1><p>Given an integer array with all positive numbers and no duplicates, find the number of possible combinations that add up to a positive integer target.</p>
-<p><strong>Example:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">nums &#x3D; [1, 2, 3]</span><br><span class="line">target &#x3D; 4</span><br><span class="line"></span><br><span class="line">The possible combination ways are:</span><br><span class="line">(1, 1, 1, 1)</span><br><span class="line">(1, 1, 2)</span><br><span class="line">(1, 2, 1)</span><br><span class="line">(1, 3)</span><br><span class="line">(2, 1, 1)</span><br><span class="line">(2, 2)</span><br><span class="line">(3, 1)</span><br><span class="line"></span><br><span class="line">Note that different sequences are counted as different combinations.</span><br><span class="line"></span><br><span class="line">Therefore the output is 7.</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Follow up:</strong><br>What if negative numbers are allowed in the given array?<br>How does it change the problem?<br>What limitation we need to add to the question to allow negative numbers?</p>
-<p><strong>Credits:</strong><br>Special thanks to <a href="https://leetcode.com/pbrother/" target="_blank" rel="noopener">@pbrother</a> for adding this problem and creating all test cases.</p>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Medium</p>
-<p>给定一个不包含重复数的正整数数组，从中选取一些整数，可以重复选取，使得其和为target，选择的顺序不同带来不同的答案，求解最后可以得到多少个这样的子数组。</p>
-<p>下面我按照做题的思路逐步论述这道题。</p>
-<p>这个题看到的第一时间尝试使用回溯法。设计一个递归函数返回符合target目标的所有合法序列的总数。考虑选第一个数，假设现在要选出所有的合法序列，我们选择一个数作为第一个。然后target减少，进入下一层递归，然后又从整个数组中选择一个数，再进入下一层递归···，这样因为每一层递归在同层对应的位置上选择的数都是不一样的（因为所有元素不同），所以最后得到的序列一定是不一样的。</p>
-<p>结束递归就是，target小于0，或者等于0，等于0说明这一路选择的序列是合法的，ans+1即可。因此代码就很容易写了。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">helper</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> target, <span class="keyword">int</span>&amp; ans)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (target == <span class="number">0</span>) &#123;</span><br><span class="line">            ans++;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (target &lt; <span class="number">0</span>) <span class="keyword">return</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// select</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> n : nums) &#123;</span><br><span class="line">            helper(nums, target - n, ans);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">combinationSum4</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        helper(nums, target, res);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>毫无疑问，TLE了···。</p>
-<p>那我们就对上面的进行优化，查看每个target，因为都是从同一个数组中选择数据。所以，我们可以记录下target的值，子问题的搜索次数。稍微修改下代码。用一个dp的vector记录target的值，初始化dp[0] = 1. 当然dp[target] &gt; 0总是。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">helper</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> target, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; dp)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (dp[target] &gt; <span class="number">0</span>) <span class="keyword">return</span> dp[target];</span><br><span class="line">        <span class="keyword">if</span> (target == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//if (target &lt; 0) return 0; // no effect</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">// select</span></span><br><span class="line">        <span class="keyword">int</span> ans = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> n : nums) &#123;</span><br><span class="line">            <span class="keyword">if</span> (n &gt; target) <span class="keyword">continue</span>;</span><br><span class="line">            ans += helper(nums, target - n, dp);</span><br><span class="line">        &#125;</span><br><span class="line">        dp[target] = ans;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">combinationSum4</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; dp = <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(target + <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">        dp[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">        helper(nums, target, dp);</span><br><span class="line">        <span class="keyword">return</span> dp[target];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>结果还是TLE，这是因为，虽然优化了子问题的搜索方式，但是对于子问题的规模并没有变，即使查看所有的子问题（遍历一遍），查看是否已经解决了所花费的时间都还是很大。当然还有其它的优化方式，比如将数组排序，然后如果当前数大于target就可以不用再向后找了之类的。</p>
-<h4 id="DP解法"><a href="#DP解法" class="headerlink" title="DP解法"></a>DP解法</h4><p>这个题其实可以使用DP解决。我们设定f(i)表示在整个数组寻找的合法的数组满足target=i的数目。那么如何来设定转移方程，即f(i)如何填充呢？</p>
-<p>其实我们可以这样想，f(i)现在要选一个数作为序列的第一个，那么假如选择了nums[k]，那么剩下的target为i-nums[k]。因为序列第一个是nums[k]，加在后面的f(i-nums[k])对应的序列的前面即可，肯定是不重复的。然后我们选择另一个元素nums[p]，那么又得到一个后面的子序列个数。</p>
-<p>所以我们可以填充$f(i) = \sum f(i-nums[k])\ \ (0=&lt;k&lt;n, i-nums[k]&gt;=0)$ </p>
-<p>然后又同志可能会问，因为这个选择的序列是可以排列的，不同的排列是不同的序列啊，如果nums[k]不是放在第一个呢？其实这时候如果不是nums[k]在第一个，那就是别的，那就对应别的f(XX)了啊，我们一样会遍历到这个情况的。</p>
-<h3 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h3><p>因此改写代码如下(这里int会超限，因此改为unsigned long也可, long都不行)，时间上，$O(target * N)$，空间上，$O(target)$。</p>
-<p><code>Runtime: 0 ms, faster than 100.00% of C++ online submissions for Combination Sum IV.</code></p>
-<p><code>Memory Usage: 6.5 MB, less than 100.00% of C++ online submissions for Combination Sum IV.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">combinationSum4</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">unsigned</span> <span class="keyword">long</span>&gt; dp = <span class="built_in">vector</span>&lt;<span class="keyword">unsigned</span> <span class="keyword">long</span>&gt;(target + <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">        dp[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> t=<span class="number">1</span>; t&lt;=target; ++t) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">auto</span> n : nums) &#123;</span><br><span class="line">                <span class="keyword">if</span> (n &gt; t) <span class="keyword">continue</span>;</span><br><span class="line">                dp[t] += dp[t - n];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> dp[target];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2020-04-09.</p>
-<p>注：这个题最后说如果存在负数，应该怎么改，其实如果有负数的时候，那么有可能满足target的条件有无数个。因此需要设定一个上界，如果答案数满足了上界了，就不再寻找了。此外就算遇到n&gt;t即DP代码中n&gt;target的情况，也不跳过，而是继续寻找，但是负数有可能会重复加上，因此可以判断每次加入一个负数，两个负数,····。然后后面就不再加入负数了等操作。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/08/LeetCode(818.%20Race%20Car)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/04/08/LeetCode(818.%20Race%20Car)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(818. Race Car)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-04-08 12:36:17 / 修改时间：12:36:19" itemprop="dateCreated datePublished" datetime="2020-04-08T12:36:17+08:00">2020-04-08</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-818-Race-Car-题解"><a href="#LeetCode-818-Race-Car-题解" class="headerlink" title="LeetCode(\818. Race Car)题解"></a>LeetCode(\818. Race Car)题解</h1><p>Your car starts at position 0 and speed +1 on an infinite number line. (Your car can go into negative positions.)</p>
-<p>Your car drives automatically according to a sequence of instructions A (accelerate) and R (reverse).</p>
-<p>When you get an instruction “A”, your car does the following: <code>position += speed, speed *= 2</code>.</p>
-<p>When you get an instruction “R”, your car does the following: if your speed is positive then <code>speed = -1</code> , otherwise <code>speed = 1</code>. (Your position stays the same.)</p>
-<p>For example, after commands “AAR”, your car goes to positions 0-&gt;1-&gt;3-&gt;3, and your speed goes to 1-&gt;2-&gt;4-&gt;-1.</p>
-<p>Now for some target position, say the <strong>length</strong> of the shortest sequence of instructions to get there.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Example 1:</span><br><span class="line">Input: </span><br><span class="line">target &#x3D; 3</span><br><span class="line">Output: 2</span><br><span class="line">Explanation: </span><br><span class="line">The shortest instruction sequence is &quot;AA&quot;.</span><br><span class="line">Your position goes from 0-&gt;1-&gt;3.</span><br><span class="line">Example 2:</span><br><span class="line">Input: </span><br><span class="line">target &#x3D; 6</span><br><span class="line">Output: 5</span><br><span class="line">Explanation: </span><br><span class="line">The shortest instruction sequence is &quot;AAARA&quot;.</span><br><span class="line">Your position goes from 0-&gt;1-&gt;3-&gt;7-&gt;7-&gt;6.</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Note:</strong></p>
-<ul>
-<li><code>1 &lt;= target &lt;= 10000</code>.</li>
-</ul>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Hard</p>
-<p>起始时有个小车在位置0，速度为1，有个目标位置 target，是小车要到达的地方。而小车只有两种操作，第一种是加速操作，首先当前位置加上小车速度，然后小车速度乘以2。第二种是反向操作，小车位置不变，小车速度重置为单位长度，并且反向。问我们最少需要多少个操作才能到达 target。</p>
-<p>本题可以使用DP解决。</p>
-<p>我们首先来看下若小车一直加速的话，都能经过哪些位置，从起点开始，若小车连加五次速，位置的变化为：</p>
-<p>0 -&gt; 1 -&gt; 3 -&gt; 7 -&gt; 15 -&gt; 31。</p>
-<p>得出了结论，当小车从0开始连加n个速的话，其将会到达位置 2^n - 1。我们可以看出，小车越往后，位置跨度越大，那么当 target 不在这些位置上，很有可能一脚油门就开过了。</p>
-<p>假设target的位置有：$2^{n-1}&lt;=target&lt;2^n$。</p>
-<p>执行如下策略，小车尽可能靠近target，即走了n步之后，如果刚好就在target，则结束算法。</p>
-<p>如果不在，此时有两种情况：</p>
-<ol>
-<li>n步之后刚刚好越过target，此时不能再向前走了（因为再向后走的话，一次增大的间距会变成2^n，如果要往回返，需要从速度1开始多走至少2^n的长度，肯定不是到target的最优路径）。这时候直接停下，然后计算返回路径。</li>
-<li>n步之后，还差一步就越过target。此时不能再直接向前，我们选择停住向后走m步，并且不能往回走超过n步，理由和上述一致。(往回走n步会回到原点)。然后再停住回返，计算到target的路径。至于为什么不在n步之前就回返二次，我目前没有办法给出确定证明，只是感觉要么可以用到了n步回返代替，要么就这种方式肯定不是最优的。</li>
-</ol>
-<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间上，O(targetlog(target))，空间上，O(target)。</p>
-<p><code>Runtime: 4 ms, faster than 88.37% of C++ online submissions for Race Car.</code></p>
-<p><code>Memory Usage: 8.9 MB, less than 33.33% of C++ online submissions for Race Car.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; dp = <span class="built_in">vector</span>(<span class="number">10001</span>, <span class="number">0</span>);</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">racecar</span><span class="params">(<span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (dp[target] &gt; <span class="number">0</span>) <span class="keyword">return</span> dp[target];</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> n = <span class="built_in">floor</span>(log2(target)) + <span class="number">1</span>; <span class="comment">// 2^(n-1) &lt;= target &lt; 2^n</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (target+<span class="number">1</span> == <span class="number">1</span>&lt;&lt;n) dp[target] = n;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            dp[target] = racecar((<span class="number">1</span>&lt;&lt;n) - <span class="number">1</span> - target) + n + <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> m=<span class="number">0</span>; m&lt;n<span class="number">-1</span>; m++) &#123;</span><br><span class="line">                dp[target] = <span class="built_in">min</span>(dp[target], racecar(target - (<span class="number">1</span>&lt;&lt;(n<span class="number">-1</span>)) + (<span class="number">1</span>&lt;&lt;m)) + n + m + <span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp[target];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2020-04-08.</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1103,12 +1098,12 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">342</span>
+          <span class="site-state-item-count">344</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">19</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>

@@ -168,6 +168,165 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(33.%20Search%20in%20Rotated%20Sorted%20Array)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(33.%20Search%20in%20Rotated%20Sorted%20Array)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(33. Search in Rotated Sorted Array)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-33-Search-in-Rotated-Sorted-Array-题解"><a href="#LeetCode-33-Search-in-Rotated-Sorted-Array-题解" class="headerlink" title="LeetCode(33. Search in Rotated Sorted Array)题解"></a>LeetCode(33. Search in Rotated Sorted Array)题解</h1><hr>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给定一个升序的一串数字，其中有可能在某个位置被旋转了，比如 1、2、3、4、5在3旋转就变成了3、4、5、1、2，此时的旋转点位置的值5，因为这个值之后的数都变小了。现在假定这串数字是不重合的，给定一个数target，要求在O(logn)的时间内找出这个数在一串数字中的索引，如果有的话就返回位置，没有返回-1。</p>
+<p>一旦涉及到logn通常考虑二分查找。因此这个题可以这样想，首先将数组对半分，查看中间的数与两边的数的大小，可以知道的是，当数组被旋转之后，第一个元素是一定大于最后一个元素的。</p>
+<p>假如中间元素小于右边元素，可以判断旋转点在中间元素的左边。此时有以下几种情况：</p>
+<p>1 target=中间元素，直接返回索引值，算法结束<br>2 target=右边元素，直接返回索引值，算法结束<br>3 target大于右边元素，表明其值只可能在左边的半个数组内，在左边数组内寻找<br>4 target小于中间元素，表明其值只可能在左边的半个数组内，在左边数组内寻找<br>5 target在中间元素和右边元素之间，表明其值只可能在右边的半个数组内，在右边数组内寻找</p>
+<p>假如中间元素大于右边元素，可以判断旋转点在中间元素的右边。此时有以下几种情况：</p>
+<p>1 target=中间元素，直接返回索引值，算法结束<br>2 target=左边元素，直接返回索引值，算法结束<br>3 target小于左边元素，表明其值只可能在右边的半个数组内，在右边数组内寻找<br>4 target大于中间元素，表明其值只可能在右边的半个数组内，在右边数组内寻找<br>5 target在中间元素和左边元素之间，表明其值只可能在左边的半个数组内，在左边数组内寻找</p>
+<p>注意，如果没有target如何判断，可以这样：当中间元素等于右边元素时，表明此时数组内就一个元素，而此时target还是不等于的话，就返回-1。<br>这样，每次都将数组减半，时间复杂度为O(logn)</p>
+<p>代码如下：<br>Runtime: 4 ms, faster than 99.87% of C++ online submissions for Search in Rotated Sorted Array.<br>Memory Usage: 9.1 MB, less than 98.58% of C++ online submissions for Search in Rotated Sorted Array.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">findindex</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> left, <span class="keyword">int</span> right, <span class="keyword">int</span> target)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(left&gt;right) <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> med = (left+right)/<span class="number">2</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(nums[med]==nums[right]) <span class="keyword">return</span> nums[med]==target ? med:<span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(nums[med]&lt;nums[right])&#123;</span><br><span class="line">            <span class="keyword">if</span>(target==nums[med]) <span class="keyword">return</span> med;</span><br><span class="line">            <span class="keyword">if</span>(target==nums[right]) <span class="keyword">return</span> right;</span><br><span class="line">            <span class="keyword">if</span>(target&lt;nums[med]) <span class="keyword">return</span> findindex(nums, left, med<span class="number">-1</span>, target);</span><br><span class="line">            <span class="keyword">if</span>(target&gt;nums[right]) <span class="keyword">return</span> findindex(nums, left, med<span class="number">-1</span>, target);</span><br><span class="line">            <span class="keyword">return</span> findindex(nums, med+<span class="number">1</span>, right, target);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//nums[med]&gt;nums[right])&#123;</span></span><br><span class="line">        <span class="keyword">if</span>(target==nums[med]) <span class="keyword">return</span> med;</span><br><span class="line">        <span class="keyword">if</span>(target==nums[left]) <span class="keyword">return</span> left;</span><br><span class="line">        <span class="keyword">if</span>(target&gt;nums[med]) <span class="keyword">return</span> findindex(nums, med+<span class="number">1</span>, right, target);</span><br><span class="line">        <span class="keyword">if</span>(target&lt;nums[left]) <span class="keyword">return</span> findindex(nums, med+<span class="number">1</span>, right, target);</span><br><span class="line">        <span class="keyword">return</span> findindex(nums, left, med<span class="number">-1</span>, target);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">search</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span>(len==<span class="number">0</span>) <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> findindex(nums, <span class="number">0</span>, len<span class="number">-1</span>, target);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>或者</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">findindex</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> left, <span class="keyword">int</span> right, <span class="keyword">int</span> target)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(left&gt;right) <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">if</span>(left==right) <span class="keyword">return</span> nums[left]==target ? left:<span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">int</span> med = (left+right)/<span class="number">2</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//if(nums[med]==nums[right]) return nums[med]==target ? med:-1;</span></span><br><span class="line">        <span class="keyword">if</span>(nums[med]&lt;nums[right])&#123;</span><br><span class="line">            <span class="keyword">if</span>(target==nums[med]) <span class="keyword">return</span> med;</span><br><span class="line">            <span class="keyword">if</span>(target==nums[right]) <span class="keyword">return</span> right;</span><br><span class="line">            <span class="keyword">if</span>(target&lt;nums[med]) <span class="keyword">return</span> findindex(nums, left, med<span class="number">-1</span>, target);</span><br><span class="line">            <span class="keyword">if</span>(target&gt;nums[right]) <span class="keyword">return</span> findindex(nums, left, med<span class="number">-1</span>, target);</span><br><span class="line">            <span class="keyword">return</span> findindex(nums, med+<span class="number">1</span>, right, target);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//nums[med]&gt;nums[right])&#123;</span></span><br><span class="line">        <span class="keyword">if</span>(target==nums[med]) <span class="keyword">return</span> med;</span><br><span class="line">        <span class="keyword">if</span>(target==nums[left]) <span class="keyword">return</span> left;</span><br><span class="line">        <span class="keyword">if</span>(target&gt;nums[med]) <span class="keyword">return</span> findindex(nums, med+<span class="number">1</span>, right, target);</span><br><span class="line">        <span class="keyword">if</span>(target&lt;nums[left]) <span class="keyword">return</span> findindex(nums, med+<span class="number">1</span>, right, target);</span><br><span class="line">        <span class="keyword">return</span> findindex(nums, left, med<span class="number">-1</span>, target);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">search</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span>(len==<span class="number">0</span>) <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> findindex(nums, <span class="number">0</span>, len<span class="number">-1</span>, target);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-05-10</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(337.%20House%20Robber%20III)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(337.%20House%20Robber%20III)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(337. House Robber III)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-337-House-Robber-III-题解"><a href="#LeetCode-337-House-Robber-III-题解" class="headerlink" title="LeetCode(337. House Robber III)题解"></a>LeetCode(337. House Robber III)题解</h1><hr>
+<p>The thief has found himself a new place for his thievery again. There is only one entrance to this area, called the “root.” Besides the root, each house has one and only one parent house. After a tour, the smart thief realized that “all houses in this place forms a binary tree”. It will automatically contact the police if two directly-linked houses were broken into on the same night.</p>
+<p>Determine the maximum amount of money the thief can rob tonight without alerting the police.</p>
+<p>Example 1:</p>
+<pre><code>Input: [3,2,3,null,3,null,1]
+
+ 3
+/ \</code></pre><p>   2   3<br>    \   \<br>     3   1</p>
+<pre><code>Output: 7 
+Explanation: Maximum amount of money the thief can rob = 3 + 3 + 1 = 7.</code></pre><p>Example 2:</p>
+<pre><code>Input: [3,4,5,1,3,null,1]
+
+     3
+    / \
+   4   5
+  / \   \ 
+ 1   3   1
+
+Output: 9
+Explanation: Maximum amount of money the thief can rob = 4 + 5 = 9.</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出一个二叉树，找出其中不相邻节点的值的最大和。</p>
+<p>跟数组抢劫一样，使用DP即可。对于一个节点来说，如果当前节点计入，那么孩子节点就不能计入，而计算以孙子节点为根节点的树。反之若当前节点不计入，则计算以儿子节点为根节点的数，这二者取最大值即可。</p>
+<p>最朴素的代码如下：</p>
+<p>Runtime: 1852 ms, faster than 5.02% of C++ online submissions for House Robber III.<br>Memory Usage: 20.8 MB, less than 83.33% of C++ online submissions for House Robber III.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">rob</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span>(root-&gt;right == <span class="literal">NULL</span> &amp;&amp; root-&gt;left == <span class="literal">NULL</span>) <span class="keyword">return</span> root-&gt;val;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(root-&gt;left == <span class="literal">NULL</span>) </span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">max</span>(root-&gt;val+rob(root-&gt;right-&gt;left)+rob(root-&gt;right-&gt;right), rob(root-&gt;right));</span><br><span class="line">        <span class="keyword">if</span>(root-&gt;right == <span class="literal">NULL</span>) </span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">max</span>(root-&gt;val+rob(root-&gt;left-&gt;left)+rob(root-&gt;left-&gt;right), rob(root-&gt;left));</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">max</span>(root-&gt;val+rob(root-&gt;left-&gt;left)+rob(root-&gt;left-&gt;right)+rob(root-&gt;right-&gt;left)+rob(root-&gt;right-&gt;right), rob(root-&gt;left)+rob(root-&gt;right));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到非常地耗时，这是因为计算一个节点的时候，需要不断计算孩子孙子节点，而做了大量无用功。可以用一个map记录下来算过的值，这样可以大大减少时间。</p>
+<p>代码如下：</p>
+<p>Runtime: 24 ms, faster than 46.56% of C++ online submissions for House Robber III.<br>Memory Usage: 24 MB, less than 16.67% of C++ online submissions for House Robber III.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">    <span class="built_in">map</span>&lt;TreeNode*, <span class="keyword">int</span>&gt; M;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">rob</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span>(M.<span class="built_in">find</span>(root) != M.<span class="built_in">end</span>()) <span class="keyword">return</span> M[root];</span><br><span class="line">        <span class="keyword">if</span>(root-&gt;right == <span class="literal">NULL</span> &amp;&amp; root-&gt;left == <span class="literal">NULL</span>)&#123;</span><br><span class="line">            M[root] = root-&gt;val;</span><br><span class="line">            <span class="keyword">return</span> M[root];</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(root-&gt;left == <span class="literal">NULL</span>)&#123;</span><br><span class="line">            M[root] = <span class="built_in">max</span>(root-&gt;val+rob(root-&gt;right-&gt;left)+rob(root-&gt;right-&gt;right), rob(root-&gt;right));</span><br><span class="line">            <span class="keyword">return</span> M[root];</span><br><span class="line">        &#125;</span><br><span class="line">            </span><br><span class="line">        <span class="keyword">if</span>(root-&gt;right == <span class="literal">NULL</span>)&#123;</span><br><span class="line">            M[root] = <span class="built_in">max</span>(root-&gt;val+rob(root-&gt;left-&gt;left)+rob(root-&gt;left-&gt;right), rob(root-&gt;left));</span><br><span class="line">            <span class="keyword">return</span> M[root]; </span><br><span class="line">        &#125;</span><br><span class="line">        M[root] = <span class="built_in">max</span>(root-&gt;val+rob(root-&gt;left-&gt;left)+rob(root-&gt;left-&gt;right)+rob(root-&gt;right-&gt;left)+rob(root-&gt;right-&gt;right), rob(root-&gt;left)+rob(root-&gt;right));</span><br><span class="line">        <span class="keyword">return</span> M[root];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-08-8</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(338.%20Counting%20Bits)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -806,157 +965,6 @@ Output: &quot;1211&quot;</code></pre><h2 id="解题思路"><a href="#解题思�
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(39.%20Combination%20Sum)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(39.%20Combination%20Sum)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(39. Combination Sum)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-39-Combination-Sum-题解"><a href="#LeetCode-39-Combination-Sum-题解" class="headerlink" title="LeetCode(39. Combination Sum)题解"></a>LeetCode(39. Combination Sum)题解</h1><hr>
-<p>Given a set of candidate numbers (candidates) (without duplicates) and a target number (target), find all unique combinations in candidates where the candidate numbers sums to target.</p>
-<p>The same repeated number may be chosen from candidates unlimited number of times.</p>
-<p>Note:</p>
-<p>All numbers (including target) will be positive integers.<br>The solution set must not contain duplicate combinations.<br>Example 1:</p>
-<pre><code>Input: candidates = [2,3,6,7], target = 7,
-A solution set is:
-[
-[7],
-[2,2,3]
-]</code></pre><p>Example 2:</p>
-<pre><code>Input: candidates = [2,3,5], target = 8,
-A solution set is:
-[
-[2,2,2,2],
-[2,3,3],
-[3,5]
-]</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Medium，要求给定一个不重复的数组，求出一些元素的组合其和位target，这些元素可以重复多次。</p>
-<p>这道题看到首先想到的是先排序，然后队首队尾两个指针向中间走，但是这个题并不用这么复杂。</p>
-<p>我们可以使用递归的办法，将数组升序排序之后，进入一个递归数组，首先加入第一个数，当其和小于target的，剩下的在第二个数到之后的数中选，这涵盖了一些情况。然后将第一个数在此加入，等于把第一个数选取两次，然后剩下的在第二个数到之后的数中选。然后将第一个数加入三次·····当然要保证数之和要小于等于target。最后递归内的核心结构就是如果大于就返回，等于就记录，小于就往下走。</p>
-<p>代码如下：</p>
-<p>Runtime: 276 ms, faster than 5.00% of C++ online submissions for Combination Sum.<br>Memory Usage: 113.9 MB, less than 5.01% of C++ online submissions for Combination Sum.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">findSum</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; ret, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; tmp, <span class="keyword">int</span> tsum,  <span class="keyword">int</span> target, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; candidates, <span class="keyword">int</span> sta, <span class="keyword">int</span> len)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(tsum==target)&#123;</span><br><span class="line">            ret.push_back(tmp);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(sta&gt;=len || tsum&gt;target) <span class="keyword">return</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">tmp_</span><span class="params">(tmp)</span></span>;</span><br><span class="line">        findSum(ret, tmp_, tsum, target, candidates, sta+<span class="number">1</span>, len);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i*candidates[sta]+tsum &lt;= target; i++)&#123;</span><br><span class="line">            tmp_.push_back(candidates[sta]);</span><br><span class="line">            findSum(ret, tmp_, i*candidates[sta]+tsum, target, candidates, sta+<span class="number">1</span>, len);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">combinationSum</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; candidates, <span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = candidates.<span class="built_in">size</span>();</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; ret;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; tmp;</span><br><span class="line">        </span><br><span class="line">        sort(candidates.<span class="built_in">begin</span>(), candidates.<span class="built_in">end</span>());</span><br><span class="line">        </span><br><span class="line">        findSum(ret, tmp, <span class="number">0</span>, target, candidates, <span class="number">0</span>, len);</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(406.%20Queue%20Reconstruction%20by%20Height)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(406.%20Queue%20Reconstruction%20by%20Height)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(406. Queue Reconstruction by Height)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-406-Queue-Reconstruction-by-Height-题解"><a href="#LeetCode-406-Queue-Reconstruction-by-Height-题解" class="headerlink" title="LeetCode(406. Queue Reconstruction by Height)题解"></a>LeetCode(406. Queue Reconstruction by Height)题解</h1><hr>
-<p>Suppose you have a random list of people standing in a queue. Each person is described by a pair of integers (h, k), where h is the height of the person and k is the number of people in front of this person who have a height greater than or equal to h. Write an algorithm to reconstruct the queue.</p>
-<pre><code>Note:
-The number of people is less than 1,100.</code></pre><p>Example</p>
-<pre><code>Input:
-[[7,0], [4,4], [7,1], [5,0], [6,1], [5,2]]
-
-Output:
-[[5,0], [7,0], [5,2], [6,1], [4,4], [7,1]]</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出一个队列数组，每个元素包括两个。前一个是身高，后面是队列中前面比他高或者相等的人数目。</p>
-<p>这有一个解题思路<a href="https://leetcode.com/problems/queue-reconstruction-by-height/" target="_blank" rel="noopener">https://leetcode.com/problems/queue-reconstruction-by-height/</a></p>
-<p>代码如下</p>
-<p>Runtime: 136 ms, faster than 13.53% of C++ online submissions for Queue Reconstruction by Height.<br>Memory Usage: 25.1 MB, less than 9.52% of C++ online submissions for Queue Reconstruction by Height.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; a, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; b)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(a[<span class="number">0</span>] &gt; b[<span class="number">0</span>]) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">if</span>(a[<span class="number">0</span>]==b[<span class="number">0</span>]) <span class="keyword">return</span> a[<span class="number">1</span>]&lt;b[<span class="number">1</span>];</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">reconstructQueue</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; people)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; res;</span><br><span class="line">        <span class="keyword">int</span> len = people.<span class="built_in">size</span>();</span><br><span class="line">        sort(people.<span class="built_in">begin</span>(), people.<span class="built_in">end</span>(), cmp);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(people[i][<span class="number">1</span>]&gt;=i) res.push_back(people[i]);</span><br><span class="line">            <span class="keyword">else</span> res.insert(res.<span class="built_in">begin</span>()+people[i][<span class="number">1</span>], people[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-08-10</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1027,12 +1035,12 @@ Output:
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">342</span>
+          <span class="site-state-item-count">344</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">19</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
