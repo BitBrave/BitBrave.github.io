@@ -168,6 +168,83 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(264.%20Ugly%20Number%20II)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(264.%20Ugly%20Number%20II)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(264. Ugly Number II)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-264-Ugly-Number-II-题解"><a href="#LeetCode-264-Ugly-Number-II-题解" class="headerlink" title="LeetCode(\264. Ugly Number II)题解"></a>LeetCode(\264. Ugly Number II)题解</h1><p>Write a program to find the <code>n</code>-th ugly number.</p>
+<p>Ugly numbers are <strong>positive numbers</strong> whose prime factors only include <code>2, 3, 5</code>. </p>
+<p><strong>Example:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: n &#x3D; 10</span><br><span class="line">Output: 12</span><br><span class="line">Explanation: 1, 2, 3, 4, 5, 6, 8, 9, 10, 12 is the sequence of the first 10 ugly numbers.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Note:</strong> </p>
+<ol>
+<li><code>1</code> is typically treated as an ugly number.</li>
+<li><code>n</code> <strong>does not exceed 1690</strong>.</li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>寻找第N个丑陋数，丑陋数的定义就是1和因子只有2,3,5,的整数。</p>
+<p>最暴力的解法就是从1开始不断遍历，判断当前数是不是丑陋数，直到找到第N个。但是这样会超时，因为有很多冗余的操作，很多数不是丑陋数。</p>
+<p>这个题给出了很多hint，通过分析可以发现丑陋数的出现是可以计算出来的：假设我们现在从1开始已经依次从小到大有了M个丑陋数，那么如何计算出第M+1个丑陋数呢？我们可以把当前所有元素都分别乘2、乘3、乘5，然后取所有的值中，比当前第M个丑陋数大的最小的值。</p>
+<p>但是其实我们不必将所有的数都乘上2,3,5，只需要找到最小的乘以2，3,5的大于当前丑陋数的几个数，然后取乘之后的三个值中的最小的值即可。然后将最小值对应地原始的丑陋数所在位置更新一下即可。</p>
+<p>代码如下，时间复杂度O(N)，空间复杂度O(N)。</p>
+<p><code>Runtime: 8 ms, faster than 75.06% of C++ online submissions for Ugly Number II.</code></p>
+<p><code>Memory Usage: 9.8 MB, less than 100.00% of C++ online submissions for Ugly Number II.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">nthUglyNumber</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">ret</span><span class="params">(n, <span class="number">1</span>)</span></span>;</span><br><span class="line">        <span class="keyword">int</span> i2 = <span class="number">0</span>, i3 = <span class="number">0</span>, i5 = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;n; i++)&#123;</span><br><span class="line">            ret[i] = <span class="built_in">min</span>(ret[i2]*<span class="number">2</span>, <span class="built_in">min</span>(ret[i3]*<span class="number">3</span>, ret[i5]*<span class="number">5</span>));</span><br><span class="line">            <span class="keyword">if</span>(ret[i] == ret[i2]*<span class="number">2</span>) i2++;</span><br><span class="line">            <span class="keyword">if</span>(ret[i] == ret[i3]*<span class="number">3</span>) i3++;</span><br><span class="line">            <span class="keyword">if</span>(ret[i] == ret[i5]*<span class="number">5</span>) i5++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret[n<span class="number">-1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2019-12-04</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(27.%20Remove%20Element)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -860,88 +937,6 @@ Explanation: The longest valid parentheses substring is &quot;()()&quot;</code><
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(322.%20Coin%20Change)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(322.%20Coin%20Change)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(322. Coin Change)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-322-Coin-Change-题解"><a href="#LeetCode-322-Coin-Change-题解" class="headerlink" title="LeetCode(322. Coin Change)题解"></a>LeetCode(322. Coin Change)题解</h1><hr>
-<p>You are given coins of different denominations and a total amount of money amount. Write a function to compute the fewest number of coins that you need to make up that amount. If that amount of money cannot be made up by any combination of the coins, return -1.</p>
-<p>Example 1:</p>
-<pre><code>Input: coins = [1, 2, 5], amount = 11
-Output: 3 
-Explanation: 11 = 5 + 5 + 1</code></pre><p>Example 2:</p>
-<pre><code>Input: coins = [2], amount = 3
-Output: -1
-Note:
-You may assume that you have an infinite number of each kind of coin.</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一串数表示每个硬币的面值，每个硬币假设有无限个，从中找出可以组成给定面值的最小的硬币个数，返回其数目，否则返回-1.</p>
-<p>这个题明显用DP求解。但是状态转移方程有点难想，还是那句话，先从最简单的着手。假设硬币的面额有n种，第i种的面额为n[i]。需要凑齐的面额为m。</p>
-<p>我们用一个数组D[n][m]来进行状态方程的转移记录，初始化都为inf。其中D[i][j]表示在n[1-i]中凑齐面额为j的需要的最小的硬币数。如果凑不齐，就令D[i][j]=inf。那么最终结果就是D[n][m]。</p>
-<p>如何书写状态转移方程呢？假设要填充D[i][j], 那么有如下几种情况：</p>
-<p>不选择n[i]硬币，D[i][j] = D[i-1][j].</p>
-<p>选择了一枚或者多枚n[i]硬币，D[i][j] = D[i][j-n[i]].</p>
-<p>那么D[i][j] = min(D[i-1][j], D[i][j-n[i]]).</p>
-<p>优化策略</p>
-<p>这里可以看到，每次更新D[i][j]的时候，其实只用到了i-1行的数据，因此，可以将D[n][m]变为一个D[2][m]的数组。</p>
-<p>更进一步，D[i][j]更新使用的D[i-1][j]只表示上一个状态，因此，可以将D[2][m]直接变为D[m]初始化D[0]=0, 表示0面额需要0个硬币。</p>
-<p>最终时间复杂度O(mn)，空间复杂度O(m)</p>
-<p>代码如下:</p>
-<p>Runtime: 48 ms, faster than 65.50% of C++ online submissions for Coin Change.<br>Memory Usage: 12.6 MB, less than 82.35% of C++ online submissions for Coin Change.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">coinChange</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; coins, <span class="keyword">int</span> amount)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = coins.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span>(len == <span class="number">0</span>) <span class="keyword">return</span> amount == <span class="number">0</span> ? <span class="number">0</span>:<span class="number">-1</span>;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">res</span><span class="params">(amount+<span class="number">1</span>, INT_MAX)</span></span>;</span><br><span class="line">        res[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;=amount; j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(j-coins[i]&gt;=<span class="number">0</span>) res[j] = <span class="built_in">min</span>(res[j], <span class="number">1</span> + (res[j-coins[i]]==INT_MAX ? INT_MAX<span class="number">-1</span> : res[j-coins[i]]));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res[amount] == INT_MAX ? <span class="number">-1</span> : res[amount];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-08-19</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1012,12 +1007,12 @@ You may assume that you have an infinite number of each kind of coin.</code></pr
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">344</span>
+          <span class="site-state-item-count">345</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-count">21</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
