@@ -168,6 +168,108 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(99.%20Recover%20Binary%20Search%20Tree)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(99.%20Recover%20Binary%20Search%20Tree)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(99. Recover Binary Search Tree)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-99-Recover-Binary-Search-Tree-题解"><a href="#LeetCode-99-Recover-Binary-Search-Tree-题解" class="headerlink" title="LeetCode(99. Recover Binary Search Tree)题解"></a>LeetCode(99. Recover Binary Search Tree)题解</h1><hr>
+<p>Two elements of a binary search tree (BST) are swapped by mistake.</p>
+<p>Recover the tree without changing its structure.</p>
+<p>Example 1:</p>
+<pre><code>Input: [1,3,null,null,2]
+
+1
+/
+3
+ \
+  2
+
+Output: [3,1,null,null,2]
+
+3
+/
+1
+\
+2</code></pre><p>Example 2:</p>
+<pre><code>Input: [3,1,4,null,null,2]
+
+ 3
+/ \
+1   4
+/
+2
+
+Output: [2,1,4,null,null,3]
+
+  2
+ / \
+1   4
+    /
+    3</code></pre><p>Follow up:</p>
+<pre><code>A solution using O(n) space is pretty straight forward.
+Could you devise a constant space solution?</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出一个BST树，其中有两个值交换了位置导致出错。需要在O(n)的时间内，O(1)的空间下纠正这个错误。</p>
+<p>因为题目保证了只有两个值被交换，因此只要找出两处不和谐的地方，然后判断一下就可以了。可以利用中序遍历法（一个正确的BST的中序遍历下是递增的）找出局部降序点</p>
+<p>使用函数从root节点出发，寻找局部降序点。</p>
+<p>注意局部降序点有两种情况，一种是两个相邻的点交换了位置如（3，5，4）只有4和5交换，一种是不相邻的两个点交换了位置（3，8，5，6，7，4，9）8和4交换了位置。第一个的局部降序点是5，4。需要交换4和5。第二个的降序点是8，5和7，4，需要交换8和4.</p>
+<p>因此，在使用函数寻找降序点的时候. 使用两个指针，首先找到第一个降序点，记录当前节点和上一个节点，如第一个记录4和5。然后继续寻找第二个。如果找到了第二个，就把之前记录的当前节点换成现在的当前节点。然后返回。如果找不到，表示是相邻的交换。直接返回即可。</p>
+<p>代码如下：</p>
+<p>Runtime: 16 ms, faster than 98.67% of C++ online submissions for Recover Binary Search Tree.<br>Memory Usage: 17.7 MB, less than 80.93% of C++ online submissions for Recover Binary Search Tree.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">    TreeNode* back = <span class="literal">NULL</span>;</span><br><span class="line">    TreeNode* fore = <span class="literal">NULL</span>;</span><br><span class="line">    TreeNode* last = <span class="literal">NULL</span>;</span><br><span class="line">    </span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">inorder</span><span class="params">(TreeNode* root)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="literal">NULL</span>) <span class="keyword">return</span>;</span><br><span class="line">        inorder(root-&gt;left);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(last != <span class="literal">NULL</span> &amp;&amp; last-&gt;val &gt; root-&gt;val)&#123;</span><br><span class="line">            <span class="keyword">if</span>(back == <span class="literal">NULL</span>)&#123;</span><br><span class="line">                back = last;</span><br><span class="line">                fore = root;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> fore = root;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        last = root;</span><br><span class="line">        </span><br><span class="line">        inorder(root-&gt;right);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">recoverTree</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        inorder(root);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(back != <span class="literal">NULL</span>) swap(back-&gt;val, fore-&gt;val);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-06-25</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(990.%20Satisfiability%20of%20Equality%20Equations)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -695,7 +797,7 @@ The median is (2 + 3)/2 = 2.5</code></pre><p>这道题让我们求两个有序�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">345</span>
+          <span class="site-state-item-count">346</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

@@ -168,6 +168,108 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(932.%20Beautiful%20Array)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(932.%20Beautiful%20Array)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(932. Beautiful Array)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-932-Beautiful-Array-题解"><a href="#LeetCode-932-Beautiful-Array-题解" class="headerlink" title="LeetCode(932. Beautiful Array)题解"></a>LeetCode(932. Beautiful Array)题解</h1><p>For some fixed <code>N</code>, an array <code>A</code> is <em>beautiful</em> if it is a permutation of the integers <code>1, 2, ..., N</code>, such that:</p>
+<p>For every <code>i &lt; j</code>, there is <strong>no</strong> <code>k</code> with <code>i &lt; k &lt; j</code> such that <code>A[k] * 2 = A[i] + A[j]</code>.</p>
+<p>Given <code>N</code>, return <strong>any</strong> beautiful array <code>A</code>.  (It is guaranteed that one exists.)</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: 4</span><br><span class="line">Output: [2,1,4,3]</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: 5</span><br><span class="line">Output: [3,1,2,5,4]</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Note:</strong></p>
+<ul>
+<li><code>1 &lt;= N &lt;= 1000</code></li>
+</ul>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出一个数N，要求返回一个由1,2,3,4,…N的数组，这个数组必须是一个漂亮数组。即，任意A[i]和A[j]之间，即i&lt;k&lt;j，都有A[i]+A[j]!=2*A[k]。</p>
+<p>这个题可以使用DC的办法解决。首先假设一个数组B是漂亮数组，那么B中的元素整体加减一个元素和整体乘上除上一个数得到的数组仍然是一个漂亮数组。因为如果B[i]+B[j] != 2*B[k]，那么.</p>
+<ul>
+<li>B[i]+a+B[j]+a != 2*(B[k]+a)</li>
+<li>B[i]*a+B[j]*a != 2*(B[k]*a)</li>
+</ul>
+<p>而观察可知，中间元素的两倍一定是一个偶数，因此只要保证B[i]+B[j] 等于一个奇数一定就可以满足k位置元素的要求了。</p>
+<p>那么可以假设这样一个数组A，元素分别是1,2,3,…N。我们将其分成两组数，在左边分别放奇数1,3,5,7, …,一共(N+1)/2个，右边放上2,4,6,8,…一共N/2个。假设这两个数组内部是漂亮数组，那么这两个数组左右组合起来，也一定是一个漂亮数组。</p>
+<p>观察左边，将所有元素+1得到2,4,6,8,…，再除二就得到一个1,2,3,4,…共(N+1)/2的和一开始一样的数组。</p>
+<p>观察右边，将所有元素除二就得到一个1,2,3,4,…共N/2的和一开始一样的数组。</p>
+<p>这两个数组和一开始一样，只不过规模变小，并且只要这两个数组构成了漂亮数组，左边的只需要所有元素乘2-1，右边乘2，组合在一起就是初始问题的解。</p>
+<p>因此一个N的问题就变成了一个(N+1)/2和N/2的两个规模的问题。</p>
+<p>这个问题可以使用递归的办法解决,代码如下，时间复杂度O(nlogn)，空间复杂度O(1).</p>
+<p><code>Runtime: 16 ms, faster than 31.48% of C++ online submissions for Beautiful Array.</code></p>
+<p><code>Memory Usage: 19.8 MB, less than 100.00% of C++ online submissions for Beautiful Array.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">beautifulArray</span><span class="params">(<span class="keyword">int</span> N)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(N == <span class="number">0</span>) <span class="keyword">return</span> <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;();</span><br><span class="line">        <span class="keyword">if</span>(N == <span class="number">1</span>) <span class="keyword">return</span> <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(&#123;<span class="number">1</span>&#125;);</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; left = beautifulArray((N+<span class="number">1</span>)/<span class="number">2</span>), right = beautifulArray(N/<span class="number">2</span>), ret;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> a : left) ret.push_back(a*<span class="number">2</span><span class="number">-1</span>);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> a : right) ret.push_back(a*<span class="number">2</span>);</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>但是上述递归还是花费太多时间了因为折半的时候对于N=1,2,3这样的低阶计算了很多次，一个办法是将对应的答案存储起来，最后时间复杂度只需要O(N)，但需要O(N)的空间复杂度(1+2+4+…+N)。</p>
+<p>这里还有一个优化的办法，观察数组有以下性质，假设有一个N+1的漂亮数组，现在删除掉其中的N+1，剩下的额仍旧是漂亮数组，因为如果不是的话，那么加上N+1之后也就不是了。因此推论出，一个为N的漂亮数组，可以依次删除N,N-1,N-2等数得到一个更低阶的漂亮数组。</p>
+<p>因此，一个N的问题是这样增长过来的，以左边和右边数组的各自的元素长度计算来说分别是说。</p>
+<ul>
+<li>1,1-&gt;2,2-&gt;4,4-&gt;4,4-&gt;…-&gt;m,m。直到2*m&gt;=N.</li>
+</ul>
+<p>因此，这个题可以从左边为1个元素，右边为1个元素开始，逐步增加。每次增加，到达M时，都将当前数组的元素整体乘2-1作为M+1数组的左边，整体*2作为M+1的右边。知道数组长度大于等于N就停下，然后从中删除那些大于N的元素即可。</p>
+<p>这样的时间复杂度O(n)，空间复杂度O(1)。（均不计算答案的空间）。代码如下。</p>
+<p><code>Runtime: 4 ms, faster than 99.72% of C++ online submissions for Beautiful Array.</code></p>
+<p><code>Memory Usage: 8.8 MB, less than 100.00% of C++ online submissions for Beautiful Array.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">beautifulArray</span><span class="params">(<span class="keyword">int</span> N)</span> </span>&#123;</span><br><span class="line">        vector&lt;int&gt; V(&#123;1,2&#125;), ret;</span><br><span class="line">        <span class="keyword">int</span> M = <span class="number">2</span>;</span><br><span class="line">        <span class="keyword">while</span>(M &lt; N)&#123;</span><br><span class="line">            V.insert(V.<span class="built_in">end</span>(), V.<span class="built_in">begin</span>(), V.<span class="built_in">end</span>());</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;M; i++) V[i] = V[i] * <span class="number">2</span> <span class="number">-1</span>;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=M; i&lt;<span class="number">2</span>*M; i++) V[i] = V[i] * <span class="number">2</span>;</span><br><span class="line">            M *= <span class="number">2</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;M; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(V[i] &lt;= N) ret.push_back(V[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2019-11-13</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(939.%20Minimum%20Area%20Rectangle)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -908,90 +1010,6 @@ Output:
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(958.%20Check%20Completeness%20of%20a%20Binary%20Tree)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(958.%20Check%20Completeness%20of%20a%20Binary%20Tree)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(958. Check Completeness of a Binary Tree)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-958-Check-Completeness-of-a-Binary-Tree-题解"><a href="#LeetCode-958-Check-Completeness-of-a-Binary-Tree-题解" class="headerlink" title="LeetCode(958. Check Completeness of a Binary Tree)题解"></a>LeetCode(958. Check Completeness of a Binary Tree)题解</h1><p>Given a binary tree, determine if it is a <em>complete binary tree</em>.</p>
-<p><strong>Definition of a complete binary tree from Wikipedia:</strong><br>In a complete binary tree every level, except possibly the last, is completely filled, and all nodes in the last level are as far left as possible. It can have between 1 and 2h nodes inclusive at the last level h.</p>
-<p><strong>Example 1:</strong></p>
-<p><strong><img src="https://assets.leetcode.com/uploads/2018/12/15/complete-binary-tree-1.png" alt="img"></strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: [1,2,3,4,5,6]</span><br><span class="line">Output: true</span><br><span class="line">Explanation: Every level before the last is full (ie. levels with node-values &#123;1&#125; and &#123;2, 3&#125;), and all nodes in the last level (&#123;4, 5, 6&#125;) are as far left as possible.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<p><strong><img src="https://assets.leetcode.com/uploads/2018/12/15/complete-binary-tree-2.png" alt="img"></strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: [1,2,3,4,5,null,7]</span><br><span class="line">Output: false</span><br><span class="line">Explanation: The node with value 7 isn&#39;t as far left as possible.</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Note:</strong></p>
-<ol>
-<li>The tree will have between 1 and 100 nodes.</li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出一个二叉树，判断是不是完全二叉树（除了最后一层，每一层的二叉树节点是满的，最后一层的节点也是从左到右一次排列的）。</p>
-<p>这个题可以使用BFS队列的方式做，也可以使用DFS的方式。因为考虑到空间复杂度的缘故，可以使用DFS。</p>
-<p>设定一个Height函数，返回一个整数值，表示二叉树的最大深度，同时返回二叉树的类型type，如果是满二叉树就是0，完全二叉树就是1，否则就是-1。那么输入一个节点，返回以这个节点为根节点的二叉树的深度，至于Type的值，看左右子树的Type值，如果有一个-1或者两边的深度相差超过1就直接返回-1。否则就看深度，如果两边深度一样，那么左边必须是满二叉树，此时直接将右边的type值赋值给当前节点的type即可否则就是-1.如果右边深度少1，那么右子树必须是满二叉树，此时左边如果是满二叉树（Type=0）或者完全二叉树（Type=1），那么当前节点就是一个完全二叉树（Type=1），否则就返回-1.</p>
-<p>代码如下，时间复杂度O(N)，空间复杂度O(1)。</p>
-<p><code>Runtime: 4 ms, faster than 88.77% of C++ online submissions for Check Completeness of a Binary Tree.</code></p>
-<p><code>Memory Usage: 9.9 MB, less than 100.00% of C++ online submissions for Check Completeness of a Binary Tree.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">Height</span><span class="params">(TreeNode* root, <span class="keyword">int</span> &amp;type)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="literal">NULL</span>)&#123;</span><br><span class="line">            type = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        type = <span class="number">-1</span>;</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">int</span> typel, typer;</span><br><span class="line">        <span class="keyword">int</span> l = Height(root-&gt;left, typel), r = Height(root-&gt;right, typer);</span><br><span class="line">        <span class="keyword">if</span>(l == r) type = (typel==<span class="number">0</span>) ? typer : <span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(l == r + <span class="number">1</span>) type = (typer==<span class="number">0</span> <span class="keyword">and</span> typel+<span class="number">1</span>&gt;<span class="number">0</span>) ? <span class="number">1</span> : <span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span> + <span class="built_in">max</span>(l, r);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isCompleteTree</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> type;</span><br><span class="line">        Height(root, type);</span><br><span class="line">        <span class="keyword">return</span> type != <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-
-
-<p>BitBrave，2019-11-22</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1062,7 +1080,7 @@ Output:
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">345</span>
+          <span class="site-state-item-count">346</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
