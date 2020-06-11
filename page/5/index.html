@@ -168,6 +168,84 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/01/LeetCode(363.%20Max%20Sum%20of%20Rectangle%20No%20Larger%20Than%20K)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/04/01/LeetCode(363.%20Max%20Sum%20of%20Rectangle%20No%20Larger%20Than%20K)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(363. Max Sum of Rectangle No Larger Than K)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-04-01 21:28:30 / 修改时间：21:28:34" itemprop="dateCreated datePublished" datetime="2020-04-01T21:28:30+08:00">2020-04-01</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-363-Max-Sum-of-Rectangle-No-Larger-Than-K-题解"><a href="#LeetCode-363-Max-Sum-of-Rectangle-No-Larger-Than-K-题解" class="headerlink" title="LeetCode(\363. Max Sum of Rectangle No Larger Than K)题解"></a>LeetCode(\363. Max Sum of Rectangle No Larger Than K)题解</h1><p>Given a non-empty 2D matrix <em>matrix</em> and an integer <em>k</em>, find the max sum of a rectangle in the <em>matrix</em> such that its sum is no larger than <em>k</em>.</p>
+<p><strong>Example:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Input: matrix &#x3D; [[1,0,1],[0,-2,3]], k &#x3D; 2</span><br><span class="line">Output: 2 </span><br><span class="line">Explanation: Because the sum of rectangle [[0, 1], [-2, 3]] is 2,</span><br><span class="line">             and 2 is the max number no larger than k (k &#x3D; 2).</span><br></pre></td></tr></table></figure>
+
+<p><strong>Note:</strong></p>
+<ol>
+<li>The rectangle inside the matrix must have an area &gt; 0.</li>
+<li>What if the number of rows is much larger than the number of columns?</li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Hard</p>
+<p>给出一个二维数组M和一个整数k，找出其中一个子矩阵，其内的元素和不能大于k，但是最接近k。</p>
+<p>这个题可以使用暴力枚举，就算从(0,0)开始的子矩阵之和，然后遍历数组以(i,j)元素结尾的向上向左的最大不超过k的子矩阵和，如果数组为m行n列，时间复杂度则为$O((mn)^2)$。在使用时会TLE。</p>
+<p>上述算法最耗时的就是寻找子矩阵，那么有没有优化的方法呢？这里思考以(i,j)结束的向上向右子矩阵时，我们完全可以记录之前的按行或者列来的子数组的累加和，然后利用lower_bound或者二分搜索找到第一个大于k，最接近当前累加和-k的累加和的累加和s，然后用当前累加和-s就可以得到了。</p>
+<p>因为这里说行可能会很大，因此这里我们记录累加和按照行来。</p>
+<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间上，O(nmnlogm)，空间上，O(m)。</p>
+<p><code>Runtime: 728 ms, faster than 33.23% of C++ online submissions for Max Sum of Rectangle No Larger Than K.</code></p>
+<p><code>Memory Usage: 98.2 MB, less than 58.82% of C++ online submissions for Max Sum of Rectangle No Larger Than K.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxSumSubmatrix</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; matrix, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> row = matrix.<span class="built_in">size</span>(), col = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span> (row == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        col = matrix[<span class="number">0</span>].<span class="built_in">size</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> res = INT_MIN;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;col; i++) &#123;</span><br><span class="line">            <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">sum</span><span class="params">(row, <span class="number">0</span>)</span></span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=i; j&gt;=<span class="number">0</span>; j--) &#123;</span><br><span class="line">                <span class="keyword">int</span> curSum = <span class="number">0</span>;</span><br><span class="line">                <span class="function"><span class="built_in">set</span>&lt;<span class="keyword">int</span>&gt; <span class="title">mSum</span><span class="params">(&#123;<span class="number">0</span>&#125;)</span></span>;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> r=<span class="number">0</span>; r&lt;row; r++) &#123;</span><br><span class="line">                    sum[r] += matrix[r][j];</span><br><span class="line">                    curSum += sum[r];</span><br><span class="line">                    <span class="keyword">auto</span> iter = mSum.lower_bound(curSum - k);</span><br><span class="line">                    <span class="keyword">if</span> (iter != mSum.<span class="built_in">end</span>()) res = <span class="built_in">max</span>(res, curSum - *iter);</span><br><span class="line">                    mSum.insert(curSum);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2020-04-01</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/31/LeetCode(375.%20Guess%20Number%20Higher%20or%20Lower%20II)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -937,95 +1015,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/26/LeetCode(1392.%20Longest%20Happy%20Prefix)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/03/26/LeetCode(1392.%20Longest%20Happy%20Prefix)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1392. Longest Happy Prefix)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-03-26 16:42:18 / 修改时间：16:42:19" itemprop="dateCreated datePublished" datetime="2020-03-26T16:42:18+08:00">2020-03-26</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-1392-Longest-Happy-Prefix-题解"><a href="#LeetCode-1392-Longest-Happy-Prefix-题解" class="headerlink" title="LeetCode(\1392. Longest Happy Prefix)题解"></a>LeetCode(\1392. Longest Happy Prefix)题解</h1><p>A string is called a <em>happy prefix</em> if is a <strong>non-empty</strong> prefix which is also a suffix (excluding itself).</p>
-<p>Given a string <code>s</code>. Return the <strong>longest happy prefix</strong> of <code>s</code> .</p>
-<p>Return an empty string if no such prefix exists.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: s &#x3D; &quot;level&quot;</span><br><span class="line">Output: &quot;l&quot;</span><br><span class="line">Explanation: s contains 4 prefix excluding itself (&quot;l&quot;, &quot;le&quot;, &quot;lev&quot;, &quot;leve&quot;), and suffix (&quot;l&quot;, &quot;el&quot;, &quot;vel&quot;, &quot;evel&quot;). The largest prefix which is also suffix is given by &quot;l&quot;.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: s &#x3D; &quot;ababab&quot;</span><br><span class="line">Output: &quot;abab&quot;</span><br><span class="line">Explanation: &quot;abab&quot; is the largest prefix which is also suffix. They can overlap in the original string.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 3:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: s &#x3D; &quot;leetcodeleet&quot;</span><br><span class="line">Output: &quot;leet&quot;</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 4:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: s &#x3D; &quot;a&quot;</span><br><span class="line">Output: &quot;&quot;</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Constraints:</strong></p>
-<ul>
-<li><code>1 &lt;= s.length &lt;= 10^5</code></li>
-<li><code>s</code> contains only lowercase English letters.</li>
-</ul>
-<p><a href="https://leetcode.com/problems/longest-happy-prefix/discuss" target="_blank" rel="noopener">Discuss</a></p>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Hard</p>
-<p>求出一个字符串的公共前后缀最长值。</p>
-<p>这个乍一看很难在O(n)的时间内解决。但是知道KMP的人来说，这就是求Next数组而已。同时Rolling hash也可以解决，将字符串映射到一个值，将前缀的值依次放入Set 中，然后将后缀依次转为整数，然后在O(1)时间内就可以判断是否存在。</p>
-<p>这里我使用Next的方式。</p>
-<p>代码如下，时间复杂度O(N)，空间复杂度O(N)。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">string</span> <span class="title">longestPrefix</span><span class="params">(<span class="built_in">string</span> s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = s.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> j = <span class="number">1</span>, t = <span class="number">0</span>;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">Next</span><span class="params">(len + <span class="number">2</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">        <span class="keyword">while</span> (j &lt;= len) &#123;</span><br><span class="line">            <span class="keyword">if</span> (t == <span class="number">0</span> || s[j<span class="number">-1</span>] == s[t<span class="number">-1</span>]) &#123;</span><br><span class="line">                Next[j+<span class="number">1</span>] = t + <span class="number">1</span>;</span><br><span class="line">                j++;</span><br><span class="line">                t++;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                t = Next[t];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> s.substr(<span class="number">0</span>, Next[len+<span class="number">1</span>]<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2020-03-25</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1096,12 +1085,12 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">346</span>
+          <span class="site-state-item-count">347</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-count">24</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>

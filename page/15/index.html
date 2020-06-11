@@ -168,6 +168,88 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(142.%20Linked%20List%20Cycle%20II)%20%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(142.%20Linked%20List%20Cycle%20II)%20%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(142. Linked List Cycle II) 题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-142-Linked-List-Cycle-II-题解"><a href="#LeetCode-142-Linked-List-Cycle-II-题解" class="headerlink" title="LeetCode(142. Linked List Cycle II) 题解"></a>LeetCode(142. Linked List Cycle II) 题解</h1><hr>
+<p>Given a linked list, return the node where the cycle begins. If there is no cycle, return null.</p>
+<p>To represent a cycle in the given linked list, we use an integer pos which represents the position (0-indexed) in the linked list where tail connects to. If pos is -1, then there is no cycle in the linked list.</p>
+<p>Note: Do not modify the linked list.</p>
+<p>Example 1:</p>
+<pre><code>Input: head = [3,2,0,-4], pos = 1
+Output: tail connects to node index 1
+Explanation: There is a cycle in the linked list, where tail connects to the second node.</code></pre><p><img src="https://assets.leetcode.com/uploads/2018/12/07/circularlinkedlist.png" alt=""></p>
+<p>Example 2:</p>
+<pre><code>Input: head = [1,2], pos = 0
+Output: tail connects to node index 0
+Explanation: There is a cycle in the linked list, where tail connects to the first node.</code></pre><p><img src="https://assets.leetcode.com/uploads/2018/12/07/circularlinkedlist.png" alt=""></p>
+<p>Example 3:</p>
+<pre><code>Input: head = [1], pos = -1
+Output: no cycle
+Explanation: There is no cycle in the linked list.</code></pre><p><img src="https://assets.leetcode.com/uploads/2018/12/07/circularlinkedlist_test3.png" alt=""></p>
+<p>Follow-up:<br>Can you solve it without using extra space?</p>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个链表。判断有没有环，有环的话，找出这个环的交接点。</p>
+<p>在不使用别的空间的情况下，首先使用双指针一个走一步一个走两步，如果最后会重合的话，说明有环，没有则算法结束返回NULL。然后还是双指针sp,fp,如果链表中存在环，那么fp和sp一定会相遇，当两个指针相遇的时候，我们设相遇点为c，此时fp和sp都指向了c，接下来令fp继续指向c结点，sp指向链表头结点head，此时最大的不同是fp的步数变成为每次走一步，令fp和sp同时走，每次一步，那么它们再次相遇的时候即为环的入口结点。</p>
+<p>这里有一个链接，很详细：<a href="https://blog.csdn.net/willduan1/article/details/50938210" target="_blank" rel="noopener">https://blog.csdn.net/willduan1/article/details/50938210</a></p>
+<p>代码如下：</p>
+<p>Runtime: 12 ms, faster than 84.65% of C++ online submissions for Linked List Cycle II.<br>Memory Usage: 9.7 MB, less than 70.60% of C++ online submissions for Linked List Cycle II.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode *next;</span></span><br><span class="line"><span class="comment"> *     ListNode(int x) : val(x), next(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">ListNode *<span class="title">detectCycle</span><span class="params">(ListNode *head)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(head == <span class="literal">NULL</span> || head-&gt;next == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">        ListNode *fp = head-&gt;next-&gt;next, *sp = head-&gt;next;</span><br><span class="line">        <span class="keyword">while</span>(fp != <span class="literal">NULL</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(sp == fp) <span class="keyword">break</span>;</span><br><span class="line">            sp = sp-&gt;next;</span><br><span class="line">            <span class="keyword">if</span>(fp-&gt;next != <span class="literal">NULL</span>) fp = fp-&gt;next-&gt;next;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(fp == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">        sp = head;</span><br><span class="line">        <span class="keyword">while</span>(sp != fp)&#123;</span><br><span class="line">            sp = sp-&gt;next;</span><br><span class="line">            fp = fp-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> sp;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-07-07</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(144.%20Binary%20Tree%20Preorder%20Traversal)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -840,81 +922,6 @@ You need to reduce multiple spaces between two words to a single space in the re
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(16.%203Sum%20Closest)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(16.%203Sum%20Closest)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(16. 3Sum Closest)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-16-3Sum-Closest-题解"><a href="#LeetCode-16-3Sum-Closest-题解" class="headerlink" title="LeetCode(16. 3Sum Closest)题解"></a>LeetCode(16. 3Sum Closest)题解</h1><hr>
-<h2 id="题意理解"><a href="#题意理解" class="headerlink" title="题意理解"></a>题意理解</h2><p>从一个数组内找出三个数，其和与target的差值最小，假定这个和的值是唯一的，比如找离1最近的数，如果最小的距离是1，那么0和2都满足条件，但是在数组内只会出现一种情况。</p>
-<h2 id="解决思路"><a href="#解决思路" class="headerlink" title="解决思路"></a>解决思路</h2><p>与15题一样，首先将数据变为有序，比如升序排序，时间复杂度O(nlogn)，然后再从头到尾指定一个位置i，再找两个指针从有序数组的left和right一起比较。时间复杂度O(n2)。总的时间复杂度O(n2)。</p>
-<p>步骤如下：</p>
-<pre><code>1. 将数组nums升序排序，长度为len，并从左到右依次选定一个为位置i，初始化i=0；O(nlogn)
-2. 设置r = target - nums[i]，left = i + 1, right = nums[len  - 1]
-3. 使用res来记录到目前为止与target最近的距离是多少，使用rec记录对应三个数的和
-4. 计算nums[left] + nums[right] 是否等于r，如下处理：
-    a 如果等于r，表示可以完全匹配，此时直接返回target即可。；
-    b 如果大于r，说明三个数的和大于target，此时为了更接近target需要降低，right--；
-    c 如果小于r，说明三个数的和小于target，此时为了更接近target需要增大，left++；
-    PS：移动的过程中，如果发现nums[left] = nums[left+1]之类的情况，表示这个数重复了，而我们之前已经比较过这个数了，所以此时可以直接跳过。
-5. i++，如果与前一个数一样，则continue
-6. 当i==len-2时，返回函数 O(n2)</code></pre><p>代码如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">threeSumClosest</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = INT_MAX, rec = <span class="number">0</span>, len = nums.<span class="built_in">size</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// sort O(nlogn)</span></span><br><span class="line">        sort(nums.<span class="built_in">begin</span>(), nums.<span class="built_in">end</span>());</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> left = <span class="number">0</span>, right = <span class="number">0</span>, r = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; len - <span class="number">2</span>; i++)&#123;</span><br><span class="line">            left = i + <span class="number">1</span>;</span><br><span class="line">            right = len - <span class="number">1</span>;</span><br><span class="line">            r = target - nums[i];</span><br><span class="line"></span><br><span class="line">            <span class="keyword">while</span>(left &lt; right)&#123;</span><br><span class="line">                rec = res &lt; <span class="built_in">abs</span>(r - nums[left] - nums[right])? rec: nums[left] + nums[right] + nums[i];</span><br><span class="line">                res = <span class="built_in">min</span>(res, <span class="built_in">abs</span>(r - nums[left] - nums[right]));</span><br><span class="line">                </span><br><span class="line">                <span class="keyword">if</span>(r &gt; nums[left] + nums[right])&#123;</span><br><span class="line">                    left++;</span><br><span class="line">                    <span class="keyword">while</span>(left &lt; right &amp;&amp; nums[left] == nums[left<span class="number">-1</span>]) left++;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span>(r &lt; nums[left] + nums[right]) &#123;</span><br><span class="line">                    right--;</span><br><span class="line">                    <span class="keyword">while</span>(right &gt; left &amp;&amp; nums[right] == nums[right+<span class="number">1</span>]) right--;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">return</span> target;</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">while</span>(i + <span class="number">1</span> &lt; len - <span class="number">2</span> &amp;&amp; nums[i] == nums[i + <span class="number">1</span>]) i++; </span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> rec;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>有一个提速的，比如已经有nums[left] + nums[left + 1] &gt; r或者nums[right] + nums[right - 1] &lt; r，那么后续left再++或right–肯定不会获得更短的距离，所以可以直接返回。但是在LeetCode内好像没什么作用。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">threeSumClosest</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = INT_MAX, rec = <span class="number">0</span>, len = nums.<span class="built_in">size</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// sort O(nlogn)</span></span><br><span class="line">        sort(nums.<span class="built_in">begin</span>(), nums.<span class="built_in">end</span>());</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> left = <span class="number">0</span>, right = <span class="number">0</span>, r = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; len - <span class="number">2</span>; i++)&#123;</span><br><span class="line">            left = i + <span class="number">1</span>;</span><br><span class="line">            right = len - <span class="number">1</span>;</span><br><span class="line">            r = target - nums[i];</span><br><span class="line"></span><br><span class="line">            <span class="keyword">while</span>(left &lt; right)&#123;</span><br><span class="line">                <span class="comment">//////// you can add it to speed-up</span></span><br><span class="line">                **<span class="keyword">if</span>(nums[left] + nums[left + <span class="number">1</span>] &gt; r) &#123;</span><br><span class="line">                    rec = res &lt; <span class="built_in">abs</span>(r - nums[left] - nums[left + <span class="number">1</span>])? rec: nums[left] + nums[left + <span class="number">1</span>] + nums[i];</span><br><span class="line">                    res = <span class="built_in">min</span>(res, <span class="built_in">abs</span>(r - nums[left] - nums[left + <span class="number">1</span>]));</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span>(nums[right] + nums[right - <span class="number">1</span>] &lt; r) &#123;</span><br><span class="line">                    rec = res &lt; <span class="built_in">abs</span>(r - nums[right - <span class="number">1</span>] - nums[right])? rec: nums[right - <span class="number">1</span>] + nums[right] + nums[i];</span><br><span class="line">                res = <span class="built_in">min</span>(res, <span class="built_in">abs</span>(r - nums[right - <span class="number">1</span>] - nums[right]));</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;**</span><br><span class="line">                <span class="comment">/////////</span></span><br><span class="line">                rec = res &lt; <span class="built_in">abs</span>(r - nums[left] - nums[right])? rec: nums[left] + nums[right] + nums[i];</span><br><span class="line">                res = <span class="built_in">min</span>(res, <span class="built_in">abs</span>(r - nums[left] - nums[right]));</span><br><span class="line">                </span><br><span class="line">                </span><br><span class="line">                <span class="keyword">if</span>(r &gt; nums[left] + nums[right])&#123;</span><br><span class="line">                    left++;</span><br><span class="line">                    <span class="keyword">while</span>(left &lt; right &amp;&amp; nums[left] == nums[left<span class="number">-1</span>]) left++;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span>(r &lt; nums[left] + nums[right]) &#123;</span><br><span class="line">                    right--;</span><br><span class="line">                    <span class="keyword">while</span>(right &gt; left &amp;&amp; nums[right] == nums[right+<span class="number">1</span>]) right--;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">return</span> target;</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">while</span>(i + <span class="number">1</span> &lt; len - <span class="number">2</span> &amp;&amp; nums[i] == nums[i + <span class="number">1</span>]) i++; </span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> rec;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -985,12 +992,12 @@ You need to reduce multiple spaces between two words to a single space in the re
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">346</span>
+          <span class="site-state-item-count">347</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-count">24</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>

@@ -168,6 +168,93 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/15/LeetCode(1310.%20XOR%20Queries%20of%20a%20Subarray)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/02/15/LeetCode(1310.%20XOR%20Queries%20of%20a%20Subarray)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1310. XOR Queries of a Subarray)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-02-15 20:44:08 / 修改时间：20:44:15" itemprop="dateCreated datePublished" datetime="2020-02-15T20:44:08+08:00">2020-02-15</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-1310-XOR-Queries-of-a-Subarray-题解"><a href="#LeetCode-1310-XOR-Queries-of-a-Subarray-题解" class="headerlink" title="LeetCode(\1310. XOR Queries of a Subarray)题解"></a>LeetCode(\1310. XOR Queries of a Subarray)题解</h1><p>Given the array <code>arr</code> of positive integers and the array <code>queries</code> where <code>queries[i] = [Li, Ri]</code>, for each query <code>i</code> compute the <strong>XOR</strong> of elements from <code>Li</code> to <code>Ri</code> (that is, <code>arr[Li] **xor** arr[Li+1] **xor** ... **xor** arr[Ri]</code> ). Return an array containing the result for the given <code>queries</code>.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Input: arr &#x3D; [1,3,4,8], queries &#x3D; [[0,1],[1,2],[0,3],[3,3]]</span><br><span class="line">Output: [2,7,14,8] </span><br><span class="line">Explanation: </span><br><span class="line">The binary representation of the elements in the array are:</span><br><span class="line">1 &#x3D; 0001 </span><br><span class="line">3 &#x3D; 0011 </span><br><span class="line">4 &#x3D; 0100 </span><br><span class="line">8 &#x3D; 1000 </span><br><span class="line">The XOR values for queries are:</span><br><span class="line">[0,1] &#x3D; 1 xor 3 &#x3D; 2 </span><br><span class="line">[1,2] &#x3D; 3 xor 4 &#x3D; 7 </span><br><span class="line">[0,3] &#x3D; 1 xor 3 xor 4 xor 8 &#x3D; 14 </span><br><span class="line">[3,3] &#x3D; 8</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: arr &#x3D; [4,8,2,10], queries &#x3D; [[2,3],[1,3],[0,0],[0,3]]</span><br><span class="line">Output: [8,0,4,4]</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>1 &lt;= arr.length &lt;= 3 * 10^4</code></li>
+<li><code>1 &lt;= arr[i] &lt;= 10^9</code></li>
+<li><code>1 &lt;= queries.length &lt;= 3 * 10^4</code></li>
+<li><code>queries[i].length == 2</code></li>
+<li><code>0 &lt;= queries[i][0] &lt;= queries[i][1] &lt; arr.length</code></li>
+</ul>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Medium</p>
+<p>给一个数组arr，每个元素都是非负数。给一个查询数组queries，每个元素是一个坐标区间 $[left, right]$ 。返回这个坐标区间的所有arr元素的异或值。</p>
+<p>这个题很简单，我们注意到一个性质，两个相同的数异或等于0，0和任何数异或都等于原来的数。所以，我们可以首先构建一个数组arrS，其中arrS[i+1]表示arr[0]~arr[i]的异或值。所以区间 $[left, right]$ 的结果为：</p>
+<ul>
+<li>arrS[right+1] - arrS[left]</li>
+</ul>
+<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间上，只需要填充arrS数组，后续只是O(1)的计算时间，因此为O(n)。空间上，O(n)。</p>
+<p><code>Runtime: 152 ms, faster than 24.42% of C++ online submissions for XOR Queries of a Subarray.</code></p>
+<p><code>Memory Usage: 29 MB, less than 100.00% of C++ online submissions for XOR Queries of a Subarray.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">xorQueries</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; arr, <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; queries)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = arr.<span class="built_in">size</span>();</span><br><span class="line">        vector&lt;int&gt; arrS(len + 1, 0), res;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;=len; i++) &#123;</span><br><span class="line">            arrS[i] = arrS[i<span class="number">-1</span>] ^ arr[i<span class="number">-1</span>];</span><br><span class="line">        &#125;;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; q : queries) &#123;</span><br><span class="line">            res.push_back(arrS[q[<span class="number">1</span>]+<span class="number">1</span>] ^ arrS[q[<span class="number">0</span>]]);</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2020-02-15（以后估计会很少上传题解了，因为很多题感觉直接就会做了，遇到那种需要思考很久的才会传上来。但估计还是会有很多很多不会的吧···）</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/13/LeetCode(1345.%20Jump%20Game%20IV)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -989,97 +1076,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/07/LeetCode(1255.%20Maximum%20Score%20Words%20Formed%20by%20Letters)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/02/07/LeetCode(1255.%20Maximum%20Score%20Words%20Formed%20by%20Letters)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1255. Maximum Score Words Formed by Letters)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-02-07 11:13:06 / 修改时间：15:04:51" itemprop="dateCreated datePublished" datetime="2020-02-07T11:13:06+08:00">2020-02-07</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-1255-Maximum-Score-Words-Formed-by-Letters-题解"><a href="#LeetCode-1255-Maximum-Score-Words-Formed-by-Letters-题解" class="headerlink" title="LeetCode(\1255. Maximum Score Words Formed by Letters)题解"></a>LeetCode(\1255. Maximum Score Words Formed by Letters)题解</h1><p>Given a list of <code>words</code>, list of single <code>letters</code> (might be repeating) and <code>score</code> of every character.</p>
-<p>Return the maximum score of <strong>any</strong> valid set of words formed by using the given letters (<code>words[i]</code> cannot be used two or more times).</p>
-<p>It is not necessary to use all characters in <code>letters</code> and each letter can only be used once. Score of letters <code>&#39;a&#39;</code>, <code>&#39;b&#39;</code>, <code>&#39;c&#39;</code>, … ,<code>&#39;z&#39;</code> is given by <code>score[0]</code>, <code>score[1]</code>, … , <code>score[25]</code> respectively.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Input: words &#x3D; [&quot;dog&quot;,&quot;cat&quot;,&quot;dad&quot;,&quot;good&quot;], letters &#x3D; [&quot;a&quot;,&quot;a&quot;,&quot;c&quot;,&quot;d&quot;,&quot;d&quot;,&quot;d&quot;,&quot;g&quot;,&quot;o&quot;,&quot;o&quot;], score &#x3D; [1,0,9,5,0,0,3,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0]</span><br><span class="line">Output: 23</span><br><span class="line">Explanation:</span><br><span class="line">Score  a&#x3D;1, c&#x3D;9, d&#x3D;5, g&#x3D;3, o&#x3D;2</span><br><span class="line">Given letters, we can form the words &quot;dad&quot; (5+1+5) and &quot;good&quot; (3+2+2+5) with a score of 23.</span><br><span class="line">Words &quot;dad&quot; and &quot;dog&quot; only get a score of 21.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Input: words &#x3D; [&quot;xxxz&quot;,&quot;ax&quot;,&quot;bx&quot;,&quot;cx&quot;], letters &#x3D; [&quot;z&quot;,&quot;a&quot;,&quot;b&quot;,&quot;c&quot;,&quot;x&quot;,&quot;x&quot;,&quot;x&quot;], score &#x3D; [4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,10]</span><br><span class="line">Output: 27</span><br><span class="line">Explanation:</span><br><span class="line">Score  a&#x3D;4, b&#x3D;4, c&#x3D;4, x&#x3D;5, z&#x3D;10</span><br><span class="line">Given letters, we can form the words &quot;ax&quot; (4+5), &quot;bx&quot; (4+5) and &quot;cx&quot; (4+5) with a score of 27.</span><br><span class="line">Word &quot;xxxz&quot; only get a score of 25.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 3:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Input: words &#x3D; [&quot;leetcode&quot;], letters &#x3D; [&quot;l&quot;,&quot;e&quot;,&quot;t&quot;,&quot;c&quot;,&quot;o&quot;,&quot;d&quot;], score &#x3D; [0,0,1,1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,1,0,0,0,0,0,0]</span><br><span class="line">Output: 0</span><br><span class="line">Explanation:</span><br><span class="line">Letter &quot;e&quot; can only be used once.</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Constraints:</strong></p>
-<ul>
-<li><code>1 &lt;= words.length &lt;= 14</code></li>
-<li><code>1 &lt;= words[i].length &lt;= 15</code></li>
-<li><code>1 &lt;= letters.length &lt;= 100</code></li>
-<li><code>letters[i].length == 1</code></li>
-<li><code>score.length == 26</code></li>
-<li><code>0 &lt;= score[i] &lt;= 10</code></li>
-<li><code>words[i]</code>, <code>letters[i]</code> contains only lower case English letters.</li>
-</ul>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>一个单词列表words，一个字符列表letters，字符可能会有重复，一个26个字符的得分数组score，所有的字符都是小写字母。现在用letters内的字符尽力去组合成words内的单词，最后组合成的单词的得分就是字符的分数之和。计算最后能得到的最大的得分。</p>
-<p>这个题最笨的方法就是穷举，枚举每种组合，一个word有选与不选两种，最后要枚举 $2^n$ 种方案。但是每个单词的长度&lt;15，因此我们可以在常数时间内判断一个单词是否能被组合，而单词数目n&lt;=14。所以即便枚举也花不了太多时间。</p>
-<p>使用dfs暴力枚举即可，每个单词选择与不选，最后得出最大值。Python的Counter是一个不错的东西。</p>
-<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>时间上，枚举所有方案， $O(2^n)$. 空间上，递归的深度为N， $O(n)$。</p>
-<p><code>Runtime: 44 ms, faster than 83.69% of Python3 online submissions for Maximum Score Words Formed by Letters.</code></p>
-<p><code>Memory Usage: 12.8 MB, less than 100.00% of Python3 online submissions for Maximum Score Words Formed by Letters.</code></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">dfs</span><span class="params">(self, words, letters, score)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> len(words) == <span class="number">0</span>: <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">        <span class="comment"># not select</span></span><br><span class="line">        res = self.dfs(words[<span class="number">1</span>:], letters, score)</span><br><span class="line">        <span class="comment"># select</span></span><br><span class="line">        m = <span class="literal">True</span></span><br><span class="line">        <span class="keyword">for</span> w <span class="keyword">in</span> words[<span class="number">0</span>]:</span><br><span class="line">            <span class="keyword">if</span> w <span class="keyword">not</span> <span class="keyword">in</span> letters <span class="keyword">or</span> words[<span class="number">0</span>][w] &gt; letters[w]: m = <span class="literal">False</span>; <span class="keyword">break</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> m == <span class="literal">True</span>:</span><br><span class="line">            s = <span class="number">0</span></span><br><span class="line">            <span class="keyword">for</span> w <span class="keyword">in</span> words[<span class="number">0</span>]: </span><br><span class="line">                letters[w] -= words[<span class="number">0</span>][w]</span><br><span class="line">                s += score[w] * words[<span class="number">0</span>][w]</span><br><span class="line">        </span><br><span class="line">            res = max(res, s + self.dfs(words[<span class="number">1</span>:], letters, score))</span><br><span class="line">        </span><br><span class="line">            <span class="keyword">for</span> w <span class="keyword">in</span> words[<span class="number">0</span>]: letters[w] += words[<span class="number">0</span>][w]</span><br><span class="line">                </span><br><span class="line">        <span class="keyword">return</span> res</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">maxScoreWords</span><span class="params">(self, words: List[str], letters: List[str], score: List[int])</span> -&gt; int:</span></span><br><span class="line">        words = [Counter(word) <span class="keyword">for</span> word <span class="keyword">in</span> words]</span><br><span class="line">        letters = Counter(letters)</span><br><span class="line">        score_ = &#123;&#125;</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">26</span>): score_[chr(<span class="number">97</span>+i)] = score[i]</span><br><span class="line">        </span><br><span class="line">        res = self.dfs(words, letters, score_)</span><br><span class="line">        <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2020-02-07</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1150,12 +1146,12 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">346</span>
+          <span class="site-state-item-count">347</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-count">24</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
