@@ -168,6 +168,98 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/05/LeetCode(456.%20132%20Pattern)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/05/LeetCode(456.%20132%20Pattern)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(456. 132 Pattern)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-03-05 23:04:42 / 修改时间：23:04:54" itemprop="dateCreated datePublished" datetime="2020-03-05T23:04:42+08:00">2020-03-05</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-456-132-Pattern-题解"><a href="#LeetCode-456-132-Pattern-题解" class="headerlink" title="LeetCode(\456. 132 Pattern)题解"></a>LeetCode(\456. 132 Pattern)题解</h1><p>Given a sequence of n integers a1, a2, …, an, a 132 pattern is a subsequence a<strong>i</strong>, a<strong>j</strong>, a<strong>k</strong> such that <strong>i</strong> &lt; <strong>j</strong> &lt; <strong>k</strong> and a<strong>i</strong> &lt; a<strong>k</strong> &lt; a<strong>j</strong>. Design an algorithm that takes a list of n numbers as input and checks whether there is a 132 pattern in the list.</p>
+<p><strong>Note:</strong> n will be less than 15,000.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Input: [1, 2, 3, 4]</span><br><span class="line"></span><br><span class="line">Output: False</span><br><span class="line"></span><br><span class="line">Explanation: There is no 132 pattern in the sequence.</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Input: [3, 1, 4, 2]</span><br><span class="line"></span><br><span class="line">Output: True</span><br><span class="line"></span><br><span class="line">Explanation: There is a 132 pattern in the sequence: [1, 4, 2].</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Example 3:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Input: [-1, 3, 2, 0]</span><br><span class="line"></span><br><span class="line">Output: True</span><br><span class="line"></span><br><span class="line">Explanation: There are three 132 patterns in the sequence: [-1, 3, 2], [-1, 3, 0] and [-1, 2, 0].</span><br></pre></td></tr></table></figure>
+
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Medium</p>
+<p>给定一个整数数组A，判断其中是否存在这样的模式：有三个位置，i&lt;j&lt;k。每个位置上的元素关系为Ai&lt;Ak&lt;Aj即132模式，如果有这样的模式存在就返回True，否则False。</p>
+<p>这个题明确使用Stack，可以在线性时间内解决，但是我只能想到平方的解法，就是以每个元素Aj，分别寻找左边最小的和右边比当前值小的最大值，然后判断。参考网上别人的解法才发现，Stack实在是太美妙了。</p>
+<p>我们如何来利用Stack呢？</p>
+<p>可以这样想，我们找到一个元素a，只要得到左边的最小元素b和右边的比a小的数中最大的那个c，只要bac满足条件，那么算法就以True结束了，如果不满足，那么以这个元素a作为中间值肯定是不可以的。找元素左边最小的很容易，我们O(n)的时间就可以，主要是如何寻找c？</p>
+<p>这里可以用一个Stack来，我们可以维护一个递减栈，一般来说一个递减栈是用来确定一个元素离它最近的比他大的元素值的。但是我们在递减栈出栈的过程中，记录下最后那个出栈的元素，那么那个元素就是比当前元素小的元素中，最大的那个了。</p>
+<p>因此，再完善一点，算法的流程就是：</p>
+<ul>
+<li>我们构建一个Stack（存储一个递减序列），从数组A的后边向前边遍历，设定一个整数s记录最近出栈的元素，初始化s=INT_MIN。</li>
+<li>从后向前遍历元素，走到元素a时，判断a是否小于s，如果小于，说明s已经被更新了，栈内肯定插入了更大值，因为从后向前遍历，这个更大值的位置肯定在s和a之间，因此符合132的模式，返回True。否则进行下一步。</li>
+<li>如果栈为空，直接将a入栈，否则判断元素是否大于栈顶元素，如果大于，那么就不断出栈直到栈为空或者a小于等于栈顶元素，然后将a入栈，此时s更新为最近一次出栈的元素，因为是个递减栈，所以s一定小于a同时s是数组右边小于a的元素中最大的那个，此时也可以说s元素的左边一定有一个比他的大的元素存在。</li>
+<li>重复上述操作，知道遍历完整个数组才退出循环，表示这个数组内不存在132的模式，否则肯定会提前结束循环。因此直接返回False。</li>
+</ul>
+<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间上，$O(N)$，空间上，$O(N)$。</p>
+<p><code>Runtime: 24 ms, faster than 82.89% of C++ online submissions for 132 Pattern.</code></p>
+<p><code>Memory Usage: 9.4 MB, less than 100.00% of C++ online submissions for 132 Pattern.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">find132pattern</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">stack</span>&lt;<span class="keyword">int</span>&gt; S;</span><br><span class="line">        <span class="keyword">int</span> c = INT_MIN, len = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=len<span class="number">-1</span>; i&gt;=<span class="number">0</span>; i--) &#123;</span><br><span class="line">            <span class="keyword">if</span> (nums[i] &lt; c) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">while</span> (!S.empty() <span class="keyword">and</span> nums[i] &gt; S.top()) &#123;</span><br><span class="line">                c = S.top();</span><br><span class="line">                S.pop();</span><br><span class="line">            &#125;</span><br><span class="line">            S.push(nums[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2020-03-05</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/03/LeetCode(1368.%20Minimum%20Cost%20to%20Make%20at%20Least%20One%20Valid%20Path%20in%20a%20Grid)%E5%91%A8%E8%B5%9B%E7%AC%AC4%E9%A2%98%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1072,105 +1164,6 @@ with open(&apos;result.json&apos;, &apos;w&apos;, encoding=&apos;utf-8&apos;) as
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/17/LeetCode(1320.%20Minimum%20Distance%20to%20Type%20a%20Word%20Using%20Two%20Fingers)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/02/17/LeetCode(1320.%20Minimum%20Distance%20to%20Type%20a%20Word%20Using%20Two%20Fingers)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1320. Minimum Distance to Type a Word Using Two Fingers)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-02-17 23:34:40 / 修改时间：23:34:41" itemprop="dateCreated datePublished" datetime="2020-02-17T23:34:40+08:00">2020-02-17</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="LeetCode-1320-Minimum-Distance-to-Type-a-Word-Using-Two-Fingers-题解"><a href="#LeetCode-1320-Minimum-Distance-to-Type-a-Word-Using-Two-Fingers-题解" class="headerlink" title="LeetCode(\1320. Minimum Distance to Type a Word Using Two Fingers)题解"></a>LeetCode(\1320. Minimum Distance to Type a Word Using Two Fingers)题解</h2><p><img src="https://assets.leetcode.com/uploads/2020/01/02/leetcode_keyboard.png" alt="img"></p>
-<p>You have a keyboard layout as shown above in the XY plane, where each English uppercase letter is located at some coordinate, for example, the letter <strong>A</strong> is located at coordinate <strong>(0,0)</strong>, the letter <strong>B</strong> is located at coordinate <strong>(0,1)</strong>, the letter <strong>P</strong> is located at coordinate <strong>(2,3)</strong> and the letter <strong>Z</strong> is located at coordinate <strong>(4,1)</strong>.</p>
-<p>Given the string <code>word</code>, return the minimum total distance to type such string using only two fingers. The distance between coordinates <strong>(x1,y1)</strong> and <strong>(x2,y2)</strong> is <strong>|x1 - x2| + |y1 - y2|</strong>. </p>
-<p>Note that the initial positions of your two fingers are considered free so don’t count towards your total distance, also your two fingers do not have to start at the first letter or the first two letters.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Input: word &#x3D; &quot;CAKE&quot;</span><br><span class="line">Output: 3</span><br><span class="line">Explanation: </span><br><span class="line">Using two fingers, one optimal way to type &quot;CAKE&quot; is: </span><br><span class="line">Finger 1 on letter &#39;C&#39; -&gt; cost &#x3D; 0 </span><br><span class="line">Finger 1 on letter &#39;A&#39; -&gt; cost &#x3D; Distance from letter &#39;C&#39; to letter &#39;A&#39; &#x3D; 2 </span><br><span class="line">Finger 2 on letter &#39;K&#39; -&gt; cost &#x3D; 0 </span><br><span class="line">Finger 2 on letter &#39;E&#39; -&gt; cost &#x3D; Distance from letter &#39;K&#39; to letter &#39;E&#39; &#x3D; 1 </span><br><span class="line">Total distance &#x3D; 3</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Input: word &#x3D; &quot;HAPPY&quot;</span><br><span class="line">Output: 6</span><br><span class="line">Explanation: </span><br><span class="line">Using two fingers, one optimal way to type &quot;HAPPY&quot; is:</span><br><span class="line">Finger 1 on letter &#39;H&#39; -&gt; cost &#x3D; 0</span><br><span class="line">Finger 1 on letter &#39;A&#39; -&gt; cost &#x3D; Distance from letter &#39;H&#39; to letter &#39;A&#39; &#x3D; 2</span><br><span class="line">Finger 2 on letter &#39;P&#39; -&gt; cost &#x3D; 0</span><br><span class="line">Finger 2 on letter &#39;P&#39; -&gt; cost &#x3D; Distance from letter &#39;P&#39; to letter &#39;P&#39; &#x3D; 0</span><br><span class="line">Finger 1 on letter &#39;Y&#39; -&gt; cost &#x3D; Distance from letter &#39;A&#39; to letter &#39;Y&#39; &#x3D; 4</span><br><span class="line">Total distance &#x3D; 6</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 3:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: word &#x3D; &quot;NEW&quot;</span><br><span class="line">Output: 3</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 4:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: word &#x3D; &quot;YEAR&quot;</span><br><span class="line">Output: 7</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Constraints:</strong></p>
-<ul>
-<li><code>2 &lt;= word.length &lt;= 300</code></li>
-<li>Each <code>word[i]</code> is an English uppercase letter.</li>
-</ul>
-<h2 id="解题思路-DP"><a href="#解题思路-DP" class="headerlink" title="解题思路(DP)"></a>解题思路(DP)</h2><p>Hard</p>
-<p>计算二指输入最短距离。设定26个字母之间的距离，给定一个字符串，现在你有两个手指依次打出这些字符，求最小的手指移动距离，注意手指的起始按键不用计入距离，起始的不一定必须是开始两个字母。</p>
-<p>使用DP</p>
-<p>D[i][j][k]表示在0~k-1的字符中，左边手指在i位置，右边手指在j位置时所取得的最小距离，依据推论i和j中肯定有一个k。i和j一共有26种状态。</p>
-<p>那么我们观察如果第k个字符输入，我们应该是用第一个手指还是第二个手指去键入呢？假设输入的第k个字符的位置为v，状态更新为：</p>
-<ul>
-<li>左指：D[v][j][k+1] = D[i][j][k] + dis(i, v)</li>
-<li>右指：D[i][v][k+1] = D[i][j][k] + dis(j, v)</li>
-</ul>
-<p>最后在k=n的情况下遍历所有的ij方案即可得到答案。</p>
-<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间上，为 $O(n\times 26 \times 26)$，空间上同样为$O(n\times 26 \times 26)$。</p>
-<p><code>Runtime: 52 ms, faster than 57.62% of C++ online submissions for Minimum Distance to Type a Word Using Two Fingers.</code></p>
-<p><code>Memory Usage: 33 MB, less than 100.00% of C++ online submissions for Minimum Distance to Type a Word Using Two Fingers.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">dis</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">abs</span>(a%<span class="number">6</span> - b%<span class="number">6</span>) + <span class="built_in">abs</span>(a/<span class="number">6</span> - b/<span class="number">6</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minimumDistance</span><span class="params">(<span class="built_in">string</span> <span class="keyword">word</span>)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = <span class="keyword">word</span>.<span class="built_in">size</span>(), res = INT_MAX;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&gt; <span class="title">D</span><span class="params">(<span class="number">26</span>, <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;(<span class="number">26</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(len+<span class="number">1</span>, INT_MAX)))</span></span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">26</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;<span class="number">26</span>; j++) D[i][j][<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> k=<span class="number">1</span>; k&lt;=len; k++) &#123;</span><br><span class="line">            <span class="keyword">int</span> v = <span class="keyword">word</span>[k<span class="number">-1</span>] - <span class="string">'A'</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">26</span>; i++) &#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;<span class="number">26</span>; j++) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (D[i][j][k<span class="number">-1</span>] == INT_MAX) <span class="keyword">continue</span>;</span><br><span class="line">                    <span class="comment">// left finger</span></span><br><span class="line">                    D[v][j][k] = <span class="built_in">min</span>(D[v][j][k], D[i][j][k<span class="number">-1</span>] + dis(v, i));</span><br><span class="line">                    <span class="comment">// right finger</span></span><br><span class="line">                    D[i][v][k] = <span class="built_in">min</span>(D[i][v][k], D[i][j][k<span class="number">-1</span>] + dis(v, j));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">26</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;<span class="number">26</span>; j++) &#123;</span><br><span class="line">                res = <span class="built_in">min</span>(res, D[i][j][len]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-
-
-<p>BitBrave，2020-02-17</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1241,7 +1234,7 @@ with open(&apos;result.json&apos;, &apos;w&apos;, encoding=&apos;utf-8&apos;) as
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">347</span>
+          <span class="site-state-item-count">348</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
