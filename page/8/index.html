@@ -168,6 +168,160 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/18/Mac%E4%B8%8B%E5%A4%A9%E6%B1%A0%E6%96%B0%E4%BA%BA%E8%B5%9B%E9%80%9A%E8%BF%87%E5%85%A8%E6%B5%81%E7%A8%8B%E8%AF%A6%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/02/18/Mac%E4%B8%8B%E5%A4%A9%E6%B1%A0%E6%96%B0%E4%BA%BA%E8%B5%9B%E9%80%9A%E8%BF%87%E5%85%A8%E6%B5%81%E7%A8%8B%E8%AF%A6%E8%A7%A3/" class="post-title-link" itemprop="url">Mac下天池新人赛通过全流程详解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-02-18 14:05:19 / 修改时间：14:05:22" itemprop="dateCreated datePublished" datetime="2020-02-18T14:05:19+08:00">2020-02-18</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Mac下天池新人赛通过全流程详解"><a href="#Mac下天池新人赛通过全流程详解" class="headerlink" title="Mac下天池新人赛通过全流程详解"></a>Mac下天池新人赛通过全流程详解</h1><h2 id="一、安装docker环境"><a href="#一、安装docker环境" class="headerlink" title="一、安装docker环境"></a>一、安装docker环境</h2><p>在mac下安装docker，直接下载软件安装即可。</p>
+<p>链接：<a href="https://docs.docker.com/docker-for-mac/install/" target="_blank" rel="noopener">https://docs.docker.com/docker-for-mac/install/</a></p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEBebf4e52305359827d736ad6e5c215f20?method=getImage&version=32&cstk=7hthgWHw" alt="image-20200218090852375"></p>
+<h2 id="二、开通阿里云镜像服务"><a href="#二、开通阿里云镜像服务" class="headerlink" title="二、开通阿里云镜像服务"></a>二、开通阿里云镜像服务</h2><p>这里按照“手把手教程”（在新人赛的链接内）内的流程一步步操作即可，非常的详细和简单。</p>
+<p>链接如下：<a href="https://tianchi.aliyun.com/competition/entrance/231759/tab/174" target="_blank" rel="noopener">https://tianchi.aliyun.com/competition/entrance/231759/tab/174</a></p>
+<h2 id="三、构建镜像"><a href="#三、构建镜像" class="headerlink" title="三、构建镜像"></a>三、构建镜像</h2><p>这里就是构建自己的镜像，其实docker的各部分关系如图所示。</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEBd869d338687854f93ada5ae25612415e?method=getImage&version=24&cstk=7hthgWHw" alt="image-20200218091244075"></p>
+<h3 id="建立文件"><a href="#建立文件" class="headerlink" title="建立文件"></a>建立文件</h3><p>这里我们选择使用Dockerfile的方式构建镜像，步骤如下：</p>
+<ol>
+<li><p>建立一个文件夹如tianchi-test，用来存储本次项目的所有文件。</p>
+</li>
+<li><p>在文件夹内建立四个文件，Dockerfile、hello_world.py、result.json、run.sh</p>
+</li>
+</ol>
+<p>至此，文件就建立完成了，这个项目基本完成了一半，剩下的就是填充各个文件。</p>
+<p><strong>Dockerfile</strong> 用来指定如何构建一个镜像，在其中填入如下内容。</p>
+<pre><code># Base Images
+## 从天池基础镜像构建
+FROM registry.cn-shanghai.aliyuncs.com/tcc-public/python:3
+## 把当前文件夹里的文件构建到镜像的根目录下
+ADD . /
+## 指定默认工作目录为根目录（需要把run.sh和生成的结果文件都放在该文件夹下，提交后才能运行
+WORKDIR /
+## 镜像启动后统一执行 sh run.sh
+CMD [&quot;sh&quot;, &quot;run.sh&quot;]</code></pre><p><strong>hello_world.py</strong> 项目的主体文件，完成三个题目的代码在这里面构建。</p>
+<pre><code>import sys
+import json
+res = {}
+
+res[&apos;Q1&apos;] = &quot;Hello world&quot;
+#print(&quot;Q1-pycharm&quot;, res[&apos;Q1&apos;])
+tmp = 0
+
+with open(&quot;./tcdata/num_list.csv&quot; , &apos;r&apos;) as f:
+   data = f.readlines()
+
+num_list = [int(x.strip()) for x in data]
+res_sum = sum(num_list)
+
+#print(&quot;Q2-pycharm&quot;, res_sum)
+
+res[&apos;Q2&apos;] = res_sum # np.sum(res_sum)
+res[&apos;Q3&apos;] = sorted(num_list,reverse=True)[:10]
+with open(&apos;result.json&apos;, &apos;w&apos;, encoding=&apos;utf-8&apos;) as f:
+   f.write(json.dumps(res, ensure_ascii=False))
+
+#print(&quot;Q3-pycharm&quot;, res[&apos;Q3&apos;])</code></pre><p><strong>result.json</strong> 用来存储结果，不用填充内容</p>
+<p><strong>run.sh</strong> 就一句话，用来编译hello_world.py</p>
+<pre><code>python hello_world.py</code></pre><p>这里大家注意到了，我们并没有num_list.csv。“/tcdata/num_list.csv”这个系统会自动创建，我们可以不做操作，只是读取的时候设置一下就行，只需要在hello_world.py代码里写明读取就可以了。</p>
+<p>同时，我们的项目主体文件hello_world.py也不一定要叫这个名字，只要和run.sh内的保持一致就可以了。</p>
+<h3 id="build镜像"><a href="#build镜像" class="headerlink" title="build镜像"></a>build镜像</h3><p>首先从远端下载一个基础镜像，这个基础镜像在上述的Dockerfile中有使用到。</p>
+<pre><code>docker pull registry.cn-shanghai.aliyuncs.com/tcc-public/python:3</code></pre><p>然后在tianchi-test目录下使用如下命令构建自己的镜像。</p>
+<pre><code>docker build -t registry.cn-shanghai.aliyuncs.com/账户名/仓库名:版本号 .</code></pre><p>注意最后有个逗号.<br><img src="https://note.youdao.com/yws/api/personal/file/WEBa4d8498b6252bc6a7b2f9860c1960237?method=getImage&version=19&cstk=7hthgWHw" alt="image-20200218100328898"></p>
+<h2 id="四、推送镜像到阿里云ACR"><a href="#四、推送镜像到阿里云ACR" class="headerlink" title="四、推送镜像到阿里云ACR"></a>四、推送镜像到阿里云ACR</h2><p>推送镜像有两种方式。</p>
+<ol>
+<li><p><strong>服务器命令行提交</strong>（在自己建立的仓库的基本信息目录内有相关提交代码，直接复制即可）</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEB28d4d9e0df4ceb51aff3b9b87f43505d?method=getImage&version=18&cstk=7hthgWHw" alt="image-20200218095053531"></p>
+</li>
+<li><p><strong>使用Pycharm+ <a href="https://cn.aliyun.com/product/cloudtoolkit" target="_blank" rel="noopener">Alibaba Cloud Toolkit</a>提交。</strong></p>
+<ul>
+<li><p>a、配置账户信息，获取AccessKey：<a href="https://help.aliyun.com/document_detail/145787.html?spm=a2c4g.11186623.2.22.702c1d4eQUpZ4M#task-2349932" target="_blank" rel="noopener">https://help.aliyun.com/document_detail/145787.html?spm=a2c4g.11186623.2.22.702c1d4eQUpZ4M#task-2349932</a>. 得到AccessKey ID 和 AccessKey Secret。</p>
+</li>
+<li><p>b、pycharm安装Alibaba Cloud Toolkit</p>
+<p>“command + ,”打开设置界面。或者：</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEB586228ee61dbd7bd2eb1e28dc748b10e?method=getImage&version=27&cstk=7hthgWHw" alt="image-20200218112749131"></p>
+<p>然后搜索插件。<br><img src="https://note.youdao.com/yws/api/personal/file/WEBcb872189bab1efa1c0197f5853c8291b?method=getImage&version=11&cstk=7hthgWHw" alt="image-20200218113114083"></p>
+<p>安装完成之后界面如下。<br><img src="https://note.youdao.com/yws/api/personal/file/WEB787563c68ed97cb06b834715f9a3b732?method=getImage&version=17&cstk=7hthgWHw" alt="image-20200218113212619"></p>
+</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li><p>c、在pycharm中设置用于打包本地镜像的 Docker 环境。<br>进入设置界面，打开之后，Mac勾选 <strong>Unix Socket</strong>，然后单击 <strong>Browse</strong>，输入<code>unix:///var/run/docker.sock</code>。。<strong>注意：如果出现连接测试报错，可进入 Docker 的 Settings 界面，单击左侧导航栏中的 General，然后选择 Expose daemon on tcp://localhost:2375 without TLS。</strong><br><img src="https://note.youdao.com/yws/api/personal/file/WEB495006b6b8e589b38122b921c6b9cb3b?method=getImage&version=25&cstk=7hthgWHw" alt="image-20200218113507511"><br>在下图中填入第一遍得到的ID和密码。<br><img src="https://note.youdao.com/yws/api/personal/file/WEBbd1d80a7e1a1467e6f3df42af15652a2?method=getImage&version=20&cstk=7hthgWHw" alt="image-20200218112851387"></p>
+<ul>
+<li>d、推送仓库到ACR<br>在pycharm上，打开项目文件tianchi-test。<br><img src="https://note.youdao.com/yws/api/personal/file/WEB5ade6e0b87a50ab47007c00044fcff8a?method=getImage&version=16&cstk=7hthgWHw" alt="image-20200218114230636"><br>右键单击应用工程，如下操作。<br><img src="https://note.youdao.com/yws/api/personal/file/WEB9634749a8726af0be5231797a6b7cc4e?method=getImage&version=31&cstk=7hthgWHw" alt="image-20200218114415051"><br>得到如下界面，然后填入项目目录等，点击Run开始推送。<br><img src="https://note.youdao.com/yws/api/personal/file/WEB5ce6fc3f4cf613c545b98ca06651b049?method=getImage&version=10&cstk=7hthgWHw" alt="image-20200218115103857"><br>运行成功如下图所示，此时远端就显示你成功推送了。<br><img src="https://note.youdao.com/yws/api/personal/file/WEBad1c5fc0cc0c6570cad1b9bf6af6f3bf?method=getImage&version=28&cstk=7hthgWHw" alt="image-20200218115926611"><br><img src="https://note.youdao.com/yws/api/personal/file/WEB0cf5a6ea065ea36d65a1fc73773cb598?method=getImage&version=14&cstk=7hthgWHw" alt="image-20200218120059574"></li>
+</ul>
+</li>
+</ul>
+<h2 id="五、验证实验结果"><a href="#五、验证实验结果" class="headerlink" title="五、验证实验结果"></a>五、验证实验结果</h2><p>推送完成之后，就在比赛页面输入仓库链接和账户信息即可提交结果了。</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEB269bb755c32d8fbaab2bbb1b7d79e350?method=getImage&version=29&cstk=7hthgWHw" alt="image-20200218120358998"></p>
+<p>提交之后，在成绩页面即可查看。</p>
+<p><img src="https://note.youdao.com/yws/api/personal/file/WEB47ffdb203ec46a95e45db6755cff9f51?method=getImage&version=23&cstk=7hthgWHw" alt="image-20200218120435389"></p>
+<h2 id="六、本地调试"><a href="#六、本地调试" class="headerlink" title="六、本地调试"></a>六、本地调试</h2><p>一般来说，代码写完之后，需要进行调试，一种方法是我们先构建项目主体代码hello_world.py，然后自己建立一个csv文件进行调试，最后一切都OK了再建立镜像。但是我们也可以建立镜像之后，运行起来进入容器调试，这里我们如何进入镜像调试呢？</p>
+<p>直接在容器内运行项目，XX为镜像的ID，通过docker images可以查看，这里不需要把ID全部写出来，只需要前几个字母，只要可以将其余其它ID区分开就可以了。</p>
+<pre><code>docker run -it XX</code></pre><p><img src="https://note.youdao.com/yws/api/personal/file/WEBbacebd5dc491bd3d6c78762b4d1eef19?method=getImage&version=21&cstk=7hthgWHw" alt="image-20200218121516536"></p>
+<p>或者按照如下激活镜像，进入容器。</p>
+<pre><code>docker run -it XXX /bin/bash 
+#XXX为镜像名称，同样只需要前几个字母数字，只要能区分开来即可，进入终端。</code></pre><p><img src="https://note.youdao.com/yws/api/personal/file/WEB81a59b9266604d305ba15e59191d7eb9?method=getImage&version=22&cstk=7hthgWHw" alt="image-20200218121740938"></p>
+<p>或者镜像已经运行成容器了，可以在命令行输入如下代码，进入容器。</p>
+<pre><code>docker exec –it XXXXXXXXXX bash 
+# 进入正在运行的容器内，XXXXXXXXXX是镜像ID 
+# 进入容器后，就可以修改镜像了，进去之后就是正常的操作，比如pip3之类的</code></pre><p>然后修改完成之后</p>
+<pre><code>$ docker commit XXX [镜像ID] [保存成的镜像名字]:1.0 [版本] 
+# 提交你刚才修改的镜像，新的镜像名称为wujiekd，版本为1.0</code></pre><p>在里面调试完之后输入exit即可退出。</p>
+<p>BitBrave，2020-02-18.</p>
+<p>​      </p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/18/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%89%8D%E5%BA%8F%E3%80%81%E4%B8%AD%E5%BA%8F%E3%80%81%E5%90%8E%E5%BA%8F%E9%81%8D%E5%8E%86%E7%9A%84%E9%9D%9E%E9%80%92%E5%BD%92%E5%AE%9E%E7%8E%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -978,107 +1132,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/09/LeetCode(1284.%20Minimum%20Number%20of%20Flips%20to%20Convert%20Binary%20Matrix%20to%20Zero%20Matrix)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/02/09/LeetCode(1284.%20Minimum%20Number%20of%20Flips%20to%20Convert%20Binary%20Matrix%20to%20Zero%20Matrix)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1284. Minimum Number of Flips to Convert Binary Matrix to Zero Matrix)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-02-09 10:58:23" itemprop="dateCreated datePublished" datetime="2020-02-09T10:58:23+08:00">2020-02-09</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-02-10 00:43:04" itemprop="dateModified" datetime="2020-02-10T00:43:04+08:00">2020-02-10</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-1284-Minimum-Number-of-Flips-to-Convert-Binary-Matrix-to-Zero-Matrix-题解"><a href="#LeetCode-1284-Minimum-Number-of-Flips-to-Convert-Binary-Matrix-to-Zero-Matrix-题解" class="headerlink" title="LeetCode(\1284. Minimum Number of Flips to Convert Binary Matrix to Zero Matrix)题解"></a>LeetCode(\1284. Minimum Number of Flips to Convert Binary Matrix to Zero Matrix)题解</h1><p>Given a <code>m x n</code> binary matrix <code>mat</code>. In one step, you can choose one cell and flip it and all the four neighbours of it if they exist (Flip is changing 1 to 0 and 0 to 1). A pair of cells are called neighboors if they share one edge.</p>
-<p>Return the <em>minimum number of steps</em> required to convert <code>mat</code> to a zero matrix or <strong>-1</strong> if you cannot.</p>
-<p>Binary matrix is a matrix with all cells equal to 0 or 1 only.</p>
-<p>Zero matrix is a matrix with all cells equal to 0.</p>
-<p><strong>Example 1:</strong></p>
-<p><img src="https://assets.leetcode.com/uploads/2019/11/28/matrix.png" alt="img"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: mat &#x3D; [[0,0],[0,1]]</span><br><span class="line">Output: 3</span><br><span class="line">Explanation: One possible solution is to flip (1, 0) then (0, 1) and finally (1, 1) as shown.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: mat &#x3D; [[0]]</span><br><span class="line">Output: 0</span><br><span class="line">Explanation: Given matrix is a zero matrix. We don&#39;t need to change it.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 3:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: mat &#x3D; [[1,1,1],[1,0,1],[0,0,0]]</span><br><span class="line">Output: 6</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 4:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: mat &#x3D; [[1,0,0],[1,0,0]]</span><br><span class="line">Output: -1</span><br><span class="line">Explanation: Given matrix can&#39;t be a zero matrix</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Constraints:</strong></p>
-<ul>
-<li><code>m == mat.length</code></li>
-<li><code>n == mat[0].length</code></li>
-<li><code>1 &lt;= m &lt;= 3</code></li>
-<li><code>1 &lt;= n &lt;= 3</code></li>
-<li><code>mat[i][j]</code> is 0 or 1.</li>
-</ul>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Hard</p>
-<p>有一个 $n \times m$ 的二元矩阵，元素都为0或者1。现在有一个翻转操作，选定一个元素，如果为1就变为0，为0就变为1。然后其上下左右如果存在值，也进行同样的操作。求最少需要多少次可以得到全0的矩阵，如果得不到就返回-1.</p>
-<p>这个题使用BFS解决，观察m和n的大小，我们实际上可以遍历所有的矩阵形式。但是要找出最短的变化方式，实际上就是找一条最短的路径，假设一个矩阵是一个点，两个矩阵可以通过某一个值的翻转互相转换，这两个点之间就有一条线相连。这就明显是使用BFS解决了。</p>
-<p>使用队列存储，按层索引。具体方法就不介绍了。</p>
-<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间上为遍历所有的可能矩阵形式为， $O(2^{m\times n})$。空间上，为队列，为$O(2^{m \times n-1})$。</p>
-<p><code>Runtime: 8 ms, faster than 47.39% of C++ online submissions for Minimum Number of Flips to Convert Binary Matrix to Zero Matrix.</code></p>
-<p><code>Memory Usage: 12.2 MB, less than 100.00% of C++ online submissions for Minimum Number of Flips to Convert Binary Matrix to Zero Matrix.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">num</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; mat)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; m:mat)&#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i:m) res = res * <span class="number">10</span> + i;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">flip</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; mat, <span class="keyword">int</span> i, <span class="keyword">int</span> j, <span class="keyword">int</span> row, <span class="keyword">int</span> col)</span> </span>&#123;</span><br><span class="line">        mat[i][j] ^= <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (i &gt; <span class="number">0</span>) mat[i<span class="number">-1</span>][j] ^= <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (j &gt; <span class="number">0</span>) mat[i][j<span class="number">-1</span>] ^= <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (i &lt; row<span class="number">-1</span>) mat[i+<span class="number">1</span>][j] ^= <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (j &lt; col<span class="number">-1</span>) mat[i][j+<span class="number">1</span>] ^= <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">return</span> mat;</span><br><span class="line">    &#125; </span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minFlips</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; mat)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>, row = mat.<span class="built_in">size</span>(), col = mat[<span class="number">0</span>].<span class="built_in">size</span>();</span><br><span class="line">        <span class="built_in">set</span>&lt;<span class="keyword">int</span>&gt; S;</span><br><span class="line">        <span class="built_in">queue</span>&lt;<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&gt; Q;</span><br><span class="line">        Q.push(mat);</span><br><span class="line">        S.insert(num(mat));</span><br><span class="line">        <span class="keyword">if</span> (num(mat) == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (Q.empty() == <span class="literal">false</span>) &#123;</span><br><span class="line">            res++;</span><br><span class="line">            <span class="keyword">int</span> len = Q.<span class="built_in">size</span>();</span><br><span class="line">            <span class="comment">//cout&lt;&lt;len&lt;&lt;" "&lt;&lt;S.size()&lt;&lt;endl;</span></span><br><span class="line">            <span class="keyword">while</span> (len-- &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="comment">//cout&lt;&lt;"enter"&lt;&lt;endl;</span></span><br><span class="line">                <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; m = Q.front(); Q.pop();</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;row; i++) &#123;</span><br><span class="line">                    <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;col; j++) &#123;</span><br><span class="line">                        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; t = flip(m, i, j, row, col);</span><br><span class="line">                        <span class="keyword">int</span> index = num(t);</span><br><span class="line">                        <span class="keyword">if</span> (index == <span class="number">0</span>) <span class="keyword">return</span> res;</span><br><span class="line">                        <span class="keyword">if</span> (S.<span class="built_in">find</span>(index) == S.<span class="built_in">end</span>()) &#123;</span><br><span class="line">                            S.insert(index);</span><br><span class="line">                            Q.push(t);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2020-02-09</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1149,12 +1202,12 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">349</span>
+          <span class="site-state-item-count">350</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-count">27</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
