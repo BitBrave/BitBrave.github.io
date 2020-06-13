@@ -168,6 +168,80 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(213.%20House%20Robber%20II)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(213.%20House%20Robber%20II)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(213. House Robber II)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-213-House-Robber-II-题解"><a href="#LeetCode-213-House-Robber-II-题解" class="headerlink" title="LeetCode(\213. House Robber II)题解"></a>LeetCode(\213. House Robber II)题解</h1><p>You are a professional robber planning to rob houses along a street. Each house has a certain amount of money stashed. All houses at this place are <strong>arranged in a circle.</strong> That means the first house is the neighbor of the last one. Meanwhile, adjacent houses have security system connected and <strong>it will automatically contact the police if two adjacent houses were broken into on the same night</strong>.</p>
+<p>Given a list of non-negative integers representing the amount of money of each house, determine the maximum amount of money you can rob tonight <strong>without alerting the police</strong>.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Input: [2,3,2]</span><br><span class="line">Output: 3</span><br><span class="line">Explanation: You cannot rob house 1 (money &#x3D; 2) and then rob house 3 (money &#x3D; 2),</span><br><span class="line">             because they are adjacent houses.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Input: [1,2,3,1]</span><br><span class="line">Output: 4</span><br><span class="line">Explanation: Rob house 1 (money &#x3D; 1) and then rob house 3 (money &#x3D; 3).</span><br><span class="line">             Total amount you can rob &#x3D; 1 + 3 &#x3D; 4.</span><br></pre></td></tr></table></figure>
+
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>一个盗贼偷窃一排房屋，每个房屋内有一定的钱财，房屋是围成圆形的，盗贼只能在不相邻的房屋之间实施盗窃，否则就会触发警报。问如何能偷到最多的钱财。这个题形式化就是，从一个环形数组内，找出不相邻的数字相加得到最大的和。</p>
+<p>这个可以使用DP解决。首先简单考虑，如果房屋不是环形的话，应该怎么处理，这就很简单了，直接定义一个状态数组D，D[i]表示盗贼从0房间开始到i房间能偷到的最多钱财，那么状态转移方程就是D[i]=max(D[i-1], D[i-2]+nums[i])。表示在当前房屋下选择偷与不偷之间的最大值。</p>
+<p>现在如果变成环形的话，我们可以分析，那就是nums数组首尾不能同时都被偷，那么我们可以分别求出1到n和0到n-1的线性的最优解，然后二者取最大值即可。</p>
+<p>代码如下，时间复杂度O(n)，空间复杂度O(n)。</p>
+<p><code>Runtime: 4 ms, faster than 58.56% of C++ online submissions for House Robber II.</code></p>
+<p><code>Memory Usage: 8.4 MB, less than 100.00% of C++ online submissions for House Robber II.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">rob</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = nums.<span class="built_in">size</span>(), ret;</span><br><span class="line">        <span class="keyword">if</span>(len == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">D</span><span class="params">(len+<span class="number">2</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len<span class="number">-1</span>; i++)&#123;</span><br><span class="line">            D[i+<span class="number">2</span>] = <span class="built_in">max</span>(D[i+<span class="number">1</span>], nums[i]+D[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        ret = <span class="built_in">max</span>(nums[<span class="number">0</span>], D[len]);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;len; i++)&#123;</span><br><span class="line">            D[i+<span class="number">1</span>] = <span class="built_in">max</span>(D[i], nums[i]+D[i<span class="number">-1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">max</span>(ret, D[len]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(200.%20Number%20of%20Islands)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -846,75 +920,6 @@ Output: 1-&gt;1-&gt;2-&gt;3-&gt;4-&gt;4-&gt;5-&gt;6</code></pre><h2 id="解题�
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(24.%20Swap%20Nodes%20in%20Pairs)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(24.%20Swap%20Nodes%20in%20Pairs)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(24. Swap Nodes in Pairs)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-24-Swap-Nodes-in-Pairs-题解"><a href="#LeetCode-24-Swap-Nodes-in-Pairs-题解" class="headerlink" title="LeetCode(24. Swap Nodes in Pairs)题解"></a>LeetCode(24. Swap Nodes in Pairs)题解</h1><hr>
-<p>原文如下<br>Given a linked list, swap every two adjacent nodes and return its head.</p>
-<p>You may not modify the values in the list’s nodes, only nodes itself may be changed.</p>
-<p>Example:</p>
-<pre><code>Given 1-&gt;2-&gt;3-&gt;4, you should return the list as 2-&gt;1-&gt;4-&gt;3.</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>这个题要求链表中每两个节点互换，并建议不要换节点值而是直接把两个节点交换，一个Medium值。其实很简单，链表指针互相指而已。</p>
-<p>代码如下图所示，所以为什么说LeetCode是宽容的，我明明是交换的两个节点的值，也可以AC。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode *next;</span></span><br><span class="line"><span class="comment"> *     ListNode(int x) : val(x), next(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">ListNode* <span class="title">swapPairs</span><span class="params">(ListNode* head)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(head==<span class="literal">NULL</span>) <span class="keyword">return</span> head;</span><br><span class="line">        ListNode *fore = head, *back = head-&gt;next;</span><br><span class="line">        <span class="keyword">int</span> temp;</span><br><span class="line">        <span class="keyword">while</span>(back!=<span class="literal">NULL</span>)&#123;</span><br><span class="line">            temp = fore-&gt;val;</span><br><span class="line">            fore-&gt;val = back-&gt;val;</span><br><span class="line">            back-&gt;val = temp;</span><br><span class="line">            fore = back-&gt;next;</span><br><span class="line">            <span class="keyword">if</span>(fore==<span class="literal">NULL</span> || fore-&gt;next==<span class="literal">NULL</span>) <span class="keyword">break</span>;</span><br><span class="line">            back = fore-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> head;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>当然这里也有不是改变节点的值，而是改变交换整个节点.但是这样速度慢了很多，也复杂了很多，花了我很多时间，指针真的好麻烦。不过也能AC。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode *next;</span></span><br><span class="line"><span class="comment"> *     ListNode(int x) : val(x), next(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">ListNode* <span class="title">swapPairs</span><span class="params">(ListNode* head)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(head==<span class="literal">NULL</span>) <span class="keyword">return</span> head;</span><br><span class="line">        ListNode *fore = head, *back = head-&gt;next, *temp;</span><br><span class="line">        <span class="keyword">if</span>(back!=<span class="literal">NULL</span>)&#123;</span><br><span class="line">            temp = back-&gt;next;</span><br><span class="line">            back-&gt;next = fore;</span><br><span class="line">            fore-&gt;next = temp;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">return</span> fore;</span><br><span class="line">        head = back;</span><br><span class="line">        temp = fore;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(fore-&gt;next!=<span class="literal">NULL</span>) fore = fore-&gt;next;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">return</span> head;</span><br><span class="line">        <span class="keyword">if</span>(fore-&gt;next!=<span class="literal">NULL</span>) back = fore-&gt;next;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">return</span> head;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span>(back!=<span class="literal">NULL</span>)&#123;</span><br><span class="line">            temp-&gt;next = back;</span><br><span class="line">            temp = back-&gt;next;</span><br><span class="line">            back-&gt;next = fore;</span><br><span class="line">            fore-&gt;next = temp;</span><br><span class="line">            temp = fore;</span><br><span class="line">            <span class="keyword">if</span>(fore-&gt;next==<span class="literal">NULL</span>) <span class="keyword">break</span>;</span><br><span class="line">            fore = fore-&gt;next;</span><br><span class="line">            <span class="keyword">if</span>(fore-&gt;next==<span class="literal">NULL</span>) <span class="keyword">break</span>;</span><br><span class="line">            back = fore-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> head;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2019-04-26。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -985,12 +990,12 @@ Output: 1-&gt;1-&gt;2-&gt;3-&gt;4-&gt;4-&gt;5-&gt;6</code></pre><h2 id="解题�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">348</span>
+          <span class="site-state-item-count">349</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
