@@ -168,6 +168,162 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/28/%E4%B8%80%E5%A0%86%E7%8F%A0%E5%AD%90%EF%BC%8CA%E9%80%891%E4%B8%AAB%E9%80%891%E4%B8%AA%E4%B8%A2%E4%B8%80%E4%B8%AA%E4%B8%ADA%E8%83%9C%E6%A6%82%E7%8E%87/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/28/%E4%B8%80%E5%A0%86%E7%8F%A0%E5%AD%90%EF%BC%8CA%E9%80%891%E4%B8%AAB%E9%80%891%E4%B8%AA%E4%B8%A2%E4%B8%80%E4%B8%AA%E4%B8%ADA%E8%83%9C%E6%A6%82%E7%8E%87/" class="post-title-link" itemprop="url">一堆珠子，A选1个B选1个丢一个中A胜概率</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-03-28 10:37:54 / 修改时间：11:46:12" itemprop="dateCreated datePublished" datetime="2020-03-28T10:37:54+08:00">2020-03-28</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="一堆珠子，A选1个B选1个丢一个中A胜概率"><a href="#一堆珠子，A选1个B选1个丢一个中A胜概率" class="headerlink" title="一堆珠子，A选1个B选1个丢一个中A胜概率"></a>一堆珠子，A选1个B选1个丢一个中A胜概率</h1><p>有一个盒子，里面分别有n颗黑色珠子和m颗白色珠子。</p>
+<p>AB两个人轮流中盒子中选珠子，A先选。</p>
+<p>A每次选一颗，如果是黑色珠子就结束算法，A胜利。</p>
+<p>B每次选一颗，如果是黑色珠子就结束算法，B胜利，如果不是B会再选一颗丢掉，这个丢掉的珠子不管是什么颜色都不影响胜负。</p>
+<p>最后如果没有谁选到黑色珠子，平局的话，算B胜利。</p>
+<p>请问A胜利的概率，保留4位小数。</p>
+<p><strong>Example 1</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">2 3</span><br><span class="line">output: 0.6000</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 1</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1 3</span><br><span class="line">output: 0.5000</span><br></pre></td></tr></table></figure>
+
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>这个题明显可以使用递归来做。</p>
+<p>我们首先假设一般的情况。设f(n, m)函数返回A先抽胜利的概率。那么A先抽，有如下情况：</p>
+<ul>
+<li>A抽到黑色珠子，游戏结束。此时A胜利的概率为 $\frac{n}{n+m}$。</li>
+<li>A抽到白色珠子，概率为 $\frac{m}{n+m}$。然后轮到B抽，此时如果需要A胜利，那么B只能抽到黑色珠子，概率为 $\frac{m-1}{n+m-1}$，然后B开始抽一个珠子扔掉，此时又存在两种情况：(1) B抽到要扔的为黑色珠子，概率为 $\frac{n}{n+m-2}$，然后乘上函数f(n-1, m-2)；(2) B抽到要扔的为白色珠子，概率为 $\frac{m-2}{n+m-2}$，然后乘上函数f(n, m-3)。</li>
+</ul>
+<p>综上：A胜利的概率为f(n,m).</p>
+<p>$f(n,m) = \frac{n}{n+m} + \frac{m}{n+m} \times \frac{m-1}{n+m-1} \times (\frac{n}{n+m-2}f(n-1,m-2)+\frac{m-2}{n+m-2}f(n,m-3))$</p>
+<p>最后考虑边缘状态：</p>
+<p>输入一个f(n,m)，如果n&lt;=0，表示不存在黑色珠子，A肯定失败，那就直接返回0。如果m&lt;=0，说明不存在白色珠子，A直接胜利，直接返回1。注意这里有可能n和m都小于等于0，因此我们先判断n的状态，然后再判断m的值。这里因为表达式中有n+m-2，为了避免除0的情况存在，如果都等于1的时候，直接返回0.5即可。</p>
+<p>注意这里，我们可以使用Map记录n和m的状态，避免重复计算。</p>
+<p>转化为为代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iomanip&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;utility&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;map&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> N, M;</span><br><span class="line"><span class="built_in">map</span>&lt;pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt;, <span class="keyword">float</span>&gt; Map;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">float</span> <span class="title">Pro</span><span class="params">(<span class="keyword">int</span> n, <span class="keyword">int</span> m)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (Map.<span class="built_in">find</span>(make_pair(n, m)) != Map.<span class="built_in">end</span>()) <span class="keyword">return</span> Map[make_pair(n,m)];</span><br><span class="line">    pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; p = make_pair(n, m);</span><br><span class="line">    <span class="keyword">if</span> (n &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">        Map[p] = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">return</span> Map[p];</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (m &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">        Map[p] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">return</span> Map[p];</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (m == <span class="number">1</span> &amp;&amp; n == <span class="number">1</span>) &#123;</span><br><span class="line">        Map[p] = <span class="number">0.5</span>;</span><br><span class="line">        <span class="keyword">return</span> Map[p];</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">float</span> res = n*<span class="number">1.0</span>/(m+n) +</span><br><span class="line">                m*<span class="number">1.0</span>/(m+n)*(m<span class="number">-1</span>)*<span class="number">1.0</span>/(m+n<span class="number">-1</span>) * (Pro(n<span class="number">-1</span>,m<span class="number">-2</span>) * n*<span class="number">1.0</span>/(m+n<span class="number">-2</span>) + Pro(n, m<span class="number">-3</span>) * (m<span class="number">-2</span>)*<span class="number">1.0</span>/(m+n<span class="number">-2</span>));</span><br><span class="line">    Map[p] = res;</span><br><span class="line">    <span class="keyword">return</span> Map[p];</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">cin</span>&gt;&gt;N&gt;&gt;M;</span><br><span class="line">    <span class="keyword">float</span> res = Pro(N, M);</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt;fixed &lt;&lt;setprecision(<span class="number">4</span>) &lt;&lt; res &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2020-03-28</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/27/%E6%9C%80%E5%B0%91%E8%8A%B1%E8%B4%B9%E6%9C%A8%E6%A3%8D%E9%80%89%E6%8B%A9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/27/%E6%9C%80%E5%B0%91%E8%8A%B1%E8%B4%B9%E6%9C%A8%E6%A3%8D%E9%80%89%E6%8B%A9/" class="post-title-link" itemprop="url">最少花费木棍选择</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-03-27 22:09:08 / 修改时间：23:05:07" itemprop="dateCreated datePublished" datetime="2020-03-27T22:09:08+08:00">2020-03-27</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="最少花费木棍选择"><a href="#最少花费木棍选择" class="headerlink" title="最少花费木棍选择"></a>最少花费木棍选择</h1><p>有N个木棍，每个木棍有一个重量和长度，现在按一定顺序选择木棍，第一个木棍花费1，后面的选择的木棍如果重量和长度都不低于前一个木棍，则不产生花费，否则花费1.请确定一个选择顺序，使得花费最少。返回最少的花费。输入数组clubs，club[i][0]和club[i][1]分别表示第i根木棍的重量和长度。</p>
+<p>这个题分析一下可以使用Greedy的办法解决。</p>
+<p>分析题目，我们需要将这N个按一定顺序排列，组成数个长度和重量递增子序列，总的子序列的个数尽可能少就可以了，子序列的个数就是花费。</p>
+<p>怎么来选呢？我们可以首先对长度或者重量排序，比如我们对重量排序，当然在重量相等的情况下，更短的木棒排前面。然后从第一个木棍开始，从前往后选择更长的木棒来组成递增子序列。然后在剩下的木棒中，从前往后选择第二个子序列，···直到所有的木棒都被选择完毕。</p>
+<p>如何证明这个算法是正确的呢？假设按照上述选择的木棒递增子序列，不是最优的。那就说明，存在一个甚至多个递增子序列是可以拆分开来，放到别的序列里面去。那么就假设这个序列为a1,a2,···,ak，这个序列的木棒可以拆开放入别的序列中。有如下几种情况：</p>
+<p>对于ai，如果能放入算法运行前期选择的序列中，那么在算法前期运行的时候就会把这个木棒选择，因此如果真能拆分，ai一定是放入后期选择的序列中的。那么a1，a2，···，ak都拆分放在后面的序列中。</p>
+<p>但是能出现A系列出现即后面还有其它序列的原因是第一个a1开始，比如到了ai，后面如果有元素未被选择，一定是这个木棒的比ai更短。那么ai肯定不能放在这个序列中。</p>
+<p>就单独只看a1，如果a1可以放入后面的某个序列，但是算法运行时并没有被分配到那个序列比如说B，那么就说明a1和b1之间一定有长度大于b1的木棒，这些木棒一定有存在于A中的，这些事不能放入别的B中的，也不能放入别的，因为如果可以放入而没有的话，那么说明运行算法的时候这些元素和可以放入的序列之间存在更大的值。因此A序列一定存在不能放入别的序列中的元素。</p>
+<p>这样算法就证明完毕了。</p>
+<p>代码如下，时间上$O(N^2)$，空间$O(N)$。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">minClubsCost</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; &amp;clubs)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> len = club.<span class="built_in">size</span>(), res = <span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">bool</span>&gt; <span class="title">visit</span><span class="params">(len, <span class="literal">false</span>)</span></span>;</span><br><span class="line">    </span><br><span class="line">    sort(clubs.<span class="built_in">begin</span>(), clubs.<span class="built_in">end</span>(), cmp); <span class="comment">// 将木棍按照重量升序排序</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">int</span> count = <span class="number">0</span>; <span class="comment">// 记录下已经选择木棒的数目</span></span><br><span class="line">    <span class="keyword">int</span> p = <span class="number">0</span>; <span class="comment">// 选择一个木棍开始递增子序列选择，子序列尽可能长</span></span><br><span class="line">    <span class="keyword">while</span> (count &lt; len) &#123;</span><br><span class="line">        <span class="keyword">while</span> (visit[p+<span class="number">1</span>] == <span class="literal">true</span>) p++; <span class="comment">// 选择一个还未选择的最短木棒</span></span><br><span class="line">        res++;</span><br><span class="line">        count++;</span><br><span class="line">        visit[p] = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=p+<span class="number">1</span>; i&lt;len; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (visit[i] == <span class="literal">true</span>) <span class="keyword">continue</span>;</span><br><span class="line">            count++;</span><br><span class="line">            visit[i] = <span class="literal">true</span>;</span><br><span class="line">            p = i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2020-03-27</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/27/LeetCode(765.%20Couples%20Holding%20Hands)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -882,191 +1038,11 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/17/LeetCode(321.%20Create%20Maximum%20Number)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/03/17/LeetCode(321.%20Create%20Maximum%20Number)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(321. Create Maximum Number)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-03-17 23:42:06" itemprop="dateCreated datePublished" datetime="2020-03-17T23:42:06+08:00">2020-03-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-03-18 15:36:37" itemprop="dateModified" datetime="2020-03-18T15:36:37+08:00">2020-03-18</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-321-Create-Maximum-Number-题解"><a href="#LeetCode-321-Create-Maximum-Number-题解" class="headerlink" title="LeetCode(\321. Create Maximum Number)题解"></a>LeetCode(\321. Create Maximum Number)题解</h1><p>Given two arrays of length <code>m</code> and <code>n</code> with digits <code>0-9</code> representing two numbers. Create the maximum number of length <code>k &lt;= m + n</code> from digits of the two. The relative order of the digits from the same array must be preserved. Return an array of the <code>k</code> digits.</p>
-<p><strong>Note:</strong> You should try to optimize your time and space complexity.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Input:</span><br><span class="line">nums1 &#x3D; [3, 4, 6, 5]</span><br><span class="line">nums2 &#x3D; [9, 1, 2, 5, 8, 3]</span><br><span class="line">k &#x3D; 5</span><br><span class="line">Output:</span><br><span class="line">[9, 8, 6, 5, 3]</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Input:</span><br><span class="line">nums1 &#x3D; [6, 7]</span><br><span class="line">nums2 &#x3D; [6, 0, 4]</span><br><span class="line">k &#x3D; 5</span><br><span class="line">Output:</span><br><span class="line">[6, 7, 6, 0, 4]</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 3:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Input:</span><br><span class="line">nums1 &#x3D; [3, 9]</span><br><span class="line">nums2 &#x3D; [8, 9]</span><br><span class="line">k &#x3D; 3</span><br><span class="line">Output:</span><br><span class="line">[9, 8, 9]</span><br></pre></td></tr></table></figure>
-
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Hard</p>
-<p>有m和n长的两个整数数组nums1和nums2，整数数组表示一个大的多位整数。从前到后每个元素都是0-9的值。现在从两个数组中选出K(K&lt;m+n)个数组成一个新的整数数组来表示一个大的K位数，选出的元素要保持在原有数组的相对顺序，返回选定的最大的K位数数组。</p>
-<p>这个题如何来做呢？我的思路是这样的——</p>
-<p>首先不考虑边界问题，我们组成一个K位数，一定是从nums1中选一些数，再从nums2中选一些数组成K个数，再组合成一个K位数。那么我们就遍历从nums1选0个数和nums2选K个数，nums1选1个数和nums2选K-1个数，…，nums1选K个数和nums2选0个数，这样遍历K种情况，每种情况下都得到对应的最大的K位数整数数组，最后比较一下就可以。这个步骤的时间复杂度$O(K)$。</p>
-<p>好，现在考虑选定了数之后怎么组合的问题。假定从nums1中选了a个数，从nums2中选了b个数，a+b=K。那么nums1的a个数和nums2的b个数在保持原有相对顺序不变的情况下得到最大的K位数数组的组合方式就很简单了。我们直接按照类似于归并排序内的merge方式就可以。在a个数和b个数的开头分别设置一个指针，每次选择两个指针中较大的那个值放入组合的K位数中的尾部即可，然后对应的指针后移一位。但是这里要注意如果两个指针指向的元素是一样的话，那么就要判断后面的元素大大小才能确定移动哪个指针（移动后面元素更大的那个数组的指针）。这个步骤的时间复杂度为$O(K)$。</p>
-<p>那么现在就应该考虑如何从两个数组中选数了。假定我们要从nums1中选出a个数，一共有多少种方式呢，答案是$ C_{m}^{a} $ 种。如果再加上nums2的二者一乘，时间复杂度就太高了。但其实想一想，我们只需要nums1中最大的a个数就可以了，怎么定义最大呢，就是a个数组成的a位数是所有a个数组成的数中最大的。</p>
-<p>那么现在，问题就变成了——怎么从一个0-9的整数数组中选出a个数，假设数组为nums1，在保持原有顺序的前提下，使得选出的a个数组成最大的a位数。</p>
-<p>在这里我们可以使用贪心策略，即我们尽可能保证选出的a个数，位于前列的数更大，这样最后组成的a位数就尽可能大。比如选第一个数，我们就首先去寻找9的位置，如果存在9且这个9后面的数大于等于a-1个，那么我们就可以选这个，然后在后面的序列中选剩下的a-1个数。如果不满足条件，就依次寻找8、7、6等。</p>
-<p>这里我们可以选择使用Stack来帮助我们，维护一个递减栈，从nums1的左边开始向右遍历。当遍历到一个数时，如果栈为空或者当前元素加上栈内的元素个数再加上剩余未遍历的元素等于a，就直接将元素入栈。否则就判断当前元素是否小于栈顶元素，小于等于就直接入栈。如果大于，就在保证当前元素加上栈内的元素个数再加上剩余未遍历的元素等于a，同时栈顶元素小于当前元素的前提下，不断出栈，最后将当前元素入栈。最后遍历结束时，栈中的元素个数一定大于等于a，返回栈底前a个元素，这就是最大的a个符合顺序的元素。这个步骤时间复杂度为$O(m)$。同样对nums2操作，时间复杂度为$O(n)$。</p>
-<p>因此，按照上述方法，时间复杂度为$O(K(K+m+n))$。空间复杂度$O(K+m+n)$。</p>
-<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下。</p>
-<p><code>Runtime: 48 ms, faster than 70.26% of C++ online submissions for Create Maximum Number.</code></p>
-<p><code>Memory Usage: 23.4 MB, less than 80.00% of C++ online submissions for Create Maximum Number.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">maxNumberOfSingleArray</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">res</span><span class="params">(k)</span></span>;</span><br><span class="line">        <span class="built_in">deque</span>&lt;<span class="keyword">int</span>&gt; S;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++) &#123;</span><br><span class="line">            <span class="keyword">while</span> (!S.empty() <span class="keyword">and</span> S.back() &lt; nums[i] <span class="keyword">and</span> S.<span class="built_in">size</span>() + len - i &gt; k) S.pop_back();</span><br><span class="line">            S.push_back(nums[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;k; i++) &#123;</span><br><span class="line">            res[i] = S.front();</span><br><span class="line">            S.pop_front();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">merge</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; res1, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; res2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> k1 = res1.<span class="built_in">size</span>(), k2 = res2.<span class="built_in">size</span>(), i1 = <span class="number">0</span>, i2 = <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; res;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span> (i1 &lt; k1 <span class="keyword">and</span> i2 &lt; k2) &#123;</span><br><span class="line">            <span class="keyword">if</span> (res1[i1] &gt; res2[i2]) res.push_back(res1[i1++]);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (res1[i1] &lt; res2[i2]) res.push_back(res2[i2++]);</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">int</span> ti1 = i1 + <span class="number">1</span>, ti2 = i2 + <span class="number">1</span>;</span><br><span class="line">                <span class="keyword">while</span> (ti1 &lt; k1 <span class="keyword">and</span> ti2 &lt; k2 <span class="keyword">and</span> res1[ti1] == res2[ti2]) &#123;</span><br><span class="line">                    ti1++;</span><br><span class="line">                    ti2++;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (ti1 == k1) res.push_back(res2[i2++]);</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (ti2 == k2) res.push_back(res1[i1++]);</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (res1[ti1] &gt; res2[ti2]) res.push_back(res1[i1++]);</span><br><span class="line">                <span class="keyword">else</span> res.push_back(res2[i2++]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span> (i1 &lt; k1) res.push_back(res1[i1++]);</span><br><span class="line">        <span class="keyword">while</span> (i2 &lt; k2) res.push_back(res2[i2++]);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isBigger</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; res1, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; res2, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;k; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (res1[i] &gt; res2[i]) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            <span class="keyword">if</span> (res1[i] &lt; res2[i]) <span class="keyword">return</span> <span class="literal">false</span>; </span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">maxNumber</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums1, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums2, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> m = nums1.<span class="built_in">size</span>(), n = nums2.<span class="built_in">size</span>();</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">res</span><span class="params">(k, <span class="number">0</span>)</span></span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;=k; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (i &gt; m <span class="keyword">or</span> k-i &gt; n) <span class="keyword">continue</span>;</span><br><span class="line">            </span><br><span class="line">            <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; tmp1 = maxNumberOfSingleArray(nums1, i);</span><br><span class="line">            <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; tmp2 = maxNumberOfSingleArray(nums2, k-i);</span><br><span class="line">            </span><br><span class="line">            <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; tmp = merge(tmp1, tmp2);</span><br><span class="line">            <span class="keyword">if</span> (isBigger(tmp, res, k)) &#123;</span><br><span class="line">                res = tmp;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2020-03-18</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/16/LeetCode(1383.%20Maximum%20Performance%20of%20a%20Team)%E5%91%A8%E8%B5%9B%E9%A2%984%E9%A2%98%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/03/16/LeetCode(1383.%20Maximum%20Performance%20of%20a%20Team)%E5%91%A8%E8%B5%9B%E9%A2%984%E9%A2%98%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1383. Maximum Performance of a Team)周赛题4题题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-03-16 10:36:53 / 修改时间：10:48:04" itemprop="dateCreated datePublished" datetime="2020-03-16T10:36:53+08:00">2020-03-16</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-1383-Maximum-Performance-of-a-Team-周赛题4题题解"><a href="#LeetCode-1383-Maximum-Performance-of-a-Team-周赛题4题题解" class="headerlink" title="LeetCode(\1383. Maximum Performance of a Team)周赛题4题题解"></a>LeetCode(\1383. Maximum Performance of a Team)周赛题4题题解</h1><p>There are <code>n</code> engineers numbered from 1 to <code>n</code> and two arrays: <code>speed</code> and <code>efficiency</code>, where <code>speed[i]</code> and <code>efficiency[i]</code> represent the speed and efficiency for the i-th engineer respectively. <em>Return the maximum <strong>performance</strong> of a team composed of at most <code>k</code> engineers, since the answer can be a huge number, return this modulo 10^9 + 7.</em></p>
-<p>The <strong>performance</strong> of a team is the sum of their engineers’ speeds multiplied by the minimum efficiency among their engineers. </p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Input: n &#x3D; 6, speed &#x3D; [2,10,3,1,5,8], efficiency &#x3D; [5,4,3,9,7,2], k &#x3D; 2</span><br><span class="line">Output: 60</span><br><span class="line">Explanation: </span><br><span class="line">We have the maximum performance of the team by selecting engineer 2 (with speed&#x3D;10 and efficiency&#x3D;4) and engineer 5 (with speed&#x3D;5 and efficiency&#x3D;7). That is, performance &#x3D; (10 + 5) * min(4, 7) &#x3D; 60.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Input: n &#x3D; 6, speed &#x3D; [2,10,3,1,5,8], efficiency &#x3D; [5,4,3,9,7,2], k &#x3D; 3</span><br><span class="line">Output: 68</span><br><span class="line">Explanation:</span><br><span class="line">This is the same example as the first but k &#x3D; 3. We can select engineer 1, engineer 2 and engineer 5 to get the maximum performance of the team. That is, performance &#x3D; (2 + 10 + 5) * min(5, 4, 7) &#x3D; 68.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 3:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: n &#x3D; 6, speed &#x3D; [2,10,3,1,5,8], efficiency &#x3D; [5,4,3,9,7,2], k &#x3D; 4</span><br><span class="line">Output: 72</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Constraints:</strong></p>
-<ul>
-<li><code>1 &lt;= n &lt;= 10^5</code></li>
-<li><code>speed.length == n</code></li>
-<li><code>efficiency.length == n</code></li>
-<li><code>1 &lt;= speed[i] &lt;= 10^5</code></li>
-<li><code>1 &lt;= efficiency[i] &lt;= 10^8</code></li>
-<li><code>1 &lt;= k &lt;= n</code></li>
-</ul>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Hard</p>
-<p>这题可以这样想，有N名工人，每个工人有一个勤奋度和做事速度，二者都越大越好。现在最多要招K名员工组成一个团队，团队整体的质量是由团队所有人的做事速度相加再乘上最低的勤奋度得到的，请问如何选择才能得到最高的质量，返回这个值，不过记得取余数。</p>
-<p>这个题使用Greedy解决，可以使用优先队列。首先将所有工人按照勤奋度降序排序，从前到后遍历工人，然后维护一个最大为K个元素的最小堆，每次将工人的做事速度放入堆中，堆中的元素就代表了要选的工人，如果超过了K个元素就将速度最小的那个去掉，在这个过程中记录最高的团队质量。</p>
-<p>而贪心策略就是，如果必须要要加入一个人同时必须在团队内删除一个人的话，那我就去掉那个速度最慢的，因为勤奋度在排序之后已经入了团队的人的勤奋度是不会成为最低的勤奋度的。</p>
-<p>这个题和<a href="https://leetcode.com/problems/minimum-cost-to-hire-k-workers/" target="_blank" rel="noopener">857. Minimum Cost to Hire K Workers</a>是一样的解法，不过857是按单价从低到高排序，每次从最大堆里推掉质量最大的人。</p>
-<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间复杂度主要用在排序上面，$O(nlogn)$，空间上$O(n)$.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; a, pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a.second &gt; b.second;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxPerformance</span><span class="params">(<span class="keyword">int</span> n, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; speed, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; efficiency, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        vector&lt;pair&lt;int, int&gt;&gt; se(n);</span><br><span class="line">        <span class="keyword">long</span> <span class="keyword">long</span> res = <span class="number">0</span>, m = <span class="built_in">pow</span>(<span class="number">10</span>, <span class="number">9</span>) + <span class="number">7</span>, speedSum = <span class="number">0</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;n; i++) se[i] = make_pair(speed[i], efficiency[i]);</span><br><span class="line">        sort(se.<span class="built_in">begin</span>(), se.<span class="built_in">end</span>(), cmp);</span><br><span class="line">        </span><br><span class="line">        priority_queue&lt;<span class="keyword">int</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;, greater&lt;<span class="keyword">int</span>&gt; &gt; minHeap;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;n; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (minHeap.<span class="built_in">size</span>() &lt; k) &#123;</span><br><span class="line">                minHeap.push(se[i].first);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                speedSum -= minHeap.top();</span><br><span class="line">                minHeap.pop();</span><br><span class="line">                minHeap.push(se[i].first);</span><br><span class="line">            &#125;</span><br><span class="line">            speedSum += se[i].first;</span><br><span class="line"></span><br><span class="line">            res = <span class="built_in">max</span>(res, speedSum * se[i].second);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> res % m;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2020-03-15</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/35/">35</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/36/">36</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1132,7 +1108,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">350</span>
+          <span class="site-state-item-count">352</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
