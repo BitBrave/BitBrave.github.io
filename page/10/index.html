@@ -168,6 +168,98 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/04/LeetCode(1267.%20Count%20Servers%20that%20Communicate)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/02/04/LeetCode(1267.%20Count%20Servers%20that%20Communicate)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1267. Count Servers that Communicate)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-02-04 11:56:13 / 修改时间：11:56:55" itemprop="dateCreated datePublished" datetime="2020-02-04T11:56:13+08:00">2020-02-04</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-1267-Count-Servers-that-Communicate-题解"><a href="#LeetCode-1267-Count-Servers-that-Communicate-题解" class="headerlink" title="LeetCode(\1267. Count Servers that Communicate)题解"></a>LeetCode(\1267. Count Servers that Communicate)题解</h1><p>You are given a map of a server center, represented as a <code>m * n</code> integer matrix <code>grid</code>, where 1 means that on that cell there is a server and 0 means that it is no server. Two servers are said to communicate if they are on the same row or on the same column.</p>
+<p>Return the number of servers that communicate with any other server.</p>
+<p><strong>Example 1:</strong></p>
+<p><img src="https://assets.leetcode.com/uploads/2019/11/14/untitled-diagram-6.jpg" alt="img"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: grid &#x3D; [[1,0],[0,1]]</span><br><span class="line">Output: 0</span><br><span class="line">Explanation: No servers can communicate with others.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<p><strong><img src="https://assets.leetcode.com/uploads/2019/11/13/untitled-diagram-4.jpg" alt="img"></strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: grid &#x3D; [[1,0],[1,1]]</span><br><span class="line">Output: 3</span><br><span class="line">Explanation: All three servers can communicate with at least one other server.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 3:</strong></p>
+<p><img src="https://assets.leetcode.com/uploads/2019/11/14/untitled-diagram-1-3.jpg" alt="img"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: grid &#x3D; [[1,1,0,0],[0,0,1,0],[0,0,1,0],[0,0,0,1]]</span><br><span class="line">Output: 4</span><br><span class="line">Explanation: The two servers in the first row can communicate with each other. The two servers in the third column can communicate with each other. The server at right bottom corner can&#39;t communicate with any other server.</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>m == grid.length</code></li>
+<li><code>n == grid[i].length</code></li>
+<li><code>1 &lt;= m &lt;= 250</code></li>
+<li><code>1 &lt;= n &lt;= 250</code></li>
+<li><code>grid[i][j] == 0 or 1</code></li>
+</ul>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个二维数组，位置上为1的表示有服务器，为0则没有。对于同一行或者同一列的服务器则相互连接。要求计算出这个矩阵中所有与其他服务器相连的服务器数目。</p>
+<p>这个题分析之后可以得知是寻找图里面所有的数目大于1的连通子图，然后将子图的大小相加。</p>
+<p>有两种做法，一是根据给的矩阵建立图矩阵，两个服务器相连则将元素标为1，然后使用图遍历寻找子图，二是直接在给定的矩阵上操作。这里我使用第二种，为了方便，节省空间。</p>
+<p>至于寻找图中的连通子图，我使用DFS，进入DFS的一定是服务器存在的节点。放弃掉寻找到的单个节点的子图，记录大于1的子图大小。</p>
+<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间复杂度O(n2)，空间复杂度O(n2)。</p>
+<p><code>Runtime: 2384 ms, faster than 5.02% of Python3 online submissions for Count Servers that Communicate.</code></p>
+<p><code>Memory Usage: 32 MB, less than 100.00% of Python3 online submissions for Count Servers that Communicate.</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">dfs</span><span class="params">(self, i, j, n, m, M, visit)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> visit[i][j] == <span class="number">1</span>: <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">        visit[i][j] = <span class="number">1</span></span><br><span class="line">        res = <span class="number">1</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment"># up</span></span><br><span class="line">        a, b = i<span class="number">-1</span>, j</span><br><span class="line">        <span class="keyword">while</span> a &gt;= <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">if</span> M[a][b] == <span class="number">0</span>: visit[a][b] = <span class="number">1</span>; a -= <span class="number">1</span>; <span class="keyword">continue</span></span><br><span class="line">            res += self.dfs(a, b, n, m, M, visit)</span><br><span class="line">            a -= <span class="number">1</span></span><br><span class="line">        <span class="comment"># down</span></span><br><span class="line">        a, b = i+<span class="number">1</span>, j</span><br><span class="line">        <span class="keyword">while</span> a &lt; n:</span><br><span class="line">            <span class="keyword">if</span> M[a][b] == <span class="number">0</span>: visit[a][b] = <span class="number">1</span>; a += <span class="number">1</span>; <span class="keyword">continue</span></span><br><span class="line">            res += self.dfs(a, b, n, m, M, visit)</span><br><span class="line">            a += <span class="number">1</span></span><br><span class="line">        <span class="comment"># left</span></span><br><span class="line">        a, b = i, j<span class="number">-1</span></span><br><span class="line">        <span class="keyword">while</span> b &gt;= <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">if</span> M[a][b] == <span class="number">0</span>: visit[a][b] = <span class="number">1</span>; b -= <span class="number">1</span>; <span class="keyword">continue</span></span><br><span class="line">            res += self.dfs(a, b, n, m, M, visit)</span><br><span class="line">            b -= <span class="number">1</span></span><br><span class="line">        <span class="comment"># right</span></span><br><span class="line">        a, b = i, j+<span class="number">1</span></span><br><span class="line">        <span class="keyword">while</span> b &lt; m:</span><br><span class="line">            <span class="keyword">if</span> M[a][b] == <span class="number">0</span>: visit[a][b] = <span class="number">1</span>; b += <span class="number">1</span>; <span class="keyword">continue</span></span><br><span class="line">            res += self.dfs(a, b, n, m, M, visit)</span><br><span class="line">            b += <span class="number">1</span>  </span><br><span class="line">        <span class="keyword">return</span> res</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">countServers</span><span class="params">(self, grid: List[List[int]])</span> -&gt; int:</span></span><br><span class="line">        n = len(grid)</span><br><span class="line">        m = len(grid[<span class="number">0</span>])</span><br><span class="line">        <span class="keyword">print</span> (n, m, grid)</span><br><span class="line">        visit = np.zeros([n, m])</span><br><span class="line">        res = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(n):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(m):</span><br><span class="line">                <span class="keyword">if</span> visit[i][j] == <span class="number">1</span> <span class="keyword">or</span> grid[i][j] == <span class="number">0</span>: <span class="keyword">continue</span></span><br><span class="line">                t = self.dfs(i, j, n, m, grid, visit)</span><br><span class="line">                res += t <span class="keyword">if</span> t &gt; <span class="number">1</span> <span class="keyword">else</span> <span class="number">0</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2020-02-04</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/03/LeetCode(1296.%20Divide%20Array%20in%20Sets%20of%20K%20Consecutive%20Numbers)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -961,90 +1053,6 @@ Output: false</code></pre><h2 id="解题思路"><a href="#解题思路" class="h
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(1011.%20Capacity%20To%20Ship%20Packages%20Within%20D%20Days)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(1011.%20Capacity%20To%20Ship%20Packages%20Within%20D%20Days)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1011. Capacity To Ship Packages Within D Days)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-1011-Capacity-To-Ship-Packages-Within-D-Days-题解"><a href="#LeetCode-1011-Capacity-To-Ship-Packages-Within-D-Days-题解" class="headerlink" title="LeetCode(\1011. Capacity To Ship Packages Within D Days)题解"></a>LeetCode(\1011. Capacity To Ship Packages Within D Days)题解</h1><p>A conveyor belt has packages that must be shipped from one port to another within <code>D</code> days.</p>
-<p>The <code>i</code>-th package on the conveyor belt has a weight of <code>weights[i]</code>. Each day, we load the ship with packages on the conveyor belt (in the order given by <code>weights</code>). We may not load more weight than the maximum weight capacity of the ship.</p>
-<p>Return the least weight capacity of the ship that will result in all the packages on the conveyor belt being shipped within <code>D</code> days.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Input: weights &#x3D; [1,2,3,4,5,6,7,8,9,10], D &#x3D; 5</span><br><span class="line">Output: 15</span><br><span class="line">Explanation: </span><br><span class="line">A ship capacity of 15 is the minimum to ship all the packages in 5 days like this:</span><br><span class="line">1st day: 1, 2, 3, 4, 5</span><br><span class="line">2nd day: 6, 7</span><br><span class="line">3rd day: 8</span><br><span class="line">4th day: 9</span><br><span class="line">5th day: 10</span><br><span class="line"></span><br><span class="line">Note that the cargo must be shipped in the order given, so using a ship of capacity 14 and splitting the packages into parts like (2, 3, 4, 5), (1, 6, 7), (8), (9), (10) is not allowed.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Input: weights &#x3D; [3,2,2,4,1,4], D &#x3D; 3</span><br><span class="line">Output: 6</span><br><span class="line">Explanation: </span><br><span class="line">A ship capacity of 6 is the minimum to ship all the packages in 3 days like this:</span><br><span class="line">1st day: 3, 2</span><br><span class="line">2nd day: 2, 4</span><br><span class="line">3rd day: 1, 4</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 3:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Input: weights &#x3D; [1,2,3,1,1], D &#x3D; 4</span><br><span class="line">Output: 3</span><br><span class="line">Explanation: </span><br><span class="line">1st day: 1</span><br><span class="line">2nd day: 2</span><br><span class="line">3rd day: 3</span><br><span class="line">4th day: 1, 1</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Note:</strong></p>
-<ol>
-<li><code>1 &lt;= D &lt;= weights.length &lt;= 50000</code></li>
-<li><code>1 &lt;= weights[i] &lt;= 500</code></li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>把一个数组按顺序输入，每天一艘船，并且每天船的承载量相同，在D天之内需要全部运出去。求每艘船的承载量最少是多少。</p>
-<p>这个可以使用二分搜索的思路，二分枚举船的载重，载重下限是最大物品的重量，载重上限是所有物品的和，然后求中点是否满足D天内运输完成，如果满足则进一步降低上限，不满足就提高下限，直到找到刚好满足D天运输完成为止。</p>
-<p>时间复杂度为O(NlogM)，空间复杂度O(N)，N为包裹数目，M为总的重量。</p>
-<p><code>Runtime: 104 ms, faster than 6.49% of C++ online submissions for Capacity To Ship Packages Within D Days.</code></p>
-<p><code>Memory Usage: 12.9 MB, less than 11.11% of C++ online submissions for Capacity To Ship Packages Within D Days.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isOK</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; Sum, <span class="keyword">int</span> len, <span class="keyword">int</span> w, <span class="keyword">int</span> D)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> d = <span class="number">1</span>, j = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;=len; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (Sum[i]-Sum[j] &lt;= w) <span class="keyword">continue</span>;</span><br><span class="line">            d += <span class="number">1</span>;</span><br><span class="line">            j = i - <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (d &gt; D) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">shipWithinDays</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; weights, <span class="keyword">int</span> D)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = weights.<span class="built_in">size</span>(), m = <span class="number">0</span>;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">Sum</span><span class="params">(len + <span class="number">1</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++) &#123;</span><br><span class="line">            Sum[i+<span class="number">1</span>] = Sum[i] + weights[i];</span><br><span class="line">            m = <span class="built_in">max</span>(m, weights[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> l = m, r = Sum[len], mid;</span><br><span class="line">        <span class="keyword">while</span> (l &lt; r) &#123;</span><br><span class="line">            mid = (l + r) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span> (isOK(Sum, len, mid, D)) r = mid;</span><br><span class="line">            <span class="keyword">else</span> l = mid + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> r;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2020-01-23</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1115,12 +1123,12 @@ Output: false</code></pre><h2 id="解题思路"><a href="#解题思路" class="h
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">352</span>
+          <span class="site-state-item-count">353</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">28</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
