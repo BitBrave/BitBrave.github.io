@@ -168,6 +168,81 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(45.%20Jump%20Game%20II)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(45.%20Jump%20Game%20II)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(45. Jump Game II)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-45-Jump-Game-II-题解"><a href="#LeetCode-45-Jump-Game-II-题解" class="headerlink" title="LeetCode(45. Jump Game II)题解"></a>LeetCode(45. Jump Game II)题解</h1><hr>
+<p>Given an array of non-negative integers, you are initially positioned at the first index of the array.</p>
+<p>Each element in the array represents your maximum jump length at that position.</p>
+<p>Your goal is to reach the last index in the minimum number of jumps.</p>
+<p>Example:</p>
+<pre><code>Input: [2,3,1,1,4]
+Output: 2
+Explanation: The minimum number of jumps to reach the last index is 2.
+    Jump 1 step from index 0 to 1, then 3 steps to the last index.</code></pre><p>Note:</p>
+<p>You can assume that you can always reach the last index.</p>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>这个题的前提是，这个题一定有解法。即我肯定可以在n-1步之内跳到最后。当然，就算是不可解的，下面的算法稍微改一改，判断一下即可。</p>
+<p>一个比较简单的解法是，我们用一个同等长度的数组JumpTimes来记录从当前位置开始起跳的话，最少跳几次可以达到最后一个位置。我们只需要填充完则合格数组，然后返回JumpTimes[0]即可。如何来填充呢，可以采用如下方式：最后一个位置往前数，当当前位置的数ai&gt;=l（l=i位置离最后一个位置的长度）时，表示只需要跳一次就可以记录JumpTimes[i]=1。当遇到ai&lt;\l时，就从离i位置最远的i+ai位置开始往左数直到i+1，JumpTimes[i] = min(1+JumpTimes[j])(i+1&lt;=j&lt;=ai+i)，表示我多跳一次到达这些位置即可。当然，如果能直接到最后一个就直接设置JumpTimes[i]=1。就这样首先将i设为n-1，然后n-2，直到n=1，回到最初的地方。时间复杂度为O(n2).但这样LeetCode内会超时。</p>
+<p>可以使用贪心的算法，假设给定的数组为A=[a1,a2,a3, …, an]，那么可以知道我们需要从a1要跳最小的次数到an。当然如果a1直接&gt;=n-1的话，就表示跳一次就可以到达最后面。那么如果需要跳的次数超过一次呢？首先我们考虑从开头最远跳a1的长度到达位置i，然后在这个位置最长可以跳ai的长度。这里我们可以观察到一个性质：从位置1开始跳长度l（l&lt;=a1）到位置l+1，那么寻找一个L = max(l+al+1)，从位置1开始跳两次的长度最远都不会超过这个距离。而在后续的跳法中，就算是最优的（即跳得最少的次数）跳法里面，从开头跳两次的方法都可以改为L中的第一次的跳法。这是因为L的跳法涵盖了保证了我可以跳得最远，有最多的选择，那么就可以涵盖其它跳得不够远的情况了。</p>
+<p>因此，我们可以说最优的办法就是第一次跳的位置就是L中的跳l长度，达到al+1，然后第二次的跳的位置就是以al+1为起始点，按照上述的策略一样。需要注意的就是，只要可以一步到达最后的位置，就可以结束算法了。</p>
+<p>代码如下，其实可以由优化的，比如在for循环的时候，下一次的比较是不需要从sta+nums[sta]到sta都遍历一遍的，而只需要记录下上一次的位置pre_sta，从sta+nums[sta]到pre_sta+nums[pre_sta]即可。但是不这样效果也已经很不错了。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">jump</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span>(len &lt;= <span class="number">1</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> times = <span class="number">0</span>, sta = <span class="number">0</span>, tmp, tmps;</span><br><span class="line">        <span class="keyword">while</span>(sta&lt;len<span class="number">-1</span>)&#123;</span><br><span class="line">            times++;</span><br><span class="line">            tmp = <span class="number">0</span>;</span><br><span class="line">            tmps = INT_MAX;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=sta+nums[sta]; i&gt;sta; i--)&#123;</span><br><span class="line">                <span class="keyword">if</span>(i&gt;=len<span class="number">-1</span>) <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">if</span>(tmp &lt; i+nums[i])&#123;</span><br><span class="line">                    tmp = i+nums[i];</span><br><span class="line">                    tmps = i;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            sta = tmps;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> times;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-05-07</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(452.%20Minimum%20Number%20of%20Arrows%20to%20Burst%20Balloons)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -865,85 +940,6 @@ Output: &quot;bb&quot;</code></pre><h2 id="题目思路，就是返回一个stri
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(50.%20Pow(x,%20n))%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(50.%20Pow(x,%20n))%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(50. Pow(x, n))题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-50-Pow-x-n-题解"><a href="#LeetCode-50-Pow-x-n-题解" class="headerlink" title="LeetCode(50. Pow(x, n))题解"></a>LeetCode(50. Pow(x, n))题解</h1><hr>
-<p>Implement pow(x, n), which calculates x raised to the power n (xn).</p>
-<p>Example 1:</p>
-<pre><code>Input: 2.00000, 10
-Output: 1024.00000</code></pre><p>Example 2:</p>
-<pre><code>Input: 2.10000, 3
-Output: 9.26100</code></pre><p>Example 3:</p>
-<pre><code>Input: 2.00000, -2
-Output: 0.25000
-Explanation: 2-2 = 1/22 = 1/4 = 0.25</code></pre><p>Note:</p>
-<pre><code>-100.0 &lt; x &lt; 100.0
-n is a 32-bit signed integer, within the range [−231, 231 − 1]</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>直接使用内置函数</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    def myPow(self, x: float, n: int) -&gt; float:</span><br><span class="line">        <span class="keyword">return</span> math.<span class="built_in">pow</span>(x,n)</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">myPow</span><span class="params">(<span class="keyword">double</span> x, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">pow</span>(x,n);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>通过自己实现pow函数，如果没有超过n的话，每次都将数据结果乘上自己的平方。如果数据过大，就将数据不断开方，再进行相乘。</p>
-<p>代码如下：</p>
-<p>Runtime: 4 ms, faster than 93.26% of C++ online submissions for Pow(x, n).<br>Memory Usage: 8.5 MB, less than 60.47% of C++ online submissions for Pow(x, n).</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">myPow</span><span class="params">(<span class="keyword">double</span> x, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(n==<span class="number">0</span>) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span>(n==-<span class="built_in">pow</span>(<span class="number">2</span>,<span class="number">31</span>)) <span class="keyword">return</span> <span class="built_in">pow</span>(x, n);</span><br><span class="line">        <span class="keyword">int</span> N = <span class="built_in">abs</span>(n);</span><br><span class="line">        <span class="keyword">double</span> res = <span class="number">1</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">1</span>, sign = (x&lt;<span class="number">0</span> &amp;&amp; N%<span class="number">2</span>==<span class="number">1</span>) ? <span class="number">-1</span>:<span class="number">1</span>;</span><br><span class="line">        x = <span class="built_in">abs</span>(x);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span>(i&gt;=<span class="number">1</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(i&lt;=N)&#123;</span><br><span class="line">                res *= x;</span><br><span class="line">                N -= i;</span><br><span class="line">                <span class="keyword">if</span>(i&lt;<span class="built_in">pow</span>(<span class="number">2</span>,<span class="number">31</span>)/<span class="number">2</span>) &#123;</span><br><span class="line">                    i *= <span class="number">2</span>;</span><br><span class="line">                    x *= x;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                i /= <span class="number">2</span>;</span><br><span class="line">                x = <span class="built_in">sqrt</span>(x);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(n&lt;<span class="number">0</span>) res = <span class="number">1</span> / res;</span><br><span class="line">        <span class="keyword">return</span> sign*res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2019-05-28.</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1014,12 +1010,12 @@ n is a 32-bit signed integer, within the range [−231, 231 − 1]</code></pre><
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">353</span>
+          <span class="site-state-item-count">354</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-count">30</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>

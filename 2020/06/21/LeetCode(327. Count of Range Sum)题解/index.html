@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="Hard，[327. 区间和的个数](https:&#x2F;&#x2F;leetcode-cn.com&#x2F;problems&#x2F;count-of-range-sum&#x2F;)。给定字符串列表，你需要从它们中找出最长的特殊序列。给定一个整数数组 nums，返回区间和在 [lower, upper] 之间的个数，包含 lower 和 upper。区间和 S(i, j) 表示在 nums 中，位置从 i 到 j 的元素之和，包含 i">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LeetCode(\327. Count of Range Sum)题解">
+<meta property="og:url" content="http://yoursite.com/2020/06/21/LeetCode(327.%20Count%20of%20Range%20Sum)%E9%A2%98%E8%A7%A3/index.html">
+<meta property="og:site_name" content="BitBrave">
+<meta property="og:description" content="Hard，[327. 区间和的个数](https:&#x2F;&#x2F;leetcode-cn.com&#x2F;problems&#x2F;count-of-range-sum&#x2F;)。给定字符串列表，你需要从它们中找出最长的特殊序列。给定一个整数数组 nums，返回区间和在 [lower, upper] 之间的个数，包含 lower 和 upper。区间和 S(i, j) 表示在 nums 中，位置从 i 到 j 的元素之和，包含 i">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-06-20T16:36:20.617Z">
+<meta property="article:modified_time" content="2020-06-20T16:36:23.428Z">
+<meta property="article:author" content="XJ">
+<meta property="article:tag" content="Hard">
+<meta property="article:tag" content="$O(nlogn)$">
+<meta property="article:tag" content="Multiset">
+<meta property="article:tag" content="MergeSort">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2020/06/21/LeetCode(327.%20Count%20of%20Range%20Sum)%E9%A2%98%E8%A7%A3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>LeetCode(\327. Count of Range Sum)题解 | BitBrave</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">BitBrave</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">IIE</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/21/LeetCode(327.%20Count%20of%20Range%20Sum)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          LeetCode(\327. Count of Range Sum)题解
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-06-21 00:36:20 / 修改时间：00:36:23" itemprop="dateCreated datePublished" datetime="2020-06-21T00:36:20+08:00">2020-06-21</time>
+            </span>
+
+          
+            <div class="post-description">Hard，[327. 区间和的个数](https://leetcode-cn.com/problems/count-of-range-sum/)。给定字符串列表，你需要从它们中找出最长的特殊序列。给定一个整数数组 nums，返回区间和在 [lower, upper] 之间的个数，包含 lower 和 upper。区间和 S(i, j) 表示在 nums 中，位置从 i 到 j 的元素之和，包含 i 和 j (i ≤ j)。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="LeetCode-327-Count-of-Range-Sum-题解"><a href="#LeetCode-327-Count-of-Range-Sum-题解" class="headerlink" title="LeetCode(\327. Count of Range Sum)题解"></a>LeetCode(\327. Count of Range Sum)题解</h1><p>Given an integer array <code>nums</code>, return the number of range sums that lie in <code>[lower, upper]</code> inclusive.<br>Range sum <code>S(i, j)</code> is defined as the sum of the elements in <code>nums</code> between indices <code>i</code> and <code>j</code> (<code>i</code> ≤ <code>j</code>), inclusive.</p>
+<p><strong>Note:</strong><br>A naive algorithm of <em>O</em>(<em>n</em>2) is trivial. You MUST do better than that.</p>
+<p><strong>Example:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: nums &#x3D; [-2,5,-1], lower &#x3D; -2, upper &#x3D; 2,</span><br><span class="line">Output: 3 </span><br><span class="line">Explanation: The three ranges are : [0,0], [2,2], [0,2] and their respective sums are: -2, -1, 2.</span><br></pre></td></tr></table></figure>
+
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Hard</p>
+<p>这个题最简单的办法就是暴力枚举，每个区间和，然后依次判断是否处在[lower, upper]之中。这样的时间复杂度是O(n2)。不能AC。</p>
+<h3 id="解法1（multiset，前缀和排序）"><a href="#解法1（multiset，前缀和排序）" class="headerlink" title="解法1（multiset，前缀和排序）"></a>解法1（multiset，前缀和排序）</h3><p>设定sum.at(j)表示第0个到j-1个元素的连续和，即前缀和。</p>
+<p>首先题目要求的是 lower&lt;=区间[i,j]的和&lt;=upper，即前缀和 区间[i,j]的和=sum.at(j)-sum.at(i)<br>可得 <code>lower &lt;= sum.at(j)-sum.at(i) &lt;= upper</code>，其中j&gt;=i。</p>
+<p>转换一下上述的表达式，得<code>sum.at(j)-upper &lt;= sum.at(i) &lt;= sum.at(j)-lower</code>。</p>
+<p>那么我们在算出sum.at(j)的情况下，对所有的sum.at(i)，可以找到匹配上一行表达式的所有i的可能结果。</p>
+<p>这里如果对着i一个一个遍历就又回到暴力O(N)，所以可以采用折半查找(二分查找)，0到j的前缀和有序的情况下。</p>
+<p>即，从前到后遍历数组元素，每次到第j个时，计算前面的前缀和在 <code>[sum.at(j)-upper ,  sum.at(j)-lower]</code>的前缀和个数即可。</p>
+<p>而二分查找的前提是有序，这里可以使用C++的Mutiset。</p>
+<h4 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h4><p>代码如下，时间上，每个查找需要O(logn)，总的时间为O(nlogn)，空间上O(n)。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">countRangeSum</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> lower, <span class="keyword">int</span> upper)</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="built_in">multiset</span>&lt;<span class="keyword">long</span>&gt; <span class="title">M</span><span class="params">(&#123;<span class="number">0</span>&#125;)</span></span>; <span class="comment">// 内部红黑树实现，数据天然有序</span></span><br><span class="line">        <span class="keyword">long</span> res = <span class="number">0</span>, sum = <span class="number">0</span>, len = nums.<span class="built_in">size</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++) &#123;</span><br><span class="line">            <span class="comment">// lower_bound()在first和last中的前闭后开区间进行二分查找，返回大于或等于val的第一个元素位置。</span></span><br><span class="line">            <span class="comment">// upper_bound()在first和last中的前闭后开区间进行二分查找，返回大于val的第一个元素位置。</span></span><br><span class="line">            <span class="comment">// distance返回，[first, last)范围内包含的元素的个数。</span></span><br><span class="line">            sum += nums[i];</span><br><span class="line">            res += distance(M.lower_bound(sum - upper), M.upper_bound(sum - lower));</span><br><span class="line">            M.insert(sum);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="解法2，归并排序"><a href="#解法2，归并排序" class="headerlink" title="解法2，归并排序"></a>解法2，归并排序</h3><p>这里反正是要算出当j确定时，符合条件的i的个数，或者确定i时，符合条件的j的个数。因此可以想象两部分，一部分i一部分j。归并排序中计算符合条件的区间个数。</p>
+<p>首先记住题目的要求 lower &lt;= sum.at(j)-sum.at(i) &lt;= upper。归并排序中，处理的是两个有序的数组。</p>
+<p>归并排序分成两个数组，我们就可以理解成左半部分和右半部分，就可以进一步想成左边对应着i，右边对应着j</p>
+<p>那么我们可以设立指针，左边对应着i，右边对应着j，就可以通过在排序的过程中求出sum.at(j)-sum.at(i)</p>
+<p>我们在前面设定的是左边对应的是i，右边对应的是j，题目的要求表达式是lower &lt;= sum.at(j)-sum.at(i) &lt;= upper。我们可以固定i，来找所有的j的可能，在找完后，再移动i，再重复找j的操作。这样的一次时间复杂度O(N2)，但是可以分析如下——</p>
+<p>设left_p来表示i，left_p=左边的第一个元素<br>现在我们就来开始找j了，右边符合题目的j可以有多个，所以我们要找的是符合题目要求的j的区间，可以理解为 符合的j.begin(),符合的j.end()。按照迭代器的设计方法来规定 符合要求的j的区间，即 [begin,end)</p>
+<p>设right_res_begin来表示右边符合题目要求的j的区间的begin，指向区间的第一个元素</p>
+<p>设right_res_end来表示右边符合题目要求的j的区间的end，指向区间最后一个元素的下一个元素</p>
+<p>既然题目要求 <code>lower &lt;= sum.at(j)-sum.at(i)</code>，那对于begin指针，我们如果是遇到 <code>sum.at(j)-sum.at(i)&lt;lower</code> 的话，因为left_p即i是已经固定了的，增大差的方式就只有增大被减数，而归并排序的左右部分都是已经有序的了，所以我们只需要将right_res_begin即j向后移，即是增大被减数了，寻找到符合题目要求为止就停止向后移:</p>
+<p><code>while (sum.at(right_res_begin)-sum.at(left_p)&lt;lower) ++right_res_begin;</code></p>
+<p>同时题目要求 <code>sum.at(j)-sum.at(i) &lt;= upper</code>，对于end指针，我们因为是结束的边界，且数组有序，在减数sum.at(i)一定的情况下，无限增大被减数，是会造成&gt;upper即不符合题目要求的情况出现的，所以我们就一直检测 <code>sum.at(right_res_end)-sum.at(left_p)&lt;=upper</code>是否满足即可，满足则移动right_res_end，不满足则跳出循环:</p>
+<p><code>while (sum.at(right_ans_end)-sum.at(left_p)&lt;=upper) ++right_ans_end;</code></p>
+<p>现在找好了在i确定不变下，符合题目要求的j的区间了，因为是[begin,end)，所以right_res_end-right_res_begin即是区间的个数了<br>现在就可以移动i了，即++left_p.</p>
+<p>那我们是否是需要重置j的边界right_res_begin, right_res_end呢？</p>
+<p>记住题目要求 <code>lower &lt;= sum.at(j)-sum.at(i) &lt;= upper</code></p>
+<p>那么 <code>lower+sum.at(i) &lt;= sum.at(j) &lt;= upper+sum.at(i)</code></p>
+<p>此时因为移动了i，且归并排序是操作有序的数组，即新的sum.at(i)一定是变大了的，那么对应的新的sum.at(j)的取值也是变大的。</p>
+<p>意思就是在右边中，小的值(比上一个i对应的符合题目要求的j的区间的值 还要小的值，即j.begin()前面的值)必然是不符合的。</p>
+<p>即增大了i，新的j的区间只有两种情况: j.begin 要么不变要么增大，j.end 要么不变要么增大。</p>
+<p>所以我们不需要重置j的边界right_res_begin,right_res_end，这里也算是优化的一步，这样下来，只需要O(n)的时间就可以得到了。<br>当我们遍历完所以的i，即已经找全了这一步归并排序所有的符合题目要求的区间组合</p>
+<p>别忘了基础是前面的归并排序已经帮你排好了左右都是有序的部分，所以我们在找完res后，要进行排序。</p>
+<p>可以手撕，但是可以使用<code>inplace_merge</code>这个函数。可以直接有序归并。merge函数是归并后生成新的序列，inplace_merge（）有三个必须参数，默认合并后排序是升序的，第一个参数是一个序列的起始位置，第二个是该序列的切分位置，第三个参数是该序列区间的结束位置。</p>
+<h4 id="时空复杂度-1"><a href="#时空复杂度-1" class="headerlink" title="时空复杂度"></a>时空复杂度</h4><p>代码如下，时间上，归并排序，O(nlogn)，空间上，O(n)。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">countRangeSum</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> lower, <span class="keyword">int</span> upper)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">long</span>&gt; <span class="title">prefix_sum</span><span class="params">(len + <span class="number">1</span>)</span></span>;</span><br><span class="line">        prefix_sum.at(<span class="number">0</span>) = <span class="number">0</span>; <span class="comment">// prefix_sum[0] = 0;</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;=len; i++) prefix_sum[i] = prefix_sum[i<span class="number">-1</span>] + nums[i<span class="number">-1</span>];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> merge_sort(prefix_sum, lower, upper, <span class="number">0</span>, len + <span class="number">1</span>); </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">merge_sort</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">long</span>&gt;&amp; sum, <span class="keyword">int</span> lower, <span class="keyword">int</span> upper, <span class="keyword">int</span> sta, <span class="keyword">int</span> <span class="built_in">end</span>)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (sta+<span class="number">1</span> &gt;= <span class="built_in">end</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> mid = (sta + <span class="built_in">end</span>) / <span class="number">2</span>;</span><br><span class="line">        <span class="keyword">int</span> left = merge_sort(sum, lower, upper, sta, mid);</span><br><span class="line">        <span class="keyword">int</span> right = merge_sort(sum, lower, upper, mid, <span class="built_in">end</span>);</span><br><span class="line">        <span class="keyword">int</span> res_mid = merge(sum, lower, upper, sta, mid, <span class="built_in">end</span>);</span><br><span class="line">        <span class="keyword">return</span> left + res_mid + right;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">merge</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">long</span>&gt;&amp; sum, <span class="keyword">int</span> lower, <span class="keyword">int</span> upper, <span class="keyword">int</span> sta, <span class="keyword">int</span> mid, <span class="keyword">int</span> <span class="built_in">end</span>)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> right_res_begin = mid, right_res_end = mid;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=sta; i&lt;mid; i++) &#123;</span><br><span class="line">            <span class="keyword">while</span> (right_res_begin &lt; <span class="built_in">end</span> <span class="keyword">and</span> sum[right_res_begin]-sum[i] &lt;  lower) right_res_begin++;</span><br><span class="line">            <span class="keyword">while</span> (right_res_end   &lt; <span class="built_in">end</span> <span class="keyword">and</span> sum[right_res_end]  -sum[i] &lt;= upper) right_res_end++;</span><br><span class="line">            res += right_res_end - right_res_begin;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// inplace_merge 有三个参数，默认合并后排序是升序的，第一个参数是一个序列的起始位置，第二个是该序列的切分位置，第三个参数是该序列区间的结束位置。</span></span><br><span class="line">        inplace_merge(sum.<span class="built_in">begin</span>() + sta, sum.<span class="built_in">begin</span>() + mid, sum.<span class="built_in">begin</span>() + <span class="built_in">end</span>);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2020-06-20</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Hard/" rel="tag"># Hard</a>
+              <a href="/tags/O-nlogn/" rel="tag"># $O(nlogn)$</a>
+              <a href="/tags/Multiset/" rel="tag"># Multiset</a>
+              <a href="/tags/MergeSort/" rel="tag"># MergeSort</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/06/16/LeetCode(522.%20Longest%20Uncommon%20Subsequence%20II)%E9%A2%98%E8%A7%A3/" rel="prev" title="LeetCode(\522. Longest Uncommon Subsequence II)题解">
+      <i class="fa fa-chevron-left"></i> LeetCode(\522. Longest Uncommon Subsequence II)题解
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#LeetCode-327-Count-of-Range-Sum-题解"><span class="nav-number">1.</span> <span class="nav-text">LeetCode(\327. Count of Range Sum)题解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#解题思路"><span class="nav-number">1.1.</span> <span class="nav-text">解题思路</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#解法1（multiset，前缀和排序）"><span class="nav-number">1.1.1.</span> <span class="nav-text">解法1（multiset，前缀和排序）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#时空复杂度"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">时空复杂度</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解法2，归并排序"><span class="nav-number">1.1.2.</span> <span class="nav-text">解法2，归并排序</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#时空复杂度-1"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">时空复杂度</span></a></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">XJ</p>
+  <div class="site-description" itemprop="description">幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">354</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">XJ</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.7.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
