@@ -168,6 +168,84 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(38.%20Count%20and%20Say)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(38.%20Count%20and%20Say)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(38. Count and Say)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-38-Count-and-Say-题解"><a href="#LeetCode-38-Count-and-Say-题解" class="headerlink" title="LeetCode(38. Count and Say)题解"></a>LeetCode(38. Count and Say)题解</h1><hr>
+<p>The count-and-say sequence is the sequence of integers with the first five terms as following:</p>
+<pre><code>1.     1
+2.     11
+3.     21
+4.     1211
+5.     111221
+1 is read off as &quot;one 1&quot; or 11.
+11 is read off as &quot;two 1s&quot; or 21.
+21 is read off as &quot;one 2, then one 1&quot; or 1211.</code></pre><p>Given an integer n where 1 ≤ n ≤ 30, generate the nth term of the count-and-say sequence.</p>
+<p>Note: Each term of the sequence of integers will be represented as a string.</p>
+<p>Example 1:</p>
+<pre><code>Input: 1
+Output: &quot;1&quot;</code></pre><p>Example 2:</p>
+<pre><code>Input: 4
+Output: &quot;1211&quot;</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Easy题，要求根据要求进行读数。</p>
+<p>这个题其实看了很久，好几天，每次都是看一会儿发现不懂就换了。这个乍一看是有点难懂，其实就是给一个数n表示读的次数，就是在第n次读第n-1次给出的字符串。当n等于1的时候读做1，n=2时就直接将其读作11表示1个1，n=3时将11读作2个1，返回21，当n=4时，将21读作1个2和1个1，返回1211。</p>
+<p>代码如下，天然的递归：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">string</span> <span class="title">countAndSay</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(n==<span class="number">1</span>) <span class="keyword">return</span> <span class="string">"1"</span>;</span><br><span class="line">        <span class="built_in">string</span> tmp = countAndSay(n<span class="number">-1</span>), ret = <span class="string">""</span>;</span><br><span class="line">        <span class="keyword">int</span> len = tmp.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> count = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len<span class="number">-1</span>; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(tmp[i]==tmp[i+<span class="number">1</span>]) count++;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                ret += count + <span class="string">'0'</span>;</span><br><span class="line">                ret += tmp[i];</span><br><span class="line">                count = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        ret += count + <span class="string">'0'</span>;</span><br><span class="line">        ret += tmp[len<span class="number">-1</span>];</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-05-05</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(39.%20Combination%20Sum)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -863,113 +941,6 @@ Output: 6</code></pre><h2 id="题意理解"><a href="#题意理解" class="heade
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(44.%20Wildcard%20Matching)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(44.%20Wildcard%20Matching)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(44. Wildcard Matching)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-44-Wildcard-Matching-题解"><a href="#LeetCode-44-Wildcard-Matching-题解" class="headerlink" title="LeetCode(44. Wildcard Matching)题解"></a>LeetCode(44. Wildcard Matching)题解</h1><hr>
-<p>Given an input string (s) and a pattern (p), implement wildcard pattern matching with support for ‘?’ and ‘*’.</p>
-<pre><code>&apos;?&apos; Matches any single character.
-&apos;*&apos; Matches any sequence of characters (including the empty sequence).
-The matching should cover the entire input string (not partial).</code></pre><p>Note:</p>
-<pre><code>s could be empty and contains only lowercase letters a-z.
-p could be empty and contains only lowercase letters a-z, and characters like ? or *.</code></pre><p>Example 1:</p>
-<pre><code>Input:
-s = &quot;aa&quot;
-p = &quot;a&quot;
-Output: false
-Explanation: &quot;a&quot; does not match the entire string &quot;aa&quot;.</code></pre><p>Example 2:</p>
-<pre><code>Input:
-s = &quot;aa&quot;
-p = &quot;*&quot;
-Output: true
-Explanation: &apos;*&apos; matches any sequence.</code></pre><p>Example 3:</p>
-<pre><code>Input:
-s = &quot;cb&quot;
-p = &quot;?a&quot;
-Output: false
-Explanation: &apos;?&apos; matches &apos;c&apos;, but the second letter is &apos;a&apos;, which does not match &apos;b&apos;.</code></pre><p>Example 4:</p>
-<pre><code>Input:
-s = &quot;adceb&quot;
-p = &quot;*a*b&quot;
-Output: true
-Explanation: The first &apos;*&apos; matches the empty sequence, while the second &apos;*&apos; matches the substring &quot;dce&quot;.</code></pre><p>Example 5:</p>
-<pre><code>Input:
-s = &quot;acdcb&quot;
-p = &quot;a*c?b&quot;
-Output: false</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Hard，要求给定一个字符串s，在给定一个包含通配符？和<em>的字符串，判断p是否能匹配s，其中？表示匹配任何字符，不能为空，</em>表示匹配0个或多个任意字符。</p>
-<p>以下是自己的思考：</p>
-<p>可以如下操作，使用递归函数，各自从s和p的头部开始向后遍历，假设当前走到了位置i和j，s和p的长度各为s1和p1。</p>
-<p>如果j大于等于p1，表示p遍历完，若s未完，返回false，否则true</p>
-<p>如果j小于等于p1，而s已经遍历完，查看j+1及其之后是否全为*，是则true，否则false</p>
-<p>如果j小于等于p1，而s还未遍历完，则查看当前字符，如果j对应的不为？或者<em>，查看是否和i对应的相等，是则j+1，i+1继续遍历，否则就返回false。如果j对应的？，直接i+1，j+1。如果对应的</em>，就有三种情况，不匹配，查看i，j+1，匹配1次，i+1，j+1，匹配多次，i+1，j。只要这三种情况一种满足即可，因此取或。</p>
-<p>上述的操作，但是等于遍历了所有的可能性，特别是遇到了多个<em>的时候，因此在处理的时候可以将多个挨着的</em>删减为1个。但是这样处理也会超时，可能这就是为什么是Hard吧。</p>
-<p>以下是网上查询之后得到的思路：</p>
-<p>因此还需要思考一下，当我们遇到<em>的时候，总是会有匹配一次，匹配多次，一次都不匹配三种选择，原则上来说，一个</em>可以匹配任意一个字符串。因此，可以使用一个贪心的算法。我们在遍历的时候，遇到<em>，总是先一次都不匹配，然后遇到不匹配的时候，我们往回走，去使用</em>匹配一次，再重新走一遍。但是这里有一个trick，因为<em>可以匹配任意字符串，所以我们只需要回退到最近的</em>就可以了，因为这个<em>可以模拟前面的</em>在当前这个位置之后的所有可以匹配出的所有情况</p>
-<p>代码如下：</p>
-<p>Runtime: 12 ms, faster than 96.74% of C++ online submissions for Wildcard Matching.<br>Memory Usage: 8.8 MB, less than 89.78% of C++ online submissions for Wildcard Matching.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isMatch</span><span class="params">(<span class="built_in">string</span> s, <span class="built_in">string</span> p)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">0</span>, slen = s.<span class="built_in">size</span>(), j = <span class="number">0</span>, plen = p.<span class="built_in">size</span>(), lastj = <span class="number">-1</span>, lasti = <span class="number">0</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span>(i&lt;slen)&#123;</span><br><span class="line">            <span class="keyword">if</span>((j&lt;plen) &amp;&amp; ((p[j]==<span class="string">'?'</span>) || (s[i]==p[j])))&#123;</span><br><span class="line">                i++; j++;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(j&lt;plen &amp;&amp; p[j]==<span class="string">'*'</span>)&#123;</span><br><span class="line">                lastj = j;</span><br><span class="line">                lasti = i;</span><br><span class="line">                j++;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(lastj != <span class="number">-1</span>)&#123;</span><br><span class="line">                j = lastj + <span class="number">1</span>;</span><br><span class="line">                lasti++;</span><br><span class="line">                i = lasti;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">while</span>(j&lt;plen &amp;&amp; p[j]==<span class="string">'*'</span>) j++;</span><br><span class="line">        <span class="keyword">return</span> j==plen;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>这道题也可以使用动态规划的问题，使用一个二维数组就跟求编辑距离一样，ij表示s的前i个字符和p的前j个字符是否匹配。但是实际实现的时候会出现内存溢出的问题，因此可以使用一个1*2的数组，因为每一个位置的只需要前面一个位置的结果而已。</p>
-<p>（PS：DP问题，先用简单的办法想出可以解的方案，再逐步优化即可。这道题可以先用二维数组，再慢慢优化！这是一个很重要的方法和思考的办法）</p>
-<p>这里也有一个更好的办法，只使用一个1维数组。M的长度与S一致，用一个循环遍历P，M就记录S的前i个字符与P当前遍历过的字符是否匹配。当遍历结束，返回M的最后一个结果，记住每遍历一次就更新一次M。当然也可以用M记录P的前i个字符与S当前遍历过的字符是否匹配，当遍历结束返回M的最后一个结果。这里我只实现了第一种。</p>
-<p>代码如下：</p>
-<p>Runtime: 64 ms, faster than 55.45% of C++ online submissions for Wildcard Matching.<br>Memory Usage: 9.2 MB, less than 83.74% of C++ online submissions for Wildcard Matching.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isMatch</span><span class="params">(<span class="built_in">string</span> s, <span class="built_in">string</span> p)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> slen = s.<span class="built_in">size</span>(), plen = p.<span class="built_in">size</span>(), i;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(plen==<span class="number">0</span>) <span class="keyword">return</span> slen==<span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">bool</span>&gt; <span class="title">M</span><span class="params">(slen+<span class="number">1</span>, <span class="literal">false</span>)</span></span>;</span><br><span class="line">        M[<span class="number">0</span>] = <span class="literal">true</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;plen; j++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(p[j] == <span class="string">'*'</span>)&#123;</span><br><span class="line">                i = <span class="number">0</span>;</span><br><span class="line">                <span class="keyword">while</span>(i&lt;slen+<span class="number">1</span> &amp;&amp; M[i]!=<span class="literal">true</span>) i++;</span><br><span class="line">                <span class="keyword">while</span>(i&lt;slen+<span class="number">1</span>) M[i++] = <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="keyword">for</span>(i=slen<span class="number">-1</span>; i&gt;=<span class="number">0</span>; i--)</span><br><span class="line">                    M[i+<span class="number">1</span>] = M[i] &amp;&amp; (s[i]==p[j] || p[j]==<span class="string">'?'</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            M[<span class="number">0</span>] = M[<span class="number">0</span>] &amp;&amp; p[j]==<span class="string">'*'</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> M[slen];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-05-25. 我真是越来越优秀了。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1040,12 +1011,12 @@ Output: false</code></pre><h2 id="解题思路"><a href="#解题思路" class="h
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">354</span>
+          <span class="site-state-item-count">355</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-count">32</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
