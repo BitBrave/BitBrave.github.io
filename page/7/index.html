@@ -168,6 +168,279 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/27/LeetCode(765.%20Couples%20Holding%20Hands)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/27/LeetCode(765.%20Couples%20Holding%20Hands)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(765. Couples Holding Hands)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-03-27 11:03:46 / 修改时间：11:04:01" itemprop="dateCreated datePublished" datetime="2020-03-27T11:03:46+08:00">2020-03-27</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-765-Couples-Holding-Hands-题解"><a href="#LeetCode-765-Couples-Holding-Hands-题解" class="headerlink" title="LeetCode(\765. Couples Holding Hands)题解"></a>LeetCode(\765. Couples Holding Hands)题解</h1><p>N couples sit in 2N seats arranged in a row and want to hold hands. We want to know the minimum number of swaps so that every couple is sitting side by side. A <em>swap</em> consists of choosing <strong>any</strong> two people, then they stand up and switch seats.</p>
+<p>The people and seats are represented by an integer from <code>0</code> to <code>2N-1</code>, the couples are numbered in order, the first couple being <code>(0, 1)</code>, the second couple being <code>(2, 3)</code>, and so on with the last couple being <code>(2N-2, 2N-1)</code>.</p>
+<p>The couples’ initial seating is given by <code>row[i]</code> being the value of the person who is initially sitting in the i-th seat.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: row &#x3D; [0, 2, 1, 3]</span><br><span class="line">Output: 1</span><br><span class="line">Explanation: We only need to swap the second (row[1]) and third (row[2]) person.</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: row &#x3D; [3, 2, 0, 1]</span><br><span class="line">Output: 0</span><br><span class="line">Explanation: All couples are already seated side by side.</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Note:</strong></p>
+<ol>
+<li><code>len(row)</code> is even and in the range of <code>[4, 60]</code>.</li>
+<li><code>row</code> is guaranteed to be a permutation of <code>0...len(row)-1</code>.</li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Hard</p>
+<p>有N对人，编号0，1，2，···，2N-1。他们两两一对，0和1一对，2和3一对，···，2N-2和2N-1一对。现在数组中这些数是打乱的，每次可以交换两个人的位置，使用最少的交换次数使得这个数组内，每一对都是挨着的。返回交换的最小次数。</p>
+<p>这个题使用Greedy。使用Map记录下每个数原本在的位置。然后从左到右每两个元素遍历。如果这两个元素是一对，那就不必交换了，直接跳过，如果不是一对，那么其中肯定有一个需要与另一个的另一半交换。直接交换即可，然后更新Map。然后继续向下走，因为从左到右逐渐配对，所以未配对的和缺少的都肯定在右边。</p>
+<p>我在算法中每次遇到不成对的元素，都选择将右边的与左边的另一半交换，这样好写代码一点。</p>
+<p>如何证明这是最优的呢？如果这样的交换方式不是最优的，那就是说在某一步，遇到一个不成对的元素对之后，如果按照上述的方式交换，会导致多出来比较次数。那什么会导致多出来比较次数呢。有以下原因：</p>
+<ol>
+<li>我们这次交换导致了原本成对的元素拆开了</li>
+<li>这次交换没有使得元素成对，是无意义的交换</li>
+<li>这次交换成了一对，而如果按最优方案来说是成2对</li>
+</ol>
+<p>逐步分析上述原因，1，我们是遇到不匹配的元素才交换，而当前这一对不匹配，可知这一对中的各自另一半在其他位置肯定也不匹配，因为每个元素的另一半只有1个。2，我们每次交换是成了至少1对的，所以2也不成立。3，最优方案如果是成2对，说明我们当前元素的另一半各自挨着，那么我们交换的时候同样也会成2对，因此3不成立。</p>
+<p>注意，最优方案不止一种，最少交换次数则是固定的。</p>
+<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间上，O(N)，空间上，O(N)。</p>
+<p><code>Runtime: 4 ms, faster than 39.96% of C++ online submissions for Couples Holding Hands.</code></p>
+<p><code>Memory Usage: 6.4 MB, less than 100.00% of C++ online submissions for Couples Holding Hands.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minSwapsCouples</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; row)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = row.<span class="built_in">size</span>(), res = <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">unordered_map</span>&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; M;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++) &#123;</span><br><span class="line">            M[row[i]] = i;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i+=<span class="number">2</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">abs</span>(row[i]-row[i+<span class="number">1</span>]) == <span class="number">1</span> <span class="keyword">and</span> (<span class="built_in">min</span>(row[i],row[i+<span class="number">1</span>]) &amp; <span class="number">1</span>) == <span class="number">0</span>) <span class="keyword">continue</span>;</span><br><span class="line">            res++;</span><br><span class="line">            <span class="keyword">if</span> ((row[i]&amp;<span class="number">1</span>) == <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="keyword">int</span> tmp = row[i+<span class="number">1</span>];</span><br><span class="line">                row[i+<span class="number">1</span>] = row[i] + <span class="number">1</span>;</span><br><span class="line">                row[M[row[i]+<span class="number">1</span>]] = tmp;</span><br><span class="line">                M[tmp] = M[row[i]+<span class="number">1</span>];</span><br><span class="line">                M[row[i]+<span class="number">1</span>] = i + <span class="number">1</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">int</span> tmp = row[i+<span class="number">1</span>];</span><br><span class="line">                row[i+<span class="number">1</span>] = row[i] - <span class="number">1</span>;</span><br><span class="line">                row[M[row[i]<span class="number">-1</span>]] = tmp;</span><br><span class="line">                M[tmp] = M[row[i]<span class="number">-1</span>];</span><br><span class="line">                M[row[i]<span class="number">-1</span>] = i + <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2020-03-27</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/26/LeetCode(936.%20Stamping%20The%20Sequence)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/26/LeetCode(936.%20Stamping%20The%20Sequence)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(936. Stamping The Sequence)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-03-26 23:21:40" itemprop="dateCreated datePublished" datetime="2020-03-26T23:21:40+08:00">2020-03-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-03-27 11:09:03" itemprop="dateModified" datetime="2020-03-27T11:09:03+08:00">2020-03-27</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-936-Stamping-The-Sequence-题解"><a href="#LeetCode-936-Stamping-The-Sequence-题解" class="headerlink" title="LeetCode(\936. Stamping The Sequence)题解"></a>LeetCode(\936. Stamping The Sequence)题解</h1><p>You want to form a <code>target</code> string of <strong>lowercase letters</strong>.</p>
+<p>At the beginning, your sequence is <code>target.length</code> <code>&#39;?&#39;</code> marks. You also have a <code>stamp</code> of lowercase letters.</p>
+<p>On each turn, you may place the stamp over the sequence, and replace every letter in the sequence with the corresponding letter from the stamp. You can make up to <code>10 * target.length</code> turns.</p>
+<p>For example, if the initial sequence is “?????”, and your stamp is <code>&quot;abc&quot;</code>, then you may make “abc??”, “?abc?”, “??abc” in the first turn. (Note that the stamp must be fully contained in the boundaries of the sequence in order to stamp.)</p>
+<p>If the sequence is possible to stamp, then return an array of the index of the left-most letter being stamped at each turn. If the sequence is not possible to stamp, return an empty array.</p>
+<p>For example, if the sequence is “ababc”, and the stamp is <code>&quot;abc&quot;</code>, then we could return the answer <code>[0, 2]</code>, corresponding to the moves “?????” -&gt; “abc??” -&gt; “ababc”.</p>
+<p>Also, if the sequence is possible to stamp, it is guaranteed it is possible to stamp within <code>10 * target.length</code> moves. Any answers specifying more than this number of moves will not be accepted.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: stamp &#x3D; &quot;abc&quot;, target &#x3D; &quot;ababc&quot;</span><br><span class="line">Output: [0,2]</span><br><span class="line">([1,0,2] would also be accepted as an answer, as well as some other answers.)</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: stamp &#x3D; &quot;abca&quot;, target &#x3D; &quot;aabcaca&quot;</span><br><span class="line">Output: [3,0,1]</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Note:</strong></p>
+<ol>
+<li><code>1 &lt;= stamp.length &lt;= target.length &lt;= 1000</code></li>
+<li><code>stamp</code> and <code>target</code> only contain lowercase letters.</li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Hard</p>
+<p>一个目标字符串，使用另一个字符串通过左右移动去拼凑，移动后的字符如果和之间的有重叠，则覆盖掉之前的，比如abc，左移1位组成abcbc，掩盖了之前的a，在目标字符串内，按顺序写出每一次移动后停留的位置最终在目标字符串中的位置。如果不存在就返回[]。限制移动次数为10*目标字符串长度。</p>
+<p>本题可以使用贪心，也可以说是暴力了。其实每个目标字符中，每个字符最多有一个移动的对应，因为如果多个的话，最后移动的会覆盖掉前面的，所以10倍是绰绰有余的。</p>
+<p>使用count记录目标字符串中已经匹配的字符数，如果已经达到目标字符串就结束，没有就从左到右寻找一个符合另一个字符串的匹配字符串，从i=0到目标字符串长度-匹配字符串长度之间遍历。如果没找到，说明无解。如果找到了，找出其中不是”?”的字符即还未被匹配的字符，将其全部设为”?”。最后将这个i设为True，即已经移动到了。</p>
+<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间上，目标字符串长度N，匹配字符串长度K，那么每次最少匹配一个，最多有N轮，每一轮需要将目标字符串全部遍历(N-K)次，一次花费K次比较，K小于等于N。因此最终的时间复杂度$O(N^3)$，空间复杂度$O(N)$。</p>
+<p><code>Runtime: 84 ms, faster than 24.69% of C++ online submissions for Stamping The Sequence.</code></p>
+<p><code>Memory Usage: 110.5 MB, less than 7.69% of C++ online submissions for Stamping The Sequence.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">isStamp</span><span class="params">(<span class="keyword">int</span> i, <span class="keyword">int</span> K, <span class="built_in">string</span> sta, <span class="built_in">string</span> tar)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> k=<span class="number">0</span>; k&lt;K; k++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (sta[k] != tar[i+k] <span class="keyword">and</span> tar[i+k] != <span class="string">'?'</span>) <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (tar[i+k] != <span class="string">'?'</span>) count++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> count;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">movesToStamp</span><span class="params">(<span class="built_in">string</span> stamp, <span class="built_in">string</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = target.<span class="built_in">size</span>(), K = stamp.<span class="built_in">size</span>();</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; res;</span><br><span class="line">        </span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">bool</span>&gt; <span class="title">visit</span><span class="params">(len, <span class="literal">false</span>)</span></span>;</span><br><span class="line">        <span class="keyword">bool</span> change = <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (count &lt; len) &#123;</span><br><span class="line">            change = <span class="literal">false</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;=len-K; i++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (visit[i] == <span class="literal">true</span>) <span class="keyword">continue</span>;</span><br><span class="line">                <span class="keyword">int</span> tmp = isStamp(i, K, stamp, target);</span><br><span class="line">                <span class="keyword">if</span> (tmp &gt;= <span class="number">1</span>) &#123;</span><br><span class="line">                    change = <span class="literal">true</span>;</span><br><span class="line">                    count += tmp;</span><br><span class="line">                    visit[i] = <span class="literal">true</span>;</span><br><span class="line">                    res.insert(res.<span class="built_in">begin</span>(), i);</span><br><span class="line">                    <span class="keyword">for</span> (<span class="keyword">int</span> k=<span class="number">0</span>; k&lt;K; k++) target[i+k] = <span class="string">'?'</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (change == <span class="literal">false</span>) <span class="keyword">return</span> <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2020-03-27</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/26/LeetCode(995.%20Minimum%20Number%20of%20K%20Consecutive%20Bit%20Flips)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/26/LeetCode(995.%20Minimum%20Number%20of%20K%20Consecutive%20Bit%20Flips)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(995. Minimum Number of K Consecutive Bit Flips)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-03-26 18:09:57 / 修改时间：18:11:16" itemprop="dateCreated datePublished" datetime="2020-03-26T18:09:57+08:00">2020-03-26</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-995-Minimum-Number-of-K-Consecutive-Bit-Flips-题解"><a href="#LeetCode-995-Minimum-Number-of-K-Consecutive-Bit-Flips-题解" class="headerlink" title="LeetCode(\995. Minimum Number of K Consecutive Bit Flips)题解"></a>LeetCode(\995. Minimum Number of K Consecutive Bit Flips)题解</h1><p>In an array <code>A</code> containing only 0s and 1s, a <em><code>K</code>-bit flip</em> consists of choosing a (contiguous) subarray of length <code>K</code> and simultaneously changing every 0 in the subarray to 1, and every 1 in the subarray to 0.</p>
+<p>Return the minimum number of <code>K</code>-bit flips required so that there is no 0 in the array. If it is not possible, return <code>-1</code>.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: A &#x3D; [0,1,0], K &#x3D; 1</span><br><span class="line">Output: 2</span><br><span class="line">Explanation: Flip A[0], then flip A[2].</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: A &#x3D; [1,1,0], K &#x3D; 2</span><br><span class="line">Output: -1</span><br><span class="line">Explanation: No matter how we flip subarrays of size 2, we can&#39;t make the array become [1,1,1].</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 3:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Input: A &#x3D; [0,0,0,1,0,1,1,0], K &#x3D; 3</span><br><span class="line">Output: 3</span><br><span class="line">Explanation:</span><br><span class="line">Flip A[0],A[1],A[2]: A becomes [1,1,1,1,0,1,1,0]</span><br><span class="line">Flip A[4],A[5],A[6]: A becomes [1,1,1,1,1,0,0,0]</span><br><span class="line">Flip A[5],A[6],A[7]: A becomes [1,1,1,1,1,1,1,1]</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Note:</strong></p>
+<ol>
+<li><code>1 &lt;= A.length &lt;= 30000</code></li>
+<li><code>1 &lt;= K &lt;= A.length</code></li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Hard</p>
+<p>将一个由0和1组成的数组的连续k个元素进行翻转，0变为1，1变为0，求最少的翻转次数将数组的元素全部变为1。如果不能变为1，就返回-1。</p>
+<p>本题可以使用Greedy的办法，我们假设一个数组有解，并且存在一个最优方案，每一个都将一部分连续数组进行翻转，那么这些翻转是没有顺序的，不管什么顺序都能得到最终解。同时翻转的时候，最左边的翻转位置一定是0，因为不是的话，肯定还有更左边的才能将其翻为1。因此我们可以从左到右维持一个长度为K的窗口，依次划过去，如果出窗口的元素为0，就将窗口内的元素翻转，次数+1，否则就略过。走到最后，如果窗口内还有0存在，就表示不能得到答案，无解。否则就返回次数即可。</p>
+<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间复杂度O(N)，空间复杂度O(N)。</p>
+<p><code>Runtime: 108 ms, faster than 27.75% of C++ online submissions for Minimum Number of K Consecutive Bit Flips.</code></p>
+<p><code>Memory Usage: 17.7 MB, less than 100.00% of C++ online submissions for Minimum Number of K Consecutive Bit Flips.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minKBitFlips</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A, <span class="keyword">int</span> K)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>, len = A.<span class="built_in">size</span>(), flip = <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">queue</span>&lt;<span class="keyword">int</span>&gt; Q;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;K; i++) Q.push(A[i]);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=K; i&lt;len; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (flip ^ Q.front() == <span class="number">0</span>) &#123;</span><br><span class="line">                res++;</span><br><span class="line">                flip = <span class="number">1</span> - flip;</span><br><span class="line">            &#125;</span><br><span class="line">            Q.pop();</span><br><span class="line">            Q.push(flip ^ A[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (flip ^ Q.front() == <span class="number">0</span>) &#123;</span><br><span class="line">            res++;</span><br><span class="line">            flip = <span class="number">1</span> - flip;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">while</span> (!Q.empty() <span class="keyword">and</span> flip ^ Q.front() == <span class="number">1</span>) Q.pop();</span><br><span class="line">        <span class="keyword">if</span> (!Q.empty()) <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>Bitbrave，2020-03-25.</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/26/LeetCode(1392.%20Longest%20Happy%20Prefix)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -789,271 +1062,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/14/LeetCode(621.%20Task%20Scheduler)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/03/14/LeetCode(621.%20Task%20Scheduler)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(621. Task Scheduler)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-03-14 22:30:17 / 修改时间：22:45:42" itemprop="dateCreated datePublished" datetime="2020-03-14T22:30:17+08:00">2020-03-14</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-621-Task-Scheduler-题解"><a href="#LeetCode-621-Task-Scheduler-题解" class="headerlink" title="LeetCode(\621. Task Scheduler)题解"></a>LeetCode(\621. Task Scheduler)题解</h1><p>Given a char array representing tasks CPU need to do. It contains capital letters A to Z where different letters represent different tasks. Tasks could be done without original order. Each task could be done in one interval. For each interval, CPU could finish one task or just be idle.</p>
-<p>However, there is a non-negative cooling interval <strong>n</strong> that means between two <strong>same tasks</strong>, there must be at least n intervals that CPU are doing different tasks or just be idle.</p>
-<p>You need to return the <strong>least</strong> number of intervals the CPU will take to finish all the given tasks.</p>
-<p><strong>Example:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: tasks &#x3D; [&quot;A&quot;,&quot;A&quot;,&quot;A&quot;,&quot;B&quot;,&quot;B&quot;,&quot;B&quot;], n &#x3D; 2</span><br><span class="line">Output: 8</span><br><span class="line">Explanation: A -&gt; B -&gt; idle -&gt; A -&gt; B -&gt; idle -&gt; A -&gt; B.</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Note:</strong></p>
-<ol>
-<li>The number of tasks is in the range [1, 10000].</li>
-<li>The integer n is in the range [0, 100].</li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Hard</p>
-<p>给定由大写字母标的的任务列表，和一个表示间隔的值n。现在有一个电脑，可以在一个间隔的时间内完成一个任务，但是相同的任务必须隔至少n个间隔才能再次运行，每个间隔内，电脑可以选择运行任务，或者空闲。</p>
-<p>请问完成所有任务需要的最小间隔数是多少?</p>
-<p>我所能想到的解法是贪心：</p>
-<p>统计相同任务的个数，然后将任务按照任务数降序排序。然后从前到后遍历。那么第一个任务的A个数就决定了最少的间隔数是肯定大于等于，（A-1）* n + A的。那么我们可以默认空出来了（A-1）* n的间隔，后续的任务可以在这些间隔内完成，这样就不用增加新的间隔，间隔不够就再挨着慢慢增加。而贪心策略就是，我们，每次在空闲间隔内增加的方式是：以第一个任务A的排布为边界，在每个A之间分别加上当前任务，这样肯定满足条件，同时，每次添加都是沿着上一次任务结束的位置添加，如果没有空格了，还是在A的任务之间插入新的即可，在这个过程中计算增加的间隔。如果加入的任务B的个数等于A，那么除了A之间的空闲全部占掉一个之外，在最后A的外面也要占掉一个，会增加一个新的间隔。</p>
-<p>如何证明这种算法是正确的呢？我并没有想出来很形式化的语言，但是算法的过程中，每一步都尽可能不增加新的间隔，直到最后，任何最优的方案最后都可以转化为这种算法得到的答案。</p>
-<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间上，统计任务数$O(N)$，排序因为是26个 字母固定的，为$O(1)$。空间上，$O(1)$。</p>
-<p><code>Runtime: 48 ms, faster than 98.36% of C++ online submissions for Task Scheduler.</code></p>
-<p><code>Memory Usage: 8.9 MB, less than 100.00% of C++ online submissions for Task Scheduler.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">leastInterval</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">char</span>&gt;&amp; tasks, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">Task</span><span class="params">(<span class="number">26</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>, restSpace = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">char</span> t : tasks) &#123;</span><br><span class="line">            <span class="built_in">Task</span>[t - <span class="string">'A'</span>]++;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        sort(<span class="built_in">Task</span>.<span class="built_in">begin</span>(), <span class="built_in">Task</span>.<span class="built_in">end</span>());</span><br><span class="line">        </span><br><span class="line">        restSpace = n * (<span class="built_in">Task</span>[<span class="number">25</span>] - <span class="number">1</span>);</span><br><span class="line">        res = <span class="built_in">Task</span>[<span class="number">25</span>] + (<span class="built_in">Task</span>[<span class="number">25</span>] - <span class="number">1</span>) * n;  </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">24</span>; i&gt;=<span class="number">0</span>; i--) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">Task</span>[i] == <span class="built_in">Task</span>[<span class="number">25</span>]) &#123;</span><br><span class="line">                <span class="keyword">if</span> (restSpace &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                    res++;</span><br><span class="line">                    restSpace -= <span class="built_in">Task</span>[<span class="number">25</span>] - <span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> res += <span class="built_in">Task</span>[<span class="number">25</span>];</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (restSpace &gt;= <span class="built_in">Task</span>[i]) restSpace -= <span class="built_in">Task</span>[i];</span><br><span class="line">                <span class="keyword">else</span> &#123;</span><br><span class="line">                    res += <span class="built_in">Task</span>[i] - restSpace;</span><br><span class="line">                    restSpace = <span class="number">0</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<h2 id="其它的解法"><a href="#其它的解法" class="headerlink" title="其它的解法"></a>其它的解法</h2><h3 id="解法1，每一轮执行最多个数的任务"><a href="#解法1，每一轮执行最多个数的任务" class="headerlink" title="解法1，每一轮执行最多个数的任务"></a>解法1，每一轮执行最多个数的任务</h3><p>统计每个任务的任务数，然后降序排序，然后从前到后在两个相同任务允许的最小时间间隔内分别执行任务，将执行了任务的任务数-1.然后再对所有任务排序，最后直到所有的任务完成，这种也是贪心，尽可能先执行任务多的任务同时尽可能占满空闲时间。时间复杂度为所有任务的个数和，空间O(1)。</p>
-<h3 id="解法2，优先队列"><a href="#解法2，优先队列" class="headerlink" title="解法2，优先队列"></a>解法2，优先队列</h3><p>将解法1优化一下，使用最大堆，优先队列存储，那么就不用每次都排序了。</p>
-<p>BitBrave，2020-03-14</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/06/LeetCode(503.%20Next%20Greater%20Element%20II)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/03/06/LeetCode(503.%20Next%20Greater%20Element%20II)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(503. Next Greater Element II)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-03-06 21:54:36 / 修改时间：23:27:12" itemprop="dateCreated datePublished" datetime="2020-03-06T21:54:36+08:00">2020-03-06</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-503-Next-Greater-Element-II-题解"><a href="#LeetCode-503-Next-Greater-Element-II-题解" class="headerlink" title="LeetCode(\503. Next Greater Element II)题解"></a>LeetCode(\503. Next Greater Element II)题解</h1><p>Given a circular array (the next element of the last element is the first element of the array), print the Next Greater Number for every element. The Next Greater Number of a number x is the first greater number to its traversing-order next in the array, which means you could search circularly to find its next greater number. If it doesn’t exist, output -1 for this number.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Input: [1,2,1]</span><br><span class="line">Output: [2,-1,2]</span><br><span class="line">Explanation: The first 1&#39;s next greater number is 2; </span><br><span class="line">The number 2 can&#39;t find next greater number; </span><br><span class="line">The second 1&#39;s next greater number needs to search circularly, which is also 2.</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Note:</strong> The length of given array won’t exceed 10000.</p>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Medium</p>
-<p>给出一维数组nums，不过这个数组是环形的，首尾相连。要求找出每个元素右边第一个比自己大的元素，如果不存在就设为-1.比如132，最终返回的答案是3，-1，3，因为2向右走会回到第一个。</p>
-<p>这个题的简单的一个版本是数组不是收尾相连的。对于这种题的解法最简单的就是对每一个元素遍历其它元素，找出对应的值，时间复杂度$O(n^2)$。</p>
-<p>但是可以用stack在$O(n)$的时间内解决，对于不是首尾相连的数组，我们可以维护一个递减栈，这里有两种方式。</p>
-<ul>
-<li>从后往前遍历，利用栈顶元素来更新即将入栈的元素。遍历到一个元素a，如果栈空，表示a后边没有比自己大的元素了，将a元素对应的值设为-1然后将a入栈，否则查看a是否小于栈顶元素，如果小于，就说明栈顶元素就是a右边离自己最近的比自己大的元素，直接设为栈顶元素即可，如果大于等于，说明当前栈顶元素不会再在后面的遍历中用到了，直接出栈即可。持续出栈直到栈为空或者栈顶元素大于a，然后按照上面的论述设定a对应的值。最后将a入栈。</li>
-<li>从前往后遍历，利用即将入栈的元素来更新栈顶元素，遍历到到一个元素a，如果栈空，表示a前边没有可以更新的元素了，将a入栈，否则查看a是否大于栈顶元素，如果大于，就说明栈顶元素的右边离自己大的最近的就是a，将栈顶元素的对应值更新为a然后将出栈，持续出栈并更新直到栈顶元素的值大于等于a或者栈空，这时候a就不能更新栈顶元素了，将a入栈。最后所有没有更新过的值就是-1。</li>
-</ul>
-<p>在处理数组为环形的时候，上述两种办法其实也是可以的，只不过要稍稍变换下思路。我们可以将数组double一下，将两个一样的nums拼接成一个，等于遍历数组两次，然后使用上面的方法更新即可。</p>
-<ul>
-<li>从前往后遍历，第一次遍历数组nums，按照单向数组一样的方式更新，然后再次遍历一遍使用相同的额处理方式遍历数组，第二次遍历的时候，栈中已经存在了之前遍历留下的元素，就等于可以使用数组前边的元素来更新数组后边的值了。</li>
-<li>从后往前遍历，第一次遍历数组nums，按照单向数组一样的方式处理，但是不更新每个元素的对应的值，第一次主要是为了在栈中留下数组内前边的值。然后第二次遍历的时候，还是使用同样的方式，只不过这一次开始更新每个元素的对应的值。其实第一次更新不更新每个元素的值都一样的。</li>
-</ul>
-<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>时间上，$O(n)$，空间上，$O(n)$。</p>
-<h3 id="从后往前遍历"><a href="#从后往前遍历" class="headerlink" title="从后往前遍历"></a>从后往前遍历</h3><p><code>Runtime: 84 ms, faster than 92.25% of C++ online submissions for Next Greater Element II.</code></p>
-<p><code>Memory Usage: 11.5 MB, less than 100.00% of C++ online submissions for Next Greater Element II.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">nextGreaterElements</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">res</span><span class="params">(len, <span class="number">0</span>)</span></span>;</span><br><span class="line">        <span class="built_in">stack</span>&lt;<span class="keyword">int</span>&gt; S;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=len<span class="number">-1</span>; i&gt;=<span class="number">0</span>; i--) &#123;</span><br><span class="line">            <span class="keyword">while</span> (!S.empty() <span class="keyword">and</span> nums[i] &gt;= S.top()) S.pop();</span><br><span class="line">            S.push(nums[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=len<span class="number">-1</span>; i&gt;=<span class="number">0</span>; i--) &#123;</span><br><span class="line">            <span class="keyword">while</span> (!S.empty() <span class="keyword">and</span> nums[i] &gt;= S.top()) S.pop();</span><br><span class="line">            <span class="keyword">if</span> (S.empty()) res[i] = <span class="number">-1</span>;</span><br><span class="line">            <span class="keyword">else</span> res[i] = S.top();</span><br><span class="line">            S.push(nums[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<h3 id="从前往后遍历"><a href="#从前往后遍历" class="headerlink" title="从前往后遍历"></a>从前往后遍历</h3><p><code>Runtime: 84 ms, faster than 92.25% of C++ online submissions for Next Greater Element II.</code></p>
-<p><code>Memory Usage: 11.7 MB, less than 100.00% of C++ online submissions for Next Greater Element II.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">nextGreaterElements</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">res</span><span class="params">(len, <span class="number">-1</span>)</span></span>;</span><br><span class="line">        <span class="built_in">stack</span>&lt;<span class="keyword">int</span>&gt; S;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++) &#123;</span><br><span class="line">            <span class="keyword">while</span> (!S.empty() <span class="keyword">and</span> nums[i] &gt; nums[S.top()]) &#123;</span><br><span class="line">                res[S.top()] = nums[i];</span><br><span class="line">                S.pop();</span><br><span class="line">            &#125;</span><br><span class="line">            S.push(i);</span><br><span class="line">        &#125;</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++) &#123;</span><br><span class="line">            <span class="keyword">while</span> (!S.empty() <span class="keyword">and</span> nums[i] &gt; nums[S.top()]) &#123;</span><br><span class="line">                res[S.top()] = nums[i];</span><br><span class="line">                S.pop();</span><br><span class="line">            &#125;</span><br><span class="line">            S.push(i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2020-03-06</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/05/LeetCode(456.%20132%20Pattern)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/03/05/LeetCode(456.%20132%20Pattern)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(456. 132 Pattern)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-03-05 23:04:42 / 修改时间：23:04:54" itemprop="dateCreated datePublished" datetime="2020-03-05T23:04:42+08:00">2020-03-05</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-456-132-Pattern-题解"><a href="#LeetCode-456-132-Pattern-题解" class="headerlink" title="LeetCode(\456. 132 Pattern)题解"></a>LeetCode(\456. 132 Pattern)题解</h1><p>Given a sequence of n integers a1, a2, …, an, a 132 pattern is a subsequence a<strong>i</strong>, a<strong>j</strong>, a<strong>k</strong> such that <strong>i</strong> &lt; <strong>j</strong> &lt; <strong>k</strong> and a<strong>i</strong> &lt; a<strong>k</strong> &lt; a<strong>j</strong>. Design an algorithm that takes a list of n numbers as input and checks whether there is a 132 pattern in the list.</p>
-<p><strong>Note:</strong> n will be less than 15,000.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Input: [1, 2, 3, 4]</span><br><span class="line"></span><br><span class="line">Output: False</span><br><span class="line"></span><br><span class="line">Explanation: There is no 132 pattern in the sequence.</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Input: [3, 1, 4, 2]</span><br><span class="line"></span><br><span class="line">Output: True</span><br><span class="line"></span><br><span class="line">Explanation: There is a 132 pattern in the sequence: [1, 4, 2].</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Example 3:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Input: [-1, 3, 2, 0]</span><br><span class="line"></span><br><span class="line">Output: True</span><br><span class="line"></span><br><span class="line">Explanation: There are three 132 patterns in the sequence: [-1, 3, 2], [-1, 3, 0] and [-1, 2, 0].</span><br></pre></td></tr></table></figure>
-
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Medium</p>
-<p>给定一个整数数组A，判断其中是否存在这样的模式：有三个位置，i&lt;j&lt;k。每个位置上的元素关系为Ai&lt;Ak&lt;Aj即132模式，如果有这样的模式存在就返回True，否则False。</p>
-<p>这个题明确使用Stack，可以在线性时间内解决，但是我只能想到平方的解法，就是以每个元素Aj，分别寻找左边最小的和右边比当前值小的最大值，然后判断。参考网上别人的解法才发现，Stack实在是太美妙了。</p>
-<p>我们如何来利用Stack呢？</p>
-<p>可以这样想，我们找到一个元素a，只要得到左边的最小元素b和右边的比a小的数中最大的那个c，只要bac满足条件，那么算法就以True结束了，如果不满足，那么以这个元素a作为中间值肯定是不可以的。找元素左边最小的很容易，我们O(n)的时间就可以，主要是如何寻找c？</p>
-<p>这里可以用一个Stack来，我们可以维护一个递减栈，一般来说一个递减栈是用来确定一个元素离它最近的比他大的元素值的。但是我们在递减栈出栈的过程中，记录下最后那个出栈的元素，那么那个元素就是比当前元素小的元素中，最大的那个了。</p>
-<p>因此，再完善一点，算法的流程就是：</p>
-<ul>
-<li>我们构建一个Stack（存储一个递减序列），从数组A的后边向前边遍历，设定一个整数s记录最近出栈的元素，初始化s=INT_MIN。</li>
-<li>从后向前遍历元素，走到元素a时，判断a是否小于s，如果小于，说明s已经被更新了，栈内肯定插入了更大值，因为从后向前遍历，这个更大值的位置肯定在s和a之间，因此符合132的模式，返回True。否则进行下一步。</li>
-<li>如果栈为空，直接将a入栈，否则判断元素是否大于栈顶元素，如果大于，那么就不断出栈直到栈为空或者a小于等于栈顶元素，然后将a入栈，此时s更新为最近一次出栈的元素，因为是个递减栈，所以s一定小于a同时s是数组右边小于a的元素中最大的那个，此时也可以说s元素的左边一定有一个比他的大的元素存在。</li>
-<li>重复上述操作，知道遍历完整个数组才退出循环，表示这个数组内不存在132的模式，否则肯定会提前结束循环。因此直接返回False。</li>
-</ul>
-<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间上，$O(N)$，空间上，$O(N)$。</p>
-<p><code>Runtime: 24 ms, faster than 82.89% of C++ online submissions for 132 Pattern.</code></p>
-<p><code>Memory Usage: 9.4 MB, less than 100.00% of C++ online submissions for 132 Pattern.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">find132pattern</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">stack</span>&lt;<span class="keyword">int</span>&gt; S;</span><br><span class="line">        <span class="keyword">int</span> c = INT_MIN, len = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=len<span class="number">-1</span>; i&gt;=<span class="number">0</span>; i--) &#123;</span><br><span class="line">            <span class="keyword">if</span> (nums[i] &lt; c) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">while</span> (!S.empty() <span class="keyword">and</span> nums[i] &gt; S.top()) &#123;</span><br><span class="line">                c = S.top();</span><br><span class="line">                S.pop();</span><br><span class="line">            &#125;</span><br><span class="line">            S.push(nums[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2020-03-05</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1124,12 +1132,12 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">357</span>
+          <span class="site-state-item-count">360</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-count">37</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>

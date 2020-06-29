@@ -168,6 +168,266 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(853.%20Car%20Fleet)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(853.%20Car%20Fleet)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(853. Car Fleet)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-853-Car-Fleet-题解"><a href="#LeetCode-853-Car-Fleet-题解" class="headerlink" title="LeetCode(853. Car Fleet)题解"></a>LeetCode(853. Car Fleet)题解</h1><p><code>N</code> cars are going to the same destination along a one lane road.  The destination is <code>target</code> miles away.</p>
+<p>Each car <code>i</code> has a constant speed <code>speed[i]</code> (in miles per hour), and initial position <code>position[i]</code> miles towards the target along the road.</p>
+<p>A car can never pass another car ahead of it, but it can catch up to it, and drive bumper to bumper at the same speed.</p>
+<p>The distance between these two cars is ignored - they are assumed to have the same position.</p>
+<p>A <em>car fleet</em> is some non-empty set of cars driving at the same position and same speed.  Note that a single car is also a car fleet.</p>
+<p>If a car catches up to a car fleet right at the destination point, it will still be considered as one car fleet.</p>
+<p>How many car fleets will arrive at the destination?</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Input: target &#x3D; 12, position &#x3D; [10,8,0,5,3], speed &#x3D; [2,4,1,1,3]</span><br><span class="line">Output: 3</span><br><span class="line">Explanation:</span><br><span class="line">The cars starting at 10 and 8 become a fleet, meeting each other at 12.</span><br><span class="line">The car starting at 0 doesn&#39;t catch up to any other car, so it is a fleet by itself.</span><br><span class="line">The cars starting at 5 and 3 become a fleet, meeting each other at 6.</span><br><span class="line">Note that no other cars meet these fleets before the destination, so the answer is 3.</span><br></pre></td></tr></table></figure>
+
+
+<p><strong>Note:</strong></p>
+<ol>
+<li><code>0 &lt;= N &lt;= 10 ^ 4</code></li>
+<li><code>0 &lt; target &lt;= 10 ^ 6</code></li>
+<li><code>0 &lt; speed[i] &lt;= 10 ^ 6</code></li>
+<li><code>0 &lt;= position[i] &lt; target</code></li>
+<li>All initial positions are different.</li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>N辆车沿着一条车道行驶到同一目的地。目的地是目标英里。每辆汽车均具有恒定的speed[i]（以英里/小时为单位），初始位置position[i]沿道路朝向目标。一辆汽车永远无法超越前面的另一辆汽车，但它可以追上它，并以相同的速度驾驶。忽略这两辆车之间的距离-假定它们具有相同的位置。车队是在相同位置和相同速度下行驶的一些非空车组。请注意，单车也是车队。如果汽车正好赶上目的地的车队，它将仍被视为一个车队。多少车队将到达目的地？</p>
+<p>我们可以这样理解，以时间为横轴，路程为纵轴画一个平面直角坐标系，那么每辆车的行驶就对应这个坐标中的一条直线。与y轴的交点就是车的出发位置，斜率就是车的速度。那么在到达target（y轴target位置与X轴平行的直线）之前，所有后来居上超过先前直线的直线都表示超车，根据题意就可以删除这条直线。因此，每遇到相交的两条直线，就删除与y轴相交更低的那条线。最后坐标系中的所有直线在target之下都不相交，直线的数量就是问题的解。</p>
+<p>因此，这道题可以使用排序的方法来做，将车辆按照出发距离排序，然后从头到尾遍历，对于每一辆车，看后续的车是否在target之前有超过的，有就将其删除。</p>
+<p>代码如下，时间复杂度O(n)，空间复杂度O(n)。</p>
+<p><code>Runtime: 48 ms, faster than 73.22% of C++ online submissions for Car Fleet.</code></p>
+<p><code>Memory Usage: 10.5 MB, less than 100.00% of C++ online submissions for Car Fleet.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; P;</span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> P[a] &gt; P[b];</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">carFleet</span><span class="params">(<span class="keyword">int</span> target, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; <span class="built_in">position</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; speed)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = <span class="built_in">position</span>.<span class="built_in">size</span>();</span><br><span class="line">        P = <span class="built_in">position</span>;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">car</span><span class="params">(len)</span></span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++) car[i] = i;</span><br><span class="line">        sort(car.<span class="built_in">begin</span>(), car.<span class="built_in">end</span>(), cmp);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(car[i] == <span class="number">-1</span>) <span class="keyword">continue</span>;</span><br><span class="line">            <span class="keyword">double</span> X = (target - <span class="built_in">position</span>[car[i]])*<span class="number">1.0</span> / speed[car[i]];</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=i+<span class="number">1</span>; j&lt;len; j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(car[j] == <span class="number">-1</span>) <span class="keyword">continue</span>;</span><br><span class="line">                <span class="keyword">if</span>(X*speed[car[j]] + <span class="built_in">position</span>[car[j]] &gt;= target) car[j] = <span class="number">-1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> c : car)&#123;</span><br><span class="line">            <span class="keyword">if</span>(c != <span class="number">-1</span>) res++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2019-10-14</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(850.%20Rectangle%20Area%20II)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(850.%20Rectangle%20Area%20II)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(850. Rectangle Area II)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-850-Rectangle-Area-II-题解"><a href="#LeetCode-850-Rectangle-Area-II-题解" class="headerlink" title="LeetCode(850. Rectangle Area II)题解"></a>LeetCode(850. Rectangle Area II)题解</h1><p>We are given a list of (axis-aligned) <code>rectangles</code>.  Each <code>rectangle[i] = [x1, y1, x2, y2]</code>, where (x1, y1) are the coordinates of the bottom-left corner, and (x2, y2) are the coordinates of the top-right corner of the <code>i</code>th rectangle.</p>
+<p>Find the total area covered by all <code>rectangles</code> in the plane.  Since the answer may be too large, <strong>return it modulo 10^9 + 7</strong>.</p>
+<p><img src="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/06/06/rectangle_area_ii_pic.png" alt="img"></p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: [[0,0,2,2],[1,0,2,3],[1,0,3,1]]</span><br><span class="line">Output: 6</span><br><span class="line">Explanation: As illustrated in the picture.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: [[0,0,1000000000,1000000000]]</span><br><span class="line">Output: 49</span><br><span class="line">Explanation: The answer is 10^18 modulo (10^9 + 7), which is (10^9)^2 &#x3D; (-7)^2 &#x3D; 49.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Note:</strong></p>
+<ul>
+<li><code>1 &lt;= rectangles.length &lt;= 200</code></li>
+<li><code>rectanges[i].length = 4</code></li>
+<li><code>0 &lt;= rectangles[i][j] &lt;= 10^9</code></li>
+<li><code>The total area covered by all rectangles will never exceed</code>2^63 - 1<code>and thus will fit in a 64-bit signed integer.</code></li>
+</ul>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出一些矩阵，求出这些矩阵的面积之和（有的矩阵之间有重叠）。</p>
+<p>首先考虑两个矩阵，只有三种情况，相交、相离、想含。其中相离合相含是比较好分析的，相交则有些复杂。但是这三种皆可以将两个矩阵分成几个不相交的矩阵，如相交可以分成三个（一个原始矩阵，另一个矩阵分割为两个）。</p>
+<p>因此，我们可以维护一个List或者Vector，存储不相交的矩阵。将所有输入的矩阵通过分割全部转为相离的矩阵存入这个数组，最后只需计算这些矩阵的面积和即可。</p>
+<p>如何来构建并维护这个数组呢？分别遍历这些矩阵，当输入一个矩阵时，分别判断这个矩阵是否与List中的每个矩阵相交相离或包含，如果除了相离之外的其他关系，就将输入的矩阵进行分割，再分别判定分割完的矩阵与其他数组内矩阵的位置关系，直到分割完的矩阵与数组内所有矩阵都处于相离关系。每次在判断第i+1个矩阵的时候，数组内矩阵会最多增加4i+4个。最终上限为N个矩阵的话有 $ 2N^2 - 1$个。</p>
+<p>这里有一个对应的解法，<a href="https://leetcode.com/problems/rectangle-area-ii/discuss/138028/Clean-Recursive-Solution-Java" target="_blank" rel="noopener">点击进入</a>。</p>
+<p>代码如下，时间复杂度$O(n^2)$，空间复杂度$O(n^2)$。</p>
+<p><code>Runtime: 124 ms, faster than 6.09% of C++ online submissions for Rectangle Area II.</code></p>
+<p><code>Memory Usage: 64.5 MB, less than 25.00% of C++ online submissions for Rectangle Area II.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; V;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">rectangleArea</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; rectangles)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> mod = <span class="built_in">pow</span>(<span class="number">10</span>, <span class="number">9</span>) + <span class="number">7</span>;</span><br><span class="line">        <span class="keyword">int</span> a, b;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; rec : rectangles) addRectangle(rec, <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">for</span>(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; v : V)&#123;</span><br><span class="line">            a =  (v[<span class="number">2</span>]-v[<span class="number">0</span>]) % mod;</span><br><span class="line">            b =  (v[<span class="number">3</span>]-v[<span class="number">1</span>]) % mod;</span><br><span class="line">            res = (res + ((<span class="keyword">long</span>)a * (<span class="keyword">long</span>)b) % mod) % mod;  </span><br><span class="line">        &#125; </span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 判断rec与V中第start开始的矩阵位置情况，并决定是否需要进入start+1的情况。</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">addRectangle</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; rec, <span class="keyword">int</span> start)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(start &gt;= V.<span class="built_in">size</span>())&#123;</span><br><span class="line">            V.push_back(rec);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 相交？</span></span><br><span class="line">        <span class="keyword">if</span>(rec[<span class="number">0</span>] &gt; V[start][<span class="number">2</span>] <span class="keyword">or</span> rec[<span class="number">2</span>] &lt; V[start][<span class="number">0</span>] <span class="keyword">or</span> rec[<span class="number">1</span>] &gt; V[start][<span class="number">3</span>] <span class="keyword">or</span> rec[<span class="number">3</span>] &lt; V[start][<span class="number">1</span>]) <span class="keyword">return</span> addRectangle(rec, start + <span class="number">1</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 左边相交？</span></span><br><span class="line">        <span class="keyword">if</span>(rec[<span class="number">0</span>] &lt; V[start][<span class="number">0</span>]) addRectangle(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(&#123;rec[<span class="number">0</span>], rec[<span class="number">1</span>], V[start][<span class="number">0</span>], rec[<span class="number">3</span>]&#125;), start + <span class="number">1</span>);</span><br><span class="line">        <span class="comment">// 右边相交？</span></span><br><span class="line">        <span class="keyword">if</span>(rec[<span class="number">2</span>] &gt; V[start][<span class="number">2</span>]) addRectangle(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(&#123;V[start][<span class="number">2</span>], rec[<span class="number">1</span>], rec[<span class="number">2</span>], rec[<span class="number">3</span>]&#125;), start + <span class="number">1</span>);</span><br><span class="line">        <span class="comment">// 下边相交？</span></span><br><span class="line">        <span class="keyword">if</span>(rec[<span class="number">1</span>] &lt; V[start][<span class="number">1</span>]) addRectangle(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(&#123;<span class="built_in">max</span>(rec[<span class="number">0</span>], V[start][<span class="number">0</span>]), rec[<span class="number">1</span>], <span class="built_in">min</span>(rec[<span class="number">2</span>], V[start][<span class="number">2</span>]), V[start][<span class="number">1</span>]&#125;), start + <span class="number">1</span>);</span><br><span class="line">        <span class="comment">// 上边相交？</span></span><br><span class="line">        <span class="keyword">if</span>(rec[<span class="number">3</span>] &gt; V[start][<span class="number">3</span>]) addRectangle(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(&#123;<span class="built_in">max</span>(rec[<span class="number">0</span>], V[start][<span class="number">0</span>]), V[start][<span class="number">3</span>], <span class="built_in">min</span>(rec[<span class="number">2</span>], V[start][<span class="number">2</span>]), rec[<span class="number">3</span>]&#125;), start + <span class="number">1</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-09-027</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(856.%20Score%20of%20Parentheses)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(856.%20Score%20of%20Parentheses)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(856. Score of Parentheses)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-856-Score-of-Parentheses-题解"><a href="#LeetCode-856-Score-of-Parentheses-题解" class="headerlink" title="LeetCode(856. Score of Parentheses)题解"></a>LeetCode(856. Score of Parentheses)题解</h1><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个括号拓扑匹配的字符串，根据一定的规则计算其得分，单独的’()’得分1，挨着的(**)(****)表示就将其相加，包围着的((**))外部就乘以2.</p>
+<p>首先说说我的解法，就是遍历字符串，找出第一个(对应的右括号，然后判断这个字符串是不是全包围，如果是就用2乘以递归相同的函数，只不过输入的字符串变为S[1,len-1]的返回值，否则就分别前后相加即可。</p>
+<p>代码如下，时间复杂度O(n2)，空间复杂度O(1)。</p>
+<p><code>Runtime: 4 ms, faster than 56.50% of C++ online submissions for Score of Parentheses.</code></p>
+<p><code>Memory Usage: 9 MB, less than 12.50% of C++ online submissions for Score of Parentheses.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">scoreOfParentheses</span><span class="params">(<span class="built_in">string</span> S)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = S.<span class="built_in">size</span>(), left = <span class="number">0</span>, right = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span>(len == <span class="number">2</span>) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(S[i] == <span class="string">'('</span>) left++;</span><br><span class="line">            <span class="keyword">else</span> right++;</span><br><span class="line">            <span class="keyword">if</span>(left == right) <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(left + right == len) <span class="keyword">return</span> <span class="number">2</span> * scoreOfParentheses(S.substr(<span class="number">1</span>, len<span class="number">-2</span>));</span><br><span class="line">        <span class="keyword">return</span> scoreOfParentheses(S.substr(<span class="number">0</span>, left+right)) + scoreOfParentheses(S.substr(left + right));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>还有网络找到的。</p>
+<p>一种方法是直接通过栈来模拟操作，这样简单易懂，如果遇到“(”，就压入栈。如果遇到右括号，判断栈顶元素是什么，如果是“(”，证明出现了”()”的情况，那么把栈顶元素弹出，压入“1”。如果是其他情况，那么先判断栈顶是不是数字，如果是数字，证明是（()()）的结构，那么这时的栈情况是（1,1），所以应该把栈里的元素相加再压入栈，一直遇到左括号，这时情况是（2），所以应该把数字2乘以2。再压入栈，这样操作完栈里会有一堆数字，我们把数字相加即可。</p>
+<p>代码如下，时间复杂度O(n)，空间复杂度O(n)。</p>
+<p><code>Runtime: 0 ms, faster than 100.00% of C++ online submissions for Score of Parentheses.</code></p>
+<p><code>Memory Usage: 8.5 MB, less than 37.50% of C++ online submissions for Score of Parentheses.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">scoreOfParentheses</span><span class="params">(<span class="built_in">string</span> S)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = S.<span class="built_in">size</span>();</span><br><span class="line">        <span class="built_in">stack</span>&lt;<span class="keyword">int</span>&gt; ST; <span class="comment">// '(' = -2</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(S[i] == <span class="string">'('</span>) ST.push(<span class="number">-2</span>);</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="keyword">if</span>(ST.top() == <span class="number">-2</span>)&#123;</span><br><span class="line">                    ST.pop();</span><br><span class="line">                    ST.push(<span class="number">1</span>);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span>&#123;</span><br><span class="line">                    <span class="keyword">int</span> t = ST.top(); ST.pop();</span><br><span class="line">                    <span class="keyword">while</span>(ST.top() != <span class="number">-2</span>)&#123;</span><br><span class="line">                        t += ST.top(); ST.pop();</span><br><span class="line">                    &#125;</span><br><span class="line">                    ST.pop();</span><br><span class="line">                    ST.push(<span class="number">2</span> * t);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> res = ST.top(); ST.pop();</span><br><span class="line">        <span class="keyword">while</span>(!ST.empty())&#123;</span><br><span class="line">            res += ST.top(); ST.pop();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>还有一个办法也是用栈，但是思路不一样（不容易想，但是代码灰常简洁），</p>
+<p>字符串中的每个位置都有一个深度，围绕它的一些匹配括号。 例如：（（）（.（））中的点的深度为2，因为这些括号满足这个规律：（<strong>（.</strong>））</p>
+<p>我们的目标是将目前分数score保持在我们目前所处的深度。 当我们看到一个开括号时，我们增加了深度，我们在新深度的位置插入0。当我们看到一个结束括号时，我们将栈顶元素*2+下一个栈顶元素的的值加入新的栈。</p>
+<p>例如，当遇到（（）（（）））时，我们的堆栈将如下所示：</p>
+<ul>
+<li>[0, 0] 遇到 (</li>
+<li>[0, 0, 0] 遇到 (</li>
+<li>[0, 1] 遇到 )</li>
+<li>[0, 1, 0] 遇到 (</li>
+<li>[0, 1, 0, 0] 遇到 (</li>
+<li>[0, 1, 1] 遇到 )</li>
+<li>[0, 3] 遇到 )</li>
+<li>[6] 遇到 )</li>
+</ul>
+<p>代码如下，时间复杂度O(n)，空间复杂度O(n)。</p>
+<p><code>Runtime: 0 ms, faster than 100.00% of C++ online submissions for Score of Parentheses.</code></p>
+<p><code>Memory Usage: 8.3 MB, less than 100.00% of C++ online submissions for Score of Parentheses.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">scoreOfParentheses</span><span class="params">(<span class="built_in">string</span> S)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">stack</span>&lt;<span class="keyword">int</span>&gt; ST;</span><br><span class="line">        <span class="keyword">int</span> a, b;</span><br><span class="line">        </span><br><span class="line">        ST.push(<span class="number">0</span>);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> s : S)&#123;</span><br><span class="line">            <span class="keyword">if</span>(s == <span class="string">'('</span>) ST.push(<span class="number">0</span>);</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                a = ST.top(); ST.pop();</span><br><span class="line">                b = ST.top(); ST.pop();</span><br><span class="line">                ST.push(b + <span class="built_in">max</span>(a * <span class="number">2</span>, <span class="number">1</span>));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> ST.top();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave， 2019-10-09</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(858.%20Mirror%20Reflection)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -759,270 +1019,6 @@ Output: false</code></pre><h2 id="解题思路"><a href="#解题思路" class="h
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(870.%20Advantage%20Shuffle)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(870.%20Advantage%20Shuffle)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(870. Advantage Shuffle)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="LeetCode-870-Advantage-Shuffle-题解"><a href="#LeetCode-870-Advantage-Shuffle-题解" class="headerlink" title="LeetCode(870. Advantage Shuffle)题解"></a>LeetCode(870. Advantage Shuffle)题解</h2><p>Given two arrays <code>A</code> and <code>B</code> of equal size, the <em>advantage of A with respect to B</em> is the number of indices <code>i</code> for which <code>A[i] &gt; B[i]</code>.</p>
-<p>Return <strong>any</strong> permutation of <code>A</code> that maximizes its advantage with respect to <code>B</code>.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: A &#x3D; [2,7,11,15], B &#x3D; [1,10,4,11]</span><br><span class="line">Output: [2,11,7,15]</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: A &#x3D; [12,24,8,32], B &#x3D; [13,25,32,11]</span><br><span class="line">Output: [24,32,8,12]</span><br></pre></td></tr></table></figure>
-
-<p><strong>Note:</strong></p>
-<ol>
-<li><p><code>1 &lt;= A.length = B.length &lt;= 10000</code></p>
-</li>
-<li><p><code>0 &lt;= A[i] &lt;= 10^9</code></p>
-</li>
-<li><p><code>0 &lt;= B[i] &lt;= 10^9</code></p>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2></li>
-</ol>
-<p>给定两个等长的数组A和B，其中A的优势就是A中对应位置的元素大于B中对应位置的元素的数量。现在对A重排列，最大化A的优势。如果有多个答案，返回其中任意一个即可。</p>
-<p>这个题直观上就可以使用Greedy做，我们对于B中的一个元素B[i]，如果A中有比它大的元素，那么我们只选择比它大的元素中最小的那个即可，这样可以最大限度地保留A能覆盖其它B中元素的可能性。</p>
-<p>因此，算法如下，将A，B都升序排序。然后分别遍历AB中的元素，A中使用i，B中使用j。初始化i=0，j=0.</p>
-<p>然后如下判断——</p>
-<ul>
-<li><p>i==len(A)，表明已经遍历完成了，直接结束算法。</p>
-</li>
-<li><p>A[i]&gt;B[j]，表示此时可以覆盖，直接i = i+1，j = j+1.</p>
-</li>
-<li><p>A[i]&lt;=B[j]，表示此时不能覆盖，就在不超过len(A)的情况下不断增加i，判断A[i]是否可以大于B[j]，如果到最后都不能大于，则表明A中剩下的数已经都不能大于B中任何数了，就直接结束算法。如果走到一个i的值，有A[i]大于B[j]，就直接使用这个与最开始的i进行交换即可。然后i = i+1，j = j+1.</p>
-</li>
-</ul>
-<p>代码如下，排序时间复杂度O(nlogn)，加上判断的时间O(n)，总的时间复杂度为O(nlogn)，但是因为最后返回的数组要按照B的顺序，因此要把A重新排位置，这就需要一开始记住B原数组的位置，因此需要使用一个数组记录，空间复杂度O(n)。</p>
-<p><code>Runtime: 156 ms, faster than 90.29% of C++ online submissions for Advantage Shuffle.</code></p>
-<p><code>Memory Usage: 14.3 MB, less than 100.00% of C++ online submissions for Advantage Shuffle.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; B_;</span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> B_[a] &lt; B_[b];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">advantageCount</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; B)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = A.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> i, j, b = len - <span class="number">1</span>;</span><br><span class="line">        </span><br><span class="line">        vector&lt;int&gt; ret(len, -1), p(len, -1);</span><br><span class="line">        B_ = B;</span><br><span class="line">        <span class="keyword">for</span>(i=<span class="number">0</span>; i&lt;len; i++) p[i] = i;</span><br><span class="line">        sort(A.<span class="built_in">begin</span>(), A.<span class="built_in">end</span>());</span><br><span class="line">        sort(p.<span class="built_in">begin</span>(), p.<span class="built_in">end</span>(), cmp);</span><br><span class="line">        </span><br><span class="line">        i = j = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(i &lt; len)&#123;</span><br><span class="line">            <span class="keyword">while</span>(i &lt; len &amp;&amp; A[i] &lt;= B[p[j]]) ret[p[b--]] = A[i++];</span><br><span class="line">            <span class="keyword">if</span>(i &lt; len) ret[p[j++]] = A[i++];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave,2019-10-24</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(877.%20Stone%20Game)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(877.%20Stone%20Game)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(877. Stone Game)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-877-Stone-Game-题解"><a href="#LeetCode-877-Stone-Game-题解" class="headerlink" title="LeetCode(877. Stone Game)题解"></a>LeetCode(877. Stone Game)题解</h1><p>Alex and Lee play a game with piles of stones.  There are an even number of piles <strong>arranged in a row</strong>, and each pile has a positive integer number of stones <code>piles[i]</code>.</p>
-<p>The objective of the game is to end with the most stones.  The total number of stones is odd, so there are no ties.</p>
-<p>Alex and Lee take turns, with Alex starting first.  Each turn, a player takes the entire pile of stones from either the beginning or the end of the row.  This continues until there are no more piles left, at which point the person with the most stones wins.</p>
-<p>Assuming Alex and Lee play optimally, return <code>True</code> if and only if Alex wins the game.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Input: [5,3,4,5]</span><br><span class="line">Output: true</span><br><span class="line">Explanation: </span><br><span class="line">Alex starts first, and can only take the first 5 or the last 5.</span><br><span class="line">Say he takes the first 5, so that the row becomes [3, 4, 5].</span><br><span class="line">If Lee takes 3, then the board is [4, 5], and Alex takes 5 to win with 10 points.</span><br><span class="line">If Lee takes the last 5, then the board is [3, 4], and Alex takes 4 to win with 9 points.</span><br><span class="line">This demonstrated that taking the first 5 was a winning move for Alex, so we return true.</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Note:</strong></p>
-<ol>
-<li><code>2 &lt;= piles.length &lt;= 500</code></li>
-<li><code>piles.length</code> is even.</li>
-<li><code>1 &lt;= piles[i] &lt;= 500</code></li>
-<li><code>sum(piles)</code> is odd.</li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>有一个从左到右一堆堆排列的石子，每堆石子有不同的数量，但是石子的总数是奇数，石子的堆数是偶数。现在A和B玩一个游戏，从A开始，轮流从左边或者右边选一堆石子，最后每个人都有相同堆数的石子，但是因为石子的数目是奇数，因此两个人的石子数不可能一样。最后，得到石子多的人获得游戏的胜利，假设A和B都是按照最优的策略选择石子，判断A是否能获胜。</p>
-<p>这个题可以用常规的DP来做，转一下思路，A寻找最大的值，而B是从A得到的值中取值。</p>
-<p>也可以如下思路，这个石子的数量是奇数但是堆数是偶数，所以AB一定有个胜负，如果A胜利，则不管，如果是B胜利，就将选择顺序对调，还是A胜利。因此A一定总是胜利的。比如如下策略：将初始的石子按顺序编号，按照从1到N。分别计算奇数序号堆的石子总数和偶数序号堆的石子总数，一定有一堆大的，选择大的那一系列石子堆，则可以保证最后得到最多的石子。</p>
-<p>这个在<a href="[https://github.com/MisterBooo/LeetCodeAnimation/blob/master/notes/LeetCode%E7%AC%AC877%E5%8F%B7%E9%97%AE%E9%A2%98%EF%BC%9A%E7%9F%B3%E5%AD%90%E6%B8%B8%E6%88%8F.md](https://github.com/MisterBooo/LeetCodeAnimation/blob/master/notes/LeetCode第877号问题：石子游戏.md)">这个链接里</a>里有详细的解说。</p>
-<p>代码如下。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">stoneGame</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; piles)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p> BitBrave, 2019-10-05</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(871.%20Minimum%20Number%20of%20Refueling%20Stops)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(871.%20Minimum%20Number%20of%20Refueling%20Stops)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(871. Minimum Number of Refueling Stops)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-871-Minimum-Number-of-Refueling-Stops-题解"><a href="#LeetCode-871-Minimum-Number-of-Refueling-Stops-题解" class="headerlink" title="LeetCode(\871. Minimum Number of Refueling Stops)题解"></a>LeetCode(\871. Minimum Number of Refueling Stops)题解</h1><p>A car travels from a starting position to a destination which is <code>target</code> miles east of the starting position.</p>
-<p>Along the way, there are gas stations. Each <code>station[i]</code> represents a gas station that is <code>station[i][0]</code> miles east of the starting position, and has <code>station[i][1]</code> liters of gas.</p>
-<p>The car starts with an infinite tank of gas, which initially has <code>startFuel</code> liters of fuel in it. It uses 1 liter of gas per 1 mile that it drives.</p>
-<p>When the car reaches a gas station, it may stop and refuel, transferring all the gas from the station into the car.</p>
-<p>What is the least number of refueling stops the car must make in order to reach its destination? If it cannot reach the destination, return <code>-1</code>.</p>
-<p>Note that if the car reaches a gas station with 0 fuel left, the car can still refuel there. If the car reaches the destination with 0 fuel left, it is still considered to have arrived.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: target &#x3D; 1, startFuel &#x3D; 1, stations &#x3D; []</span><br><span class="line">Output: 0</span><br><span class="line">Explanation: We can reach the target without refueling.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: target &#x3D; 100, startFuel &#x3D; 1, stations &#x3D; [[10,100]]</span><br><span class="line">Output: -1</span><br><span class="line">Explanation: We can&#39;t reach the target (or even the first gas station).</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 3:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Input: target &#x3D; 100, startFuel &#x3D; 10, stations &#x3D; [[10,60],[20,30],[30,30],[60,40]]</span><br><span class="line">Output: 2</span><br><span class="line">Explanation: </span><br><span class="line">We start with 10 liters of fuel.</span><br><span class="line">We drive to position 10, expending 10 liters of fuel.  We refuel from 0 liters to 60 liters of gas.</span><br><span class="line">Then, we drive from position 10 to position 60 (expending 50 liters of fuel),</span><br><span class="line">and refuel from 10 liters to 50 liters of gas.  We then drive to and reach the target.</span><br><span class="line">We made 2 refueling stops along the way, so we return 2.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Note:</strong></p>
-<ol>
-<li><code>1 &lt;= target, startFuel, stations[i][1] &lt;= 10^9</code></li>
-<li><code>0 &lt;= stations.length &lt;= 500</code></li>
-<li><code>0 &lt; stations[0][0] &lt; stations[1][0] &lt; ... &lt; stations[stations.length-1][0] &lt; target</code></li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>有一个有油箱无限大的车，车本身的油可以走startFuel公里，从起始点0向东出发达到目的地（距离起始点target公里）。路上有一些加油站，每个加油站有一定量的油，stations[i][0]表示该加油站离起点的距离，stations[i][1]表示该加油站的油可以支持车跑多远。现在求出车到达目的地的最少的加油次数，如果不能到达，就返回-1.</p>
-<p>一般来说求极值问题可以使用DP问题求解。不过这个题如果简单地设为一最少加油站的次数作为转移特征很不好搞。我也是参考网上资料之后才想到DP的解法。总结如下。</p>
-<p>设定一个N+1大小的一维数组DP（N为加油站的个数），其中DP[i]表示加油i次能到达的最大距离。假设我们得到了这个DP数组，只需要遍历这个数组，找到最小的i使得DP[i]大于等于target即可。那么如何构建这个DP数组呢？</p>
-<p>可知，DP[0]=startFuel.因为不加油只能走这么远。</p>
-<p>那么接下来就依次根据离起点远近遍历所有的加油站，所幸给定的加油站就是根据距离排序的。当我们遍历到第i个加油站，我们已经得到了目前DP[0,…,i-1]的当前最优值。那么就遍历这些最优值，判断其能否到达i加油站，如果能就更新其DP[j+1] = max(DP[j+1], DP[j]+station[i][1]).表示在这个站加油一次之后能走的最远距离（也可能不加）。</p>
-<p>代码如下，时间复杂度O(n2)，空间复杂度O(n).</p>
-<p><code>Runtime: 52 ms, faster than 36.23% of C++ online submissions for Minimum Number of Refueling Stops.</code></p>
-<p><code>Memory Usage: 13.1 MB, less than 100.00% of C++ online submissions for Minimum Number of Refueling Stops.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minRefuelStops</span><span class="params">(<span class="keyword">int</span> target, <span class="keyword">int</span> startFuel, <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; stations)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = stations.<span class="built_in">size</span>();</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">long</span>&gt; <span class="title">DP</span><span class="params">(len+<span class="number">1</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">        DP[<span class="number">0</span>] = startFuel;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=i; j&gt;=<span class="number">0</span> &amp;&amp; DP[j]&gt;=stations[i][<span class="number">0</span>]; j--)&#123;</span><br><span class="line">                DP[j+<span class="number">1</span>] = <span class="built_in">max</span>(DP[j+<span class="number">1</span>], DP[j] + stations[i][<span class="number">1</span>]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;=len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(DP[i] &gt;= target) <span class="keyword">return</span> i;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>还有另一种使用Heap最大堆的办法，有时间再细看吧。</p>
-<p>或者我想到可以使用队列的方式，从起点开始，将当前车能到达的加油站放入队列，然后遍历这个队列，对每一个计算在这个加油站加油能走到的最远的距离，再将这些路途上能到达的加油站都记录上，清空当前的队列之后，再将记录的加油站都入队。要记住，每个入队的加油站都记着车在这里加油之后可以走到的最远距离。然后每一层就相当于车多停留一个站，这个过程中随时判断车是否能到达目标，能就直接返回当前的加油次数即可。</p>
-<p>BitBrave, 2019-10-05</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1093,12 +1089,12 @@ Output: false</code></pre><h2 id="解题思路"><a href="#解题思路" class="h
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">357</span>
+          <span class="site-state-item-count">360</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-count">37</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>

@@ -168,6 +168,253 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(810.%20Chalkboard%20XOR%20Game)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(810.%20Chalkboard%20XOR%20Game)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(810. Chalkboard XOR Game)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-810-Chalkboard-XOR-Game-题解"><a href="#LeetCode-810-Chalkboard-XOR-Game-题解" class="headerlink" title="LeetCode(810. Chalkboard XOR Game)题解"></a>LeetCode(810. Chalkboard XOR Game)题解</h1><p>We are given non-negative integers nums[i] which are written on a chalkboard.  Alice and Bob take turns erasing exactly one number from the chalkboard, with Alice starting first.  If erasing a number causes the bitwise XOR of all the elements of the chalkboard to become 0, then that player loses.  (Also, we’ll say the bitwise XOR of one element is that element itself, and the bitwise XOR of no elements is 0.)</p>
+<p>Also, if any player starts their turn with the bitwise XOR of all the elements of the chalkboard equal to 0, then that player wins.</p>
+<p>Return True if and only if Alice wins the game, assuming both players play optimally.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Example:</span><br><span class="line">Input: nums &#x3D; [1, 1, 2]</span><br><span class="line">Output: false</span><br><span class="line">Explanation: </span><br><span class="line">Alice has two choices: erase 1 or erase 2. </span><br><span class="line">If she erases 1, the nums array becomes [1, 2]. The bitwise XOR of all the elements of the chalkboard is 1 XOR 2 &#x3D; 3. Now Bob can remove any element he wants, because Alice will be the one to erase the last element and she will lose. </span><br><span class="line">If Alice erases 2 first, now nums becomes [1, 1]. The bitwise XOR of all the elements of the chalkboard is 1 XOR 1 &#x3D; 0. Alice will lose.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Notes:</strong></p>
+<ul>
+<li><code>1 &lt;= N &lt;= 1000</code>. </li>
+<li><code>0 &lt;= nums[i] &lt;= 2^16</code>.</li>
+</ul>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个数组，表示一个棋盘上的棋子，每个棋子有对应数组内的值。A和B两个人轮流从中删除一个棋子，从A先开始。判断胜负的标准是，如果一方删除一个棋子导致剩下棋子的值XOR值为0或者棋盘上没有棋子了，则落败，否则就继续下去。如果一方删除前就遇到棋盘的所有棋子XOR和为0，则获胜。假设双方都是按最优策略进行，判断A是否能获胜。</p>
+<p>这个题虽然是Hard的难度，但是其实异常简单。分析一下就可以得知，如果一方拿到删除权时棋盘上棋子XOR为0则自动获胜，否则，如果拿到时只剩一个棋子，那么这个人必输，因为删除了就没有了。反之如果剩两个，全一样或者棋子元素值全为0则自动获胜，那么随便删除一个留下一个不为0的棋子，就能导致对方只剩一个，则我必胜。若拿到三个，除非三个的XOR值为0，否则不管删除哪一个，都会导致对方剩两个从而导致自己必输。</p>
+<p>因此推广到一半的情况，如果A删除时棋盘棋子为奇数，那么以后每一轮都是奇数，到最后轮到A只剩一个棋子，肯定会输，除非轮到A时棋子的XOR值恰好为0。而按照双方最佳策略来说，B肯定不会给A这样的机会，因为如果B不得不给A这样的机会，那么就表示B不管删除棋盘中哪个棋子都使得其余棋子的XOR值为0，那么就表示这些值肯定都一样，一样则表示B拿到时就全部一样，B自动获胜。所以，不管怎样，A必输。</p>
+<p>反之，如果A删除时棋盘棋子为偶数，则AB的情况倒置，A必胜。</p>
+<p>因此代码如下，时间复杂度$O(N)$，空间复杂度$O(1)$:</p>
+<p><code>Runtime: 8 ms, faster than 98.47% of C++ online submissions for Chalkboard XOR Game.</code></p>
+<p><code>Memory Usage: 8.9 MB, less than 100.00% of C++ online submissions for Chalkboard XOR Game.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">xorGame</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i:nums) res ^= i;</span><br><span class="line">        <span class="keyword">return</span> res == <span class="number">0</span> || (nums.<span class="built_in">size</span>() &amp; <span class="number">1</span>) == <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-09-11</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(813.%20Largest%20Sum%20of%20Averages)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(813.%20Largest%20Sum%20of%20Averages)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(813. Largest Sum of Averages)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-813-Largest-Sum-of-Averages-题解"><a href="#LeetCode-813-Largest-Sum-of-Averages-题解" class="headerlink" title="LeetCode(813. Largest Sum of Averages)题解"></a>LeetCode(813. Largest Sum of Averages)题解</h1><hr>
+<p>We partition a row of numbers A into at most K adjacent (non-empty) groups, then our score is the sum of the average of each group. What is the largest score we can achieve?</p>
+<p>Note that our partition must use every number in A, and that scores are not necessarily integers.</p>
+<pre><code>Example:
+Input: 
+A = [9,1,2,3,9]
+K = 3
+Output: 20
+Explanation: 
+The best choice is to partition A into [9], [1, 2, 3], [9]. The answer is 9 + (1 + 2 + 3) / 3 + 9 = 20.
+We could have also partitioned A into [9, 1], [2], [3, 9], for example.
+That partition would lead to a score of 5 + 2 + 6 = 13, which is worse.</code></pre><p>Note:</p>
+<pre><code>1 &lt;= A.length &lt;= 100.
+1 &lt;= A[i] &lt;= 10000.
+1 &lt;= K &lt;= A.length.
+Answers within 10^-6 of the correct answer will be accepted as correct.</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>这道题给了我们一个数组，说是让我们将数组分成至多K个非空组，然后说需要统计的分数是各组的平均数之和，让我们求一个分割方法，使得这个分数值最大，当然这个分数值不一定是整型数。这道题限制了分割的组必须为非空组，至多分成K组。</p>
+<p>首先可以想到，如果K 大于等于数组的长度，那么根本无需分组，因为这样才不会损失数据。如果K小于数组长度就需要进行分组. 而对于这种情况如何做呢。可以使用DP。</p>
+<p>假设数组A的长度为lenA，要求分为K组，那么用大小为lenA*K的DP记录最优值，DP[i][k]表示A中1到i的元素中，最多分为k+1组时所得到的最优值。当i==0时，表示不分组</p>
+<p>那么状态转移方程就是如下——</p>
+<p>DP[i][k] = max(DP[i][k], DP[j][k-1]+sum(j, i-1, A)/(i-j));</p>
+<p>代码如下，时间复杂度O(n4), 空间复杂度O(n2):</p>
+<p>Runtime: 96 ms, faster than 5.08% of C++ online submissions for Largest Sum of Averages.<br>Memory Usage: 9.4 MB, less than 50.00% of C++ online submissions for Largest Sum of Averages.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">sum</span><span class="params">(<span class="keyword">int</span> sta, <span class="keyword">int</span> <span class="built_in">end</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(sta&lt;=<span class="built_in">end</span>) res += A[sta++];</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">largestSumOfAverages</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A, <span class="keyword">int</span> K)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = A.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span>(len&lt;=K) <span class="keyword">return</span> sum(<span class="number">0</span>, len<span class="number">-1</span>, A);</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">double</span>&gt;&gt; <span class="title">DP</span><span class="params">(len+<span class="number">1</span>, <span class="built_in">vector</span>&lt;<span class="keyword">double</span>&gt;(K+<span class="number">1</span>, <span class="number">0</span>))</span></span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;=len; i++) DP[i][<span class="number">0</span>] = sum(<span class="number">0</span>, i<span class="number">-1</span>, A)/i;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;=len; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">1</span>; k&lt;K; k++)&#123;</span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;=i; j++)&#123;</span><br><span class="line">                    DP[i][k] = <span class="built_in">max</span>(DP[i][k], DP[j][k<span class="number">-1</span>]+sum(j, i<span class="number">-1</span>, A)/(i-j));</span><br><span class="line">                    <span class="comment">//cout&lt;&lt;j&lt;&lt;" DP["&lt;&lt;i&lt;&lt;","&lt;&lt;k&lt;&lt;"]"&lt;&lt;": "&lt;&lt;DP[i][k]&lt;&lt;endl;</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> DP[len][K<span class="number">-1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>可以观察到，在K上，每次状态更新都只使用到了上一个K-1行的数据，因此可以将数组缩减为一维数组，同时，Sum可以用一个数组存储，从而避免重复计算。</p>
+<p>代码如下，时间复杂度O(n3),空间复杂度O(n):</p>
+<p>Runtime: 12 ms, faster than 63.89% of C++ online submissions for Largest Sum of Averages.<br>Memory Usage: 8.6 MB, less than 100.00% of C++ online submissions for Largest Sum of Averages.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">largestSumOfAverages</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A, <span class="keyword">int</span> K)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = A.<span class="built_in">size</span>();  </span><br><span class="line">        vector&lt;double&gt; DP(len+1, 0), Sum(len+1, 0);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;=len; i++)&#123;</span><br><span class="line">            Sum[i] = Sum[i<span class="number">-1</span>] + A[i<span class="number">-1</span>]; </span><br><span class="line">            DP[i] = Sum[i] / i;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(len&lt;=K) <span class="keyword">return</span> Sum[len];</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">1</span>; k &lt; K; k++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = len; i &gt;= <span class="number">1</span>; i--) &#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> j = i; j &gt;=<span class="number">0</span>; j--) &#123;</span><br><span class="line">                    DP[i] = <span class="built_in">max</span>(DP[i], DP[j]+(Sum[i]-Sum[j])/(i-j)); </span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> DP[len];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-09-03</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(814.%20Binary%20Tree%20Pruning)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(814.%20Binary%20Tree%20Pruning)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(814. Binary Tree Pruning)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-814-Binary-Tree-Pruning-题解"><a href="#LeetCode-814-Binary-Tree-Pruning-题解" class="headerlink" title="LeetCode(814. Binary Tree Pruning)题解"></a>LeetCode(814. Binary Tree Pruning)题解</h1><hr>
+<p>We are given the head node root of a binary tree, where additionally every node’s value is either a 0 or a 1.</p>
+<p>Return the same tree where every subtree (of the given tree) not containing a 1 has been removed.</p>
+<p>(Recall that the subtree of a node X is X, plus every node that is a descendant of X.)</p>
+<pre><code>Example 1:
+Input: [1,null,0,0,1]
+Output: [1,null,0,null,1]
+
+Explanation: 
+Only the red nodes satisfy the property &quot;every subtree not containing a 1&quot;.
+The diagram on the right represents the answer.</code></pre><p><img src="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/04/06/1028_2.png" alt=""></p>
+<pre><code>Example 2:
+Input: [1,0,1,0,0,0,1]
+Output: [1,null,1,null,1]</code></pre><p><img src="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/04/06/1028_1.png" alt=""></p>
+<pre><code>Example 3:
+Input: [1,1,0,1,1,0,1,0]
+Output: [1,1,0,1,1,null,1]</code></pre><p><img src="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/04/05/1028.png" alt=""></p>
+<p>Note:</p>
+<pre><code>The binary tree will have at most 100 nodes.
+The value of each node will only be 0 or 1.</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>除去二叉树中所有元素为0的子树。</p>
+<p>这个使用遍历的办法可以达到，使用Map遍历遇到的节点，记录该节点及其子树是否全部为0组成，如果全部为0，那么久表示这颗树需要删除，否则就不用删除。</p>
+<p>代码如下，时间复杂度O(n), 空间复杂度O(n):</p>
+<p>Runtime: 8 ms, faster than 5.19% of C++ online submissions for Binary Tree Pruning.<br>Memory Usage: 11.1 MB, less than 7.14% of C++ online submissions for Binary Tree Pruning.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">    <span class="built_in">map</span>&lt;TreeNode*, <span class="keyword">bool</span>&gt; M;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isAll0</span><span class="params">(TreeNode* root)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(M.<span class="built_in">find</span>(root) != M.<span class="built_in">end</span>()) <span class="keyword">return</span> M[root];</span><br><span class="line">        <span class="keyword">bool</span> l = isAll0(root-&gt;left), r = isAll0(root-&gt;right);</span><br><span class="line">        <span class="keyword">if</span>(l &amp;&amp; r)&#123;</span><br><span class="line">            M[root] = <span class="literal">true</span> &amp;&amp; root-&gt;val == <span class="number">0</span>;</span><br><span class="line">            root-&gt;left = <span class="literal">NULL</span>;</span><br><span class="line">            root-&gt;right = <span class="literal">NULL</span>;</span><br><span class="line">            <span class="keyword">return</span> M[root];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(l) root-&gt;left = <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">if</span>(r) root-&gt;right = <span class="literal">NULL</span>;</span><br><span class="line">        M[root] = <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">TreeNode* <span class="title">pruneTree</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        M[<span class="literal">NULL</span>] = <span class="literal">true</span>;</span><br><span class="line">        isAll0(root);</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-08-27</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(815.%20Bus%20Routes)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -705,258 +952,6 @@ Output: 2-&gt;3</code></pre><h2 id="解题思路"><a href="#解题思路" class=
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(826.%20Most%20Profit%20Assigning%20Work)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(826.%20Most%20Profit%20Assigning%20Work)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(826. Most Profit Assigning Work)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-826-Most-Profit-Assigning-Work-题解"><a href="#LeetCode-826-Most-Profit-Assigning-Work-题解" class="headerlink" title="LeetCode(826. Most Profit Assigning Work)题解"></a>LeetCode(826. Most Profit Assigning Work)题解</h1><p>We have jobs: <code>difficulty[i]</code> is the difficulty of the <code>i</code>th job, and <code>profit[i]</code> is the profit of the <code>i</code>th job. </p>
-<p>Now we have some workers. <code>worker[i]</code> is the ability of the <code>i</code>th worker, which means that this worker can only complete a job with difficulty at most <code>worker[i]</code>. </p>
-<p>Every worker can be assigned at most one job, but one job can be completed multiple times.</p>
-<p>For example, if 3 people attempt the same job that pays $1, then the total profit will be $3.  If a worker cannot complete any job, his profit is $0.</p>
-<p>What is the most profit we can make?</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: difficulty &#x3D; [2,4,6,8,10], profit &#x3D; [10,20,30,40,50], worker &#x3D; [4,5,6,7]</span><br><span class="line">Output: 100 </span><br><span class="line">Explanation: Workers are assigned jobs of difficulty [4,4,6,6] and they get profit of [20,20,30,30] seperately.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Notes:</strong></p>
-<ul>
-<li><code>1 &lt;= difficulty.length = profit.length &lt;= 10000</code></li>
-<li><code>1 &lt;= worker.length &lt;= 10000</code></li>
-<li><code>difficulty[i], profit[i], worker[i]</code>  are in range <code>[1, 10^5]</code></li>
-</ul>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>现在有一些工作，每个工作有不同的困难度，比如工作1的困难度3，工作2困难度4.然后每个工作有各自不同的收益。一些工人有自己的能力值，每个工人只能完成困难度不能高于自己能力值的工作，完成一个工作得到一份收益。一个工人只能完成一份工作，但是一个工作可以被多个人完成。求这种情况下，这些工人可以获得的最大收益是多少。</p>
-<p>我们可以这样想，一个工人需要在自己能力范围内完成尽可能高收益的工作。因此直接把工人可以完成的工作中，最高收益的工作完成即可。针对每个工人，对工作进行全搜索当然可以行。但是这样会花费O(N)的时间。</p>
-<p>因此，可以构建一个数组S，将工作W[i]按照困难度排序之后的i作为S的key，低于这个困难度的工作中最大收益作为value，这样只需要使用O(logn).就可以得到一名工人可以得到的最大收益了。但是其实也有一个Trick，可以将工人也按照能力值排序，比如从小到大，然后利用双指针法，平均花费O(1)的时间就可以得到一名工人的收益。</p>
-<p>如何构建这个数组呢？可以先将工作按照困难度排序，然后遍历工作，从小到大，将每个元素换成小于等于这个困难度的工作中的最大收益即可，时间复杂度O(nlogn).这里有一个Trick，不要直接对困难度排序，而是建一个数组，存储各个工作的编号，对编号进行排序。</p>
-<p>但是上述因为C++的Sort排序必须静态，我懒得自己写Sort函数。因此采用如下策略。<br>将任务按照difficult 从小到大排</p>
-<p>将worker 从小到大排</p>
-<p>对于当前的worker遍历它力所能及的工作并取最大利润</p>
-<p>那么下一个worker在上一个worker利润基础上，继续遍历力所能及的范围</p>
-<p>排序后one pass即可</p>
-<p>这道题的基本逻辑是，如果workerA 比workerB能力大，那么B能获得的利润肯定比A高。</p>
-<p>时间复杂度不变，空间复杂度反而还降低了，但是还是需要自己写排序函数，因此我选择Python。</p>
-<p>代码如下，设工人数量M，工作数N。则空间复杂度O(1)，时间复杂度O(NlogN+MlogM+N+M)。</p>
-<p><code>Runtime: 336 ms, faster than 70.70% of Python online submissions for Most Profit Assigning Work.</code></p>
-<p><code>Memory Usage: 14.3 MB, less than 100.00% of Python online submissions for Most Profit Assigning Work.</code></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">maxProfitAssignment</span><span class="params">(self, difficulty, profit, worker)</span>:</span></span><br><span class="line">        jobs = sorted(zip(difficulty, profit))</span><br><span class="line">        worker.sort()</span><br><span class="line">        index, cur_max, res = <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> ability <span class="keyword">in</span> worker:</span><br><span class="line">            <span class="keyword">while</span>(index &lt; len(difficulty) <span class="keyword">and</span> ability &gt;= jobs[index][<span class="number">0</span>]):</span><br><span class="line">                cur_max = max(cur_max, jobs[index][<span class="number">1</span>])</span><br><span class="line">                index += <span class="number">1</span></span><br><span class="line">                </span><br><span class="line">            res += cur_max</span><br><span class="line">        <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2019-09-24.</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(835.%20Image%20Overlap)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(835.%20Image%20Overlap)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(835. Image Overlap)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Leetcode-835-Image-Overlap-题解"><a href="#Leetcode-835-Image-Overlap-题解" class="headerlink" title="Leetcode(835. Image Overlap)题解"></a>Leetcode(835. Image Overlap)题解</h1><p>Two images <code>A</code> and <code>B</code> are given, represented as binary, square matrices of the same size.  (A binary matrix has only 0s and 1s as values.)</p>
-<p>We translate one image however we choose (sliding it left, right, up, or down any number of units), and place it on top of the other image.  After, the <em>overlap</em> of this translation is the number of positions that have a 1 in both images.</p>
-<p>(Note also that a translation does <strong>not</strong> include any kind of rotation.)</p>
-<p>What is the largest possible overlap?</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Input: A &#x3D; [[1,1,0],</span><br><span class="line">            [0,1,0],</span><br><span class="line">            [0,1,0]]</span><br><span class="line">       B &#x3D; [[0,0,0],</span><br><span class="line">            [0,1,1],</span><br><span class="line">            [0,0,1]]</span><br><span class="line">Output: 3</span><br><span class="line">Explanation: We slide A to right by 1 unit and down by 1 unit.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Notes:</strong> </p>
-<ol>
-<li><code>1 &lt;= A.length = A[0].length = B.length = B[0].length &lt;= 30</code></li>
-<li><code>0 &lt;= A[i][j], B[i][j] &lt;= 1</code></li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给两个二值数组，可以上下左右移动，求出其1值重叠的最大的大小。</p>
-<p>民工题，保持一个数组不变，每次移动变换另一个数组，进行比较即可。</p>
-<p>代码如下，时间复杂度$O(n^4)$，空间复杂度$O(n^2)$:</p>
-<p><code>Runtime: 36 ms, faster than 74.91% of C++ online submissions for Image Overlap. Memory Usage: 9.2 MB, less than 86.67% of C++ online submissions for Image Overlap.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; A_;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; B_;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">Overlap</span><span class="params">(<span class="keyword">int</span> r, <span class="keyword">int</span> c, <span class="keyword">int</span> row, <span class="keyword">int</span> col, <span class="keyword">bool</span> pre)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span>(pre)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=r; i&lt;row; i++)</span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> j=c; j&lt;col; j++)</span><br><span class="line">                   res += A_[i][j] &amp; B_[i][j];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;=r; i++)</span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;=c; j++)</span><br><span class="line">                   res += A_[i][j] &amp; B_[i][j];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Fill</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; A, <span class="keyword">int</span> r, <span class="keyword">int</span> c, <span class="keyword">int</span> row, <span class="keyword">int</span> col, <span class="keyword">bool</span> pre)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(pre)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;row-r; i++)&#123;</span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;col-c; j++)&#123;</span><br><span class="line">                    A_[i+r][j+c] = A[i][j];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;=r; i++)&#123;</span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;=c; j++)&#123;</span><br><span class="line">                    A_[i][j] = A[row<span class="number">-1</span>-r+i][col<span class="number">-1</span>-c+j];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">largestOverlap</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; A, <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; B)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> row = A.<span class="built_in">size</span>(), col = A[<span class="number">0</span>].<span class="built_in">size</span>(), res = <span class="number">0</span>;</span><br><span class="line">        A_ = <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;(row, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(col, <span class="number">0</span>));</span><br><span class="line">        B_ = B;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;row; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;col; j++)&#123;</span><br><span class="line">                Fill(A, i, j, row, col, <span class="literal">true</span>);</span><br><span class="line">                res = <span class="built_in">max</span>(res, Overlap(i, j, row, col, <span class="literal">true</span>));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">fill</span>(A_.<span class="built_in">begin</span>(), A_.<span class="built_in">end</span>(), <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(col, <span class="number">0</span>));</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=row<span class="number">-1</span>; i&gt;=<span class="number">0</span>; i--)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=col<span class="number">-1</span>; j&gt;=<span class="number">0</span>; j--)&#123;</span><br><span class="line">                Fill(A, i, j, row, col, <span class="literal">false</span>);</span><br><span class="line">                <span class="comment">//cout&lt;&lt;i&lt;&lt;" "&lt;&lt;j&lt;&lt;" "&lt;&lt;Overlap(i, j, row, col, false)&lt;&lt;endl;</span></span><br><span class="line">                res = <span class="built_in">max</span>(res, Overlap(i, j, row, col, <span class="literal">false</span>));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2019-09-06</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(837.%20New%2021%20Game)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(837.%20New%2021%20Game)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(837. New 21 Game)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-837-New-21-Game-题解"><a href="#LeetCode-837-New-21-Game-题解" class="headerlink" title="LeetCode(837. New 21 Game)题解"></a>LeetCode(837. New 21 Game)题解</h1><p>Alice plays the following game, loosely based on the card game “21”.</p>
-<p>Alice starts with <code>0</code> points, and draws numbers while she has less than <code>K</code> points.  During each draw, she gains an integer number of points randomly from the range <code>[1, W]</code>, where <code>W</code> is an integer.  Each draw is independent and the outcomes have equal probabilities.</p>
-<p>Alice stops drawing numbers when she gets <code>K</code> or more points.  What is the probability that she has <code>N</code>or less points?</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: N &#x3D; 10, K &#x3D; 1, W &#x3D; 10</span><br><span class="line">Output: 1.00000</span><br><span class="line">Explanation:  Alice gets a single card, then stops.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Input: N &#x3D; 6, K &#x3D; 1, W &#x3D; 10</span><br><span class="line">Output: 0.60000</span><br><span class="line">Explanation:  Alice gets a single card, then stops.</span><br><span class="line">In 6 out of W &#x3D; 10 possibilities, she is at or below N &#x3D; 6 points.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 3:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: N &#x3D; 21, K &#x3D; 17, W &#x3D; 10</span><br><span class="line">Output: 0.73278</span><br></pre></td></tr></table></figure>
-
-<p><strong>Note:</strong></p>
-<ol>
-<li><code>0 &lt;= K &lt;= N &lt;= 10000</code></li>
-<li><code>1 &lt;= W &lt;= 10000</code></li>
-<li>Answers will be accepted as correct if they are within <code>10^-5</code> of the correct answer.</li>
-<li>The judging time limit has been reduced for this question.</li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>新21点，给定三个数N，W，K，其中N小于等于K。每次从[1,W]中随机选一个数，累积的超过或者等于K时就停止，这时候求对应的和小于等于N的概率。</p>
-<p>可以知道，当K大于N时，概率一定是0。</p>
-<p>这个题可以用DP的方法求解：我们维护一个一维数组dp，其中dp[i]表示当目标为i时的概率，由于最后一次的选择的排数的范围为[i-w,i-1]，这时可选的牌有[1,w]，所以最后的点数和是[i,w+i-1]，对应我们是要求大于等于K的数，所以最后的累加范围是[K,K+W-1]，所以我们的结果便是返回dp[i]（K&lt;=i&lt;=K+W-1）的和。最后还有一个小技巧，由于最后的范围是[K,K+W-1]，如果N&gt;=K+W-1（意味着在最后一次累加和[K-W,K-1]选择时，无论选择[1,W]中的任何数，最后的累加和一定在[K,N]范围内，在这种条件下[K,K+W-1]是[K,N]的子集，所以直接返回1，如果N&lt;K+W-1，那么我们最后的答案就只用累加[K,N]的dp值即可，所以申请长度为N+1的数组即可）。</p>
-<p>而DP的计算，按照正常的思路，代码如下：时间复杂度$O(n^2)$，空间复杂度$O(n)$:</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">new21Game</span><span class="params">(<span class="keyword">int</span> N, <span class="keyword">int</span> K, <span class="keyword">int</span> W)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(N&gt;=K+W<span class="number">-1</span> || K==<span class="number">0</span>) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">double</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">double</span>&gt; <span class="title">D</span><span class="params">(N+<span class="number">1</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">        D[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;=K; i++)&#123;</span><br><span class="line">            <span class="comment">//if(i&lt;=W) D[i] = 1.0/W;</span></span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=i<span class="number">-1</span>; j&gt;=<span class="number">0</span> &amp;&amp; i-j&lt;=W; j--) D[i] += <span class="number">1.0</span>/W * D[j];</span><br><span class="line">        &#125;</span><br><span class="line">        res = D[K];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=K+<span class="number">1</span>; i&lt;=N; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=K<span class="number">-1</span>; j&gt;=<span class="number">0</span> &amp;&amp; i-j&lt;=W; j--) D[i] += <span class="number">1.0</span>/W * D[j];</span><br><span class="line">            res += D[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>但是上述代码会超时，因为重复了很多无意义的计算，仔细观察第二个for循环，发现可以使用一个sum_维持最多W长度的局部概率值和，可以替代掉第二个for循环。</p>
-<p>因此优化的代码如下，时间复杂度$O(n)$，空间复杂度$O(n)$:</p>
-<p><code>Runtime: 4 ms, faster than 82.13% of C++ online submissions for New 21 Game. Memory Usage: 11.6 MB, less than 100.00% of C++ online submissions for New 21 Game.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">new21Game</span><span class="params">(<span class="keyword">int</span> N, <span class="keyword">int</span> K, <span class="keyword">int</span> W)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(N&gt;=K+W<span class="number">-1</span> || K==<span class="number">0</span>) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">double</span> res = <span class="number">0</span>, sum_ = <span class="number">0</span>;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">double</span>&gt; <span class="title">D</span><span class="params">(N+<span class="number">1</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;=N; i++)&#123;</span><br><span class="line">            D[i] = i&lt;=W ? sum_/W + <span class="number">1.0</span>/W : sum_/W;</span><br><span class="line">            <span class="keyword">if</span>(i&lt;K) sum_ += D[i];</span><br><span class="line">            <span class="keyword">else</span> res += D[i];</span><br><span class="line">            <span class="keyword">if</span>(i&gt;W) sum_ -= D[i-W];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-09-13</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1027,12 +1022,12 @@ Output: 2-&gt;3</code></pre><h2 id="解题思路"><a href="#解题思路" class=
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">357</span>
+          <span class="site-state-item-count">360</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-count">37</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>

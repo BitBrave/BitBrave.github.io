@@ -168,6 +168,270 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(870.%20Advantage%20Shuffle)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(870.%20Advantage%20Shuffle)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(870. Advantage Shuffle)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="LeetCode-870-Advantage-Shuffle-题解"><a href="#LeetCode-870-Advantage-Shuffle-题解" class="headerlink" title="LeetCode(870. Advantage Shuffle)题解"></a>LeetCode(870. Advantage Shuffle)题解</h2><p>Given two arrays <code>A</code> and <code>B</code> of equal size, the <em>advantage of A with respect to B</em> is the number of indices <code>i</code> for which <code>A[i] &gt; B[i]</code>.</p>
+<p>Return <strong>any</strong> permutation of <code>A</code> that maximizes its advantage with respect to <code>B</code>.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: A &#x3D; [2,7,11,15], B &#x3D; [1,10,4,11]</span><br><span class="line">Output: [2,11,7,15]</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: A &#x3D; [12,24,8,32], B &#x3D; [13,25,32,11]</span><br><span class="line">Output: [24,32,8,12]</span><br></pre></td></tr></table></figure>
+
+<p><strong>Note:</strong></p>
+<ol>
+<li><p><code>1 &lt;= A.length = B.length &lt;= 10000</code></p>
+</li>
+<li><p><code>0 &lt;= A[i] &lt;= 10^9</code></p>
+</li>
+<li><p><code>0 &lt;= B[i] &lt;= 10^9</code></p>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2></li>
+</ol>
+<p>给定两个等长的数组A和B，其中A的优势就是A中对应位置的元素大于B中对应位置的元素的数量。现在对A重排列，最大化A的优势。如果有多个答案，返回其中任意一个即可。</p>
+<p>这个题直观上就可以使用Greedy做，我们对于B中的一个元素B[i]，如果A中有比它大的元素，那么我们只选择比它大的元素中最小的那个即可，这样可以最大限度地保留A能覆盖其它B中元素的可能性。</p>
+<p>因此，算法如下，将A，B都升序排序。然后分别遍历AB中的元素，A中使用i，B中使用j。初始化i=0，j=0.</p>
+<p>然后如下判断——</p>
+<ul>
+<li><p>i==len(A)，表明已经遍历完成了，直接结束算法。</p>
+</li>
+<li><p>A[i]&gt;B[j]，表示此时可以覆盖，直接i = i+1，j = j+1.</p>
+</li>
+<li><p>A[i]&lt;=B[j]，表示此时不能覆盖，就在不超过len(A)的情况下不断增加i，判断A[i]是否可以大于B[j]，如果到最后都不能大于，则表明A中剩下的数已经都不能大于B中任何数了，就直接结束算法。如果走到一个i的值，有A[i]大于B[j]，就直接使用这个与最开始的i进行交换即可。然后i = i+1，j = j+1.</p>
+</li>
+</ul>
+<p>代码如下，排序时间复杂度O(nlogn)，加上判断的时间O(n)，总的时间复杂度为O(nlogn)，但是因为最后返回的数组要按照B的顺序，因此要把A重新排位置，这就需要一开始记住B原数组的位置，因此需要使用一个数组记录，空间复杂度O(n)。</p>
+<p><code>Runtime: 156 ms, faster than 90.29% of C++ online submissions for Advantage Shuffle.</code></p>
+<p><code>Memory Usage: 14.3 MB, less than 100.00% of C++ online submissions for Advantage Shuffle.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; B_;</span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> B_[a] &lt; B_[b];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">advantageCount</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; B)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = A.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> i, j, b = len - <span class="number">1</span>;</span><br><span class="line">        </span><br><span class="line">        vector&lt;int&gt; ret(len, -1), p(len, -1);</span><br><span class="line">        B_ = B;</span><br><span class="line">        <span class="keyword">for</span>(i=<span class="number">0</span>; i&lt;len; i++) p[i] = i;</span><br><span class="line">        sort(A.<span class="built_in">begin</span>(), A.<span class="built_in">end</span>());</span><br><span class="line">        sort(p.<span class="built_in">begin</span>(), p.<span class="built_in">end</span>(), cmp);</span><br><span class="line">        </span><br><span class="line">        i = j = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(i &lt; len)&#123;</span><br><span class="line">            <span class="keyword">while</span>(i &lt; len &amp;&amp; A[i] &lt;= B[p[j]]) ret[p[b--]] = A[i++];</span><br><span class="line">            <span class="keyword">if</span>(i &lt; len) ret[p[j++]] = A[i++];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave,2019-10-24</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(877.%20Stone%20Game)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(877.%20Stone%20Game)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(877. Stone Game)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-877-Stone-Game-题解"><a href="#LeetCode-877-Stone-Game-题解" class="headerlink" title="LeetCode(877. Stone Game)题解"></a>LeetCode(877. Stone Game)题解</h1><p>Alex and Lee play a game with piles of stones.  There are an even number of piles <strong>arranged in a row</strong>, and each pile has a positive integer number of stones <code>piles[i]</code>.</p>
+<p>The objective of the game is to end with the most stones.  The total number of stones is odd, so there are no ties.</p>
+<p>Alex and Lee take turns, with Alex starting first.  Each turn, a player takes the entire pile of stones from either the beginning or the end of the row.  This continues until there are no more piles left, at which point the person with the most stones wins.</p>
+<p>Assuming Alex and Lee play optimally, return <code>True</code> if and only if Alex wins the game.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Input: [5,3,4,5]</span><br><span class="line">Output: true</span><br><span class="line">Explanation: </span><br><span class="line">Alex starts first, and can only take the first 5 or the last 5.</span><br><span class="line">Say he takes the first 5, so that the row becomes [3, 4, 5].</span><br><span class="line">If Lee takes 3, then the board is [4, 5], and Alex takes 5 to win with 10 points.</span><br><span class="line">If Lee takes the last 5, then the board is [3, 4], and Alex takes 4 to win with 9 points.</span><br><span class="line">This demonstrated that taking the first 5 was a winning move for Alex, so we return true.</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Note:</strong></p>
+<ol>
+<li><code>2 &lt;= piles.length &lt;= 500</code></li>
+<li><code>piles.length</code> is even.</li>
+<li><code>1 &lt;= piles[i] &lt;= 500</code></li>
+<li><code>sum(piles)</code> is odd.</li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>有一个从左到右一堆堆排列的石子，每堆石子有不同的数量，但是石子的总数是奇数，石子的堆数是偶数。现在A和B玩一个游戏，从A开始，轮流从左边或者右边选一堆石子，最后每个人都有相同堆数的石子，但是因为石子的数目是奇数，因此两个人的石子数不可能一样。最后，得到石子多的人获得游戏的胜利，假设A和B都是按照最优的策略选择石子，判断A是否能获胜。</p>
+<p>这个题可以用常规的DP来做，转一下思路，A寻找最大的值，而B是从A得到的值中取值。</p>
+<p>也可以如下思路，这个石子的数量是奇数但是堆数是偶数，所以AB一定有个胜负，如果A胜利，则不管，如果是B胜利，就将选择顺序对调，还是A胜利。因此A一定总是胜利的。比如如下策略：将初始的石子按顺序编号，按照从1到N。分别计算奇数序号堆的石子总数和偶数序号堆的石子总数，一定有一堆大的，选择大的那一系列石子堆，则可以保证最后得到最多的石子。</p>
+<p>这个在<a href="[https://github.com/MisterBooo/LeetCodeAnimation/blob/master/notes/LeetCode%E7%AC%AC877%E5%8F%B7%E9%97%AE%E9%A2%98%EF%BC%9A%E7%9F%B3%E5%AD%90%E6%B8%B8%E6%88%8F.md](https://github.com/MisterBooo/LeetCodeAnimation/blob/master/notes/LeetCode第877号问题：石子游戏.md)">这个链接里</a>里有详细的解说。</p>
+<p>代码如下。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">stoneGame</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; piles)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p> BitBrave, 2019-10-05</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(871.%20Minimum%20Number%20of%20Refueling%20Stops)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(871.%20Minimum%20Number%20of%20Refueling%20Stops)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(871. Minimum Number of Refueling Stops)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-871-Minimum-Number-of-Refueling-Stops-题解"><a href="#LeetCode-871-Minimum-Number-of-Refueling-Stops-题解" class="headerlink" title="LeetCode(\871. Minimum Number of Refueling Stops)题解"></a>LeetCode(\871. Minimum Number of Refueling Stops)题解</h1><p>A car travels from a starting position to a destination which is <code>target</code> miles east of the starting position.</p>
+<p>Along the way, there are gas stations. Each <code>station[i]</code> represents a gas station that is <code>station[i][0]</code> miles east of the starting position, and has <code>station[i][1]</code> liters of gas.</p>
+<p>The car starts with an infinite tank of gas, which initially has <code>startFuel</code> liters of fuel in it. It uses 1 liter of gas per 1 mile that it drives.</p>
+<p>When the car reaches a gas station, it may stop and refuel, transferring all the gas from the station into the car.</p>
+<p>What is the least number of refueling stops the car must make in order to reach its destination? If it cannot reach the destination, return <code>-1</code>.</p>
+<p>Note that if the car reaches a gas station with 0 fuel left, the car can still refuel there. If the car reaches the destination with 0 fuel left, it is still considered to have arrived.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: target &#x3D; 1, startFuel &#x3D; 1, stations &#x3D; []</span><br><span class="line">Output: 0</span><br><span class="line">Explanation: We can reach the target without refueling.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: target &#x3D; 100, startFuel &#x3D; 1, stations &#x3D; [[10,100]]</span><br><span class="line">Output: -1</span><br><span class="line">Explanation: We can&#39;t reach the target (or even the first gas station).</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 3:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Input: target &#x3D; 100, startFuel &#x3D; 10, stations &#x3D; [[10,60],[20,30],[30,30],[60,40]]</span><br><span class="line">Output: 2</span><br><span class="line">Explanation: </span><br><span class="line">We start with 10 liters of fuel.</span><br><span class="line">We drive to position 10, expending 10 liters of fuel.  We refuel from 0 liters to 60 liters of gas.</span><br><span class="line">Then, we drive from position 10 to position 60 (expending 50 liters of fuel),</span><br><span class="line">and refuel from 10 liters to 50 liters of gas.  We then drive to and reach the target.</span><br><span class="line">We made 2 refueling stops along the way, so we return 2.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Note:</strong></p>
+<ol>
+<li><code>1 &lt;= target, startFuel, stations[i][1] &lt;= 10^9</code></li>
+<li><code>0 &lt;= stations.length &lt;= 500</code></li>
+<li><code>0 &lt; stations[0][0] &lt; stations[1][0] &lt; ... &lt; stations[stations.length-1][0] &lt; target</code></li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>有一个有油箱无限大的车，车本身的油可以走startFuel公里，从起始点0向东出发达到目的地（距离起始点target公里）。路上有一些加油站，每个加油站有一定量的油，stations[i][0]表示该加油站离起点的距离，stations[i][1]表示该加油站的油可以支持车跑多远。现在求出车到达目的地的最少的加油次数，如果不能到达，就返回-1.</p>
+<p>一般来说求极值问题可以使用DP问题求解。不过这个题如果简单地设为一最少加油站的次数作为转移特征很不好搞。我也是参考网上资料之后才想到DP的解法。总结如下。</p>
+<p>设定一个N+1大小的一维数组DP（N为加油站的个数），其中DP[i]表示加油i次能到达的最大距离。假设我们得到了这个DP数组，只需要遍历这个数组，找到最小的i使得DP[i]大于等于target即可。那么如何构建这个DP数组呢？</p>
+<p>可知，DP[0]=startFuel.因为不加油只能走这么远。</p>
+<p>那么接下来就依次根据离起点远近遍历所有的加油站，所幸给定的加油站就是根据距离排序的。当我们遍历到第i个加油站，我们已经得到了目前DP[0,…,i-1]的当前最优值。那么就遍历这些最优值，判断其能否到达i加油站，如果能就更新其DP[j+1] = max(DP[j+1], DP[j]+station[i][1]).表示在这个站加油一次之后能走的最远距离（也可能不加）。</p>
+<p>代码如下，时间复杂度O(n2)，空间复杂度O(n).</p>
+<p><code>Runtime: 52 ms, faster than 36.23% of C++ online submissions for Minimum Number of Refueling Stops.</code></p>
+<p><code>Memory Usage: 13.1 MB, less than 100.00% of C++ online submissions for Minimum Number of Refueling Stops.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minRefuelStops</span><span class="params">(<span class="keyword">int</span> target, <span class="keyword">int</span> startFuel, <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; stations)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = stations.<span class="built_in">size</span>();</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">long</span>&gt; <span class="title">DP</span><span class="params">(len+<span class="number">1</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">        DP[<span class="number">0</span>] = startFuel;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=i; j&gt;=<span class="number">0</span> &amp;&amp; DP[j]&gt;=stations[i][<span class="number">0</span>]; j--)&#123;</span><br><span class="line">                DP[j+<span class="number">1</span>] = <span class="built_in">max</span>(DP[j+<span class="number">1</span>], DP[j] + stations[i][<span class="number">1</span>]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;=len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(DP[i] &gt;= target) <span class="keyword">return</span> i;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>还有另一种使用Heap最大堆的办法，有时间再细看吧。</p>
+<p>或者我想到可以使用队列的方式，从起点开始，将当前车能到达的加油站放入队列，然后遍历这个队列，对每一个计算在这个加油站加油能走到的最远的距离，再将这些路途上能到达的加油站都记录上，清空当前的队列之后，再将记录的加油站都入队。要记住，每个入队的加油站都记着车在这里加油之后可以走到的最远距离。然后每一层就相当于车多停留一个站，这个过程中随时判断车是否能到达目标，能就直接返回当前的加油次数即可。</p>
+<p>BitBrave, 2019-10-05</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(875.%20Koko%20Eating%20Bananas)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -771,258 +1035,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(894.%20All%20Possible%20Full%20Binary%20Trees)%20%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(894.%20All%20Possible%20Full%20Binary%20Trees)%20%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(894. All Possible Full Binary Trees) 题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-894-All-Possible-Full-Binary-Trees-题解"><a href="#LeetCode-894-All-Possible-Full-Binary-Trees-题解" class="headerlink" title="LeetCode(894. All Possible Full Binary Trees) 题解"></a>LeetCode(894. All Possible Full Binary Trees) 题解</h1><p>A <em>full binary tree</em> is a binary tree where each node has exactly 0 or 2 children.</p>
-<p>Return a list of all possible full binary trees with <code>N</code> nodes.  Each element of the answer is the root node of one possible tree.</p>
-<p>Each <code>node</code> of each tree in the answer <strong>must</strong> have <code>node.val = 0</code>.</p>
-<p>You may return the final list of trees in any order.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: 7</span><br><span class="line">Output: [[0,0,0,null,null,0,0,null,null,0,0],[0,0,0,null,null,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,null,null,null,null,0,0],[0,0,0,0,0,null,null,0,0]]</span><br><span class="line">Explanation:</span><br></pre></td></tr></table></figure>
-
-<p> <img src="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/08/22/fivetrees.png" alt=""></p>
-<p><strong>Note:</strong></p>
-<ul>
-<li><code>1 &lt;= N &lt;= 20</code></li>
-</ul>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>输入一个数，输出对应节点数的完全二叉树（由度只有0和2的节点组成的二叉树）。</p>
-<p>设二叉树节点叶子节点数为a，则内部节点为a-1。有2*a-1=N。因此完全二叉树的左右子树也一定是一个完全二叉树，其节点数也一定是奇数。</p>
-<p>知道了这个性质，就可以依次左边放置奇数个节点，右边放置奇数个节点，遍历所有的情况即可。</p>
-<p>代码如下，时间复杂度O(n)=2 * (O(1)+O(3)+O(i)+O(N-4)+O(N-2))+O(1) * O(N-2)+O(3) * O(N-4)+…+O(N-2) * O(1)，O(1) = 1. 空间复杂度就是多个二叉树的存储。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;TreeNode*&gt; <span class="title">allPossibleFBT</span><span class="params">(<span class="keyword">int</span> N)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(N == <span class="number">1</span>) <span class="keyword">return</span> <span class="built_in">vector</span>&lt;TreeNode*&gt;(&#123;<span class="keyword">new</span> TreeNode(<span class="number">0</span>)&#125;);</span><br><span class="line">        <span class="built_in">vector</span>&lt;TreeNode*&gt; res;</span><br><span class="line">        <span class="keyword">if</span>(N &amp; <span class="number">1</span> == <span class="number">0</span>) <span class="keyword">return</span> res;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;=N<span class="number">-2</span>; i+=<span class="number">2</span>)&#123;</span><br><span class="line">            <span class="built_in">vector</span>&lt;TreeNode*&gt; left = allPossibleFBT(i), right = allPossibleFBT(N-i<span class="number">-1</span>);</span><br><span class="line">            <span class="keyword">for</span>(TreeNode* l : left)&#123;</span><br><span class="line">                <span class="keyword">for</span>(TreeNode* r : right)&#123;</span><br><span class="line">                    TreeNode* root = <span class="keyword">new</span> TreeNode(<span class="number">0</span>);</span><br><span class="line">                    root-&gt;left = l;</span><br><span class="line">                    root-&gt;right = r;</span><br><span class="line">                    res.push_back(root);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2019-09-29</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(89.%20Gray%20Code)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(89.%20Gray%20Code)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(89. Gray Code)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-89-Gray-Code-题解"><a href="#LeetCode-89-Gray-Code-题解" class="headerlink" title="LeetCode(89. Gray Code)题解"></a>LeetCode(89. Gray Code)题解</h1><hr>
-<p>The gray code is a binary numeral system where two successive values differ in only one bit.</p>
-<p>Given a non-negative integer n representing the total number of bits in the code, print the sequence of gray code. A gray code sequence must begin with 0.</p>
-<p>Example 1:</p>
-<pre><code>Input: 2
-Output: [0,1,3,2]
-Explanation:
-00 - 0
-01 - 1
-11 - 3
-10 - 2
-
-For a given n, a gray code sequence may not be uniquely defined.
-For example, [0,2,3,1] is also a valid gray code sequence.
-
-00 - 0
-10 - 2
-11 - 3
-01 - 1</code></pre><p>Example 2:</p>
-<pre><code>Input: 0
-Output: [0]
-Explanation: We define the gray code sequence to begin with 0.
-            A gray code sequence of n has size = 2n, which for n = 0 the size is 20 = 1.
-            Therefore, for n = 0 the gray code sequence is [0].</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>灰色代码是一个二进制数字系统，其中两个连续的值只相差一位。给定一个非负整数n表示代码中的总比特数，打印灰色代码序列。灰色代码序列必须以0开头。</p>
-<p>直白的解释就是，对给定的n，设计n个01组成的序列，一共2的n次方个，一次排列，使得每个序列之间只相差一个字符。</p>
-<p>可以使用类似于递归的办法解决（一个for循环就可以）。假设n-1的情况下有2的n-1次方个序列已经排好了，那个扩展到n的时候。首先将0加到所有序列之上，形成一个2的n-1次方个的序列集，按顺序存储。然后将所有开头的0换成1，倒顺序存储到序列集内。如此即完成了2的n次方的组合。</p>
-<p>代码如下：</p>
-<p>Runtime: 4 ms, faster than 92.85% of C++ online submissions for Gray Code.<br>Memory Usage: 8.6 MB, less than 57.17% of C++ online submissions for Gray Code.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">grayCode</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; res;</span><br><span class="line">        <span class="keyword">int</span> len = <span class="number">1</span>, t = <span class="number">0</span>;</span><br><span class="line">        res.push_back(<span class="number">0</span>);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;n; i++)&#123;</span><br><span class="line">            t = <span class="built_in">pow</span>(<span class="number">2</span>, i);</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=len<span class="number">-1</span>; j&gt;<span class="number">-1</span>; j--) res.push_back(t + res[j]);</span><br><span class="line">            len *= <span class="number">2</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BItBrave，2019-06-19</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(898.%20Bitwise%20ORs%20of%20Subarrays)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(898.%20Bitwise%20ORs%20of%20Subarrays)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(898. Bitwise ORs of Subarrays)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-898-Bitwise-ORs-of-Subarrays-题解"><a href="#LeetCode-898-Bitwise-ORs-of-Subarrays-题解" class="headerlink" title="LeetCode(898. Bitwise ORs of Subarrays)题解"></a>LeetCode(898. Bitwise ORs of Subarrays)题解</h1><p>We have an array <code>A</code> of non-negative integers.</p>
-<p>For every (contiguous) subarray <code>B = [A[i], A[i+1], ..., A[j]]</code> (with <code>i &lt;= j</code>), we take the bitwise OR of all the elements in <code>B</code>, obtaining a result <code>A[i] | A[i+1] | ... | A[j]</code>.</p>
-<p>Return the number of possible results.  (Results that occur more than once are only counted once in the final answer.)</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Input: [0]</span><br><span class="line">Output: 1</span><br><span class="line">Explanation: </span><br><span class="line">There is only one possible result: 0.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Input: [1,1,2]</span><br><span class="line">Output: 3</span><br><span class="line">Explanation: </span><br><span class="line">The possible subarrays are [1], [1], [2], [1, 1], [1, 2], [1, 1, 2].</span><br><span class="line">These yield the results 1, 1, 2, 1, 3, 3.</span><br><span class="line">There are 3 unique values, so the answer is 3.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 3:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Input: [1,2,4]</span><br><span class="line">Output: 6</span><br><span class="line">Explanation: </span><br><span class="line">The possible results are 1, 2, 3, 4, 6, and 7.</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Note:</strong></p>
-<ol>
-<li><code>1 &lt;= A.length &lt;= 50000</code></li>
-<li><code>0 &lt;= A[i] &lt;= 10^9</code></li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给定一个数组，求出所有的连续子数组内的元素相或的值的个数。</p>
-<p>这个题很容易超时，要用到很多小trick。</p>
-<p>做法如下，首先是从头到尾遍历数组，对于当前遍历到的元素，使用set记录之前的连续子数组的集合数目，这样会自动去重，从而减少遍历，虽然理论上的时间复杂度也是O(n2)，但是如果不这样做是无论如何都无法通过的。</p>
-<p>其次是使用unorder_set，这个在C++内相比于set更快，因为不支持内部排序。</p>
-<p>这里推荐一个bolg</p>
-<p><a href="https://www.cnblogs.com/grandyang/p/10982534.html" target="_blank" rel="noopener">https://www.cnblogs.com/grandyang/p/10982534.html</a></p>
-<p>代码如下，时间复杂度O(n2)，空间复杂度O(n2)。</p>
-<p><code>Runtime: 1488 ms, faster than 30.60% of C++ online submissions for Bitwise ORs of Subarrays.</code></p>
-<p><code>Memory Usage: 314.3 MB, less than 33.33% of C++ online submissions for Bitwise ORs of Subarrays.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">subarrayBitwiseORs</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">unordered_set</span>&lt;<span class="keyword">int</span>&gt; S, cur;</span><br><span class="line">        <span class="keyword">int</span> len = A.<span class="built_in">size</span>();</span><br><span class="line">        S.insert(A[<span class="number">0</span>]);</span><br><span class="line">        cur.insert(A[<span class="number">0</span>]);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(A[i] == A[i<span class="number">-1</span>]) <span class="keyword">continue</span>;</span><br><span class="line">            <span class="built_in">unordered_set</span>&lt;<span class="keyword">int</span>&gt; ts = &#123;A[i]&#125;;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> a : cur) ts.insert(a | A[i]);</span><br><span class="line">            cur = ts;</span><br><span class="line">            S.insert(cur.<span class="built_in">begin</span>(), cur.<span class="built_in">end</span>());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> S.<span class="built_in">size</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2019-10-30</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1093,12 +1105,12 @@ Explanation: We define the gray code sequence to begin with 0.
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">357</span>
+          <span class="site-state-item-count">360</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-count">37</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
