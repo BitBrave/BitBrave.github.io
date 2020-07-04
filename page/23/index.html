@@ -168,6 +168,156 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(454.%204Sum%20II)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(454.%204Sum%20II)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(454. 4Sum II)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-454-4Sum-II-题解"><a href="#LeetCode-454-4Sum-II-题解" class="headerlink" title="LeetCode(454. 4Sum II)题解"></a>LeetCode(454. 4Sum II)题解</h1><p>Given four lists A, B, C, D of integer values, compute how many tuples <code>(i, j, k, l)</code> there are such that <code>A[i] + B[j] + C[k] + D[l]</code> is zero.</p>
+<p>To make problem a bit easier, all A, B, C, D have same length of N where 0 ≤ N ≤ 500. All integers are in the range of -228 to 228 - 1 and the result is guaranteed to be at most 231 - 1.</p>
+<p><strong>Example:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Input:</span><br><span class="line">A &#x3D; [ 1, 2]</span><br><span class="line">B &#x3D; [-2,-1]</span><br><span class="line">C &#x3D; [-1, 2]</span><br><span class="line">D &#x3D; [ 0, 2]</span><br><span class="line"></span><br><span class="line">Output:</span><br><span class="line">2</span><br><span class="line"></span><br><span class="line">Explanation:</span><br><span class="line">The two tuples are:</span><br><span class="line">1. (0, 0, 0, 1) -&gt; A[0] + B[0] + C[0] + D[1] &#x3D; 1 + (-2) + (-1) + 2 &#x3D; 0</span><br><span class="line">2. (1, 1, 0, 0) -&gt; A[1] + B[1] + C[0] + D[0] &#x3D; 2 + (-1) + (-1) + 0 &#x3D; 0</span><br></pre></td></tr></table></figure>
+
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出四个数组，每个数组等长，从四个数组内各选出一个数，求这四个数想加为0的个数。</p>
+<p>这个题如果直接使用最简单的办法，可以一一遍历所有的组合形式，总的时间复杂度为O(n4)。这肯定是不可接收的，这里可以用空间换时间，使用Map记录其中两个数组内所有的相加组合，然后再遍历另外两个数组的元素相加，查看相加之和和0的差值是否在Map内，如果在就表示找到一个排列，否则就表示无法配对。</p>
+<p>代码如下，时间复杂度O(n2)，空间复杂度O(n2)。</p>
+<p><code>Memory Usage: 34.8 MB, less than 8.33% of Python3 online submissions for 4Sum II.</code></p>
+<p><code>Runtime: 320 ms, faster than 52.64% of Python3 online submissions for 4Sum II.</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fourSumCount</span><span class="params">(self, A: List[int], B: List[int], C: List[int], D: List[int])</span> -&gt; int:</span></span><br><span class="line">        ret = <span class="number">0</span></span><br><span class="line">        Dic = &#123;&#125;</span><br><span class="line">        <span class="keyword">for</span> a <span class="keyword">in</span> A:</span><br><span class="line">            <span class="keyword">for</span> b <span class="keyword">in</span> B:</span><br><span class="line">                <span class="keyword">if</span> a+b <span class="keyword">not</span> <span class="keyword">in</span> Dic: Dic[a+b] = <span class="number">1</span></span><br><span class="line">                <span class="keyword">else</span>: Dic[a+b] += <span class="number">1</span></span><br><span class="line">        <span class="keyword">for</span> c <span class="keyword">in</span> C:</span><br><span class="line">            <span class="keyword">for</span> d <span class="keyword">in</span> D:</span><br><span class="line">                ret += Dic.get(-d-c, <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> ret</span><br></pre></td></tr></table></figure>
+
+<p>更加简洁的写法如下。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fourSumCount</span><span class="params">(self, A: List[int], B: List[int], C: List[int], D: List[int])</span> -&gt; int:</span></span><br><span class="line">        Dic = Counter([a+b <span class="keyword">for</span> a <span class="keyword">in</span> A <span class="keyword">for</span> b <span class="keyword">in</span> B])</span><br><span class="line">        <span class="keyword">return</span> sum([Dic[-c-d] <span class="keyword">for</span> c <span class="keyword">in</span> C <span class="keyword">for</span> d <span class="keyword">in</span> D <span class="keyword">if</span> -c-d <span class="keyword">in</span> Dic])</span><br></pre></td></tr></table></figure>
+
+<p>但是这个方法肯定不是最优的，但是我在网上也没有找到更优的解法了。留待以后再看吧。</p>
+<p>BitBrave，2019-10-29</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(46.%20Permutations)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(46.%20Permutations)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(46. Permutations)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-46-Permutations-题解"><a href="#LeetCode-46-Permutations-题解" class="headerlink" title="LeetCode(46. Permutations)题解"></a>LeetCode(46. Permutations)题解</h1><hr>
+<p>Given a collection of distinct integers, return all possible permutations.</p>
+<p>Example:</p>
+<pre><code>Input: [1,2,3]
+Output:
+[
+[1,2,3],
+[1,3,2],
+[2,1,3],
+[2,3,1],
+[3,1,2],
+[3,2,1]
+]</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Medium，要求给一个数组（每个数不一样），然后求出这个数的所有排列，按照数学的计算，一个N个数的数组，排列有N！种。</p>
+<p>我的思路是直接使用递归，permute_函数，就每次将一个数放在最前面，然后剩下的数做全排列，一共有n-1！种，依次类推，当没有数就直接返回。</p>
+<p>代码如下</p>
+<p>Runtime: 16 ms, faster than 46.36% of C++ online submissions for Permutations.<br>Memory Usage: 10.8 MB, less than 8.29% of C++ online submissions for Permutations.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">permute_</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; &amp;ret, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; tmp, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; nums, <span class="keyword">int</span> left, <span class="keyword">int</span> right)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(left&gt;right)&#123;</span><br><span class="line">            ret.push_back(tmp);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=left; i&lt;=right; i++)&#123;</span><br><span class="line">            <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">tmp_</span><span class="params">(tmp)</span></span>;</span><br><span class="line">            tmp_.push_back(nums[i]);</span><br><span class="line">            swap(nums[left],nums[i]);</span><br><span class="line">            permute_(ret, tmp_, nums, left+<span class="number">1</span>, right);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">permute</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; ret;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; tmp;</span><br><span class="line">        </span><br><span class="line">        permute_(ret, tmp, nums, <span class="number">0</span>, nums.<span class="built_in">size</span>()<span class="number">-1</span>);</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-05-16</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(47.%20Permutations%20II)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -806,183 +956,11 @@ Explanation: There exist two distinct solutions to the 4-queens puzzle as shown 
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(52.%20N-Queens%20II)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(52.%20N-Queens%20II)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(52. N-Queens II)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-52-N-Queens-II-题解"><a href="#LeetCode-52-N-Queens-II-题解" class="headerlink" title="LeetCode(52. N-Queens II)题解"></a>LeetCode(52. N-Queens II)题解</h1><hr>
-<p>The n-queens puzzle is the problem of placing n queens on an n×n chessboard such that no two queens attack each other.</p>
-<p><img src="https://assets.leetcode.com/uploads/2018/10/12/8-queens.png" alt=""></p>
-<p>Given an integer n, return all distinct solutions to the n-queens puzzle.</p>
-<p>Each solution contains a distinct board configuration of the n-queens’ placement, where ‘Q’ and ‘.’ both indicate a queen and an empty space respectively.</p>
-<p>Example:</p>
-<pre><code>Input: 4
-Output: [
-[&quot;.Q..&quot;,  // Solution 1
-&quot;...Q&quot;,
-&quot;Q...&quot;,
-&quot;..Q.&quot;],
-
-[&quot;..Q.&quot;,  // Solution 2
-&quot;Q...&quot;,
-&quot;...Q&quot;,
-&quot;.Q..&quot;]
-]
-Explanation: There exist two distinct solutions to the 4-queens puzzle as shown above.</code></pre><h2 id="解题思路-与51题一模一样"><a href="#解题思路-与51题一模一样" class="headerlink" title="解题思路(与51题一模一样)"></a>解题思路(与51题一模一样)</h2><p>Hard，这道题的要求是N皇后问题：放置n的皇后在n*n的棋盘上，使其任意两个皇后不能相互攻击。给定整数n，返回所有可能情况，其中‘Q’表示皇后，‘.’表示空位置。</p>
-<p>两个皇后不能相互攻击，即要求这两个皇后不在同一行、同一列及同一斜线上。</p>
-<p>可以使用一个N维数组记录每一行上的皇后位置，使用递归计算。递归到当前行时，从1到n查看是否可以放皇后，放置的条件就是不能与前面的皇后在同一列（可以比较值是否相同，相同就在同一列），不能在同一个斜线上（当前行与当前列的差值相同则在同一个\斜线，当前行与当前值的和相同则在同一个/斜线）。</p>
-<p>代码如下，速度有点慢，懒得优化了：</p>
-<p>Runtime: 28 ms, faster than 13.38% of C++ online submissions for N-Queens II.<br>Memory Usage: 16.4 MB, less than 6.86% of C++ online submissions for N-Queens II.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isValid</span><span class="params">( <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; tmp, <span class="keyword">int</span> pos, <span class="keyword">int</span> len, <span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(tmp[i]==pos) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            <span class="keyword">if</span>((len-pos) == (i-tmp[i])) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            <span class="keyword">if</span>((len+pos) == (i+tmp[i])) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">solveNQueens_</span><span class="params">(<span class="keyword">int</span> n, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; tmp, <span class="keyword">int</span> len)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(len==n) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;n; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(!<span class="built_in">isValid</span>(tmp, i, len, n)) <span class="keyword">continue</span>;</span><br><span class="line">            tmp[len] = i;</span><br><span class="line">            res += solveNQueens_(n, tmp, len+<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">totalNQueens</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(n==<span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">tmp</span><span class="params">(n)</span></span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> solveNQueens_(n, tmp, <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2019-05-29.</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(516.%20Longest%20Palindromic%20Subsequence)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(516.%20Longest%20Palindromic%20Subsequence)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(516. Longest Palindromic Subsequence)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="LeetCode-516-Longest-Palindromic-Subsequence-题解"><a href="#LeetCode-516-Longest-Palindromic-Subsequence-题解" class="headerlink" title="LeetCode(\516. Longest Palindromic Subsequence)题解"></a>LeetCode(\516. Longest Palindromic Subsequence)题解</h2><p>Given a string s, find the longest palindromic subsequence’s length in s. You may assume that the maximum length of s is 1000.</p>
-<p><strong>Example 1:</strong><br>Input:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;bbbab&quot;</span><br></pre></td></tr></table></figure>
-
-<p>Output:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">4</span><br></pre></td></tr></table></figure>
-
-<p>One possible longest palindromic subsequence is “bbbb”.</p>
-<p><strong>Example 2:</strong><br>Input:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;cbbd&quot;</span><br></pre></td></tr></table></figure>
-
-<p>Output:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2</span><br></pre></td></tr></table></figure>
-
-<p>One possible longest palindromic subsequence is “bb”.</p>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给定字符串s，找到s的最长回文子序列的长度。假设s的最大长度为1000。</p>
-<p>这个可以使用DP问题，回文子序列是是可以由不连续的字符组成的，我们可以首先计算长度为1的子序列中最长的回文字符串长度，然后计算长度为2的，然后长度为3,4,5，···直到len(s)，最后返回最长的长度即可。</p>
-<p>我们使用一个len(s)*len(s)的二维数组DP记录状态转移子数组的值。其中DP[i][j]表示字符串s中i到j位置的最长的合法字符串。那么就有。</p>
-<ul>
-<li>如果i&gt;j，DP[i][j]=0。</li>
-<li>如果i==j，DP[i][j]=1。</li>
-<li>如果s[i]==s[j]，DP[i][j] = max(DP[i][j-1], DP[i+1][j], DP[i+1][j-1]+2)</li>
-<li>如果s[i]!=s[j]，DP[i][j] = max(DP[i][j-1], DP[i+1][j])</li>
-</ul>
-<p>最后返回 DP[0][len(s)-1]即可。</p>
-<p>注意这个经过分析数组更新是每次都沿着对角线平行的方向，更新的时候只使用了前两斜线的数据，因此可以将空间复杂度降到O(n)，只是数组变化有点麻烦而已。</p>
-<p>代码如下，时间复杂度O(n)，空间复杂度O(n2)。</p>
-<p><code>Runtime: 128 ms, faster than 8.56% of C++ online submissions for Longest Palindromic Subsequence.</code></p>
-<p><code>Memory Usage: 69.3 MB, less than 100.00% of C++ online submissions for Longest Palindromic Subsequence.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">longestPalindromeSubseq</span><span class="params">(<span class="built_in">string</span> s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = s.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span>(len &lt;= <span class="number">1</span>) <span class="keyword">return</span> len;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">D</span><span class="params">(len, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(len, <span class="number">0</span>))</span></span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++) D[i][i] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">1</span>; k&lt;len; k++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=k; i&lt;len; i++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(s[i-k]==s[i]) D[i-k][i] = <span class="number">2</span> + D[i-k+<span class="number">1</span>][i<span class="number">-1</span>];</span><br><span class="line">                <span class="keyword">else</span> D[i-k][i] = <span class="built_in">max</span>(D[i-k][i<span class="number">-1</span>], D[i-k+<span class="number">1</span>][i]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> D[<span class="number">0</span>][len<span class="number">-1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2019-12-13</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/22/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/22/">22</a><span class="page-number current">23</span><a class="page-number" href="/page/24/">24</a><span class="space">&hellip;</span><a class="page-number" href="/page/36/">36</a><a class="extend next" rel="next" href="/page/24/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/22/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/22/">22</a><span class="page-number current">23</span><a class="page-number" href="/page/24/">24</a><span class="space">&hellip;</span><a class="page-number" href="/page/37/">37</a><a class="extend next" rel="next" href="/page/24/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1048,7 +1026,7 @@ Explanation: There exist two distinct solutions to the 4-queens puzzle as shown 
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">360</span>
+          <span class="site-state-item-count">362</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

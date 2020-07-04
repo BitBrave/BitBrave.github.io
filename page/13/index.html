@@ -168,6 +168,162 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(1043.%20Partition%20Array%20for%20Maximum%20Sum)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(1043.%20Partition%20Array%20for%20Maximum%20Sum)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1043. Partition Array for Maximum Sum)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-1043-Partition-Array-for-Maximum-Sum-题解"><a href="#LeetCode-1043-Partition-Array-for-Maximum-Sum-题解" class="headerlink" title="LeetCode(\1043. Partition Array for Maximum Sum)题解"></a>LeetCode(\1043. Partition Array for Maximum Sum)题解</h1><p>Given an integer array <code>A</code>, you partition the array into (contiguous) subarrays of length at most <code>K</code>. After partitioning, each subarray has their values changed to become the maximum value of that subarray.</p>
+<p>Return the largest sum of the given array after partitioning.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: A &#x3D; [1,15,7,9,2,5,10], K &#x3D; 3</span><br><span class="line">Output: 84</span><br><span class="line">Explanation: A becomes [15,15,15,9,10,10,10]</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Note:</strong></p>
+<ol>
+<li><code>1 &lt;= K &lt;= A.length &lt;= 500</code></li>
+<li><code>0 &lt;= A[i] &lt;= 10^6</code></li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个数组A和整数K，将A分为长度不超过K的若干个子数组，将每个子数组内的元素变为其中最大的元素值，然后求所有的子数组元素之和，问最终能得到的最大和为多少。</p>
+<p>这个题可以使用DP解决，设定一个与A等长的数组dp，其中dp[i]表示A中0~i位置能得到的最大和，最终题目的答案就是dp[A.size()-1]。</p>
+<p>状态转移方程是什么呢，因为子数组长度最多为K长度，因此我们考虑最后一个子数组的长度即可。即：</p>
+<p>dp[i] = max(dp[i-j] + max(A[i-j+1], A[i-j+2], …, A[i])),    j = 1,2, …, K.</p>
+<p>代码如下，时间复杂度O(nk), 空间复杂度O(n).</p>
+<p><code>Runtime: 16 ms, faster than 72.94% of C++ online submissions for Partition Array for Maximum Sum.</code></p>
+<p><code>Memory Usage: 8.7 MB, less than 100.00% of C++ online submissions for Partition Array for Maximum Sum.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxSumAfterPartitioning</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A, <span class="keyword">int</span> K)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = A.<span class="built_in">size</span>();</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">dp</span><span class="params">(len + <span class="number">1</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">        <span class="comment">//dp[0] = A[0];</span></span><br><span class="line">            </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++) &#123;</span><br><span class="line">            <span class="keyword">int</span> m = A[i];</span><br><span class="line">            dp[i+<span class="number">1</span>] = dp[i] + m;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=i; j&gt;=<span class="number">0</span> <span class="keyword">and</span> j&gt;i-K; j--) &#123;</span><br><span class="line">                m = <span class="built_in">max</span>(m, A[j]);</span><br><span class="line">                dp[i+<span class="number">1</span>] = <span class="built_in">max</span>(dp[i+<span class="number">1</span>], dp[j] + m * (i-j+<span class="number">1</span>));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp[len];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2020-01-05</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(105.%20Construct%20Binary%20Tree%20from%20Preorder%20and%20Inorder%20Traversal)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(105.%20Construct%20Binary%20Tree%20from%20Preorder%20and%20Inorder%20Traversal)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(105. Construct Binary Tree from Preorder and Inorder Traversal)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-105-Construct-Binary-Tree-from-Preorder-and-Inorder-Traversal-题解"><a href="#LeetCode-105-Construct-Binary-Tree-from-Preorder-and-Inorder-Traversal-题解" class="headerlink" title="LeetCode(105. Construct Binary Tree from Preorder and Inorder Traversal)题解"></a>LeetCode(105. Construct Binary Tree from Preorder and Inorder Traversal)题解</h1><hr>
+<p>Given preorder and inorder traversal of a tree, construct the binary tree.</p>
+<p>Note:<br>You may assume that duplicates do not exist in the tree.</p>
+<p>For example, given</p>
+<pre><code>preorder = [3,9,20,15,7]
+inorder = [9,3,15,20,7]
+Return the following binary tree:
+
+    3
+   / \
+  9  20
+    /  \
+   15   7</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出一个树的前序和中序遍历，恢复这个树的结构，树中元素是不重复的。</p>
+<p>对于二叉树来说，前序和中序遍历可以唯一地确定一个树的结构，如果元素没有重复的话。方法如下，首先看前序第一个一定根节点，然后在中序遍历里查看这个根节点的位置。位置左边的元素一定是中序遍历下的左子树，位置右边的元素一定是中序遍历下的右子树。那么确定根节点之后及左右子树后，在前序遍历中从根节点之后取中序遍历左子树序列长度的序列，一定是前序遍历下的左子树。这样就又得到了一个左子树的前序和中序遍历。问题缩小了。同样，右子树一样可以得到。</p>
+<p>因此问题规模可以一直缩小，直到为空。当判断为空时，直接返回NULL。</p>
+<p>代码如下：</p>
+<p>Runtime: 16 ms, faster than 89.76% of C++ online submissions for Construct Binary Tree from Preorder and Inorder Traversal.<br>Memory Usage: 16.5 MB, less than 82.31% of C++ online submissions for Construct Binary Tree from Preorder and Inorder Traversal.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">TreeNode* <span class="title">build</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; preorder, <span class="keyword">int</span> psta, <span class="keyword">int</span> pend, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; inorder, <span class="keyword">int</span> ista, <span class="keyword">int</span> iend)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(psta&gt;pend) <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">        </span><br><span class="line">        TreeNode *root = <span class="keyword">new</span> TreeNode(preorder[psta]);</span><br><span class="line">        <span class="keyword">int</span> pmid = psta, imid = ista;</span><br><span class="line">        <span class="keyword">while</span>(inorder[imid] != preorder[psta]) imid++;</span><br><span class="line">        pmid = imid - ista + psta;</span><br><span class="line">        root-&gt;left = build(preorder, psta+<span class="number">1</span>, pmid, inorder, ista, imid<span class="number">-1</span>);</span><br><span class="line">        root-&gt;right = build(preorder, pmid+<span class="number">1</span>, pend, inorder, imid+<span class="number">1</span>, iend);</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">TreeNode* <span class="title">buildTree</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; preorder, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; inorder)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> plen = preorder.<span class="built_in">size</span>(), ilen = inorder.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">return</span> build(preorder, <span class="number">0</span>, plen<span class="number">-1</span>, inorder, <span class="number">0</span>, ilen<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-06-28</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(113.%20Path%20Sum%20II)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -856,191 +1012,11 @@ Recursive approach is fine, implicit stack space does not count as extra space f
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(1155.%20Number%20of%20Dice%20Rolls%20With%20Target%20Sum)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(1155.%20Number%20of%20Dice%20Rolls%20With%20Target%20Sum)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1155. Number of Dice Rolls With Target Sum)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-1155-Number-of-Dice-Rolls-With-Target-Sum-题解"><a href="#LeetCode-1155-Number-of-Dice-Rolls-With-Target-Sum-题解" class="headerlink" title="LeetCode(\1155. Number of Dice Rolls With Target Sum)题解"></a>LeetCode(\1155. Number of Dice Rolls With Target Sum)题解</h1><p>You have <code>d</code> dice, and each die has <code>f</code> faces numbered <code>1, 2, ..., f</code>.</p>
-<p>Return the number of possible ways (out of <code>fd</code> total ways) <strong>modulo <code>10^9 + 7</code></strong> to roll the dice so the sum of the face up numbers equals <code>target</code>.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Input: d &#x3D; 1, f &#x3D; 6, target &#x3D; 3</span><br><span class="line">Output: 1</span><br><span class="line">Explanation: </span><br><span class="line">You throw one die with 6 faces.  There is only one way to get a sum of 3.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Input: d &#x3D; 2, f &#x3D; 6, target &#x3D; 7</span><br><span class="line">Output: 6</span><br><span class="line">Explanation: </span><br><span class="line">You throw two dice, each with 6 faces.  There are 6 ways to get a sum of 7:</span><br><span class="line">1+6, 2+5, 3+4, 4+3, 5+2, 6+1.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 3:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Input: d &#x3D; 2, f &#x3D; 5, target &#x3D; 10</span><br><span class="line">Output: 1</span><br><span class="line">Explanation: </span><br><span class="line">You throw two dice, each with 5 faces.  There is only one way to get a sum of 10: 5+5.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 4:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Input: d &#x3D; 1, f &#x3D; 2, target &#x3D; 3</span><br><span class="line">Output: 0</span><br><span class="line">Explanation: </span><br><span class="line">You throw one die with 2 faces.  There is no way to get a sum of 3.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 5:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Input: d &#x3D; 30, f &#x3D; 30, target &#x3D; 500</span><br><span class="line">Output: 222616187</span><br><span class="line">Explanation: </span><br><span class="line">The answer must be returned modulo 10^9 + 7.</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Constraints:</strong></p>
-<ul>
-<li><code>1 &lt;= d, f &lt;= 30</code></li>
-<li><code>1 &lt;= target &lt;= 1000</code></li>
-</ul>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给三个数d，f和target。可以理解为现在有d堆石子，每一堆有f个石子。现在从每堆石子中选一些石子，最后总的数目为target，问一共有多少种选择方案。</p>
-<p>这个题可以使用DP问题求解。设定一个(d) * (target+1)的二维数组D。其中D(i,t)表示选定序号0~i的石子堆时，选定方案中石子总和为t的方案数，每一堆必须至少选一个。那么最后的题目的答案就是D(d, target)。</p>
-<p>那么如何填充这个数组呢，首先是普遍的状态转移方程。</p>
-<ul>
-<li>D(i, t) = D(i-1, t-1) + D(i-1, t-2) + … + D(i-1, t-f)。表示D(i, t)的解就是我之前的方案基础上，在第i堆石子上选0,1,2···f个石子，来组成新的和为t的方案。因此这里不能出现负数，如果t比较小，表示一堆石子其实就可以满足方案，那么不能在第i堆中选超过t的石子，因此t-f&gt;=0.</li>
-</ul>
-<p>其次就是基础赋值计算了，比如，如果t=0，表示不选石子，那么不管多少堆石子（堆数&gt;=1），最后的答案都只是0种，不存在解决方案。因此D(i,0)=0 (i=0,1,2,…,d-1)。同时如果i=0，表示只有一堆石子，那么target小于等于f时，对应的方案只有一种，如果大于f就为0，因为不存在解决方案。</p>
-<p>注意需要取余数。</p>
-<p>代码如下，时间复杂度O(d*f*target)，时间复杂度O(d*target)。</p>
-<p><code>Runtime: 36 ms, faster than 37.21% of C++ online submissions for Number of Dice Rolls With Target Sum.</code></p>
-<p><code>Memory Usage: 10.7 MB, less than 100.00% of C++ online submissions for Number of Dice Rolls With Target Sum.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">numRollsToTarget</span><span class="params">(<span class="keyword">int</span> d, <span class="keyword">int</span> f, <span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">ret</span><span class="params">(d, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(target+<span class="number">1</span>, <span class="number">0</span>))</span></span>;</span><br><span class="line">        <span class="keyword">int</span> mft = <span class="built_in">min</span>(target, f), mod = <span class="built_in">pow</span>(<span class="number">10</span>, <span class="number">9</span>) + <span class="number">7</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">1</span>; j&lt;=mft; j++) ret[<span class="number">0</span>][j] = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;d; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> t=<span class="number">1</span>; t&lt;=target; t++)&#123;</span><br><span class="line">                mft = <span class="built_in">min</span>(t, f);</span><br><span class="line">                ret[i][t] = <span class="number">0</span>;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">1</span>; j&lt;=mft; j++) ret[i][t] = (ret[i][t] + ret[i<span class="number">-1</span>][t-j]) % mod;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret[d<span class="number">-1</span>][target];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>这个算法是可以优化的，观察可以知道二维数组是每次更新只用到了上一行，同时求和也只用到了上一行的固定位置的的数，因此时间复杂度可以降到O(d*target)，空间复杂度降到O(target)。这里给出优化时间复杂度的算法。代码如下。</p>
-<p><code>Runtime: 8 ms, faster than 93.92% of C++ online submissions for Number of Dice Rolls With Target Sum.</code></p>
-<p><code>Memory Usage: 10.7 MB, less than 100.00% of C++ online submissions for Number of Dice Rolls With Target Sum.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">numRollsToTarget</span><span class="params">(<span class="keyword">int</span> d, <span class="keyword">int</span> f, <span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">ret</span><span class="params">(d, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(target+<span class="number">1</span>, <span class="number">0</span>))</span></span>;</span><br><span class="line">        <span class="keyword">int</span> mft = <span class="built_in">min</span>(f, target), mod = <span class="built_in">pow</span>(<span class="number">10</span>, <span class="number">9</span>) + <span class="number">7</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">1</span>; j&lt;=mft; j++) ret[<span class="number">0</span>][j] = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;d; i++) &#123;</span><br><span class="line">            <span class="keyword">long</span> lsum = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> t=<span class="number">1</span>; t&lt;=target; t++)&#123;</span><br><span class="line">                <span class="keyword">if</span> (t &gt; f) lsum = (lsum - ret[i<span class="number">-1</span>][t-f<span class="number">-1</span>] + ret[i<span class="number">-1</span>][t<span class="number">-1</span>] + mod) % mod;</span><br><span class="line">                <span class="keyword">else</span> lsum = (lsum + ret[i<span class="number">-1</span>][t<span class="number">-1</span>]) % mod;</span><br><span class="line">                </span><br><span class="line">                ret[i][t] = lsum;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret[d<span class="number">-1</span>][target];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2019-12-17</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(117.%20Populating%20Next%20Right%20Pointers%20in%20Each%20Node%20II)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(117.%20Populating%20Next%20Right%20Pointers%20in%20Each%20Node%20II)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(117. Populating Next Right Pointers in Each Node II)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-117-Populating-Next-Right-Pointers-in-Each-Node-II-题解"><a href="#LeetCode-117-Populating-Next-Right-Pointers-in-Each-Node-II-题解" class="headerlink" title="LeetCode(117. Populating Next Right Pointers in Each Node II)题解"></a>LeetCode(117. Populating Next Right Pointers in Each Node II)题解</h1><hr>
-<p>Given a binary tree</p>
-<pre><code>struct Node {
-    int val;
-    Node *left;
-    Node *right;
-    Node *next;
-}</code></pre><p>Populate each next pointer to point to its next right node. If there is no next right node, the next pointer should be set to NULL.</p>
-<p>Initially, all next pointers are set to NULL.</p>
-<p><img src="https://assets.leetcode.com/uploads/2019/02/15/117_sample.png" alt=""></p>
-<p>Example:</p>
-<pre><code>Input: {&quot;$id&quot;:&quot;1&quot;,&quot;left&quot;:{&quot;$id&quot;:&quot;2&quot;,&quot;left&quot;:{&quot;$id&quot;:&quot;3&quot;,&quot;left&quot;:null,&quot;next&quot;:null,&quot;right&quot;:null,&quot;val&quot;:4},&quot;next&quot;:null,&quot;right&quot;:{&quot;$id&quot;:&quot;4&quot;,&quot;left&quot;:null,&quot;next&quot;:null,&quot;right&quot;:null,&quot;val&quot;:5},&quot;val&quot;:2},&quot;next&quot;:null,&quot;right&quot;:{&quot;$id&quot;:&quot;5&quot;,&quot;left&quot;:null,&quot;next&quot;:null,&quot;right&quot;:{&quot;$id&quot;:&quot;6&quot;,&quot;left&quot;:null,&quot;next&quot;:null,&quot;right&quot;:null,&quot;val&quot;:7},&quot;val&quot;:3},&quot;val&quot;:1}
-
-Output: {&quot;$id&quot;:&quot;1&quot;,&quot;left&quot;:{&quot;$id&quot;:&quot;2&quot;,&quot;left&quot;:{&quot;$id&quot;:&quot;3&quot;,&quot;left&quot;:null,&quot;next&quot;:{&quot;$id&quot;:&quot;4&quot;,&quot;left&quot;:null,&quot;next&quot;:{&quot;$id&quot;:&quot;5&quot;,&quot;left&quot;:null,&quot;next&quot;:null,&quot;right&quot;:null,&quot;val&quot;:7},&quot;right&quot;:null,&quot;val&quot;:5},&quot;right&quot;:null,&quot;val&quot;:4},&quot;next&quot;:{&quot;$id&quot;:&quot;6&quot;,&quot;left&quot;:null,&quot;next&quot;:null,&quot;right&quot;:{&quot;$ref&quot;:&quot;5&quot;},&quot;val&quot;:3},&quot;right&quot;:{&quot;$ref&quot;:&quot;4&quot;},&quot;val&quot;:2},&quot;next&quot;:null,&quot;right&quot;:{&quot;$ref&quot;:&quot;6&quot;},&quot;val&quot;:1}</code></pre><p>Explanation: Given the above binary tree (Figure A), your function should populate each next pointer to point to its next right node, just like in Figure B.</p>
-<p>Note:</p>
-<pre><code>You may only use constant extra space.
-Recursive approach is fine, implicit stack space does not count as extra space for this problem.</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出一个二叉树，将其按层次的方式从左节点指向右节点。要求是空间花费常量, 如果对应的层右边没有，则指向NULL。</p>
-<p>可以直接使用队列进行层序遍历，每一层中左边指向右边，因为给出的说递归内的堆栈可以不计入常量空间的考量。那么队列的非递归方式肯定也是可以AC的。</p>
-<p>代码如下：</p>
-<p>Runtime: 400 ms, faster than 79.08% of C++ online submissions for Populating Next Right Pointers in Each Node II.<br>Memory Usage: 66.9 MB, less than 13.93% of C++ online submissions for Populating Next Right Pointers in Each Node II.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">// Definition for a Node.</span></span><br><span class="line"><span class="comment">class Node &#123;</span></span><br><span class="line"><span class="comment">public:</span></span><br><span class="line"><span class="comment">    int val;</span></span><br><span class="line"><span class="comment">    Node* left;</span></span><br><span class="line"><span class="comment">    Node* right;</span></span><br><span class="line"><span class="comment">    Node* next;</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">    Node() &#123;&#125;</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">    Node(int _val, Node* _left, Node* _right, Node* _next) &#123;</span></span><br><span class="line"><span class="comment">        val = _val;</span></span><br><span class="line"><span class="comment">        left = _left;</span></span><br><span class="line"><span class="comment">        right = _right;</span></span><br><span class="line"><span class="comment">        next = _next;</span></span><br><span class="line"><span class="comment">    &#125;</span></span><br><span class="line"><span class="comment">&#125;;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">Node* <span class="title">connect</span><span class="params">(Node* root)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="literal">NULL</span>) <span class="keyword">return</span> root;</span><br><span class="line">        <span class="built_in">queue</span>&lt;Node*&gt; Q;</span><br><span class="line">        <span class="keyword">int</span> c = <span class="number">1</span>;</span><br><span class="line">        Q.push(root);</span><br><span class="line">        <span class="keyword">while</span>(!Q.empty())&#123;</span><br><span class="line">            c = Q.<span class="built_in">size</span>() - <span class="number">1</span>;</span><br><span class="line">            Node *last = Q.front(), *next; Q.pop();</span><br><span class="line">            <span class="keyword">if</span>(last-&gt;left != <span class="literal">NULL</span>) Q.push(last-&gt;left);</span><br><span class="line">            <span class="keyword">if</span>(last-&gt;right != <span class="literal">NULL</span>) Q.push(last-&gt;right);</span><br><span class="line">            <span class="keyword">while</span>(c&gt;<span class="number">0</span>)&#123;</span><br><span class="line">                c--;</span><br><span class="line">                next = Q.front(); Q.pop();</span><br><span class="line">                <span class="keyword">if</span>(next-&gt;left != <span class="literal">NULL</span>) Q.push(next-&gt;left);</span><br><span class="line">                <span class="keyword">if</span>(next-&gt;right != <span class="literal">NULL</span>) Q.push(next-&gt;right);</span><br><span class="line">                last-&gt;next = next;</span><br><span class="line">                last = next;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave 2019-07-04</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/12/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/">14</a><span class="space">&hellip;</span><a class="page-number" href="/page/36/">36</a><a class="extend next" rel="next" href="/page/14/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/12/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/">14</a><span class="space">&hellip;</span><a class="page-number" href="/page/37/">37</a><a class="extend next" rel="next" href="/page/14/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1106,7 +1082,7 @@ Recursive approach is fine, implicit stack space does not count as extra space f
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">360</span>
+          <span class="site-state-item-count">362</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
