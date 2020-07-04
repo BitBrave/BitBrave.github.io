@@ -168,6 +168,107 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/28/Leet(174.%20Dungeon%20Game)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/28/Leet(174.%20Dungeon%20Game)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">Leet(174. Dungeon Game)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-03-28 13:32:39 / 修改时间：13:32:59" itemprop="dateCreated datePublished" datetime="2020-03-28T13:32:39+08:00">2020-03-28</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Leet-174-Dungeon-Game-题解"><a href="#Leet-174-Dungeon-Game-题解" class="headerlink" title="Leet(\174. Dungeon Game)题解"></a>Leet(\174. Dungeon Game)题解</h1><p>The demons had captured the princess (<strong>P</strong>) and imprisoned her in the bottom-right corner of a dungeon. The dungeon consists of M x N rooms laid out in a 2D grid. Our valiant knight (<strong>K</strong>) was initially positioned in the top-left room and must fight his way through the dungeon to rescue the princess.</p>
+<p>The knight has an initial health point represented by a positive integer. If at any point his health point drops to 0 or below, he dies immediately.</p>
+<p>Some of the rooms are guarded by demons, so the knight loses health (<em>negative</em> integers) upon entering these rooms; other rooms are either empty (<em>0’s</em>) or contain magic orbs that increase the knight’s health (<em>positive</em> integers).</p>
+<p>In order to reach the princess as quickly as possible, the knight decides to move only rightward or downward in each step.</p>
+<p><strong>Write a function to determine the knight’s minimum initial health so that he is able to rescue the princess.</strong></p>
+<p>For example, given the dungeon below, the initial health of the knight must be at least <strong>7</strong> if he follows the optimal path <code>RIGHT-&gt; RIGHT -&gt; DOWN -&gt; DOWN</code>.</p>
+<table>
+<thead>
+<tr>
+<th>-2 (K)</th>
+<th>-3</th>
+<th>3</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-5</td>
+<td>-10</td>
+<td>1</td>
+</tr>
+<tr>
+<td>10</td>
+<td>30</td>
+<td>-5 (P)</td>
+</tr>
+</tbody></table>
+<p><strong>Note:</strong></p>
+<ul>
+<li>The knight’s health has no upper bound.</li>
+<li>Any room can contain threats or power-ups, even the first room the knight enters and the bottom-right room where the princess is imprisoned.</li>
+</ul>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Hard</p>
+<p>这个题分析下来就是：给定一个M*N的二维数组dungeon，每个位置上都有一个整数，要求从左上到右下找一条路径，每次进入一个节点要求初始值必须大于0，求最开始进入路径的最小值。</p>
+<p>这个题乍一看就是使用DP，从上到下即可。但是[[1,-3,3],[0,-2,0],[-3,-3,-3]]这个案例表明，从左上走是行不通的。</p>
+<p>这个题其实还是使用DP解决，但是聪明的地方在于，我们不从左上到右下寻找，而是从终点回溯。f(i,j)表示的是以ij为起点，到达右下角的最小初始值。这样就可以唯一确定最优值，这也是为什么他是Hard的原因。</p>
+<p>很多时候，dp如果顺着不行，不妨逆着来试试。</p>
+<p>状态转移方程如下：</p>
+<p>$f(i,j) = max(min(f(i+1,j),f(i,j+1)-dungeon[i][j], 1)$ </p>
+<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间上，O(N2)，空间上，O(N2)。</p>
+<p><code>Runtime: 8 ms, faster than 67.05% of C++ online submissions for Dungeon Game.</code></p>
+<p><code>Memory Usage: 7.7 MB, less than 100.00% of C++ online submissions for Dungeon Game.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">calculateMinimumHP</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; dungeon)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> row = dungeon.<span class="built_in">size</span>(), col = dungeon[<span class="number">0</span>].<span class="built_in">size</span>();</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">dp</span><span class="params">(row+<span class="number">1</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(col+<span class="number">1</span>, INT_MAX))</span></span>;</span><br><span class="line">        </span><br><span class="line">        dp[row][col<span class="number">-1</span>] = <span class="number">1</span>;</span><br><span class="line">        dp[row<span class="number">-1</span>][col] = <span class="number">1</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=row<span class="number">-1</span>; i&gt;=<span class="number">0</span>; i--) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=col<span class="number">-1</span>; j&gt;=<span class="number">0</span>; j--) &#123;</span><br><span class="line">                dp[i][j] = <span class="built_in">max</span>(<span class="number">1</span>, <span class="built_in">min</span>(dp[i+<span class="number">1</span>][j],dp[i][j+<span class="number">1</span>]) - dungeon[i][j]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2020-03-28</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/28/%E4%B8%80%E5%A0%86%E7%8F%A0%E5%AD%90%EF%BC%8CA%E9%80%891%E4%B8%AAB%E9%80%891%E4%B8%AA%E4%B8%A2%E4%B8%80%E4%B8%AA%E4%B8%ADA%E8%83%9C%E6%A6%82%E7%8E%87/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -957,87 +1058,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/19/LeetCode(330.%20Patching%20Array)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/03/19/LeetCode(330.%20Patching%20Array)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(330. Patching Array)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-03-19 12:12:15 / 修改时间：12:12:18" itemprop="dateCreated datePublished" datetime="2020-03-19T12:12:15+08:00">2020-03-19</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-330-Patching-Array-题解"><a href="#LeetCode-330-Patching-Array-题解" class="headerlink" title="LeetCode(\330. Patching Array)题解"></a>LeetCode(\330. Patching Array)题解</h1><p>Given a sorted positive integer array <em>nums</em> and an integer <em>n</em>, add/patch elements to the array such that any number in range <code>[1, n]</code> inclusive can be formed by the sum of some elements in the array. Return the minimum number of patches required.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Input: nums &#x3D; [1,3], n &#x3D; 6</span><br><span class="line">Output: 1 </span><br><span class="line">Explanation:</span><br><span class="line">Combinations of nums are [1], [3], [1,3], which form possible sums of: 1, 3, 4.</span><br><span class="line">Now if we add&#x2F;patch 2 to nums, the combinations are: [1], [2], [3], [1,3], [2,3], [1,2,3].</span><br><span class="line">Possible sums are 1, 2, 3, 4, 5, 6, which now covers the range [1, 6].</span><br><span class="line">So we only need 1 patch.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: nums &#x3D; [1,5,10], n &#x3D; 20</span><br><span class="line">Output: 2</span><br><span class="line">Explanation: The two patches can be [2, 4].</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 3:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: nums &#x3D; [1,2,2], n &#x3D; 5</span><br><span class="line">Output: 0</span><br></pre></td></tr></table></figure>
-
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Hard</p>
-<p>给一个排序的整数数组nums，和一个n。通过向nums中增加一些元素，使得1~n可以通过nums中的元素进行组合求和得到。返回需要增加的最少元素个数。</p>
-<p>这题使用Greedy。总体来说，贪心策略为：我们从1开始，尽可能向着连续增长最快的方向前进，遇到无法增长的时候，尽可能从nums中寻找可以使当前无法覆盖的被覆盖，找不到才增加一个数。比如1，2，走到最远端的是1+2=3，下一个无法达到的数是4，因此直接增加一个4。这种方法可以使用反证法证明是最优的，因为如果增加的数不是最近的无法达到的数，如果增加的比这个数小，最后的总的增加数肯定是小于等于这种方式，如果增加的比这个数大，那这个数就永远也无法满足了。</p>
-<p>因此，具体做法如下。</p>
-<p>我们维护一个数miss，表示当前构造的序列中，最近一个无法抵达的数。比如当前构造的序列覆盖的范围为1~t，那么miss=t+1。初始化miss=1，因为此时序列中没有元素。</p>
-<p>我们假设算法运行到一定程度了，这时候nums从左到右遍历到了i位置，最近的缺失值为miss，那么可以推断出，当前的序列构造到了1~miss-1。</p>
-<p>那么这时候判断nums[i]的值，如果大于miss，说明这时候nums中的所有未加入的都大于miss，加入任何值都不能使得miss被覆盖，因此需要我们加入一个为val=miss的值到构造序列中。如果nums[i]&lt;=miss，那么nums[i]与构造序列中的miss-nums[i]或者nums[i]本身就可以组合出miss，因此这时候不需要加入新的数，而是加入val=nums[i]即可，同时i++。通过上述操作之后，构造序列的覆盖范围变成了1~miss-1+val，那么下一个miss值就是miss+val。这样循环下去，直到miss+val&gt;n。</p>
-<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间上$O(n)$，空间上$O(1)$。</p>
-<p><code>Runtime: 8 ms, faster than 66.49% of C++ online submissions for Patching Array.</code></p>
-<p><code>Memory Usage: 8.2 MB, less than 100.00% of C++ online submissions for Patching Array.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minPatches</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">long</span> miss = <span class="number">1</span>, i = <span class="number">0</span>, len = nums.<span class="built_in">size</span>(), res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (miss &lt;= n) &#123;</span><br><span class="line">            <span class="keyword">if</span> (i &lt; len <span class="keyword">and</span> nums[i] &lt;= miss) &#123;</span><br><span class="line">                miss = miss + nums[i++];</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                res++;</span><br><span class="line">                miss = miss + miss;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2020-03-19</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1108,7 +1128,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">362</span>
+          <span class="site-state-item-count">363</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

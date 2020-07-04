@@ -168,6 +168,97 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/05/LeetCode(1499.%20Max%20Value%20of%20Equation)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/07/05/LeetCode(1499.%20Max%20Value%20of%20Equation)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1499. Max Value of Equation)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-07-05 00:28:09 / 修改时间：00:28:10" itemprop="dateCreated datePublished" datetime="2020-07-05T00:28:09+08:00">2020-07-05</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>title: LeetCode(\1499. Max Value of Equation)题解</p>
+<p>description: Hard，<a href="https://leetcode-cn.com/problems/max-value-of-equation/" target="_blank" rel="noopener">1499. 满足不等式的最大值</a>。给定字符串列表，你需要从它们中找出最长的特殊序列给定给你给你一个数组 points 和一个整数 k 。数组中每个元素都表示二维平面上的点的坐标，并按照横坐标 x 的值从小到大排序。也就是说 points[i] = [xi, yi] ，并且在 1 &lt;= i &lt; j &lt;= points.length 的前提下， xi &lt; xj 总成立。请你找出 yi + yj + |xi - xj| 的 最大值，其中 |xi - xj| &lt;= k 且 1 &lt;= i &lt; j &lt;= points.length。题目测试数据保证至少存在一对能够满足 |xi - xj| &lt;= k 的点。</p>
+<p>tags:</p>
+<ul>
+<li>queue</li>
+<li>$O(n)$</li>
+<li>Hard</li>
+</ul>
+<h1 id="LeetCode-1499-Max-Value-of-Equation-题解"><a href="#LeetCode-1499-Max-Value-of-Equation-题解" class="headerlink" title="LeetCode(\1499. Max Value of Equation)题解"></a>LeetCode(\1499. Max Value of Equation)题解</h1><p>Given an array <code>points</code> containing the coordinates of points on a 2D plane, sorted by the x-values, where <code>points[i] = [xi, yi]</code> such that <code>xi &lt; xj</code> for all <code>1 &lt;= i &lt; j &lt;= points.length</code>. You are also given an integer <code>k</code>.</p>
+<p>Find the <em>maximum value of the equation</em> <code>yi + yj + |xi - xj|</code> where <code>|xi - xj| &lt;= k</code> and <code>1 &lt;= i &lt; j &lt;= points.length</code>. It is guaranteed that there exists at least one pair of points that satisfy the constraint <code>|xi - xj| &lt;= k</code>.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Input: points &#x3D; [[1,3],[2,0],[5,10],[6,-10]], k &#x3D; 1</span><br><span class="line">Output: 4</span><br><span class="line">Explanation: The first two points satisfy the condition |xi - xj| &lt;&#x3D; 1 and if we calculate the equation we get 3 + 0 + |1 - 2| &#x3D; 4. Third and fourth points also satisfy the condition and give a value of 10 + -10 + |5 - 6| &#x3D; 1.</span><br><span class="line">No other pairs satisfy the condition, so we return the max of 4 and 1.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: points &#x3D; [[0,0],[3,0],[9,2]], k &#x3D; 3</span><br><span class="line">Output: 3</span><br><span class="line">Explanation: Only the first two points have an absolute difference of 3 or less in the x-values, and give the value of 0 + 0 + |0 - 3| &#x3D; 3.</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>2 &lt;= points.length &lt;= 10^5</code></li>
+<li><code>points[i].length == 2</code></li>
+<li><code>-10^8 &lt;= points[i][0], points[i][1] &lt;= 10^8</code></li>
+<li><code>0 &lt;= k &lt;= 2 * 10^8</code></li>
+<li><code>points[i][0] &lt; points[j][0]</code> for all <code>1 &lt;= i &lt; j &lt;= points.length</code></li>
+<li><code>xi</code> form a strictly increasing sequence.</li>
+</ul>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Hard</p>
+<p>本题可以使用单调队列的方式解决。将计算式稍微变换一下可以得到，当遍历到第j个时。<br>$$<br>y_i+y_j+|x_i-x_j| = y_i+y_j+x_j-x_i=y_j+x_j+y_i-x_i<br>$$<br>也就是说，遍历到第j个时，只需要找前面最大的yi-xi即可。这个使用单调双端队列即可。其实单调栈也行，但是必须要要取到栈底元素，因此使用deque.</p>
+<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间上O(n)，空间上O(n)。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">// when i &lt; j, yi + yj + |xi - xj| = (yj + xj) + (yi - xi) </span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">findMaxValueOfEquation</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; points, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = points.<span class="built_in">size</span>(), res = INT_MIN;</span><br><span class="line">        <span class="built_in">deque</span>&lt;pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt;&gt; Q;</span><br><span class="line">        Q.push_back(&#123;points[<span class="number">0</span>][<span class="number">0</span>], points[<span class="number">0</span>][<span class="number">1</span>] - points[<span class="number">0</span>][<span class="number">0</span>]&#125;);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 队列按照yi-xi降序排序</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;len; i++) &#123;</span><br><span class="line">            <span class="keyword">while</span>(!Q.empty() <span class="keyword">and</span> points[i][<span class="number">0</span>] - Q.front().first &gt; k) Q.pop_front();</span><br><span class="line">            <span class="keyword">if</span> (!Q.empty()) res = <span class="built_in">max</span>(res, points[i][<span class="number">0</span>] + points[i][<span class="number">1</span>] + Q.front().second);</span><br><span class="line">            <span class="keyword">while</span> (!Q.empty() <span class="keyword">and</span> Q.back().second &lt;= points[i][<span class="number">1</span>] - points[i][<span class="number">0</span>]) Q.pop_back();</span><br><span class="line">            Q.push_back(&#123;points[i][<span class="number">0</span>], points[i][<span class="number">1</span>] - points[i][<span class="number">0</span>]&#125;);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2020-07-04</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/04/LeetCode(1494.%20Parallel%20Courses%20II)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -823,72 +914,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/16/LeetCode(522.%20Longest%20Uncommon%20Subsequence%20II)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/06/16/LeetCode(522.%20Longest%20Uncommon%20Subsequence%20II)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(\522. Longest Uncommon Subsequence II)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-06-16 23:16:59 / 修改时间：23:17:03" itemprop="dateCreated datePublished" datetime="2020-06-16T23:16:59+08:00">2020-06-16</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          Medium，[522. 最长特殊序列 II](https://leetcode-cn.com/problems/longest-uncommon-subsequence-ii/)。给定字符串列表，你需要从它们中找出最长的特殊序列。最长特殊序列定义如下：该序列为某字符串独有的最长子序列（即不能是其他字符串的子序列）。子序列可以通过删去字符串中的某些字符实现，但不能改变剩余字符的相对顺序。空序列为所有字符串的子序列，任何字符串为其自身的子序列。输入将是一个字符串列表，输出是最长特殊序列的长度。如果最长特殊序列不存在，返回 -1 。
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/06/16/LeetCode(522.%20Longest%20Uncommon%20Subsequence%20II)%E9%A2%98%E8%A7%A3/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -959,7 +984,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">362</span>
+          <span class="site-state-item-count">363</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
