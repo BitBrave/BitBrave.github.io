@@ -168,6 +168,167 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(1038.%20Binary%20Search%20Tree%20to%20Greater%20Sum%20Tree)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(1038.%20Binary%20Search%20Tree%20to%20Greater%20Sum%20Tree)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1038. Binary Search Tree to Greater Sum Tree)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-1038-Binary-Search-Tree-to-Greater-Sum-Tree-题解"><a href="#LeetCode-1038-Binary-Search-Tree-to-Greater-Sum-Tree-题解" class="headerlink" title="LeetCode(\1038. Binary Search Tree to Greater Sum Tree)题解"></a>LeetCode(\1038. Binary Search Tree to Greater Sum Tree)题解</h1><p>Given the root of a binary <strong>search</strong> tree with distinct values, modify it so that every <code>node</code> has a new value equal to the sum of the values of the original tree that are greater than or equal to <code>node.val</code>.</p>
+<p>As a reminder, a <em>binary search tree</em> is a tree that satisfies these constraints:</p>
+<ul>
+<li>The left subtree of a node contains only nodes with keys <strong>less than</strong> the node’s key.</li>
+<li>The right subtree of a node contains only nodes with keys <strong>greater than</strong> the node’s key.</li>
+<li>Both the left and right subtrees must also be binary search trees.</li>
+</ul>
+<p><strong>Example 1:</strong></p>
+<p><strong><img src="https://assets.leetcode.com/uploads/2019/05/02/tree.png" alt="img"></strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: [4,1,6,0,2,5,7,null,null,null,3,null,null,null,8]</span><br><span class="line">Output: [30,36,21,36,35,26,15,null,null,null,33,null,null,null,8]</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Note:</strong></p>
+<ol>
+<li>The number of nodes in the tree is between <code>1</code> and <code>100</code>.</li>
+<li>Each node will have value between <code>0</code> and <code>100</code>.</li>
+<li>The given tree is a binary search tree.</li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个BST（二叉搜索树），其中每个节点的值都不一样，现在对每个值进行改变，将每个节点的值改为原本二叉树中大于等于这个节点值的节点的值的和。（理解了好久才明白这个题意！）</p>
+<p>这个题说白了就是，找到一个节点，然后统计BST中大于等于这个节点值的所有节点，把这些节点的值加起来更新为这个节点的值。而BST在中序遍历上就是一个递增的序列。因此我们可以使用一个倒着的中序遍历，然后把前面的值分别求和加到后面的值上即可。</p>
+<p>代码如下，时间复杂度O(N)，空间复杂度O(1)。</p>
+<p><code>Runtime: 0 ms, faster than 100.00% of C++ online submissions for Binary Search Tree to Greater Sum Tree.</code></p>
+<p><code>Memory Usage: 9.1 MB, less than 100.00% of C++ online submissions for Binary Search Tree to Greater Sum Tree.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">inOrder</span><span class="params">(TreeNode* root, <span class="keyword">int</span> val)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> tmp = root-&gt;val, r = inOrder(root-&gt;right, val);</span><br><span class="line">        root-&gt;val += r + val;</span><br><span class="line">        <span class="keyword">return</span> tmp + r + inOrder(root-&gt;left, root-&gt;val);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">TreeNode* <span class="title">bstToGst</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        inOrder(root, <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2019-11-22</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(106.%20Construct%20Binary%20Tree%20from%20Inorder%20and%20Postorder%20Traversal)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(106.%20Construct%20Binary%20Tree%20from%20Inorder%20and%20Postorder%20Traversal)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(106. Construct Binary Tree from Inorder and Postorder Traversal)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-106-Construct-Binary-Tree-from-Inorder-and-Postorder-Traversal-题解"><a href="#LeetCode-106-Construct-Binary-Tree-from-Inorder-and-Postorder-Traversal-题解" class="headerlink" title="LeetCode(106. Construct Binary Tree from Inorder and Postorder Traversal)题解"></a>LeetCode(106. Construct Binary Tree from Inorder and Postorder Traversal)题解</h1><hr>
+<p>Given inorder and postorder traversal of a tree, construct the binary tree.</p>
+<p>Note:<br>You may assume that duplicates do not exist in the tree.</p>
+<p>For example, given</p>
+<pre><code>inorder = [9,3,15,20,7]
+postorder = [9,15,7,20,3]
+Return the following binary tree:
+
+    3
+   / \
+  9  20
+    /  \
+   15   7</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出一个树的中序和后序遍历，恢复这个树的结构，树中元素是不重复的。</p>
+<p>对于二叉树来说，后序和中序遍历可以唯一地确定一个树的结构，如果元素没有重复的话。方法如下，首先看后序最后一个一定是根节点，然后在中序遍历里查看这个根节点的位置。位置左边的元素一定是中序遍历下的左子树，位置右边的元素一定是中序遍历下的右子树。那么确定根节点之后及左右子树后，在后序遍历中从开始节点之后取中序遍历左子树序列长度的序列，一定是后序遍历下的左子树。这样就又得到了一个左子树的前序和中序遍历。问题缩小了。同样，右子树一样可以得到。</p>
+<p>因此问题规模可以一直缩小，直到为空。当判断为空时，直接返回NULL。</p>
+<p>代码如下：</p>
+<p>Runtime: 24 ms, faster than 55.53% of C++ online submissions for Construct Binary Tree from Inorder and Postorder Traversal.<br>Memory Usage: 16.7 MB, less than 74.96% of C++ online submissions for Construct Binary Tree from Inorder and Postorder Traversal.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">TreeNode* <span class="title">build</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; postorder, <span class="keyword">int</span> psta, <span class="keyword">int</span> pend, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; inorder, <span class="keyword">int</span> ista, <span class="keyword">int</span> iend)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(psta&gt;pend) <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">        </span><br><span class="line">        TreeNode *root = <span class="keyword">new</span> TreeNode(postorder[pend]);</span><br><span class="line">        <span class="keyword">int</span> pmid, imid = ista;</span><br><span class="line">        <span class="keyword">while</span>(inorder[imid] != postorder[pend]) imid++;</span><br><span class="line">        pmid = imid - ista + psta - <span class="number">1</span>;</span><br><span class="line">        root-&gt;left = build(postorder, psta, pmid, inorder, ista, imid<span class="number">-1</span>);</span><br><span class="line">        root-&gt;right = build(postorder, pmid+<span class="number">1</span>, pend<span class="number">-1</span>, inorder, imid+<span class="number">1</span>, iend);</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">TreeNode* <span class="title">buildTree</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; inorder, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; postorder)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> plen = postorder.<span class="built_in">size</span>(), ilen = inorder.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">return</span> build(postorder, <span class="number">0</span>, plen<span class="number">-1</span>, inorder, <span class="number">0</span>, ilen<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-06-28</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(109.%20Convert%20Sorted%20List%20to%20Binary%20Search%20Tree)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -814,195 +975,6 @@ i&lt;=p&lt;=j: M &lt;= min(abs(i-p)*min(ai, ap), abs(p-j)*min(aj, ap))。</code>
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(1140.%20Stone%20Game%20II)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(1140.%20Stone%20Game%20II)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1140. Stone Game II)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-1140-Stone-Game-II-题解"><a href="#LeetCode-1140-Stone-Game-II-题解" class="headerlink" title="LeetCode(\1140. Stone Game II)题解"></a>LeetCode(\1140. Stone Game II)题解</h1><p>Alex and Lee continue their games with piles of stones. There are a number of piles <strong>arranged in a row</strong>, and each pile has a positive integer number of stones <code>piles[i]</code>. The objective of the game is to end with the most stones. </p>
-<p>Alex and Lee take turns, with Alex starting first. Initially, <code>M = 1</code>.</p>
-<p>On each player’s turn, that player can take <strong>all the stones</strong> in the <strong>first</strong> <code>X</code> remaining piles, where <code>1 &lt;= X &lt;= 2M</code>. Then, we set <code>M = max(M, X)</code>.</p>
-<p>The game continues until all the stones have been taken.</p>
-<p>Assuming Alex and Lee play optimally, return the maximum number of stones Alex can get.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: piles &#x3D; [2,7,9,4,4]</span><br><span class="line">Output: 10</span><br><span class="line">Explanation:  If Alex takes one pile at the beginning, Lee takes two piles, then Alex takes 2 piles again. Alex can get 2 + 4 + 4 &#x3D; 10 piles in total. If Alex takes two piles at the beginning, then Lee can take all three piles left. In this case, Alex get 2 + 7 &#x3D; 9 piles in total. So we return 10 since it&#39;s larger.</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Constraints:</strong></p>
-<ul>
-<li><code>1 &lt;= piles.length &lt;= 100</code></li>
-<li><code>1 &lt;= piles[i] &lt;= 10 ^ 4</code></li>
-</ul>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一堆石子，每堆石子有对应的石子数，A和L轮流选X堆，A先选。然后1&lt;=X&lt;=2M，然后更新M=max(M, X)，初始化M=1。两个人都使用最优的办法，那么问A能得到最多的石子是多少。</p>
-<p>这个题我觉得难度挺大的，是网上参考了解法解决的。</p>
-<h3 id="解法一：记忆化递归，DFS"><a href="#解法一：记忆化递归，DFS" class="headerlink" title="解法一：记忆化递归，DFS"></a>解法一：记忆化递归，DFS</h3><p>我们假设一个函数dfs(i，M)来表示第一个选的人从第i堆石子开始，可选堆数为1和2M时，能得到的最大石子数。那么第二个先选的人就只能得到第i堆开始的剩余石子总数-函数返回值了。对于A来说，我们直接调用dfs(0,1)即可。那如何构建dfs呢，首先从第i堆开始选，我们可以遍历1到2M，假设依次选定X堆，那么能得到的最大数就是max(sum[i:]-dfs(i+X, max(X, M)))。这就可以将问题变为子问题了。</p>
-<p>同时，因为子问题有很多重复的，因此我们可以记住一些子问题的固定解，避免重复计算。使用一个map，索引为i，开始选石子的堆数位置，然后val也是一个map，索引是此时的M值，然后val是对应的结果。</p>
-<p>代码如下，时间复杂度O(n3)，空间复杂度O(n2)，因为M的值肯定不会超过n/2（n为石子堆数），因为如果等于n/2时，选的人肯定就直接将剩下的石子全部拿了。</p>
-<p><code>Runtime: 52 ms, faster than 9.79% of C++ online submissions for Stone Game II.</code></p>
-<p><code>Memory Usage: 10.3 MB, less than 100.00% of C++ online submissions for Stone Game II.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> len;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; acum;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; p;</span><br><span class="line">    <span class="built_in">unordered_map</span>&lt;<span class="keyword">int</span>, <span class="built_in">unordered_map</span>&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt;&gt; M;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> sta, <span class="keyword">int</span> m)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (sta &gt;= len) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span>(M.<span class="built_in">find</span>(sta) != M.<span class="built_in">end</span>() <span class="keyword">and</span> M[sta].<span class="built_in">find</span>(m) != M[sta].<span class="built_in">end</span>()) <span class="keyword">return</span> M[sta][m];</span><br><span class="line">        M[sta][m] = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> x=<span class="number">1</span>; x&lt;=<span class="number">2</span>*m; x++)&#123;</span><br><span class="line">            M[sta][m] = <span class="built_in">max</span>(M[sta][m], acum[len]-acum[sta]-dfs(sta+x, <span class="built_in">max</span>(m, x)));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> M[sta][m];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">stoneGameII</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; piles)</span> </span>&#123;</span><br><span class="line">        len = piles.<span class="built_in">size</span>();</span><br><span class="line">        acum = <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(len + <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">        p = piles;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++) acum[i+<span class="number">1</span>] += acum[i] + piles[i];</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> dfs(<span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<h3 id="解法二：动态规划"><a href="#解法二：动态规划" class="headerlink" title="解法二：动态规划"></a>解法二：动态规划</h3><p>一般来说，解决同样一个问题，递归总是要比非递归函数花费更多的时间。将上面的记忆化递归也就是自顶向下改变成自底向上，就可以变成DP问题了。</p>
-<p>我们设定一个二维数组D，其中D[i][j]表示从第i堆石子开始选，初始化为m=j的时候，第一个选的人能得到的最多的石子。那么状态转移方程则如下。</p>
-<p>D[i][j] = max(D[i, j], acum[len]-acum[i]-D[i+x][max(m,i)]); 1&lt;= x &lt;=m; 注意判断是否越界，如果i+x或者max(m,i)越界，就直接break。</p>
-<p>分析可知，我们是直接从最后边计算，当M=1时。结果则直接返回D[0][1]即可。</p>
-<p>代码如下，时间复杂度O(n3)，空间复杂度O(n2)，因为M的值肯定不会超过n/2（n为石子堆数），因为如果等于n/2时，选的人肯定就直接将剩下的石子全部拿了。</p>
-<p><code>Runtime: 12 ms, faster than 54.62% of C++ online submissions for Stone Game II.</code></p>
-<p><code>Memory Usage: 9 MB, less than 100.00% of C++ online submissions for Stone Game II.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">stoneGameII</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; piles)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = piles.<span class="built_in">size</span>();</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; acum = <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(len + <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">D</span><span class="params">(len+<span class="number">1</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(len+<span class="number">1</span>, <span class="number">0</span>))</span></span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++) acum[i+<span class="number">1</span>] += acum[i] + piles[i];</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=len; j&gt;=<span class="number">0</span>; j--)&#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> i=len<span class="number">-1</span>; i&gt;=<span class="number">0</span>; i--)&#123;</span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> x=<span class="number">1</span>; x &lt;= <span class="number">2</span>*j; x++)&#123;</span><br><span class="line">                    <span class="keyword">if</span> (i+x &gt; len) <span class="keyword">break</span>;</span><br><span class="line">                    <span class="keyword">else</span> D[i][j] = <span class="built_in">max</span>(D[i][j], acum[len]-acum[i]-D[i+x][<span class="built_in">max</span>(j, x)]);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> D[<span class="number">0</span>][<span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-
-
-<p>BitBrave，2019-12-14</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(115.%20Distinct%20Subsequences)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(115.%20Distinct%20Subsequences)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(115. Distinct Subsequences)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-115-Distinct-Subsequences-题解"><a href="#LeetCode-115-Distinct-Subsequences-题解" class="headerlink" title="LeetCode(115. Distinct Subsequences)题解"></a>LeetCode(115. Distinct Subsequences)题解</h1><hr>
-<p>Given a string S and a string T, count the number of distinct subsequences of S which equals T.</p>
-<p>A subsequence of a string is a new string which is formed from the original string by deleting some (can be none) of the characters without disturbing the relative positions of the remaining characters. (ie, “ACE” is a subsequence of “ABCDE” while “AEC” is not).</p>
-<p>Example 1:</p>
-<pre><code>Input: S = &quot;rabbbit&quot;, T = &quot;rabbit&quot;
-Output: 3</code></pre><p>Explanation:</p>
-<pre><code>As shown below, there are 3 ways you can generate &quot;rabbit&quot; from S.
-(The caret symbol ^ means the chosen letters)
-
-rabbbit
-^^^^ ^^
-rabbbit
-^^ ^^^^
-rabbbit
-^^^ ^^^</code></pre><p>Example 2:</p>
-<p>Input: S = “babgbag”, T = “bag”<br>Output: 5<br>Explanation:</p>
-<pre><code>As shown below, there are 5 ways you can generate &quot;bag&quot; from S.
-(The caret symbol ^ means the chosen letters)
-
-babgbag
-^^ ^
-babgbag
-^^    ^
-babgbag
-^    ^^
-babgbag
-^  ^^
-babgbag
-    ^^^</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出字符串S，和T，判断S中有几个子字符串是T中的。</p>
-<p>可以使用DP的方法求解。使用一个二维数组D,DP[i][j]表示S前i个字符中有几个子字符串是和T前j个字符匹配的。</p>
-<p>初始化D[0][0]=1, D[0][1-T.size()] = 0, D[0-S.size()][0] = 0;</p>
-<p>然后对于D[i][j]操作如下：</p>
-<p>1 S[i-1] != T[j-1]; 表示不匹配，那么直接等于之前的情况，D[i][j] = D[i-1][j]<br>2 S[i-1] == T[j-1]; 表示匹配，那么有两种情况，一是最后的匹配用上了S[i-1]，一是没用上。因此D[i][j] = D[i-1][j] + D[i-1][j-1];</p>
-<p>上述观察只用到了相邻的值，因此，可以直接使用一个S.size()<em>2数组. 降低空间复杂度。因为S.size()&gt;T.size(),因此最好使用2</em>T.size()数组。</p>
-<p>代码如下</p>
-<p>Runtime: 16 ms, faster than 29.32% of C++ online submissions for Distinct Subsequences.<br>Memory Usage: 8.8 MB, less than 79.23% of C++ online submissions for Distinct Subsequences.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">numDistinct</span><span class="params">(<span class="built_in">string</span> s, <span class="built_in">string</span> t)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> slen = s.<span class="built_in">size</span>(), tlen = t.<span class="built_in">size</span>();</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">D</span><span class="params">(<span class="number">2</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(tlen + <span class="number">1</span>, <span class="number">0</span>))</span></span>;</span><br><span class="line">        D[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;slen; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;tlen; j++)&#123;</span><br><span class="line">                D[<span class="number">1</span>][j+<span class="number">1</span>] = D[<span class="number">0</span>][j+<span class="number">1</span>];</span><br><span class="line">                <span class="keyword">if</span>(INT_MAX - D[<span class="number">1</span>][j+<span class="number">1</span>] &gt;=  (s[i] == t[j] ? D[<span class="number">0</span>][j] : <span class="number">0</span>)) D[<span class="number">1</span>][j+<span class="number">1</span>] += (s[i] == t[j] ? D[<span class="number">0</span>][j] : <span class="number">0</span>);</span><br><span class="line">                <span class="keyword">else</span> D[<span class="number">1</span>][j+<span class="number">1</span>] = INT_MAX;</span><br><span class="line">            &#125; </span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>; j&lt;tlen+<span class="number">1</span>; j++) D[<span class="number">0</span>][j] = D[<span class="number">1</span>][j];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> D[<span class="number">1</span>][tlen];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-07-02</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1073,12 +1045,12 @@ babgbag
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">363</span>
+          <span class="site-state-item-count">365</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-count">42</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>

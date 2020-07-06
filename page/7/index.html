@@ -168,6 +168,166 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/30/LeetCode(368.%20Largest%20Divisible%20Subset)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/30/LeetCode(368.%20Largest%20Divisible%20Subset)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(368. Largest Divisible Subset)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-03-30 18:13:28 / 修改时间：18:13:33" itemprop="dateCreated datePublished" datetime="2020-03-30T18:13:28+08:00">2020-03-30</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-368-Largest-Divisible-Subset-题解"><a href="#LeetCode-368-Largest-Divisible-Subset-题解" class="headerlink" title="LeetCode(\368. Largest Divisible Subset)题解"></a>LeetCode(\368. Largest Divisible Subset)题解</h1><p>Given a set of <strong>distinct</strong> positive integers, find the largest subset such that every pair (Si, Sj) of elements in this subset satisfies:</p>
+<p>Si % Sj = 0 or Sj % Si = 0.</p>
+<p>If there are multiple solutions, return any subset is fine.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: [1,2,3]</span><br><span class="line">Output: [1,2] (of course, [1,3] will also be ok)</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: [1,2,4,8]</span><br><span class="line">Output: [1,2,4,8]</span><br></pre></td></tr></table></figure>
+
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Medium</p>
+<p>从一个整数数组总选出一个最多元素的子集，子集内的任意两个元素之间一个可以被另一个整除。</p>
+<p>这个题虽然Medium，但是我觉得想不到的话还是挺难的。首先我们可以将数组降序或者升序排序，然后从前到后判断，对于走到的每个元素，我们记录到当前这个元素为止，包括当前元素在内的最长子集，如何填充这个子集呢？走到当前元素X，就往前查看，如果遇到可以用当前元素整除或者被整除的元素，那就将该元素的对应子集放入当前元素，最后保存一个最长的即可。因为是递减或者递增，只要满足最近的元素整除，那么前边的也一定满足。</p>
+<p>为了节省内存，我们可以在在每个元素index对应两个值，一个记录除了index值之外的子集长度，一个记录对应子集中左边离自己最近的那个元素，就是这个元素推导出了当前index的，最后不断回溯就可以还原整个子集。</p>
+<p>最后查看所有index的子集长度，选择最长的那个回溯即可。</p>
+<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间上，$O(nlogn)$，空间上，$O(n)$。</p>
+<p><code>Runtime: 68 ms, faster than 10.45% of C++ online submissions for Largest Divisible Subset.</code></p>
+<p><code>Memory Usage: 7.8 MB, less than 100.00% of C++ online submissions for Largest Divisible Subset.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">largestDivisibleSubset</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span> (len == <span class="number">0</span>) <span class="keyword">return</span> &#123;&#125;;</span><br><span class="line">        </span><br><span class="line">        <span class="built_in">map</span>&lt;<span class="keyword">int</span>, pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt;&gt; M; <span class="comment">// index-&gt;(index, n);</span></span><br><span class="line">        </span><br><span class="line">        sort(nums.<span class="built_in">begin</span>(), nums.<span class="built_in">end</span>());</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=len<span class="number">-1</span>; i&gt;=<span class="number">0</span>; i--) &#123;</span><br><span class="line">            <span class="keyword">int</span> index = <span class="number">-1</span>, n = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=i+<span class="number">1</span>; j&lt;len; j++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (nums[j] % nums[i] != <span class="number">0</span>) <span class="keyword">continue</span>;</span><br><span class="line">                <span class="keyword">if</span> (M[j].second + <span class="number">1</span> &gt; n) &#123;</span><br><span class="line">                    index = j;</span><br><span class="line">                    n = M[j].second + <span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            M[i] = make_pair(index, n);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> index = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;len; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (M[i].second &gt; M[index].second) index = i;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; res;</span><br><span class="line">        <span class="keyword">while</span> (index != <span class="number">-1</span>) &#123;</span><br><span class="line">            res.push_back(nums[index]);</span><br><span class="line">            index = M[index].first;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2020-03-30</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/28/LeetCode(354.%20Russian%20Doll%20Envelopes)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/28/LeetCode(354.%20Russian%20Doll%20Envelopes)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(354. Russian Doll Envelopes)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-03-28 18:43:01 / 修改时间：18:43:16" itemprop="dateCreated datePublished" datetime="2020-03-28T18:43:01+08:00">2020-03-28</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-354-Russian-Doll-Envelopes-题解"><a href="#LeetCode-354-Russian-Doll-Envelopes-题解" class="headerlink" title="LeetCode(\354. Russian Doll Envelopes)题解"></a>LeetCode(\354. Russian Doll Envelopes)题解</h1><p>You have a number of envelopes with widths and heights given as a pair of integers <code>(w, h)</code>. One envelope can fit into another if and only if both the width and height of one envelope is greater than the width and height of the other envelope.</p>
+<p>What is the maximum number of envelopes can you Russian doll? (put one inside other)</p>
+<p><strong>Note:</strong><br>Rotation is not allowed.</p>
+<p><strong>Example:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: [[5,4],[6,4],[6,7],[2,3]]</span><br><span class="line">Output: 3 </span><br><span class="line">Explanation: The maximum number of envelopes you can Russian doll is 3 ([2,3] &#x3D;&gt; [5,4] &#x3D;&gt; [6,7]).</span><br></pre></td></tr></table></figure>
+
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Hard</p>
+<p>给出一堆信封，每个信封有长宽两种大小，一个信封A可以包裹另一个信封B的条件是A的长宽都严格大于B对应的长和宽。请问这堆信封里一次性最长可以包裹几个信封。</p>
+<p>这个题分析可以发现就是在信封中选择最长的递增子序列，因为有长宽两个因素在，很难直接选取最长递增子序列。我们可以首先将信封选择一个维度比如长度进行排序。然后再对另一个维度的数进行递增子序列选取即可。</p>
+<p>这里我的方式是：对所有信封按照长度升序排序，对于相同长度的信封，宽度大的在前面。这是为了减少比较，后面因为相同长或宽的信封是不能包裹的。那么后续在判断两个信封时，如果前后两个信封的宽度前小后大可推断长度一定是不相同的，因为按照上述的排序方式，只有宽度前大后小的两个信封长度才可能相等。</p>
+<p>可以使用DP解决，构造一个dp数组，dp[i]表示前i个信封中以i为最外层包裹的话有多少包裹层数，只需要遍历前面的i-1个即可。</p>
+<p>如何证明这种算法是正确的呢？加入这种算法不是最优的，那么说明我们最终构造的序列漏掉了某个可以满足包裹的信封，但是算法中如果存在这样的，最终一定会计入。</p>
+<h2 id="DP时空复杂度"><a href="#DP时空复杂度" class="headerlink" title="DP时空复杂度"></a>DP时空复杂度</h2><p>代码如下，时间上O(N2)，空间上O(N)。</p>
+<p><code>Runtime: 1156 ms</code></p>
+<p><code>Memory Usage: 46.1 MB</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; a, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a[<span class="number">0</span>] &lt; b[<span class="number">0</span>] <span class="keyword">or</span> (a[<span class="number">0</span>] == b[<span class="number">0</span>] <span class="keyword">and</span> a[<span class="number">1</span>] &gt; b[<span class="number">1</span>]);</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxEnvelopes</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; envelopes)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = envelopes.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span> (len == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">dp</span><span class="params">(len, <span class="number">1</span>)</span></span>;</span><br><span class="line">        </span><br><span class="line">        sort(envelopes.<span class="built_in">begin</span>(), envelopes.<span class="built_in">end</span>(), cmp);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;len; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=i<span class="number">-1</span>; j&gt;=<span class="number">0</span>; j--) &#123;</span><br><span class="line">                <span class="keyword">if</span> (envelopes[j][<span class="number">1</span>] &lt; envelopes[i][<span class="number">1</span>]) &#123;</span><br><span class="line">                    dp[i] = <span class="built_in">max</span>(dp[i], dp[j] + <span class="number">1</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//int res = 1;</span></span><br><span class="line">        <span class="comment">//for (int d : dp) res = max(res, d);</span></span><br><span class="line">        <span class="comment">//return res;</span></span><br><span class="line">        <span class="keyword">return</span> *max_element(dp.<span class="built_in">begin</span>(), dp.<span class="built_in">end</span>());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>还有一种不使用DP，还是将信封按照上述一样的方式排序，然后从前到后开始选择信封，每次遍历到一个信封，查看信封的宽度在已经选择的信封中的位置，如果是最大的，直接放入，如果不是，就查看第一个大于等于这个信封的信封宽度，如果等于不用管，如果大于，就将其替换为当前信封。这是为了后续选择时候，在保证相同信封包裹数的情况下，最外围的信封宽度尽可能小，因为长度肯定都是小于。这样最后返回选择的信封的数目即可。</p>
+<h2 id="二分时空复杂度"><a href="#二分时空复杂度" class="headerlink" title="二分时空复杂度"></a>二分时空复杂度</h2><p>代码如下，时间上O(NlogN)，空间上O(N).</p>
+<p><code>Runtime: 308 ms, faster than 57.33% of C++ online submissions for Russian Doll Envelopes.</code></p>
+<p><code>Memory Usage: 47.3 MB, less than 16.67% of C++ online submissions for Russian Doll Envelopes.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; a, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a[<span class="number">0</span>] &lt; b[<span class="number">0</span>] <span class="keyword">or</span> (a[<span class="number">0</span>] == b[<span class="number">0</span>] <span class="keyword">and</span> a[<span class="number">1</span>] &gt; b[<span class="number">1</span>]);</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxEnvelopes</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; envelopes)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = envelopes.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span> (len == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; dp;</span><br><span class="line">        </span><br><span class="line">        sort(envelopes.<span class="built_in">begin</span>(), envelopes.<span class="built_in">end</span>(), cmp);</span><br><span class="line">        <span class="keyword">for</span> (<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; e : envelopes) &#123;</span><br><span class="line">            <span class="comment">// vector&lt;int&gt;::iterator </span></span><br><span class="line">            <span class="comment">// 二分搜索递增序列，返回序列中大于等于输入数的第一个数</span></span><br><span class="line">            <span class="keyword">auto</span> iter = lower_bound(dp.<span class="built_in">begin</span>(), dp.<span class="built_in">end</span>(), e[<span class="number">1</span>]); </span><br><span class="line">            <span class="keyword">if</span> (iter == dp.<span class="built_in">end</span>()) dp.push_back(e[<span class="number">1</span>]);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (e[<span class="number">1</span>] &lt; *iter) *iter = e[<span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> dp.<span class="built_in">size</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2020-03-28.</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/28/Leet(174.%20Dungeon%20Game)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -878,186 +1038,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/20/LeetCode(757.%20Set%20Intersection%20Size%20At%20Least%20Two)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/03/20/LeetCode(757.%20Set%20Intersection%20Size%20At%20Least%20Two)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(757. Set Intersection Size At Least Two)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-03-20 23:56:24" itemprop="dateCreated datePublished" datetime="2020-03-20T23:56:24+08:00">2020-03-20</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-03-23 23:42:52" itemprop="dateModified" datetime="2020-03-23T23:42:52+08:00">2020-03-23</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-757-Set-Intersection-Size-At-Least-Two-题解"><a href="#LeetCode-757-Set-Intersection-Size-At-Least-Two-题解" class="headerlink" title="LeetCode(\757. Set Intersection Size At Least Two)题解"></a>LeetCode(\757. Set Intersection Size At Least Two)题解</h1><p>An integer interval <code>[a, b]</code> (for integers <code>a &lt; b</code>) is a set of all consecutive integers from <code>a</code> to <code>b</code>, including <code>a</code> and <code>b</code>.</p>
-<p>Find the minimum size of a set S such that for every integer interval A in <code>intervals</code>, the intersection of S with A has size at least 2.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Input: intervals &#x3D; [[1, 3], [1, 4], [2, 5], [3, 5]]</span><br><span class="line">Output: 3</span><br><span class="line">Explanation:</span><br><span class="line">Consider the set S &#x3D; &#123;2, 3, 4&#125;.  For each interval, there are at least 2 elements from S in the interval.</span><br><span class="line">Also, there isn&#39;t a smaller size set that fulfills the above condition.</span><br><span class="line">Thus, we output the size of this set, which is 3.</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Input: intervals &#x3D; [[1, 2], [2, 3], [2, 4], [4, 5]]</span><br><span class="line">Output: 5</span><br><span class="line">Explanation:</span><br><span class="line">An example of a minimum sized set is &#123;1, 2, 3, 4, 5&#125;.</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Note:</strong></p>
-<ol>
-<li><code>intervals</code> will have length in range <code>[1, 3000]</code>.</li>
-<li><code>intervals[i]</code> will have length <code>2</code>, representing some integer interval.</li>
-<li><code>intervals[i][j]</code> will be an integer in <code>[0, 10^8]</code>.</li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Hard</p>
-<p>给出一系列区间，区间的表示使用[a,b]，表示a~b之间包括ab的所有值，现在寻找一个最小的集合，保证对于每个给定的区间，集合S内至少有两个元素在这个区间内，请问这个最小集合的长度是多少。</p>
-<p>本题使用Greedy。有两种方法，不过都是一样的思路，都是对于一个区间，集合S与之相交的两个值尽可能也与其他相交。</p>
-<h2 id="第一种，按照右区间排序（相同右区间的左区间更大在前！）"><a href="#第一种，按照右区间排序（相同右区间的左区间更大在前！）" class="headerlink" title="第一种，按照右区间排序（相同右区间的左区间更大在前！）"></a>第一种，按照右区间排序（相同右区间的左区间更大在前！）</h2><p>将所有的区间按照右边界升序排序，然后从第一个区间x开始，可知区间x与S至少有两个元素相交，如何选取这两个元素呢？因为要尽可能兼容其他区间，所以这个值我们选x区间的最后两个，如果x=[x1, x2]，那么就选m=x2-1，n=x2。因为后面的区间右边界都比当前x的右边界大，因此我们尽可能靠后选择。然后遍历到下一个区间y=[y1,y2]，判断y1和n、m的大小，如果y1&lt;=m，表示m、n可以包含在y中，就不需要增加新的数， 如果y1==n，表示只包含了一个，就需要增加一个值=y2，如果都不在就增加两个值y2和y2-1。注意我们每次只需要比较最新的两个值，也就是最大的两个值，m和n。因此要更新m和n，然后继续遍历到下一个区间即可。</p>
-<p>注意相同右边区间的时候，一定要左区间更大的在前，否则在判断的时候会出错。</p>
-<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间上，排序$O(nlogn)$，空间上，不需要记录集合元素，$O(1)$。</p>
-<p><code>Runtime: 340 ms, faster than 5.32% of C++ online submissions for Set Intersection Size At Least Two.</code></p>
-<p><code>Memory Usage: 51.9 MB, less than 33.33% of C++ online submissions for Set Intersection Size At Least Two.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">intersectionSizeTwo</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; intervals)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>, m = INT_MIN, n = INT_MIN + <span class="number">1</span>;</span><br><span class="line">        </span><br><span class="line">        sort(intervals.<span class="built_in">begin</span>(), intervals.<span class="built_in">end</span>(), [](<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; a, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; b) &#123; <span class="keyword">return</span> a[<span class="number">1</span>] &lt; b[<span class="number">1</span>] <span class="keyword">or</span> (a[<span class="number">1</span>] == b[<span class="number">1</span>] <span class="keyword">and</span> a[<span class="number">0</span>] &gt; b[<span class="number">0</span>]); &#125;);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; interval : intervals) &#123;</span><br><span class="line">            <span class="keyword">if</span> (interval[<span class="number">0</span>] &gt; n) &#123;</span><br><span class="line">                m = interval[<span class="number">1</span>] - <span class="number">1</span>;</span><br><span class="line">                n = m + <span class="number">1</span>;</span><br><span class="line">                res += <span class="number">2</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (interval[<span class="number">0</span>] &gt; m) &#123;</span><br><span class="line">                m = n;</span><br><span class="line">                n = interval[<span class="number">1</span>];</span><br><span class="line">                res++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<h2 id="第二种，按照左区间排序（相同左区间的右区间更小在前！）"><a href="#第二种，按照左区间排序（相同左区间的右区间更小在前！）" class="headerlink" title="第二种，按照左区间排序（相同左区间的右区间更小在前！）"></a>第二种，按照左区间排序（相同左区间的右区间更小在前！）</h2><p>将所有的区间按照左边界升序排序，然后从最后一个区间x开始，可知区间x与S至少有两个元素相交，如何选取这两个元素呢？因为要尽可能兼容其他区间，所以这个值我们选x区间的前两个，如果x=[x1, x2]，那么就选m=x1，n=x1+1。因为前面的区间左边界都比当前x的左边界大，因此我们尽可能靠前选择。然后遍历到下一个区间y=[y1,y2]，判断y2和m、n的大小，如果y2&gt;=n，表示m、n可以包含在y中，就不需要增加新的数， 如果y2==m，表示只包含了一个，就需要增加一个值=y1，如果都不在就增加两个值y1和y1+1。注意我们每次只需要比较最新的两个值，也就是最小的两个值，m和n。因此要更新m和n，然后继续遍历到下一个区间即可。</p>
-<h2 id="时空复杂度-1"><a href="#时空复杂度-1" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间上，排序$O(nlogn)$，空间上，不需要记录集合元素，$O(1)$。</p>
-<p><code>Runtime: 372 ms, faster than 5.32% of C++ online submissions for Set Intersection Size At Least Two.</code></p>
-<p><code>Memory Usage: 52 MB, less than 33.33% of C++ online submissions for Set Intersection Size At Least Two.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">intersectionSizeTwo</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; intervals)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>, m = INT_MAX - <span class="number">1</span>, n = INT_MAX;</span><br><span class="line">        </span><br><span class="line">        sort(intervals.<span class="built_in">begin</span>(), intervals.<span class="built_in">end</span>(), [](<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; a, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; b) &#123; <span class="keyword">return</span> a[<span class="number">0</span>] &gt; b[<span class="number">0</span>] <span class="keyword">or</span> (a[<span class="number">0</span>] == b[<span class="number">0</span>] <span class="keyword">and</span> a[<span class="number">1</span>] &lt; b[<span class="number">1</span>]); &#125;);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; interval : intervals) &#123;</span><br><span class="line">            <span class="keyword">if</span> (interval[<span class="number">1</span>] &lt; m) &#123;</span><br><span class="line">                m = interval[<span class="number">0</span>];</span><br><span class="line">                n = m + <span class="number">1</span>;</span><br><span class="line">                res += <span class="number">2</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (interval[<span class="number">1</span>] &lt; n) &#123;</span><br><span class="line">                n = m;</span><br><span class="line">                m = interval[<span class="number">0</span>];</span><br><span class="line">                res++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2020-03-20</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/20/LeetCode(630.%20Course%20Schedule%20III)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/03/20/LeetCode(630.%20Course%20Schedule%20III)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(630. Course Schedule III)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-03-20 00:58:39 / 修改时间：01:04:42" itemprop="dateCreated datePublished" datetime="2020-03-20T00:58:39+08:00">2020-03-20</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-630-Course-Schedule-III-题解"><a href="#LeetCode-630-Course-Schedule-III-题解" class="headerlink" title="LeetCode(\630. Course Schedule III)题解"></a>LeetCode(\630. Course Schedule III)题解</h1><p>There are <code>n</code> different online courses numbered from <code>1</code> to <code>n</code>. Each course has some duration(course length) <code>t</code> and closed on <code>dth</code> day. A course should be taken <strong>continuously</strong> for <code>t</code> days and must be finished before or on the <code>dth</code> day. You will start at the <code>1st</code> day.</p>
-<p>Given <code>n</code> online courses represented by pairs <code>(t,d)</code>, your task is to find the maximal number of courses that can be taken.</p>
-<p><strong>Example:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Input: [[100, 200], [200, 1300], [1000, 1250], [2000, 3200]]</span><br><span class="line">Output: 3</span><br><span class="line">Explanation: </span><br><span class="line">There&#39;re totally 4 courses, but you can take 3 courses at most:</span><br><span class="line">First, take the 1st course, it costs 100 days so you will finish it on the 100th day, and ready to take the next course on the 101st day.</span><br><span class="line">Second, take the 3rd course, it costs 1000 days so you will finish it on the 1100th day, and ready to take the next course on the 1101st day. </span><br><span class="line">Third, take the 2nd course, it costs 200 days so you will finish it on the 1300th day. </span><br><span class="line">The 4th course cannot be taken now, since you will finish it on the 3300th day, which exceeds the closed date.</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Note:</strong></p>
-<ol>
-<li>The integer 1 &lt;= d, t, n &lt;= 10,000.</li>
-<li>You can’t take two courses simultaneously.</li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Hard</p>
-<p>课程调度的一个变种问题。存在一批课程，每个课程存在包括两个数(t，d)，t为课程持续的时间，d为课程最晚的截止时间，即课程必须在d之前完成。现在在不冲突的情况下，串行地执行课程，可以放弃掉一些课程，请问可以成功执行的课程有最多有多少？</p>
-<p>这个题还是使用使用Greedy，蛮难想到的其实。和最小延迟调度一样，我们同样将课程按照截止时间升序排序，因为还是尽可能执行截止时间更早的课程。但是和最小延迟调度每个课程都选用不一样的是，加入一门课程，如果发现这个课程超过了截止时间，那么就从已经加入的课程中删除一个耗时最久即t最大的课程，如果加入的这个课程就是最耗时的，那自然就删除当前这个课程。</p>
-<p>按照上述策略，就可以得到最多的可以成功执行的课程，至于最优性证明，假设存在一个最优的选择方案，那么一定可以调整成上述策略选择出来的课程。</p>
-<p>这里删除耗时最久的课程，可以使用优先队列，大顶堆。</p>
-<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间上，排序加选择，$O(nlogn)$，空间上，$O(n)$。</p>
-<p><code>Runtime: 1096 ms, faster than 12.12% of C++ online submissions for Course Schedule III.</code></p>
-<p><code>Memory Usage: 248.3 MB, less than 100.00% of C++ online submissions for Course Schedule III.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; a, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a[<span class="number">1</span>] &lt; b[<span class="number">1</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">scheduleCourse</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; courses)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>, len = courses.<span class="built_in">size</span>(), courseLen = <span class="number">0</span>;</span><br><span class="line">        sort(courses.<span class="built_in">begin</span>(), courses.<span class="built_in">end</span>(), cmp);</span><br><span class="line">        priority_queue&lt;<span class="keyword">int</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;, less&lt;<span class="keyword">int</span>&gt;&gt; Q;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++) &#123;</span><br><span class="line">            Q.push(courses[i][<span class="number">0</span>]);</span><br><span class="line">            courseLen += courses[i][<span class="number">0</span>];</span><br><span class="line">            <span class="keyword">if</span> (courseLen &gt; courses[i][<span class="number">1</span>]) &#123;</span><br><span class="line">                courseLen -= Q.top();</span><br><span class="line">                Q.pop();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> Q.<span class="built_in">size</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2020-03-19</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1128,12 +1108,12 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">363</span>
+          <span class="site-state-item-count">365</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-count">42</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>

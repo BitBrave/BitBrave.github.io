@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="Hard，[1157. 子数组中占绝大多数的元素](https:&#x2F;&#x2F;leetcode-cn.com&#x2F;problems&#x2F;online-majority-element-in-subarray&#x2F;)。实现一个 MajorityChecker 的类，它应该具有下述几个 API：MajorityChecker(int[] arr) 会用给定的数组 arr 来构造一个 MajorityChecker 的实例。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LeetCode(\1157. Online Majority Element In Subarray)题解">
+<meta property="og:url" content="http://yoursite.com/2020/07/06/LeetCode(1157.%20Online%20Majority%20Element%20In%20Subarray)%E9%A2%98%E8%A7%A3/index.html">
+<meta property="og:site_name" content="BitBrave">
+<meta property="og:description" content="Hard，[1157. 子数组中占绝大多数的元素](https:&#x2F;&#x2F;leetcode-cn.com&#x2F;problems&#x2F;online-majority-element-in-subarray&#x2F;)。实现一个 MajorityChecker 的类，它应该具有下述几个 API：MajorityChecker(int[] arr) 会用给定的数组 arr 来构造一个 MajorityChecker 的实例。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-07-06T13:58:26.617Z">
+<meta property="article:modified_time" content="2020-07-06T14:02:10.746Z">
+<meta property="article:author" content="XJ">
+<meta property="article:tag" content="Hard">
+<meta property="article:tag" content="分块">
+<meta property="article:tag" content="$O(\sqrt{n}n)$">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2020/07/06/LeetCode(1157.%20Online%20Majority%20Element%20In%20Subarray)%E9%A2%98%E8%A7%A3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>LeetCode(\1157. Online Majority Element In Subarray)题解 | BitBrave</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">BitBrave</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">IIE</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/06/LeetCode(1157.%20Online%20Majority%20Element%20In%20Subarray)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          LeetCode(\1157. Online Majority Element In Subarray)题解
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-07-06 21:58:26 / 修改时间：22:02:10" itemprop="dateCreated datePublished" datetime="2020-07-06T21:58:26+08:00">2020-07-06</time>
+            </span>
+
+          
+            <div class="post-description">Hard，[1157. 子数组中占绝大多数的元素](https://leetcode-cn.com/problems/online-majority-element-in-subarray/)。实现一个 MajorityChecker 的类，它应该具有下述几个 API：MajorityChecker(int[] arr) 会用给定的数组 arr 来构造一个 MajorityChecker 的实例。int query(int left, int right, int threshold) 有这么几个参数：0 <= left <= right < arr.length 表示数组 arr 的子数组的长度。2 * threshold > right - left + 1，也就是说阈值 threshold 始终比子序列长度的一半还要大。每次查询 query(...) 会返回在 arr[left], arr[left+1], ..., arr[right] 中至少出现阈值次数 threshold 的元素，如果不存在这样的元素，就返回 -1。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="LeetCode-1157-Online-Majority-Element-In-Subarray-题解"><a href="#LeetCode-1157-Online-Majority-Element-In-Subarray-题解" class="headerlink" title="LeetCode(\1157. Online Majority Element In Subarray)题解"></a>LeetCode(\1157. Online Majority Element In Subarray)题解</h1><p>Implementing the class <code>MajorityChecker</code>, which has the following API:</p>
+<ul>
+<li><p><code>MajorityChecker(int[] arr)</code> constructs an instance of MajorityChecker with the given array <code>arr</code>;</p>
+</li>
+<li><pre><code>int query(int left, int right, int threshold)
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">   has arguments such that:</span><br><span class="line"></span><br><span class="line">  - &#96;0 &lt;&#x3D; left &lt;&#x3D; right &lt; arr.length&#96; representing a subarray of &#96;arr&#96;;</span><br><span class="line">  - &#96;2 * threshold &gt; right - left + 1&#96;, ie. the threshold is always a strict majority of the length of the subarray</span><br><span class="line"></span><br><span class="line">Each &#96;query(...)&#96; returns the element in &#96;arr[left], arr[left+1], ..., arr[right]&#96; that occurs at least &#96;threshold&#96; times, or &#96;-1&#96; if no such element exists.</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">**Example:**</span><br></pre></td></tr></table></figure>
+MajorityChecker majorityChecker = new MajorityChecker([1,1,2,2,1,1]);
+majorityChecker.query(0,5,4); // returns 1
+majorityChecker.query(0,3,3); // returns -1
+majorityChecker.query(2,3,2); // returns 2
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">**Constraints:**</span><br><span class="line"></span><br><span class="line">- &#96;1 &lt;&#x3D; arr.length &lt;&#x3D; 20000&#96;</span><br><span class="line">- &#96;1 &lt;&#x3D; arr[i] &lt;&#x3D; 20000&#96;</span><br><span class="line">- For each query, &#96;0 &lt;&#x3D; left &lt;&#x3D; right &lt; len(arr)&#96;</span><br><span class="line">- For each query, &#96;2 * threshold &gt; right - left + 1&#96;</span><br><span class="line">- The number of queries is at most &#96;10000&#96;</span><br><span class="line"></span><br><span class="line">## 解题思路</span><br><span class="line"></span><br><span class="line">Hard</span><br><span class="line"></span><br><span class="line">本题主要是从一个序列中寻找绝对众数（个数超过一半的数）。暴力的方法就是每次查询都花费O(n)的时间，总的来说是O(n2)，在实际中是LTE的。</span><br><span class="line"></span><br><span class="line">因此可以使用分块的方式实现，如果需要查询的子序列长度小于等于s时，就直接暴力搜索。如果大于s时，那么绝对众数的出现次数一定是大于s&#x2F;2的，那么在整个N个元素中，这样的数目最多只有n&#x2F;(s&#x2F;2) &#x3D; 2n&#x2F;s个，所以只需要判断这些元素在子序列出现次数即可，这可以利用前缀和解决。</span><br><span class="line"></span><br><span class="line">在这里我们设置</span><br><span class="line">$$</span><br><span class="line">s &#x3D; \sqrt&#123;N&#125;</span><br><span class="line">$$</span><br><span class="line"></span><br><span class="line">## 时空复杂度</span><br><span class="line"></span><br><span class="line">代码如下，总的时间复杂度和空间复杂度均是</span><br><span class="line">$$</span><br><span class="line">O(\sqrt&#123;N&#125;N)</span><br><span class="line">$$</span><br><span class="line"></span><br><span class="line">&#96;&#96;&#96;c++</span><br><span class="line">class MajorityChecker &#123;</span><br><span class="line">    int s, N, p; &#x2F;&#x2F; 分块界限，所有的元素数，次数最多的p个元素</span><br><span class="line">    vector&lt;int&gt; V, S; &#x2F;&#x2F; 存储所有的元素，存储次数最多的2n&#x2F;s个元素</span><br><span class="line">    vector&lt;vector&lt;int&gt;&gt; Vs;</span><br><span class="line">    unordered_map&lt;int, int&gt; M; &#x2F;&#x2F; 记录每个元素出现的次数</span><br><span class="line">public:</span><br><span class="line">    MajorityChecker(vector&lt;int&gt;&amp; arr) &#123;</span><br><span class="line">        N &#x3D; arr.size();</span><br><span class="line">        s &#x3D; sqrt(2 * N);</span><br><span class="line">        </span><br><span class="line">        V &#x3D; vector&lt;int&gt;(N);</span><br><span class="line">        S &#x3D; vector&lt;int&gt;(2 * N &#x2F; s + 1);</span><br><span class="line">        Vs &#x3D; vector&lt;vector&lt;int&gt;&gt;(2 * N &#x2F; s + 1, vector&lt;int&gt;(N + 1, 0));</span><br><span class="line"></span><br><span class="line">        for (int i&#x3D;0; i&lt;N; i++) M[V[i] &#x3D; arr[i]]++;</span><br><span class="line"></span><br><span class="line">        int pos &#x3D; 0;</span><br><span class="line">        for (auto m : M) &#123;</span><br><span class="line">            if (m.second &gt; s&#x2F;2) &#123;</span><br><span class="line">                S[pos] &#x3D; m.first;</span><br><span class="line">                for (int i&#x3D;0; i&lt;N; i++) Vs[pos][i+1] &#x3D; Vs[pos][i] + (V[i] &#x3D;&#x3D; S[pos]);</span><br><span class="line">                pos++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        p &#x3D; pos;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    int query(int left, int right, int threshold) &#123;</span><br><span class="line">        int k &#x3D; right - left + 1;</span><br><span class="line">        if (k &lt;&#x3D; s) &#123;</span><br><span class="line">            int val &#x3D; V[left], count &#x3D; 1;</span><br><span class="line">            for (int i&#x3D;left + 1; i&lt;&#x3D;right; i++) &#123;</span><br><span class="line">                if (V[i] &#x3D;&#x3D; val) count++;</span><br><span class="line">                else if (count &gt; 0) count--;</span><br><span class="line">                else &#123;</span><br><span class="line">                    val &#x3D; V[i];</span><br><span class="line">                    count &#x3D; 1;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            count &#x3D; 0;</span><br><span class="line">            for (int i&#x3D;left; i&lt;&#x3D;right; i++) &#123;</span><br><span class="line">                if (V[i] &#x3D;&#x3D; val) count++;</span><br><span class="line">            &#125;</span><br><span class="line">            if (count &lt; threshold) return -1;</span><br><span class="line">            return val;</span><br><span class="line">        &#125;</span><br><span class="line">        for (int i&#x3D;0; i&lt;p; i++) &#123;</span><br><span class="line">            if (Vs[i][right + 1] - Vs[i][left] &gt;&#x3D; threshold) &#123;</span><br><span class="line">                return S[i];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">&#x2F;**</span><br><span class="line"> * Your MajorityChecker object will be instantiated and called as such:</span><br><span class="line"> * MajorityChecker* obj &#x3D; new MajorityChecker(arr);</span><br><span class="line"> * int param_1 &#x3D; obj-&gt;query(left,right,threshold);</span><br><span class="line"> *&#x2F;</span><br></pre></td></tr></table></figure>
+</code></pre></li>
+</ul>
+<p>BitBrave，2020-06-7-06</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Hard/" rel="tag"># Hard</a>
+              <a href="/tags/%E5%88%86%E5%9D%97/" rel="tag"># 分块</a>
+              <a href="/tags/O-sqrt-n-n/" rel="tag"># $O(\sqrt{n}n)$</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/07/05/LeetCode(1499.%20Max%20Value%20of%20Equation)%E9%A2%98%E8%A7%A3/" rel="prev" title="LeetCode(\1499. Max Value of Equation)题解">
+      <i class="fa fa-chevron-left"></i> LeetCode(\1499. Max Value of Equation)题解
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/07/06/%E4%BB%8EN%E4%B8%AA%E5%85%83%E7%B4%A0%E4%B8%AD%E6%89%BE%E5%87%BA%E5%87%BA%E7%8E%B0%E8%B6%85%E8%BF%87%E4%B8%80%E5%8D%8A%E7%9A%84%E5%85%83%E7%B4%A0%EF%BC%88%E7%BB%9D%E5%AF%B9%E4%BC%97%E6%95%B0%EF%BC%89/" rel="next" title="从N个元素中找出出现超过一半的元素（绝对众数）">
+      从N个元素中找出出现超过一半的元素（绝对众数） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#LeetCode-1157-Online-Majority-Element-In-Subarray-题解"><span class="nav-number">1.</span> <span class="nav-text">LeetCode(\1157. Online Majority Element In Subarray)题解</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">XJ</p>
+  <div class="site-description" itemprop="description">幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">365</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">XJ</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.7.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
