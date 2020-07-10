@@ -168,6 +168,170 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/12/LeetCode(464.%20Can%20I%20Win)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/04/12/LeetCode(464.%20Can%20I%20Win)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(464. Can I Win)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-04-12 22:16:45" itemprop="dateCreated datePublished" datetime="2020-04-12T22:16:45+08:00">2020-04-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-13 11:03:18" itemprop="dateModified" datetime="2020-04-13T11:03:18+08:00">2020-04-13</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-464-Can-I-Win-题解"><a href="#LeetCode-464-Can-I-Win-题解" class="headerlink" title="LeetCode(\464. Can I Win)题解"></a>LeetCode(\464. Can I Win)题解</h1><p>In the “100 game,” two players take turns adding, to a running total, any integer from 1..10. The player who first causes the running total to reach or exceed 100 wins.</p>
+<p>What if we change the game so that players cannot re-use integers?</p>
+<p>For example, two players might take turns drawing from a common pool of numbers of 1..15 without replacement until they reach a total &gt;= 100.</p>
+<p>Given an integer <code>maxChoosableInteger</code> and another integer <code>desiredTotal</code>, determine if the first player to move can force a win, assuming both players play optimally.</p>
+<p>You can always assume that <code>maxChoosableInteger</code> will not be larger than 20 and <code>desiredTotal</code> will not be larger than 300.</p>
+<p><strong>Example</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Input:</span><br><span class="line">maxChoosableInteger &#x3D; 10</span><br><span class="line">desiredTotal &#x3D; 11</span><br><span class="line"></span><br><span class="line">Output:</span><br><span class="line">false</span><br><span class="line"></span><br><span class="line">Explanation:</span><br><span class="line">No matter which integer the first player choose, the first player will lose.</span><br><span class="line">The first player can choose an integer from 1 up to 10.</span><br><span class="line">If the first player choose 1, the second player can only choose integers from 2 up to 10.</span><br><span class="line">The second player will win by choosing 10 and get a total &#x3D; 11, which is &gt;&#x3D; desiredTotal.</span><br><span class="line">Same with other integers chosen by the first player, the second player will always win.</span><br></pre></td></tr></table></figure>
+
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Medium</p>
+<p>给一个maxChoosableInteger和desiredTotal，两个人依次在1，2，···，maxChoosableInteger选一个数，不可重复选，选一个少一个。如果谁先选择一个数使得两人选过的数之和大于等于desiredTotal，就判断这个人胜利。假设两人都按最优策略来走，那么请问第一个选的人是赢是输。</p>
+<p>这个题虽然是Medium，但对我来说还是挺难的。首先还是说下思路。</p>
+<p>首先是使用回溯法，建立一个递归函数helper，表示在当前选定条件下，接下来第一个选择的人是一定胜利还是一定输。因为maxChoosableInteger不大，所以可以用一个字符串pos的01串来表示哪些数已经被选择了，然后使用递归，在里面依次选择还未被选择的数，再更新pos和剩下的整数。这里使用Map记录已经得到结果的pos的值。</p>
+<p>写出了这个代码，一般都会想到是不是能使用DP解决问题。从这个代码就可以看出来，一个pos依赖于后面的pos的选取，只是要把pos中的一个0变为1而已。其实如果数能重用的话，就很容易转为DP，f(i) = ~f(i-d)。这里一个数只能用一次，因此很难使用DP。</p>
+<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间上为O(N2)，空间上理论上是O(2^N)，但实际上用不到这么多。</p>
+<p><code>Runtime: 800 ms, faster than 6.46% of C++ online submissions for Can I Win.</code></p>
+<p><code>Memory Usage: 119.8 MB, less than 20.00% of C++ online submissions for Can I Win.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">    <span class="built_in">unordered_map</span>&lt;<span class="built_in">string</span>, <span class="keyword">bool</span>&gt; M;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">helper</span><span class="params">(<span class="keyword">int</span> maxChoosableInteger, <span class="keyword">int</span> desiredTotal, <span class="built_in">string</span> pos_)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (M.<span class="built_in">find</span>(pos_) != M.<span class="built_in">end</span>()) <span class="keyword">return</span> M[pos_];</span><br><span class="line">        M[pos_] = <span class="literal">false</span>;</span><br><span class="line">        <span class="built_in">string</span> pos = pos_;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;=maxChoosableInteger; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (pos[i] == <span class="string">'1'</span>) <span class="keyword">continue</span>;</span><br><span class="line"></span><br><span class="line">            pos[i] = <span class="string">'1'</span>;</span><br><span class="line">            <span class="keyword">if</span> (desiredTotal&lt;=i) &#123;</span><br><span class="line">                M[pos_] = <span class="literal">true</span>;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (!helper(maxChoosableInteger, desiredTotal-i, pos)) &#123;</span><br><span class="line">                M[pos_] = <span class="literal">true</span>;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            pos[i] = <span class="string">'0'</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">canIWin</span><span class="params">(<span class="keyword">int</span> maxChoosableInteger, <span class="keyword">int</span> desiredTotal)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (desiredTotal &lt;= maxChoosableInteger) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">if</span> ((maxChoosableInteger + <span class="number">1</span>) * maxChoosableInteger / <span class="number">2</span> &lt; desiredTotal) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="function"><span class="built_in">string</span> <span class="title">pos</span><span class="params">(maxChoosableInteger+<span class="number">1</span>, <span class="string">'0'</span>)</span></span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> helper(maxChoosableInteger, desiredTotal, pos);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2020-04-12.</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/11/LeetCode(446.%20Arithmetic%20Slices%20II%20-%20Subsequence)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/04/11/LeetCode(446.%20Arithmetic%20Slices%20II%20-%20Subsequence)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(446. Arithmetic Slices II - Subsequence)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-04-11 21:56:10 / 修改时间：21:56:14" itemprop="dateCreated datePublished" datetime="2020-04-11T21:56:10+08:00">2020-04-11</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-446-Arithmetic-Slices-II-Subsequence-题解"><a href="#LeetCode-446-Arithmetic-Slices-II-Subsequence-题解" class="headerlink" title="LeetCode(\446. Arithmetic Slices II - Subsequence)题解"></a>LeetCode(\446. Arithmetic Slices II - Subsequence)题解</h1><p>A sequence of numbers is called arithmetic if it consists of at least three elements and if the difference between any two consecutive elements is the same.</p>
+<p>For example, these are arithmetic sequences:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1, 3, 5, 7, 9</span><br><span class="line">7, 7, 7, 7</span><br><span class="line">3, -1, -5, -9</span><br></pre></td></tr></table></figure>
+
+<p>The following sequence is not arithmetic.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1, 1, 2, 5, 7</span><br></pre></td></tr></table></figure>
+
+
+
+<p>A zero-indexed array A consisting of N numbers is given. A <strong>subsequence</strong> slice of that array is any sequence of integers (P0, P1, …, Pk) such that 0 ≤ P0 &lt; P1 &lt; … &lt; Pk &lt; N.</p>
+<p>A <strong>subsequence</strong> slice (P0, P1, …, Pk) of array A is called arithmetic if the sequence A[P0], A[P1], …, A[Pk-1], A[Pk] is arithmetic. In particular, this means that k ≥ 2.</p>
+<p>The function should return the number of arithmetic subsequence slices in the array A.</p>
+<p>The input contains N integers. Every integer is in the range of -231 and 231-1 and 0 ≤ N ≤ 1000. The output is guaranteed to be less than 231-1.</p>
+<p><strong>Example:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Input: [2, 4, 6, 8, 10]</span><br><span class="line"></span><br><span class="line">Output: 7</span><br><span class="line"></span><br><span class="line">Explanation:</span><br><span class="line">All arithmetic subsequence slices are:</span><br><span class="line">[2,4,6]</span><br><span class="line">[4,6,8]</span><br><span class="line">[6,8,10]</span><br><span class="line">[2,4,6,8]</span><br><span class="line">[4,6,8,10]</span><br><span class="line">[2,4,6,8,10]</span><br><span class="line">[2,6,10]</span><br></pre></td></tr></table></figure>
+
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Hard</p>
+<p>从一个整数数组A中选取不少于三个数按相对顺序组成等差数列。问数组中最多能选多少个这样的子数组。</p>
+<p>这个题可以使用DP，我们设定dp2(i,diff)，表示在前i+1个数中，以A[i]结尾，差值为diff的等差数列的个数，特殊的是，每个数列只有2个数。然后再设定一个dp3(i,diff)表示在前i+1个数中，以A[i]结尾，差值为diff的等差数列的个数，特殊的是，每个数列都大于等于3个数，dp2是为了填充后续的dp3的。</p>
+<p>那么dp2(i,*)，dp3(i,*)，如何填充呢？状态转移方程如下，对于元素A[i]，遍历前面的元素A[j]，j&lt;i。diff = A[i]-A[j]。dp3(i,diff)+=dp2(j,diff)+dp3(j,diff)。而dp2(i,diff) += 1.</p>
+<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间上O(N2)，空间上O(N)。</p>
+<p><code>Runtime: 1188 ms, faster than 21.61% of C++ online submissions for Arithmetic Slices II - Subsequence.</code></p>
+<p><code>Memory Usage: 155 MB, less than 40.00% of C++ online submissions for Arithmetic Slices II - Subsequence.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">numberOfArithmeticSlices</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = A.<span class="built_in">size</span>(), res = <span class="number">0</span>;</span><br><span class="line">        vector&lt;unordered_map&lt;long, long&gt;&gt; dp2(len), dp3(len);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;len; i++) &#123;</span><br><span class="line">            <span class="keyword">long</span> diff;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=i<span class="number">-1</span>; j&gt;=<span class="number">0</span>; j--) &#123;</span><br><span class="line">                diff = (<span class="keyword">long</span>)A[i]- (<span class="keyword">long</span>)A[j];</span><br><span class="line">                <span class="keyword">if</span> (dp2[i].<span class="built_in">find</span>(diff) == dp2[i].<span class="built_in">end</span>()) dp2[i][diff] = <span class="number">1</span>;</span><br><span class="line">                <span class="keyword">else</span> dp2[i][diff] += <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            dp3[i][diff] = <span class="number">0</span>;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=i<span class="number">-1</span>; j&gt;<span class="number">0</span>; j--) &#123;</span><br><span class="line">                diff = (<span class="keyword">long</span>)A[i] - (<span class="keyword">long</span>)A[j];</span><br><span class="line">                <span class="keyword">if</span> (dp2[j].<span class="built_in">find</span>(diff) != dp2[j].<span class="built_in">end</span>()) &#123;</span><br><span class="line">                    res += dp2[j][diff];</span><br><span class="line">                    dp3[i][diff] += dp2[j][diff];</span><br><span class="line">                &#125;</span><br><span class="line">                </span><br><span class="line">                <span class="keyword">if</span> (dp3[j].<span class="built_in">find</span>(diff) != dp3[j].<span class="built_in">end</span>()) &#123;</span><br><span class="line">                    res += dp3[j][diff];</span><br><span class="line">                    dp3[i][diff] += dp3[j][diff];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/09/LeetCode(/403.%20Frog%20Jump)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -899,167 +1063,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/01/LeetCode(363.%20Max%20Sum%20of%20Rectangle%20No%20Larger%20Than%20K)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/04/01/LeetCode(363.%20Max%20Sum%20of%20Rectangle%20No%20Larger%20Than%20K)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(363. Max Sum of Rectangle No Larger Than K)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-04-01 21:28:30 / 修改时间：21:28:34" itemprop="dateCreated datePublished" datetime="2020-04-01T21:28:30+08:00">2020-04-01</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-363-Max-Sum-of-Rectangle-No-Larger-Than-K-题解"><a href="#LeetCode-363-Max-Sum-of-Rectangle-No-Larger-Than-K-题解" class="headerlink" title="LeetCode(\363. Max Sum of Rectangle No Larger Than K)题解"></a>LeetCode(\363. Max Sum of Rectangle No Larger Than K)题解</h1><p>Given a non-empty 2D matrix <em>matrix</em> and an integer <em>k</em>, find the max sum of a rectangle in the <em>matrix</em> such that its sum is no larger than <em>k</em>.</p>
-<p><strong>Example:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Input: matrix &#x3D; [[1,0,1],[0,-2,3]], k &#x3D; 2</span><br><span class="line">Output: 2 </span><br><span class="line">Explanation: Because the sum of rectangle [[0, 1], [-2, 3]] is 2,</span><br><span class="line">             and 2 is the max number no larger than k (k &#x3D; 2).</span><br></pre></td></tr></table></figure>
-
-<p><strong>Note:</strong></p>
-<ol>
-<li>The rectangle inside the matrix must have an area &gt; 0.</li>
-<li>What if the number of rows is much larger than the number of columns?</li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Hard</p>
-<p>给出一个二维数组M和一个整数k，找出其中一个子矩阵，其内的元素和不能大于k，但是最接近k。</p>
-<p>这个题可以使用暴力枚举，就算从(0,0)开始的子矩阵之和，然后遍历数组以(i,j)元素结尾的向上向左的最大不超过k的子矩阵和，如果数组为m行n列，时间复杂度则为$O((mn)^2)$。在使用时会TLE。</p>
-<p>上述算法最耗时的就是寻找子矩阵，那么有没有优化的方法呢？这里思考以(i,j)结束的向上向右子矩阵时，我们完全可以记录之前的按行或者列来的子数组的累加和，然后利用lower_bound或者二分搜索找到第一个大于k，最接近当前累加和-k的累加和的累加和s，然后用当前累加和-s就可以得到了。</p>
-<p>因为这里说行可能会很大，因此这里我们记录累加和按照行来。</p>
-<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间上，O(nmnlogm)，空间上，O(m)。</p>
-<p><code>Runtime: 728 ms, faster than 33.23% of C++ online submissions for Max Sum of Rectangle No Larger Than K.</code></p>
-<p><code>Memory Usage: 98.2 MB, less than 58.82% of C++ online submissions for Max Sum of Rectangle No Larger Than K.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxSumSubmatrix</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; matrix, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> row = matrix.<span class="built_in">size</span>(), col = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span> (row == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        col = matrix[<span class="number">0</span>].<span class="built_in">size</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> res = INT_MIN;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;col; i++) &#123;</span><br><span class="line">            <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">sum</span><span class="params">(row, <span class="number">0</span>)</span></span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=i; j&gt;=<span class="number">0</span>; j--) &#123;</span><br><span class="line">                <span class="keyword">int</span> curSum = <span class="number">0</span>;</span><br><span class="line">                <span class="function"><span class="built_in">set</span>&lt;<span class="keyword">int</span>&gt; <span class="title">mSum</span><span class="params">(&#123;<span class="number">0</span>&#125;)</span></span>;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> r=<span class="number">0</span>; r&lt;row; r++) &#123;</span><br><span class="line">                    sum[r] += matrix[r][j];</span><br><span class="line">                    curSum += sum[r];</span><br><span class="line">                    <span class="keyword">auto</span> iter = mSum.lower_bound(curSum - k);</span><br><span class="line">                    <span class="keyword">if</span> (iter != mSum.<span class="built_in">end</span>()) res = <span class="built_in">max</span>(res, curSum - *iter);</span><br><span class="line">                    mSum.insert(curSum);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2020-04-01</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/31/LeetCode(375.%20Guess%20Number%20Higher%20or%20Lower%20II)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/03/31/LeetCode(375.%20Guess%20Number%20Higher%20or%20Lower%20II)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(375. Guess Number Higher or Lower II)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-03-31 23:01:45" itemprop="dateCreated datePublished" datetime="2020-03-31T23:01:45+08:00">2020-03-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-04 00:15:20" itemprop="dateModified" datetime="2020-04-04T00:15:20+08:00">2020-04-04</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-375-Guess-Number-Higher-or-Lower-II-题解"><a href="#LeetCode-375-Guess-Number-Higher-or-Lower-II-题解" class="headerlink" title="LeetCode(\375. Guess Number Higher or Lower II)题解"></a>LeetCode(\375. Guess Number Higher or Lower II)题解</h1><p>We are playing the Guess Game. The game is as follows:</p>
-<p>I pick a number from <strong>1</strong> to <strong>n</strong>. You have to guess which number I picked.</p>
-<p>Every time you guess wrong, I’ll tell you whether the number I picked is higher or lower.</p>
-<p>However, when you guess a particular number x, and you guess wrong, you pay <strong>$x</strong>. You win the game when you guess the number I picked.</p>
-<p><strong>Example:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">n &#x3D; 10, I pick 8.</span><br><span class="line"></span><br><span class="line">First round:  You guess 5, I tell you that it&#39;s higher. You pay $5.</span><br><span class="line">Second round: You guess 7, I tell you that it&#39;s higher. You pay $7.</span><br><span class="line">Third round:  You guess 9, I tell you that it&#39;s lower. You pay $9.</span><br><span class="line"></span><br><span class="line">Game over. 8 is the number I picked.</span><br><span class="line"></span><br><span class="line">You end up paying $5 + $7 + $9 &#x3D; $21.</span><br></pre></td></tr></table></figure>
-
-<p>Given a particular <strong>n ≥ 1</strong>, find out how much money you need to have to guarantee a <strong>win</strong>.</p>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Medium</p>
-<p>给出一个n表示1到n，我可能会随机给一个1到n之间的数，现在我你需要确定一个策略，每次给出一个数，我会告诉你这个数跟我给出的是大了还是小了还是相等，如果不相等你就需要收到你给定的值的惩罚，如果相等就结束游戏。请问你至少要惩罚多少才能保证一定可以找到对的数。比如n=10，你首先猜7，如果不对，小了的话就猜9，如果还小就肯定是10，大则是8，如果小于7，就猜4，然后再根据情况猜，那么最终你最多16个惩罚就可以找对值了。因此这个题并不是简单的二分。</p>
-<p>我们可以使用DP来解决这个问题，设定f(i,j)表示i到j之间保证找到一个数最小的惩罚值。那么有如下转移方程：</p>
-<p>$f(i,j) = min(max(f(i,x-1),f(x+1,j)) + x) x = i+1,…,j-1$</p>
-<p>$f(i,j) = 0, i&gt;=j$</p>
-<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间上，O(N3)，空间上，O(N2)。</p>
-<p><code>Runtime: 44 ms, faster than 42.37% of C++ online submissions for Guess Number Higher or Lower II.</code></p>
-<p><code>Memory Usage: 6.7 MB, less than 100.00% of C++ online submissions for Guess Number Higher or Lower II.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">getMoneyAmount</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        </span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">dp</span><span class="params">(n+<span class="number">2</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(n+<span class="number">2</span>, <span class="number">0</span>))</span></span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> v=<span class="number">1</span>; v&lt;n; v++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> l=<span class="number">1</span>; l&lt;=n; l++) &#123;</span><br><span class="line">                <span class="keyword">int</span> r = l + v;</span><br><span class="line">                <span class="keyword">if</span> (r &gt; n) <span class="keyword">break</span>;</span><br><span class="line">                dp[l][r] = INT_MAX;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> x=l; x&lt;=r; x++) &#123;</span><br><span class="line">                    dp[l][r] = <span class="built_in">min</span>(dp[l][r], <span class="built_in">max</span>(dp[l][x<span class="number">-1</span>], dp[x+<span class="number">1</span>][r]) + x);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp[<span class="number">1</span>][n];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2020-03-31.</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1130,12 +1133,12 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">365</span>
+          <span class="site-state-item-count">367</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-count">43</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
