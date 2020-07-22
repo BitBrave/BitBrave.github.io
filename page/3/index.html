@@ -168,6 +168,301 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/15/LeetCode(1483.%20Kth%20Ancestor%20of%20a%20Tree%20Node)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/06/15/LeetCode(1483.%20Kth%20Ancestor%20of%20a%20Tree%20Node)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1483. Kth Ancestor of a Tree Node)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-06-15 11:27:32 / 修改时间：11:27:41" itemprop="dateCreated datePublished" datetime="2020-06-15T11:27:32+08:00">2020-06-15</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>title: LeetCode(\1483. Kth Ancestor of a Tree Node)题解</p>
+<p>description: Hard，<a href="https://leetcode-cn.com/problems/kth-ancestor-of-a-tree-node/" target="_blank" rel="noopener">1483. 树节点的第 K 个祖先</a>。给定一个机票的字符串二维数组 [from, to]，子数组中的两个成员分别给你一棵树，树上有 n 个节点，按从 0 到 n-1 编号。树以父节点数组的形式给出，其中 parent[i] 是节点 i 的父节点。树的根节点是编号为 0 的节点。请你设计并实现 getKthAncestor(int node, int k) 函数，函数返回节点 node 的第 k 个祖先节点。如果不存在这样的祖先节点，返回 -1 。树节点的第 k 个祖先节点是从该节点到根节点路径上的第 k 个节点。</p>
+<p>tags:</p>
+<ul>
+<li>Binary Lifting</li>
+<li>$O(nlogn)$</li>
+<li>Hard</li>
+</ul>
+<h1 id="LeetCode-1483-Kth-Ancestor-of-a-Tree-Node-题解"><a href="#LeetCode-1483-Kth-Ancestor-of-a-Tree-Node-题解" class="headerlink" title="LeetCode(\1483. Kth Ancestor of a Tree Node)题解"></a>LeetCode(\1483. Kth Ancestor of a Tree Node)题解</h1><p>You are given a tree with <code>n</code> nodes numbered from <code>0</code> to <code>n-1</code> in the form of a parent array where <code>parent[i]</code> is the parent of node <code>i</code>. The root of the tree is node <code>0</code>.</p>
+<p>Implement the function <code>getKthAncestor``(int node, int k)</code> to return the <code>k</code>-th ancestor of the given <code>node</code>. If there is no such ancestor, return <code>-1</code>.</p>
+<p>The <em>k-th</em> <em>ancestor</em> of a tree node is the <code>k</code>-th node in the path from that node to the root.</p>
+<p><strong>Example:</strong></p>
+<p><strong><img src="https://assets.leetcode.com/uploads/2019/08/28/1528_ex1.png" alt="img"></strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Input:</span><br><span class="line">[&quot;TreeAncestor&quot;,&quot;getKthAncestor&quot;,&quot;getKthAncestor&quot;,&quot;getKthAncestor&quot;]</span><br><span class="line">[[7,[-1,0,0,1,1,2,2]],[3,1],[5,2],[6,3]]</span><br><span class="line"></span><br><span class="line">Output:</span><br><span class="line">[null,1,0,-1]</span><br><span class="line"></span><br><span class="line">Explanation:</span><br><span class="line">TreeAncestor treeAncestor &#x3D; new TreeAncestor(7, [-1, 0, 0, 1, 1, 2, 2]);</span><br><span class="line"></span><br><span class="line">treeAncestor.getKthAncestor(3, 1);  &#x2F;&#x2F; returns 1 which is the parent of 3</span><br><span class="line">treeAncestor.getKthAncestor(5, 2);  &#x2F;&#x2F; returns 0 which is the grandparent of 5</span><br><span class="line">treeAncestor.getKthAncestor(6, 3);  &#x2F;&#x2F; returns -1 because there is no such ancestor</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>1 &lt;= k &lt;= n &lt;= 5*10^4</code></li>
+<li><code>parent[0] == -1</code> indicating that <code>0</code> is the root node.</li>
+<li><code>0 &lt;= parent[i] &lt; n</code> for all <code>0 &lt; i &lt; n</code></li>
+<li><code>0 &lt;= node &lt; n</code></li>
+<li>There will be at most <code>5*10^4</code> queries.</li>
+</ul>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Hard</p>
+<p>这个题想了三种，首先是简单的向上查询，毫无意外地超时了，然后是用map记录查询过的值，还是LTE，最后是记录叶子节点的路径条数，然后每个节点都记录自己在这些路径上的位置，这样查询的时候可以直接O(1)，结果还是LTE。</p>
+<p>下面的解法参考了<a href="https://leetcode-cn.com/problems/kth-ancestor-of-a-tree-node/solution/li-kou-zai-zhu-jian-ba-acm-mo-ban-ti-ban-shang-lai/" target="_blank" rel="noopener">解法</a>.</p>
+<p>类似于寻找最近公共祖先。Binary Lifting 的本质其实是 dp。<code>dp[node][j]</code> 存储的是 node 节点距离为 $2^j$ 的祖先是谁。</p>
+<p>即，<code>dp[node][0]</code>表示节点node的父节点<code>parent[node]</code> ，距离为1。 </p>
+<p>状态转移，<code>dp[node][j]=dp[dp[node][j-1]][j-1]</code> </p>
+<p>意思是：要找到距离node为$2^j$的节点，需要先找距离node为$2^{j-1}$的节点X，然后寻找这个节点X的距离$2^{j-1}$的祖先节点。两步得到 node 的距离为 $2^j$ 的祖先。</p>
+<p>所以，我们要找到每一个 node 的距离为 1, 2, 4, 8, 16, 32, … 的祖先，直到达到树的最大的高度。树的最大的高度是 $logn$ 级别的。</p>
+<p>这样做，状态总数是 O(nlogn)，可以使用 O(nlogn) 的时间做预处理。</p>
+<p>之后，根据预处理的结果，可以在 O(logn) 的时间里完成每次查询：对于每一个查询 k，把 k 拆解成二进制表示，然后根据二进制表示中 1 的位置，累计向上查询。即，如果查询node的第6个祖先节点，6=110=10+100，首先是最小的10，表示找node的第2个祖先节点，然后走到第2个祖先节点之后，剩下100，表示找第4个祖先节点，再到第2个的第4个也就是node的第6个祖先节点，返回即可。</p>
+<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间上，预处理O(nlogn)，一次查询花费O(logn)，空间上，O(nlogn)。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TreeAncestor</span> &#123;</span></span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; dp;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    TreeAncestor(<span class="keyword">int</span> n, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; parent) &#123;</span><br><span class="line">        dp = <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;(n, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;());</span><br><span class="line">        <span class="comment">// j=0，距离为1的祖先节点</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;n; i++) dp[i].push_back(parent[i]);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 填充距离2^j(j&gt;0)的祖先节点</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">1</span>; ; j++) &#123;</span><br><span class="line">            <span class="keyword">bool</span> allneg = <span class="literal">true</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;n; i++) &#123;</span><br><span class="line">                <span class="keyword">int</span> t = dp[i][j<span class="number">-1</span>]==<span class="number">-1</span> ? <span class="number">-1</span> : dp[dp[i][j<span class="number">-1</span>]][j<span class="number">-1</span>];</span><br><span class="line">                dp[i].push_back(t);</span><br><span class="line">                <span class="keyword">if</span> (t != <span class="number">-1</span>) allneg = <span class="literal">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 若所有节点的第2^j距离祖先节点的值都是-1，就不必再继续更新了</span></span><br><span class="line">            <span class="keyword">if</span> (allneg) <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">getKthAncestor</span><span class="params">(<span class="keyword">int</span> node, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (k == <span class="number">0</span> || node == <span class="number">-1</span>) <span class="keyword">return</span> node;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> pos = ffs(k) - <span class="number">1</span>; <span class="comment">// C++ 语言中 ffs(k) 求解出 k 的最右侧第一个 1 的位置（1-based），如ffs(100) = 3</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> pos &lt; dp[node].<span class="built_in">size</span>() ? getKthAncestor(dp[node][pos], k - (<span class="number">1</span> &lt;&lt; pos)) : <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Your TreeAncestor object will be instantiated and called as such:</span></span><br><span class="line"><span class="comment"> * TreeAncestor* obj = new TreeAncestor(n, parent);</span></span><br><span class="line"><span class="comment"> * int param_1 = obj-&gt;getKthAncestor(node,k);</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2020-06-15。（认真对待每一个题）</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/13/LeetCode(332.%20Reconstruct%20Itinerary)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/06/13/LeetCode(332.%20Reconstruct%20Itinerary)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(\332. Reconstruct Itinerary)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-06-13 17:34:17 / 修改时间：17:34:20" itemprop="dateCreated datePublished" datetime="2020-06-13T17:34:17+08:00">2020-06-13</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          Hard，[332. 重新安排行程](https://leetcode-cn.com/problems/reconstruct-itinerary/)。给定一个机票的字符串二维数组 [from, to]，子数组中的两个成员分别表示飞机出发和降落的机场地点，对该行程进行重新规划排序。所有这些机票都属于一个从JFK（肯尼迪国际机场）出发的先生，所以该行程必须从 JFK 出发。说明:如果存在多种有效的行程，你可以按字符自然排序返回最小的行程组合。例如，行程 ["JFK", "LGA"] 与 ["JFK", "LGB"] 相比就更小，排序更靠前所有的机场都用三个大写字母表示（机场代码）。假定所有机票至少存在一种合理的行程。
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/06/13/LeetCode(332.%20Reconstruct%20Itinerary)%E9%A2%98%E8%A7%A3/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/13/LeetCode(982.%20Triples%20with%20Bitwise%20AND%20Equal%20To%20Zero)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/06/13/LeetCode(982.%20Triples%20with%20Bitwise%20AND%20Equal%20To%20Zero)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(\982. Triples with Bitwise AND Equal To Zero)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-06-13 11:46:23 / 修改时间：11:46:37" itemprop="dateCreated datePublished" datetime="2020-06-13T11:46:23+08:00">2020-06-13</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          Hard，[982. 按位与为零的三元组](https://leetcode-cn.com/problems/triples-with-bitwise-and-equal-to-zero/)。我们将整数 x 的 权重 定义为按照下述规则将 x 变成 1 所需要的步假设有从 1 到 N给定一个整数数组 A，找出索引为 (i, j, k) 的三元组，使得：0 <= i < A.length。0 <= j < A.length。0 <= k < A.length。A[i] & A[j] & A[k] == 0，其中 & 表示按位与（AND）操作符。
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/06/13/LeetCode(982.%20Triples%20with%20Bitwise%20AND%20Equal%20To%20Zero)%E9%A2%98%E8%A7%A3/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/12/LeetCode(526.%20Beautiful%20Arrangement)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/06/12/LeetCode(526.%20Beautiful%20Arrangement)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(\\526. Beautiful Arrangement)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-06-12 22:52:29 / 修改时间：22:52:32" itemprop="dateCreated datePublished" datetime="2020-06-12T22:52:29+08:00">2020-06-12</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          Medium，[526. 优美的排列](https://leetcode-cn.com/problems/beautiful-arrangement/)。我们将整数 x 的 权重 定义为按照下述规则将 x 变成 1 所需要的步假设有从 1 到 N 的 N 个整数，如果从这 N 个数字中成功构造出一个数组，使得数组的第 i 位 (1 <= i <= N) 满足如下两个条件中的一个，我们就称这个数组为一个优美的排列。条件：第 i 位的数字能被 i 整除。i 能被第 i 位上的数字整除。现在给定一个整数 N，请问可以构造多少个优美的排列？
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/06/12/LeetCode(526.%20Beautiful%20Arrangement)%E9%A2%98%E8%A7%A3/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/11/LeetCode(1387.%20Sort%20Integers%20by%20The%20Power%20Value)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -560,281 +855,11 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/04/LeetCode(/763.%20Partition%20Labels)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/06/04/LeetCode(%5C763.%20Partition%20Labels)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(\763. Partition Labels)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-06-04 23:53:25" itemprop="dateCreated datePublished" datetime="2020-06-04T23:53:25+08:00">2020-06-04</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-06-05 13:56:56" itemprop="dateModified" datetime="2020-06-05T13:56:56+08:00">2020-06-05</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          Medium，[763. 划分字母区间](https://leetcode-cn.com/problems/partition-labels/)。字符串 S 由小写字母组成。我们要把这个字符串划分为尽可能多的片段，同一个字母只会出现在其中的一个片段。返回一个表示每个字符串片段的长度的列表。
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/06/04/LeetCode(%5C763.%20Partition%20Labels)%E9%A2%98%E8%A7%A3/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/03/LeetCode(1432.%20Max%20Difference%20You%20Can%20Get%20From%20Changing%20an%20Integer)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/06/03/LeetCode(1432.%20Max%20Difference%20You%20Can%20Get%20From%20Changing%20an%20Integer)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(\1432. Max Difference You Can Get From Changing an Integer)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-06-03 23:27:10 / 修改时间：23:27:26" itemprop="dateCreated datePublished" datetime="2020-06-03T23:27:10+08:00">2020-06-03</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          Medium，[1432. 改变一个整数能得到的最大差值](https://leetcode-cn.com/problems/max-difference-you-can-get-from-changing-an-integer/)。给你一个整数 num 。你可以对它进行如下步骤恰好 两次 ：选择一个数字 x (0 <= x <= 9).选择另一个数字 y (0 <= y <= 9) 。数字 y 可以等于 x 。将 num 中所有出现 x 的数位都用 y 替换。得到的新的整数 不能 有前导 0 ，得到的新整数也 不能 是 0 。令两次对 num 的操作得到的结果分别为 a 和 b 。请返回 a 和 b 的 最大差值 。
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/06/03/LeetCode(1432.%20Max%20Difference%20You%20Can%20Get%20From%20Changing%20an%20Integer)%E9%A2%98%E8%A7%A3/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/03/LeetCode(923.%203Sum%20With%20Multiplicity)%E9%A2%98%E8%A7%A32/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/06/03/LeetCode(923.%203Sum%20With%20Multiplicity)%E9%A2%98%E8%A7%A32/" class="post-title-link" itemprop="url">LeetCode(\923. 3Sum With Multiplicity)题解2</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-06-03 09:33:05 / 修改时间：09:47:37" itemprop="dateCreated datePublished" datetime="2020-06-03T09:33:05+08:00">2020-06-03</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          Medium，[923. 三数之和的多种可能](https://leetcode-cn.com/problems/3sum-with-multiplicity/)。给定一个整数数组 A，以及一个整数 target 作为目标值，返回满足 i < j < k 且 A[i] + A[j] + A[k] == target 的元组 i, j, k 的数量。由于结果会非常大，请返回 结果除以 10^9 + 7 的余数。
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/06/03/LeetCode(923.%203Sum%20With%20Multiplicity)%E9%A2%98%E8%A7%A32/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/02/LeetCode(1467.%20Probability%20of%20a%20Two%20Boxes%20Having%20The%20Same%20Number%20of%20Distinct%20Balls)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/06/02/LeetCode(1467.%20Probability%20of%20a%20Two%20Boxes%20Having%20The%20Same%20Number%20of%20Distinct%20Balls)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(\1467. Probability of a Two Boxes Having The Same Number of Distinct Balls)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-06-02 00:23:59 / 修改时间：22:10:08" itemprop="dateCreated datePublished" datetime="2020-06-02T00:23:59+08:00">2020-06-02</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          Hard，使用DP求球的概率分配。
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/06/02/LeetCode(1467.%20Probability%20of%20a%20Two%20Boxes%20Having%20The%20Same%20Number%20of%20Distinct%20Balls)%E9%A2%98%E8%A7%A3/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/37/">37</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/38/">38</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -900,12 +925,12 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">367</span>
+          <span class="site-state-item-count">371</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-count">46</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>

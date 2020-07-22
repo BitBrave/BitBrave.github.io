@@ -168,6 +168,345 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/02/LeetCode(1288.%20Remove%20Covered%20Intervals)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/02/02/LeetCode(1288.%20Remove%20Covered%20Intervals)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1288. Remove Covered Intervals)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-02-02 21:23:54 / 修改时间：21:25:51" itemprop="dateCreated datePublished" datetime="2020-02-02T21:23:54+08:00">2020-02-02</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-1288-Remove-Covered-Intervals-题解"><a href="#LeetCode-1288-Remove-Covered-Intervals-题解" class="headerlink" title="LeetCode(\1288. Remove Covered Intervals)题解"></a>LeetCode(\1288. Remove Covered Intervals)题解</h1><p>Given a list of intervals, remove all intervals that are covered by another interval in the list. Interval <code>[a,b)</code> is covered by interval <code>[c,d)</code> if and only if <code>c &lt;= a</code> and <code>b &lt;= d</code>.</p>
+<p>After doing so, return the number of remaining intervals.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: intervals &#x3D; [[1,4],[3,6],[2,8]]</span><br><span class="line">Output: 2</span><br><span class="line">Explanation: Interval [3,6] is covered by [2,8], therefore it is removed.</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>1 &lt;= intervals.length &lt;= 1000</code></li>
+<li><code>0 &lt;= intervals[i][0] &lt; intervals[i][1] &lt;= 10^5</code></li>
+<li><code>intervals[i] != intervals[j]</code> for all <code>i != j</code></li>
+</ul>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出一系列区间，删除掉被别的区间给全包围的区间。然后返回剩下的区间个数。</p>
+<p>不得不感叹一句，Python大法好！直接计算set去掉相同的多余区间，然后遍历每个区间看是否被包围，是就删除，否则保留。</p>
+<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间复杂度O(n2)，空间复杂度O(n).</p>
+<p><code>Runtime: 156 ms, faster than 15.30% of Python3 online submissions for Remove Covered Intervals.</code></p>
+<p><code>Memory Usage: 13 MB, less than 100.00% of Python3 online submissions for Remove Covered Intervals.</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">removeCoveredIntervals</span><span class="params">(self, intervals: List[List[int]])</span> -&gt; int:</span></span><br><span class="line">        intervals = list(set(tuple(i) <span class="keyword">for</span> i <span class="keyword">in</span> intervals))</span><br><span class="line">        res = len(intervals)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(len(intervals)):</span><br><span class="line">            <span class="keyword">for</span> k <span class="keyword">in</span> range(len(intervals)):</span><br><span class="line">                <span class="keyword">if</span> k == i: <span class="keyword">continue</span></span><br><span class="line">                <span class="keyword">if</span> intervals[k][<span class="number">0</span>]&lt;=intervals[i][<span class="number">0</span>] <span class="keyword">and</span> intervals[k][<span class="number">1</span>]&gt;=intervals[i][<span class="number">1</span>]:</span><br><span class="line">                    res -= <span class="number">1</span></span><br><span class="line">                    <span class="comment">#print(intervals[k], "he", intervals[i])</span></span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>
+
+<p>BitbBrave, 2020-02-02</p>
+<p>PS: 今天听说是一个回文年，希望在2020能有好的收获。想做的事很多，慢慢来呗。今天做了一下LeetCode的竞赛题，说实话没有我想象中那么难，可能恰好遇到了能做的吧。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/02/LeetCode(1254.%20Number%20of%20Closed%20Islands)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/02/02/LeetCode(1254.%20Number%20of%20Closed%20Islands)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1254. Number of Closed Islands)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-02-02 00:00:40 / 修改时间：21:18:57" itemprop="dateCreated datePublished" datetime="2020-02-02T00:00:40+08:00">2020-02-02</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-1254-Number-of-Closed-Islands-题解"><a href="#LeetCode-1254-Number-of-Closed-Islands-题解" class="headerlink" title="LeetCode(\1254. Number of Closed Islands)题解"></a>LeetCode(\1254. Number of Closed Islands)题解</h1><p>Given a 2D <code>grid</code> consists of <code>0s</code> (land) and <code>1s</code> (water). An <em>island</em> is a maximal 4-directionally connected group of <code>0s</code> and a <em>closed island</em> is an island <strong>totally</strong> (all left, top, right, bottom) surrounded by <code>1s.</code></p>
+<p>Return the number of <em>closed islands</em>.</p>
+<p><strong>Example 1:</strong></p>
+<p><img src="https://assets.leetcode.com/uploads/2019/10/31/sample_3_1610.png" alt="img"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Input: grid &#x3D; [[1,1,1,1,1,1,1,0],[1,0,0,0,0,1,1,0],[1,0,1,0,1,1,1,0],[1,0,0,0,0,1,0,1],[1,1,1,1,1,1,1,0]]</span><br><span class="line">Output: 2</span><br><span class="line"></span><br><span class="line">Explanation: </span><br><span class="line">Islands in gray are closed because they are completely surrounded by water (group of 1s).</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<p><img src="https://assets.leetcode.com/uploads/2019/10/31/sample_4_1610.png" alt="img"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: grid &#x3D; [[0,0,1,0,0],[0,1,0,1,0],[0,1,1,1,0]]</span><br><span class="line">Output: 1</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 3:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Input: grid &#x3D; [[1,1,1,1,1,1,1],</span><br><span class="line">               [1,0,0,0,0,0,1],</span><br><span class="line">               [1,0,1,1,1,0,1],</span><br><span class="line">               [1,0,1,0,1,0,1],</span><br><span class="line">               [1,0,1,1,1,0,1],</span><br><span class="line">               [1,0,0,0,0,0,1],</span><br><span class="line">               [1,1,1,1,1,1,1]]</span><br><span class="line">Output: 2</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>1 &lt;= grid.length, grid[0].length &lt;= 100</code></li>
+<li><code>0 &lt;= grid[i][j] &lt;=1</code></li>
+</ul>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个二维数组，0表示岛屿，1表示水，现在要找出所有的独立岛屿（全部由1组成，四周都是海水）。</p>
+<p>使用dfs遍历，对于0就向下走，走到边界就返回false，表示不可能成为岛屿，否则就返回true。</p>
+<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间复杂度O(n)，空间复杂度O(n)。</p>
+<p><code>Runtime: 16 ms, faster than 39.23% of C++ online submissions for Number of Closed Islands.</code></p>
+<p><code>Memory Usage: 10.7 MB, less than 100.00% of C++ online submissions for Number of Closed Islands.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">bool</span>&gt;&gt; visit;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; g;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> i, <span class="keyword">int</span> j, <span class="keyword">int</span> row, <span class="keyword">int</span> col)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(visit[i][j]==<span class="literal">false</span> <span class="keyword">or</span> g[i][j]==<span class="number">1</span>) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">if</span> (i == <span class="number">0</span> <span class="keyword">or</span> j == <span class="number">0</span> <span class="keyword">or</span> i == row<span class="number">-1</span> <span class="keyword">or</span> j == col<span class="number">-1</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="literal">true</span>;</span><br><span class="line">        visit[i][j] = <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">if</span>(i &gt; <span class="number">0</span>) res = res &amp; dfs(i<span class="number">-1</span>, j, row, col);</span><br><span class="line">        <span class="keyword">if</span>(j &gt; <span class="number">0</span>) res = res &amp; dfs(i, j<span class="number">-1</span>, row, col);</span><br><span class="line">        <span class="keyword">if</span>(i &lt; row<span class="number">-1</span>) res = res &amp; dfs(i+<span class="number">1</span>, j, row, col);</span><br><span class="line">        <span class="keyword">if</span>(j &lt; col<span class="number">-1</span>) res = res &amp; dfs(i, j+<span class="number">1</span>, row, col);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">closedIsland</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; grid)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> row = grid.<span class="built_in">size</span>(), col = grid[<span class="number">0</span>].<span class="built_in">size</span>(), res = <span class="number">0</span>;</span><br><span class="line">        visit = <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">bool</span>&gt;&gt;(row, <span class="built_in">vector</span>&lt;<span class="keyword">bool</span>&gt;(col, <span class="literal">true</span>));</span><br><span class="line">        g = grid;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;row; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;col; j++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (grid[i][j] == <span class="number">0</span> <span class="keyword">and</span> visit[i][j] == <span class="literal">true</span>) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (dfs(i, j, row, col) == <span class="literal">true</span>) res++;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2020-02-01</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/31/LeetCode(1282.%20Group%20the%20People%20Given%20the%20Group%20Size%20They%20Belong%20To)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/31/LeetCode(1282.%20Group%20the%20People%20Given%20the%20Group%20Size%20They%20Belong%20To)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1282. Group the People Given the Group Size They Belong To)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-31 20:53:30" itemprop="dateCreated datePublished" datetime="2020-01-31T20:53:30+08:00">2020-01-31</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-1282-Group-the-People-Given-the-Group-Size-They-Belong-To-题解"><a href="#LeetCode-1282-Group-the-People-Given-the-Group-Size-They-Belong-To-题解" class="headerlink" title="LeetCode(\1282. Group the People Given the Group Size They Belong To)题解"></a>LeetCode(\1282. Group the People Given the Group Size They Belong To)题解</h1><p>There are <code>n</code> people whose <strong>IDs</strong> go from <code>0</code> to <code>n - 1</code> and each person belongs <strong>exactly</strong> to one group. Given the array <code>groupSizes</code> of length <code>n</code> telling the group size each person belongs to, return the groups there are and the people’s <strong>IDs</strong> each group includes.</p>
+<p>You can return any solution in any order and the same applies for IDs. Also, it is guaranteed that there exists at least one solution. </p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Input: groupSizes &#x3D; [3,3,3,3,3,1,3]</span><br><span class="line">Output: [[5],[0,1,2],[3,4,6]]</span><br><span class="line">Explanation: </span><br><span class="line">Other possible solutions are [[2,1,6],[5],[0,4,3]] and [[5],[0,6,2],[4,3,1]].</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: groupSizes &#x3D; [2,1,3,3,3,2]</span><br><span class="line">Output: [[1],[0,5],[2,3,4]]</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>groupSizes.length == n</code></li>
+<li><code>1 &lt;= n &lt;= 500</code></li>
+<li><code>1 &lt;= groupSizes[i] &lt;= n</code></li>
+</ul>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>N个人有0到N-1的ID，每个人有对应的所属组，在数组中，i位置的元素表示ID为i的人所属的组的成员个数。现在需要根据组大小将其按照组分开，保证一定有解。</p>
+<p>这个题稍稍思考一下就可以得出解法，首先记录下每个组员的ID和对应的组数，可以使用c++中的pair实现，然后将其按照组的大小排序，那么具有相同组数的一定是挨着的，然后依次取就可以。要注意的是可能有多个组大小是一样的，因此选择的时候要判断一下。</p>
+<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间复杂度O(nlogn), 空间复杂度O(n). 这里其实还有一种O(n)时间复杂度的方法，就是按照组大小将其放入不同的set中，然后再将其分开，只是有点麻烦。</p>
+<p><code>Runtime: 24 ms, faster than 86.52% of C++ online submissions for Group the People Given the Group Size They Belong To.</code></p>
+<p><code>Memory Usage: 11.7 MB, less than 100.00% of C++ online submissions for Group the People Given the Group Size They Belong To.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; a, pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a.second &lt; b.second; </span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">groupThePeople</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; groupSizes)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = groupSizes.<span class="built_in">size</span>();</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; res;</span><br><span class="line">        vector&lt;pair&lt;int, int&gt;&gt; V(len);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++) V[i] = make_pair(i, groupSizes[i]);</span><br><span class="line">        sort(V.<span class="built_in">begin</span>(), V.<span class="built_in">end</span>(), cmp);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> l = <span class="number">0</span>, s;</span><br><span class="line">        <span class="keyword">while</span> (l &lt; len) &#123;</span><br><span class="line">            s = V[l].second;</span><br><span class="line">            res.push_back(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;());</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i=l; i&lt;s+l; i++) res[res.<span class="built_in">size</span>()<span class="number">-1</span>].push_back(V[i].first);</span><br><span class="line">            l += s;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>BitBrave，2020-01-31</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/30/LeetCode(1222.%20Queens%20That%20Can%20Attack%20the%20King)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/30/LeetCode(1222.%20Queens%20That%20Can%20Attack%20the%20King)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1222. Queens That Can Attack the King)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-30 23:29:37" itemprop="dateCreated datePublished" datetime="2020-01-30T23:29:37+08:00">2020-01-30</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-1222-Queens-That-Can-Attack-the-King-题解"><a href="#LeetCode-1222-Queens-That-Can-Attack-the-King-题解" class="headerlink" title="LeetCode(\1222. Queens That Can Attack the King)题解"></a>LeetCode(\1222. Queens That Can Attack the King)题解</h1><p>On an <strong>8x8</strong> chessboard, there can be multiple Black Queens and one White King.</p>
+<p>Given an array of integer coordinates <code>queens</code> that represents the positions of the Black Queens, and a pair of coordinates <code>king</code> that represent the position of the White King, return the coordinates of all the queens (in any order) that can attack the King.</p>
+<p><strong>Example 1:</strong></p>
+<p><img src="https://assets.leetcode.com/uploads/2019/10/01/untitled-diagram.jpg" alt="img"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Input: queens &#x3D; [[0,1],[1,0],[4,0],[0,4],[3,3],[2,4]], king &#x3D; [0,0]</span><br><span class="line">Output: [[0,1],[1,0],[3,3]]</span><br><span class="line">Explanation:  </span><br><span class="line">The queen at [0,1] can attack the king cause they&#39;re in the same row. </span><br><span class="line">The queen at [1,0] can attack the king cause they&#39;re in the same column. </span><br><span class="line">The queen at [3,3] can attack the king cause they&#39;re in the same diagnal. </span><br><span class="line">The queen at [0,4] can&#39;t attack the king cause it&#39;s blocked by the queen at [0,1]. </span><br><span class="line">The queen at [4,0] can&#39;t attack the king cause it&#39;s blocked by the queen at [1,0]. </span><br><span class="line">The queen at [2,4] can&#39;t attack the king cause it&#39;s not in the same row&#x2F;column&#x2F;diagnal as the king.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<p><strong><img src="https://assets.leetcode.com/uploads/2019/10/01/untitled-diagram-1.jpg" alt="img"></strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: queens &#x3D; [[0,0],[1,1],[2,2],[3,4],[3,5],[4,4],[4,5]], king &#x3D; [3,3]</span><br><span class="line">Output: [[2,2],[3,4],[4,4]]</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 3:</strong></p>
+<p><strong><img src="https://assets.leetcode.com/uploads/2019/10/01/untitled-diagram-2.jpg" alt="img"></strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: queens &#x3D; [[5,6],[7,7],[2,1],[0,7],[1,6],[5,1],[3,7],[0,3],[4,0],[1,2],[6,3],[5,0],[0,4],[2,2],[1,1],[6,4],[5,4],[0,0],[2,6],[4,5],[5,2],[1,4],[7,5],[2,3],[0,5],[4,2],[1,0],[2,7],[0,1],[4,6],[6,1],[0,6],[4,3],[1,7]], king &#x3D; [3,4]</span><br><span class="line">Output: [[2,3],[1,4],[1,6],[3,7],[4,3],[5,4],[4,5]]</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>1 &lt;= queens.length &lt;= 63</code></li>
+<li><code>queens[0].length == 2</code></li>
+<li><code>0 &lt;= queens[i][j] &lt; 8</code></li>
+<li><code>king.length == 2</code></li>
+<li><code>0 &lt;= king[0], king[1] &lt; 8</code></li>
+<li>At most one piece is allowed in a cell.</li>
+</ul>
+<h1 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h1><p>在一个8*8给若干个皇后的位置，和一个国王的位置。然后找出可以攻击到国王的皇后位置（横竖，斜线上中间没有其他棋子，而可以直接攻击到国王的皇后）。</p>
+<p>这个题很简单，使用C++的pair记录set对，然后从国王的位置的上下左右斜线向外发散，找到第一个对应的皇后，记录下来即可。</p>
+<p>代码如下，时间复杂度O(1)，空间复杂度O(1)，因为棋盘就8*8，常量时间就可以。</p>
+<p><code>Runtime: 4 ms, faster than 91.01% of C++ online submissions for Queens That Can Attack the King.</code></p>
+<p><code>Memory Usage: 9.5 MB, less than 100.00% of C++ online submissions for Queens That Can Attack the King.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">queensAttacktheKing</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; queens, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; king)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = queens.<span class="built_in">size</span>();</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; res;</span><br><span class="line">        <span class="built_in">set</span>&lt;pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt;&gt; M;</span><br><span class="line">        pair&lt;int, int&gt; k(king[0], king[1]);</span><br><span class="line">        <span class="keyword">for</span> (<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; q : queens) M.insert(make_pair(q[<span class="number">0</span>], q[<span class="number">1</span>]));</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=king[<span class="number">0</span>]; i&gt;=<span class="number">0</span>; i--) &#123;</span><br><span class="line">            pair&lt;int, int&gt; t(i, king[1]);</span><br><span class="line">            <span class="keyword">if</span> (M.<span class="built_in">find</span>(t) == M.<span class="built_in">end</span>()) <span class="keyword">continue</span>;</span><br><span class="line">            res.push_back(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(&#123;t.first, t.second&#125;));</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=king[<span class="number">0</span>]; i&lt;<span class="number">8</span>; i++) &#123;</span><br><span class="line">            pair&lt;int, int&gt; t(i, king[1]);</span><br><span class="line">            <span class="keyword">if</span> (M.<span class="built_in">find</span>(t) == M.<span class="built_in">end</span>()) <span class="keyword">continue</span>;</span><br><span class="line">            res.push_back(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(&#123;t.first, t.second&#125;));</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j=king[<span class="number">1</span>]; j&gt;=<span class="number">0</span>; j--) &#123;</span><br><span class="line">            pair&lt;int, int&gt; t(king[0], j);</span><br><span class="line">            <span class="keyword">if</span> (M.<span class="built_in">find</span>(t) == M.<span class="built_in">end</span>()) <span class="keyword">continue</span>;</span><br><span class="line">            res.push_back(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(&#123;t.first, t.second&#125;));</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j=king[<span class="number">1</span>]; j&lt;<span class="number">8</span>; j++) &#123;</span><br><span class="line">            pair&lt;int, int&gt; t(king[0], j);</span><br><span class="line">            <span class="keyword">if</span> (M.<span class="built_in">find</span>(t) == M.<span class="built_in">end</span>()) <span class="keyword">continue</span>;</span><br><span class="line">            res.push_back(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(&#123;t.first, t.second&#125;));</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=king[<span class="number">0</span>], j=king[<span class="number">1</span>]; i&gt;=<span class="number">0</span> <span class="keyword">and</span> j&gt;=<span class="number">0</span>; i--, j--) &#123;</span><br><span class="line">            pair&lt;int, int&gt; t(i, j);</span><br><span class="line">            <span class="keyword">if</span> (M.<span class="built_in">find</span>(t) == M.<span class="built_in">end</span>()) <span class="keyword">continue</span>;</span><br><span class="line">            res.push_back(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(&#123;t.first, t.second&#125;));</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=king[<span class="number">0</span>], j=king[<span class="number">1</span>]; i&lt;<span class="number">8</span> <span class="keyword">and</span> j&lt;<span class="number">8</span>; i++, j++) &#123;</span><br><span class="line">            pair&lt;int, int&gt; t(i, j);</span><br><span class="line">            <span class="keyword">if</span> (M.<span class="built_in">find</span>(t) == M.<span class="built_in">end</span>()) <span class="keyword">continue</span>;</span><br><span class="line">            res.push_back(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(&#123;t.first, t.second&#125;));</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=king[<span class="number">0</span>], j=king[<span class="number">1</span>]; i&gt;=<span class="number">0</span> <span class="keyword">and</span> j&lt;<span class="number">8</span>; i--, j++) &#123;</span><br><span class="line">            pair&lt;int, int&gt; t(i, j);</span><br><span class="line">            <span class="keyword">if</span> (M.<span class="built_in">find</span>(t) == M.<span class="built_in">end</span>()) <span class="keyword">continue</span>;</span><br><span class="line">            res.push_back(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(&#123;t.first, t.second&#125;));</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=king[<span class="number">0</span>], j=king[<span class="number">1</span>]; i&lt;<span class="number">8</span> <span class="keyword">and</span> j&gt;=<span class="number">0</span>; i++, j--) &#123;</span><br><span class="line">            pair&lt;int, int&gt; t(i, j);</span><br><span class="line">            <span class="keyword">if</span> (M.<span class="built_in">find</span>(t) == M.<span class="built_in">end</span>()) <span class="keyword">continue</span>;</span><br><span class="line">            res.push_back(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(&#123;t.first, t.second&#125;));</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2020-01-30</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/25/LeetCode(1090.%20Largest%20Values%20From%20Labels)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -702,328 +1041,11 @@ Output: false</code></pre><h2 id="解题思路"><a href="#解题思路" class="h
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(1014.%20Best%20Sightseeing%20Pair)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(1014.%20Best%20Sightseeing%20Pair)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1014. Best Sightseeing Pair)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-1014-Best-Sightseeing-Pair-题解"><a href="#LeetCode-1014-Best-Sightseeing-Pair-题解" class="headerlink" title="LeetCode(\1014. Best Sightseeing Pair)题解"></a>LeetCode(\1014. Best Sightseeing Pair)题解</h1><p>Given an array <code>A</code> of positive integers, <code>A[i]</code> represents the value of the <code>i</code>-th sightseeing spot, and two sightseeing spots <code>i</code> and <code>j</code> have distance <code>j - i</code> between them.</p>
-<p>The <em>score</em> of a pair (<code>i &lt; j</code>) of sightseeing spots is (<code>A[i] + A[j] + i - j)</code> : the sum of the values of the sightseeing spots, <strong>minus</strong> the distance between them.</p>
-<p>Return the maximum score of a pair of sightseeing spots.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: [8,1,5,2,6]</span><br><span class="line">Output: 11</span><br><span class="line">Explanation: i &#x3D; 0, j &#x3D; 2, A[i] + A[j] + i - j &#x3D; 8 + 5 + 0 - 2 &#x3D; 11</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Note:</strong></p>
-<ol>
-<li><code>2 &lt;= A.length &lt;= 50000</code></li>
-<li><code>1 &lt;= A[i] &lt;= 1000</code></li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>有一个数组，每个元素相当于一个观光地，元素值对应观看的价值，元素的索引值的差代表两个观光地之间的距离。现在要找出两个观光地，价值之和减去距离值为所有两个观光地之间的相同值的最大。</p>
-<p>这个题最暴力的解法就是遍历所有的两种组合，但这样时间复杂度O(n2)，我做的时候超时。</p>
-<p>其实有一个非常简单的算法，我们从左到右遍历每个元素，然后用一个值去记录已经遍历数组中，到达当前观光地的价值最大的观光地的值，这个值是观光地的值减去其到当前元素位置的距离，这样就可以一次遍历解决，代码非常简单。</p>
-<p>代码如下，时间复杂度O(n)，空间复杂度O(1)。</p>
-<p><code>Runtime: 68 ms, faster than 56.81% of C++ online submissions for Best Sightseeing Pair.</code></p>
-<p><code>Memory Usage: 13.2 MB, less than 62.50% of C++ online submissions for Best Sightseeing Pair.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxScoreSightseeingPair</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> ret = <span class="number">0</span>, max_a = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> a : A)&#123;</span><br><span class="line">            ret = <span class="built_in">max</span>(max_a + a, ret);</span><br><span class="line">            max_a = <span class="built_in">max</span>(max_a, a) - <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2019-11-30</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(1016.%20Binary%20String%20With%20Substrings%20Representing%201%20To%20N)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(1016.%20Binary%20String%20With%20Substrings%20Representing%201%20To%20N)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1016. Binary String With Substrings Representing 1 To N)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-1016-Binary-String-With-Substrings-Representing-1-To-N-题解"><a href="#LeetCode-1016-Binary-String-With-Substrings-Representing-1-To-N-题解" class="headerlink" title="LeetCode(\1016. Binary String With Substrings Representing 1 To N)题解"></a>LeetCode(\1016. Binary String With Substrings Representing 1 To N)题解</h1><p>Given a binary string <code>S</code> (a string consisting only of ‘0’ and ‘1’s) and a positive integer <code>N</code>, return true if and only if for every integer X from 1 to N, the binary representation of X is a substring of S.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: S &#x3D; &quot;0110&quot;, N &#x3D; 3</span><br><span class="line">Output: true</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: S &#x3D; &quot;0110&quot;, N &#x3D; 4</span><br><span class="line">Output: false</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Note:</strong></p>
-<ol>
-<li><code>1 &lt;= S.length &lt;= 1000</code></li>
-<li><code>1 &lt;= N &lt;= 10^9</code></li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个全部由0和1组成的字符串，和一个整数N，判断1到N的所有整数转成的二进制串是否存在于字符串内。</p>
-<p>直接使用Python的算法即可，暴力枚举。网上有很多trick，但是我都觉得有点问题。</p>
-<p>代码如下，时间复杂度O(bit(N)*len(S))，空间复杂度O(1)。</p>
-<p><code>Runtime: 20 ms, faster than 100.00% of Python3 online submissions for Binary String With Substrings Representing 1 To N.</code></p>
-<p><code>Memory Usage: 12.7 MB, less than 100.00% of Python3 online submissions for Binary String With Substrings Representing 1 To N.</code></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">queryString</span><span class="params">(self, S: str, N: int)</span> -&gt; bool:</span></span><br><span class="line">        <span class="keyword">for</span> n <span class="keyword">in</span> range(<span class="number">1</span>, N+<span class="number">1</span>):</span><br><span class="line">            <span class="keyword">if</span> bin(n)[<span class="number">2</span>:] <span class="keyword">not</span> <span class="keyword">in</span> S: <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2019-12-1</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(1017.%20Convert%20to%20Base%20-2)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(1017.%20Convert%20to%20Base%20-2)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1017. Convert to Base -2)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-1017-Convert-to-Base-2-题解"><a href="#LeetCode-1017-Convert-to-Base-2-题解" class="headerlink" title="LeetCode(\1017. Convert to Base -2)题解"></a>LeetCode(\1017. Convert to Base -2)题解</h1><p>Given a number <code>N</code>, return a string consisting of <code>&quot;0&quot;</code>s and <code>&quot;1&quot;</code>s that represents its value in base <code>**-2**</code> (negative two).</p>
-<p>The returned string must have no leading zeroes, unless the string is <code>&quot;0&quot;</code>.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: 2</span><br><span class="line">Output: &quot;110&quot;</span><br><span class="line">Explantion: (-2) ^ 2 + (-2) ^ 1 &#x3D; 2</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: 3</span><br><span class="line">Output: &quot;111&quot;</span><br><span class="line">Explantion: (-2) ^ 2 + (-2) ^ 1 + (-2) ^ 0 &#x3D; 3</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 3:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: 4</span><br><span class="line">Output: &quot;100&quot;</span><br><span class="line">Explantion: (-2) ^ 2 &#x3D; 4</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Note:</strong></p>
-<ol>
-<li><code>0 &lt;= N &lt;= 10^9</code></li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个数，写出按照-2进制表示的数的字符串。</p>
-<p>这个题稍微分析一下就可以，-2进制和2进制其实没有太大的区别，把-2进制的奇数位和前面一个偶数位都设为1就和2进制的对应奇数位设置为1一样。我们首先依次查看数N的最后一个数，然后看如果对应的进制为是偶数，那就和2进制没什么分别，如果是奇数，就当前为设为1。同时样判断进位。</p>
-<p>代码如下，时间复杂度O(n)，空间复杂度O(1)。</p>
-<p><code>Runtime: 4 ms, faster than 58.15% of C++ online submissions for Convert to Base -2.</code></p>
-<p><code>Memory Usage: 8.3 MB, less than 100.00% of C++ online submissions for Convert to Base -2.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">string</span> <span class="title">baseNeg2</span><span class="params">(<span class="keyword">int</span> N)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (N == <span class="number">0</span>) <span class="keyword">return</span> <span class="string">"0"</span>;</span><br><span class="line">        <span class="keyword">if</span> (N == <span class="number">1</span>) <span class="keyword">return</span> <span class="string">"1"</span>;</span><br><span class="line">        <span class="built_in">string</span> ret = <span class="string">""</span>;</span><br><span class="line">        <span class="keyword">bool</span> even = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">int</span> a = <span class="number">0</span>, b = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(N &gt; <span class="number">0</span>)&#123;</span><br><span class="line">            a = (N &amp; <span class="number">1</span>) + b;</span><br><span class="line">            b = <span class="number">0</span>;</span><br><span class="line">            N = N &gt;&gt; <span class="number">1</span>;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span> (a == <span class="number">0</span>) ret = <span class="string">"0"</span> + ret;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (a == <span class="number">1</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (even == <span class="literal">true</span>) ret = <span class="string">"1"</span> + ret;</span><br><span class="line">                <span class="keyword">else</span> &#123;</span><br><span class="line">                    ret = <span class="string">"1"</span> + ret;</span><br><span class="line">                    b = <span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; </span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (a == <span class="number">2</span>) &#123;</span><br><span class="line">                ret = <span class="string">"0"</span> + ret;</span><br><span class="line">                b = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            even = !even;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (b == <span class="number">1</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span> (even) ret = <span class="string">"1"</span> + ret;</span><br><span class="line">            <span class="keyword">else</span> ret = <span class="string">"11"</span> + ret;</span><br><span class="line">        &#125; </span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2019-12-14</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(103.%20Binary%20Tree%20Zigzag%20Level%20Order%20Traversal)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(103.%20Binary%20Tree%20Zigzag%20Level%20Order%20Traversal)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(103. Binary Tree Zigzag Level Order Traversal)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-103-Binary-Tree-Zigzag-Level-Order-Traversal-题解"><a href="#LeetCode-103-Binary-Tree-Zigzag-Level-Order-Traversal-题解" class="headerlink" title="LeetCode(103. Binary Tree Zigzag Level Order Traversal)题解"></a>LeetCode(103. Binary Tree Zigzag Level Order Traversal)题解</h1><hr>
-<p>Given a binary tree, return the zigzag level order traversal of its nodes’ values. (ie, from left to right, then right to left for the next level and alternate between).</p>
-<pre><code>For example:
-Given binary tree [3,9,20,null,null,15,7],
-     3
-    / \
-   9  20
-     /  \
-    15   7</code></pre><p>return its zigzag level order traversal as:</p>
-<pre><code>[
-    [3],
-    [20,9],
-    [15,7]
-]</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>实现二叉树的层序遍历,同时要是曲折的，就是这一层从左到右，下一层从右到左，再从左到右····。</p>
-<p>很简单，用一个queue存储遍历的节点，用一个数count记录每一层入队列的数目，同时用一个bool变量dir记录方向，true从左到右，false从右到左。首先根节点入队列，count+1，然后以count为准进行循环出队列，每次出队列的时候，要把出队列的节点的孩子节点入队列。最后count为0时表示这一层数目全部出来了，这一层用一个vector记录，如果dir为false，就将vector反转（reverse函数）。然后再count更新为队列的size，表示下一层的数目。</p>
-<p>代码如下：</p>
-<p>Runtime: 4 ms, faster than 93.83% of C++ online submissions for Binary Tree Zigzag Level Order Traversal.<br>Memory Usage: 13.5 MB, less than 56.33% of C++ online submissions for Binary Tree Zigzag Level Order Traversal.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">zigzagLevelOrder</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; res;</span><br><span class="line">        <span class="built_in">queue</span>&lt;TreeNode*&gt; Q;</span><br><span class="line">        <span class="keyword">int</span> count;</span><br><span class="line">        <span class="keyword">bool</span> dir = <span class="literal">false</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(root != <span class="literal">NULL</span>) Q.push(root);</span><br><span class="line">        <span class="keyword">while</span>(!Q.empty())&#123;</span><br><span class="line">            count = Q.<span class="built_in">size</span>();</span><br><span class="line">            dir = !dir;</span><br><span class="line">            TreeNode* tmp;</span><br><span class="line">            <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; item;</span><br><span class="line">            <span class="keyword">while</span>(count&gt;<span class="number">0</span>)&#123;</span><br><span class="line">                count--;</span><br><span class="line">                tmp = Q.front(); Q.pop();</span><br><span class="line">                item.push_back(tmp-&gt;val);</span><br><span class="line">                <span class="keyword">if</span>(tmp-&gt;left != <span class="literal">NULL</span>) Q.push(tmp-&gt;left);</span><br><span class="line">                <span class="keyword">if</span>(tmp-&gt;right != <span class="literal">NULL</span>) Q.push(tmp-&gt;right);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(!dir) reverse(item.<span class="built_in">begin</span>(), item.<span class="built_in">end</span>());</span><br><span class="line">            </span><br><span class="line">            res.push_back(item);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-06-27</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/11/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/">13</a><span class="space">&hellip;</span><a class="page-number" href="/page/37/">37</a><a class="extend next" rel="next" href="/page/13/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/11/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/">13</a><span class="space">&hellip;</span><a class="page-number" href="/page/38/">38</a><a class="extend next" rel="next" href="/page/13/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1089,12 +1111,12 @@ Given binary tree [3,9,20,null,null,15,7],
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">367</span>
+          <span class="site-state-item-count">371</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-count">46</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>

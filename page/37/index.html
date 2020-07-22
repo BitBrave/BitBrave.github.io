@@ -168,6 +168,360 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(974.%20Subarray%20Sums%20Divisible%20by%20K)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(974.%20Subarray%20Sums%20Divisible%20by%20K)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(974. Subarray Sums Divisible by K)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-974-Subarray-Sums-Divisible-by-K-题解"><a href="#LeetCode-974-Subarray-Sums-Divisible-by-K-题解" class="headerlink" title="LeetCode(\974. Subarray Sums Divisible by K)题解"></a>LeetCode(\974. Subarray Sums Divisible by K)题解</h1><p>Given an array <code>A</code> of integers, return the number of (contiguous, non-empty) subarrays that have a sum divisible by <code>K</code>.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Input: A &#x3D; [4,5,0,-2,-3,1], K &#x3D; 5</span><br><span class="line">Output: 7</span><br><span class="line">Explanation: There are 7 subarrays with a sum divisible by K &#x3D; 5:</span><br><span class="line">[4, 5, 0, -2, -3, 1], [5], [5, 0], [5, 0, -2, -3], [0], [0, -2, -3], [-2, -3]</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Note:</strong></p>
+<ol>
+<li><code>1 &lt;= A.length &lt;= 30000</code></li>
+<li><code>-10000 &lt;= A[i] &lt;= 10000</code></li>
+<li><code>2 &lt;= K &lt;= 10000</code></li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个数组，找出其中的连续子数组的数目，每个子数组元素之和可以被K整除。</p>
+<p>这个最简单的办法就是遍历所有的子数组，然后判断是否可以被K整除，整体时间复杂度为O(n2)，肯定ETL了。</p>
+<p>这个题需要分析一下，思考一下整除的条件是什么，就是余数为0，而数学中有这样一个性质。如果两个数对于一个除数同余，那么两个数只差一定能整除这个除数。即若a&lt;=b，a%K==b%K，那么(b-a)%K=0。</p>
+<p>因此这里我们可以采用如下解法：从左到右遍历数组，用一个Map记录数组中当前遍历的所有元素之和对于K的余数出现的次数，然后后续如果出现相同的余数，那么就代表前面有多个子连续数组之间的元素和是可以被整除的。</p>
+<p>代码如下，时间复杂度O(n)，空间复杂度O(K)。</p>
+<p><code>Runtime: 76 ms, faster than 28.15% of C++ online submissions for Subarray Sums Divisible by K.</code></p>
+<p><code>Memory Usage: 14 MB, less than 58.33% of C++ online submissions for Subarray Sums Divisible by K.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">subarraysDivByK</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A, <span class="keyword">int</span> K)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>, s = <span class="number">0</span>, len = A.<span class="built_in">size</span>();</span><br><span class="line">        <span class="built_in">unordered_map</span>&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; M;</span><br><span class="line">        M[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++) &#123;</span><br><span class="line">            s = (s + A[i]) % K;</span><br><span class="line">            <span class="keyword">if</span> (s &lt; <span class="number">0</span>) s += K;</span><br><span class="line">            <span class="keyword">if</span> (M.<span class="built_in">find</span>(s) == M.<span class="built_in">end</span>()) M[s] = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                res += M[s];</span><br><span class="line">                M[s]++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2020-01-03</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(978.%20Longest%20Turbulent%20Subarray)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(978.%20Longest%20Turbulent%20Subarray)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(978. Longest Turbulent Subarray)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-978-Longest-Turbulent-Subarray-题解"><a href="#LeetCode-978-Longest-Turbulent-Subarray-题解" class="headerlink" title="LeetCode(\978. Longest Turbulent Subarray)题解"></a>LeetCode(\978. Longest Turbulent Subarray)题解</h1><p>A subarray <code>A[i], A[i+1], ..., A[j]</code> of <code>A</code> is said to be <em>turbulent</em> if and only if:</p>
+<ul>
+<li>For <code>i &lt;= k &lt; j</code>, <code>A[k] &gt; A[k+1]</code> when <code>k</code> is odd, and <code>A[k] &lt; A[k+1]</code> when <code>k</code> is even;</li>
+<li><strong>OR</strong>, for <code>i &lt;= k &lt; j</code>, <code>A[k] &gt; A[k+1]</code> when <code>k</code> is even, and <code>A[k] &lt; A[k+1]</code> when <code>k</code> is odd.</li>
+</ul>
+<p>That is, the subarray is turbulent if the comparison sign flips between each adjacent pair of elements in the subarray.</p>
+<p>Return the <strong>length</strong> of a maximum size turbulent subarray of A.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: [9,4,2,10,7,8,8,1,9]</span><br><span class="line">Output: 5</span><br><span class="line">Explanation: (A[1] &gt; A[2] &lt; A[3] &gt; A[4] &lt; A[5])</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: [4,8,12,16]</span><br><span class="line">Output: 2</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 3:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: [100]</span><br><span class="line">Output: 1</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Note:</strong></p>
+<ol>
+<li><code>1 &lt;= A.length &lt;= 40000</code></li>
+<li><code>0 &lt;= A[i] &lt;= 10^9</code></li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个数组，找出其中最长的起伏连续子数组，返回其长度。起伏就是数组内奇数位元素总是比相邻的偶数位置元素小，或者偶数位置元素总是比相邻奇数位置元素小。</p>
+<p>这个题可以使用DP的方式，从左到右遍历数组，使用一个数记录遍历到当前位置，包括当前元素在内的最长连续合法子树组长度，因为合法子树组的元素内部直观来看肯定是元素一大一小一大一小之类的样子，因此只要判断下一个元素是否符合这个特征即可，如果符合就当前长度+1，如果不符合就从新开始一个即可。我们可以使用dir的异或操作控制方向，也可以两次遍历数组，第一次寻找奇数位大于偶数位的合法数组，第二次寻找偶数位大于奇数位的数组。</p>
+<p>代码如下，时间复杂度O(n)，空间复杂度O(1)。</p>
+<p><code>Runtime: 128 ms, faster than 11.85% of C++ online submissions for Longest Turbulent Subarray.</code></p>
+<p><code>Memory Usage: 13.3 MB, less than 100.00% of C++ online submissions for Longest Turbulent Subarray.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxTurbulenceSize</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = A.<span class="built_in">size</span>(), ret = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span>(len &lt;= <span class="number">1</span>) <span class="keyword">return</span> len;</span><br><span class="line">        <span class="keyword">bool</span> dir = A[<span class="number">0</span>] &lt; A[<span class="number">1</span>];</span><br><span class="line">        <span class="keyword">int</span> t = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(A[i<span class="number">-1</span>] == A[i])&#123;</span><br><span class="line">                ret = <span class="built_in">max</span>(ret, t);</span><br><span class="line">                t = <span class="number">1</span>;</span><br><span class="line">                <span class="keyword">if</span>(i+<span class="number">1</span> &lt; len) dir = (A[i] &lt; A[i+<span class="number">1</span>]);</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>((A[i<span class="number">-1</span>] &gt; A[i]) ^ dir)&#123;</span><br><span class="line">                dir = !dir;</span><br><span class="line">                t += <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                ret = <span class="built_in">max</span>(t, ret);</span><br><span class="line">                t = <span class="number">2</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">max</span>(ret, t);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>分别遍历两次数组的代码。</p>
+<p><code>Runtime: 116 ms, faster than 24.88% of C++ online submissions for Longest Turbulent Subarray.</code></p>
+<p><code>Memory Usage: 13.3 MB, less than 100.00% of C++ online submissions for Longest Turbulent Subarray.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxTurbulenceSize</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = A.<span class="built_in">size</span>(), ret = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span>(len &lt;= <span class="number">1</span>) <span class="keyword">return</span> len;</span><br><span class="line">        <span class="keyword">int</span> t = <span class="number">1</span>;</span><br><span class="line">        <span class="comment">// odd</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>((A[i<span class="number">-1</span>]==A[i]) <span class="keyword">or</span> ((A[i<span class="number">-1</span>]&gt;A[i]) ^ (i&amp;<span class="number">1</span>)))&#123;</span><br><span class="line">                ret = <span class="built_in">max</span>(ret, t);</span><br><span class="line">                t = <span class="number">0</span>;</span><br><span class="line">            &#125;   </span><br><span class="line">            t += <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        ret = <span class="built_in">max</span>(ret, t);</span><br><span class="line">        t = <span class="number">1</span>;</span><br><span class="line">        <span class="comment">// even</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>((A[i<span class="number">-1</span>]==A[i]) <span class="keyword">or</span> ((A[i<span class="number">-1</span>]&lt;A[i]) ^ (i&amp;<span class="number">1</span>)))&#123;</span><br><span class="line">                ret = <span class="built_in">max</span>(ret, t);</span><br><span class="line">                t = <span class="number">0</span>;</span><br><span class="line">            &#125;   </span><br><span class="line">            t += <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">max</span>(ret, t);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(979.%20Distribute%20Coins%20in%20Binary%20Tree%20Medium)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(979.%20Distribute%20Coins%20in%20Binary%20Tree%20Medium)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(979. Distribute Coins in Binary Tree Medium)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-979-Distribute-Coins-in-Binary-Tree-Medium-题解"><a href="#LeetCode-979-Distribute-Coins-in-Binary-Tree-Medium-题解" class="headerlink" title="LeetCode(\979. Distribute Coins in Binary Tree Medium)题解"></a>LeetCode(\979. Distribute Coins in Binary Tree Medium)题解</h1><p>Given the <code>root</code> of a binary tree with <code>N</code> nodes, each <code>node</code> in the tree has <code>node.val</code> coins, and there are <code>N</code> coins total.</p>
+<p>In one move, we may choose two adjacent nodes and move one coin from one node to another.  (The move may be from parent to child, or from child to parent.)</p>
+<p>Return the number of moves required to make every node have exactly one coin.</p>
+<p><strong>Example 1:</strong></p>
+<p><strong><img src="https://assets.leetcode.com/uploads/2019/01/18/tree1.png" alt="img"></strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: [3,0,0]</span><br><span class="line">Output: 2</span><br><span class="line">Explanation: From the root of the tree, we move one coin to its left child, and one coin to its right child.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<p><strong><img src="https://assets.leetcode.com/uploads/2019/01/18/tree2.png" alt="img"></strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: [0,3,0]</span><br><span class="line">Output: 3</span><br><span class="line">Explanation: From the left child of the root, we move two coins to the root [taking two moves].  Then, we move one coin from the root of the tree to the right child.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 3:</strong></p>
+<p><strong><img src="https://assets.leetcode.com/uploads/2019/01/18/tree3.png" alt="img"></strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: [1,0,2]</span><br><span class="line">Output: 2</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 4:</strong></p>
+<p><strong><img src="https://assets.leetcode.com/uploads/2019/01/18/tree4.png" alt="img"></strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: [1,0,0,null,3]</span><br><span class="line">Output: 4</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Note:</strong></p>
+<ol>
+<li><code>1&lt;= N &lt;= 100</code></li>
+<li><code>0 &lt;= node.val &lt;= N</code></li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出了一个二叉树，每个节点都有个数字代表当前节点有多少个金币，保证所有节点的金币数量之和等于节点个数。现在要求把金币平分到每个节点，使得每个节点都只放1个金币。问需要的移动次数是多少？</p>
+<p>首先，给定了一个二叉树的状态，只要不做重复移动，那么可以证明，移动是无状态的。也就是说，最终的移动次数不会因为先给谁后给谁，或者先移动几个再移动几个，再或者把某些金币移动到近的节点把另外一些金币移动到远的节点而有所不同。</p>
+<p>一开始我的思路就是分别统计左右子树缺少的金币个数，然后把每个节点和其子树总体的金币分配到位。累计所有节点和其子树所需要的移动次数就是结果。</p>
+<p>但是这个题可以使用更简单的办法做。因为从叶子到跟寻找，对于每个节点，只能剩下一个。多了的值肯定要全给父亲，少的值全问父亲要，统计一下就好了。</p>
+<p>因此我们建立一个DFS，输入根节点，返回这个二叉树的缺少或多余的金币，如果大于0说明多了，小于说明少了，等于则刚刚好。那么对于当前的节点来说，假设我们把左右都DFS完毕，那么这时候根据左边和右边的情况，假设我们已经将缺少或者多余的金币的需求都放在了左右子根节点上（就是我们只需要再移动一次就可以了）。我们还需要将金币进行移动，根据推算这个移动从次数就是abs(DFS(left))+abs(DFS(right))。可以检验不管是什么情况，最后都是这个表达式。而DFS返回的值应该为DFS(left)+DFS(right)+root-&gt;val-1，表示当前根节点所代表的子树需要从根节点的父节点拿多少金币或给出多少金币。</p>
+<p>因此，我们在DFS的过程中，每次到达一个节点，都计算左子树上传或下载多少个金币，右子树需要上传或下载多少个金币，将二者相加即可。</p>
+<p>代码如下，时间复杂度O(n)，空间复杂度O(1)。</p>
+<p><code>Runtime: 4 ms, faster than 91.60% of C++ online submissions for Distribute Coins in Binary Tree.</code></p>
+<p><code>Memory Usage: 13.1 MB, less than 94.44% of C++ online submissions for Distribute Coins in Binary Tree.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> ret;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">DFS</span><span class="params">(TreeNode* root)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> l = DFS(root-&gt;left), r = DFS(root-&gt;right);</span><br><span class="line">        ret += <span class="built_in">abs</span>(l) + <span class="built_in">abs</span>(r);</span><br><span class="line">        <span class="keyword">return</span> root-&gt;val - <span class="number">1</span> + l + r;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">distributeCoins</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        ret = <span class="number">0</span>;</span><br><span class="line">        DFS(root);</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2019-11-20</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(98.%20Validate%20Binary%20Search%20Tree)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(98.%20Validate%20Binary%20Search%20Tree)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(98. Validate Binary Search Tree)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-98-Validate-Binary-Search-Tree-题解"><a href="#LeetCode-98-Validate-Binary-Search-Tree-题解" class="headerlink" title="LeetCode(98. Validate Binary Search Tree)题解"></a>LeetCode(98. Validate Binary Search Tree)题解</h1><hr>
+<p>Given a binary tree, determine if it is a valid binary search tree (BST).</p>
+<p>Assume a BST is defined as follows:</p>
+<p>The left subtree of a node contains only nodes with keys less than the node’s key.<br>The right subtree of a node contains only nodes with keys greater than the node’s key.<br>Both the left and right subtrees must also be binary search trees.</p>
+<pre><code>Example 1:
+
+    2
+   / \
+  1   3
+
+Input: [2,1,3]
+Output: true</code></pre><p>Example 2:</p>
+<pre><code>    5
+   / \
+  1   4
+     / \
+    3   6
+
+Input: [5,1,4,null,null,3,6]
+Output: false
+Explanation: The root node&apos;s value is 5 but its right child&apos;s value is 4.</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出1个二叉树，判断是不是一个二叉搜索树。</p>
+<p>前向遍历下，二叉搜索树是一个递增序列，因此直接前向遍历树，如果发现数不是递增的就是错误的。</p>
+<p>代码如下：</p>
+<p>Runtime: 16 ms, faster than 87.95% of C++ online submissions for Validate Binary Search Tree.<br>Memory Usage: 20.9 MB, less than 19.46% of C++ online submissions for Validate Binary Search Tree.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">fowardT</span><span class="params">(TreeNode* root, <span class="keyword">double</span> &amp;last, <span class="keyword">bool</span> &amp;l)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">if</span>(!fowardT(root-&gt;left, last, l)) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">if</span>(root-&gt;val &lt;= last &amp;&amp; !l) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        l = <span class="literal">false</span>;</span><br><span class="line">        last = root-&gt;val;</span><br><span class="line">        <span class="keyword">return</span> fowardT(root-&gt;right, last, l);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isValidBST</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">double</span> last = INT_MIN;</span><br><span class="line">        <span class="keyword">bool</span> l = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">return</span> fowardT(root, last, l);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2019-06-13</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(986.%20Interval%20List%20Intersections)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -715,106 +1069,11 @@ The median is (2 + 3)/2 = 2.5</code></pre><p>这道题让我们求两个有序�
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/Leetcode(983.%20Minimum%20Cost%20For%20Tickets)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/Leetcode(983.%20Minimum%20Cost%20For%20Tickets)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">Leetcode(983. Minimum Cost For Tickets)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Leetcode-983-Minimum-Cost-For-Tickets-题解"><a href="#Leetcode-983-Minimum-Cost-For-Tickets-题解" class="headerlink" title="Leetcode(\983. Minimum Cost For Tickets)题解"></a>Leetcode(\983. Minimum Cost For Tickets)题解</h1><p>In a country popular for train travel, you have planned some train travelling one year in advance. The days of the year that you will travel is given as an array <code>days</code>. Each day is an integer from <code>1</code> to <code>365</code>.</p>
-<p>Train tickets are sold in 3 different ways:</p>
-<ul>
-<li>a 1-day pass is sold for <code>costs[0]</code> dollars;</li>
-<li>a 7-day pass is sold for <code>costs[1]</code> dollars;</li>
-<li>a 30-day pass is sold for <code>costs[2]</code> dollars.</li>
-</ul>
-<p>The passes allow that many days of consecutive travel. For example, if we get a 7-day pass on day 2, then we can travel for 7 days: day 2, 3, 4, 5, 6, 7, and 8.</p>
-<p>Return the minimum number of dollars you need to travel every day in the given list of <code>days</code>.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Input: days &#x3D; [1,4,6,7,8,20], costs &#x3D; [2,7,15]</span><br><span class="line">Output: 11</span><br><span class="line">Explanation: </span><br><span class="line">For example, here is one way to buy passes that lets you travel your travel plan:</span><br><span class="line">On day 1, you bought a 1-day pass for costs[0] &#x3D; $2, which covered day 1.</span><br><span class="line">On day 3, you bought a 7-day pass for costs[1] &#x3D; $7, which covered days 3, 4, ..., 9.</span><br><span class="line">On day 20, you bought a 1-day pass for costs[0] &#x3D; $2, which covered day 20.</span><br><span class="line">In total you spent $11 and covered all the days of your travel.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Input: days &#x3D; [1,2,3,4,5,6,7,8,9,10,30,31], costs &#x3D; [2,7,15]</span><br><span class="line">Output: 17</span><br><span class="line">Explanation: </span><br><span class="line">For example, here is one way to buy passes that lets you travel your travel plan:</span><br><span class="line">On day 1, you bought a 30-day pass for costs[2] &#x3D; $15 which covered days 1, 2, ..., 30.</span><br><span class="line">On day 31, you bought a 1-day pass for costs[0] &#x3D; $2 which covered day 31.</span><br><span class="line">In total you spent $17 and covered all the days of your travel.</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Note:</strong></p>
-<ol>
-<li><code>1 &lt;= days.length &lt;= 365</code></li>
-<li><code>1 &lt;= days[i] &lt;= 365</code></li>
-<li><code>days</code> is in strictly increasing order.</li>
-<li><code>costs.length == 3</code></li>
-<li><code>1 &lt;= costs[i] &lt;= 1000</code></li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>在一个因火车旅行而闻名的国家，一个人将一年中要旅行的日子以数组天数给出。每天是编号1到365之间的整数。火车票以3种不同的方式出售：1天车票的售价为costs[0]美元；7天的车票售价为成本costs[1]美元；30天的车票售价为costs[2]美元。通票允许连续几天旅行。例如，如果我们在第2天获得7天通行证，那么我们可以旅行7天：第2、3、4、5、6、7和8天。在给定的日期列表中，返回需要旅行的最少美元数。注意给出的旅行的天数编号是递增的。</p>
-<p>这个题在知道了用DP解决的时候，我还是想了好久，最后给出了一个我看来很复杂的解法，但是还是失败了。于是看了网上的解法，这里给出自己的理解。</p>
-<p>方法是我们用一个366长度的数组dp，dp[i]表示1到i天中旅行的最少花费。那么因为旅行的天数序列肯定小于等于365的，所以直接返回dp[365]即可。</p>
-<p>那么如何填充这个数组呢，也就是状态转移方程是什么，dp[i]是怎么计算得来的。</p>
-<p>我们可以这样想，如果第i天不旅行也就是数组中没有给出这一天，那么这一天不用花钱，dp[i] = dp[i-1]。如果旅行，那么第i天使用的票只有三种方式，1天，7天和30天。这三种票的方式要么现场买，要么前面几天里买好了第i天是连续着享受的，而前面要花费少的话，就是尽可能提前已经买了的。因此我们选dp[i-1]+costs[0],dp[i-7]+costs[1], dp[i-30]+costs[2] 中的较小值就可以了。</p>
-<p>注意数组越界问题，主要是左边越界，越界时要取0.</p>
-<p>代码如下，时间复杂度O(366)，空间复杂度O(365)。</p>
-<p><code>Runtime: 4 ms, faster than 79.28% of C++ online submissions for Minimum Cost For Tickets.</code></p>
-<p><code>Memory Usage: 8.8 MB, less than 75.00% of C++ online submissions for Minimum Cost For Tickets.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">mincostTickets</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; days, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; costs)</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">dp</span><span class="params">(<span class="number">366</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> d : days) dp[d] = INT_MAX;</span><br><span class="line">        <span class="comment">//dp[0] = 0;</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;<span class="number">366</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (dp[i] == <span class="number">0</span>) dp[i] = dp[i<span class="number">-1</span>];</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                dp[i] = <span class="built_in">min</span>(dp[i - <span class="number">1</span>] + costs[<span class="number">0</span>], <span class="built_in">min</span>(dp[<span class="built_in">max</span>(<span class="number">0</span>, i - <span class="number">7</span>)] + costs[<span class="number">1</span>], dp[<span class="built_in">max</span>(<span class="number">0</span>, i - <span class="number">30</span>)] + costs[<span class="number">2</span>]));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp[<span class="number">365</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>还有一种方法是时间复杂度O(n)，就是判断给定的天数里面相差的条件，直接填充dp[i]，只不过代码复杂一点，这里就不写了。链接在此<a href="https://blog.csdn.net/mike_learns_to_rock/article/details/86669196" target="_blank" rel="noopener">https://blog.csdn.net/mike_learns_to_rock/article/details/86669196</a></p>
-<p>BitBrave，2020-1-4</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/36/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/36/">36</a><span class="page-number current">37</span>
+    <a class="extend prev" rel="prev" href="/page/36/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/36/">36</a><span class="page-number current">37</span><a class="page-number" href="/page/38/">38</a><a class="extend next" rel="next" href="/page/38/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -880,12 +1139,12 @@ The median is (2 + 3)/2 = 2.5</code></pre><p>这道题让我们求两个有序�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">367</span>
+          <span class="site-state-item-count">371</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-count">46</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
