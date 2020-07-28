@@ -168,6 +168,544 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/25/LeetCode(1090.%20Largest%20Values%20From%20Labels)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/25/LeetCode(1090.%20Largest%20Values%20From%20Labels)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1090. Largest Values From Labels)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-25 21:12:24" itemprop="dateCreated datePublished" datetime="2020-01-25T21:12:24+08:00">2020-01-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-29 10:22:45" itemprop="dateModified" datetime="2020-01-29T10:22:45+08:00">2020-01-29</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-1090-Largest-Values-From-Labels-题解"><a href="#LeetCode-1090-Largest-Values-From-Labels-题解" class="headerlink" title="LeetCode(\1090. Largest Values From Labels)题解"></a>LeetCode(\1090. Largest Values From Labels)题解</h1><p>We have a set of items: the <code>i</code>-th item has value <code>values[i]</code> and label <code>labels[i]</code>.</p>
+<p>Then, we choose a subset <code>S</code> of these items, such that:</p>
+<ul>
+<li><code>|S| &lt;= num_wanted</code></li>
+<li>For every label <code>L</code>, the number of items in <code>S</code> with label <code>L</code> is <code>&lt;= use_limit</code>.</li>
+</ul>
+<p>Return the largest possible sum of the subset <code>S</code>.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: values &#x3D; [5,4,3,2,1], labels &#x3D; [1,1,2,2,3], num_wanted &#x3D; 3, use_limit &#x3D; 1</span><br><span class="line">Output: 9</span><br><span class="line">Explanation: The subset chosen is the first, third, and fifth item.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: values &#x3D; [5,4,3,2,1], labels &#x3D; [1,3,3,3,2], num_wanted &#x3D; 3, use_limit &#x3D; 2</span><br><span class="line">Output: 12</span><br><span class="line">Explanation: The subset chosen is the first, second, and third item.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 3:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: values &#x3D; [9,8,8,7,6], labels &#x3D; [0,0,0,1,1], num_wanted &#x3D; 3, use_limit &#x3D; 1</span><br><span class="line">Output: 16</span><br><span class="line">Explanation: The subset chosen is the first and fourth item.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 4:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: values &#x3D; [9,8,8,7,6], labels &#x3D; [0,0,0,1,1], num_wanted &#x3D; 3, use_limit &#x3D; 2</span><br><span class="line">Output: 24</span><br><span class="line">Explanation: The subset chosen is the first, second, and fourth item.</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Note:</strong></p>
+<ol>
+<li><code>1 &lt;= values.length == labels.length &lt;= 20000</code></li>
+<li><code>0 &lt;= values[i], labels[i] &lt;= 20000</code></li>
+<li><code>1 &lt;= num_wanted, use_limit &lt;= values.length</code></li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个数组V和一个数组L，每个序列值i，Vi表示元素的值，Li表示元素的标签。现在要从数组中选出一些元素，元素个数小于给定的值，标签相同的元素的个数也要小于给定的值，求寻找满足这个条件的情况下最大的子数组对应的元素值的和。</p>
+<p>这个题可以使用Greedy，将序列按照元素的值降序排序，然后依次在满足条件的情况下选择元素，这里使用Map记录选中的值。</p>
+<p>代码如下，时间复杂度O(nlogn)，空间复杂度O(n)。</p>
+<p><code>Runtime: 52 ms, faster than 20.15% of C++ online submissions for Largest Values From Labels.</code></p>
+<p><code>Memory Usage: 11.8 MB, less than 100.00% of C++ online submissions for Largest Values From Labels.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; V;</span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> V[a] &gt; V[b];</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">largestValsFromLabels</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; values, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; labels, <span class="keyword">int</span> num_wanted, <span class="keyword">int</span> use_limit)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>, num = <span class="number">0</span>, len = values.<span class="built_in">size</span>();</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">index</span><span class="params">(len)</span></span>;</span><br><span class="line">        <span class="built_in">map</span>&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; M;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++) &#123;</span><br><span class="line">            index[i] = i;</span><br><span class="line">            M[labels[i]] = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        V = values;</span><br><span class="line">        sort(index.<span class="built_in">begin</span>(), index.<span class="built_in">end</span>(), cmp);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//for (int i=0; i&lt;len; i++) cout&lt;&lt;values[index[i]]&lt;&lt;endl;</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (M[labels[index[i]]] &lt; use_limit) &#123;</span><br><span class="line">                M[labels[index[i]]]++;</span><br><span class="line">                num++;</span><br><span class="line">                res += values[index[i]];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (num &gt;= num_wanted) <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2020-01-25</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(10.%20Regular%20Expression%20Matching)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(10.%20Regular%20Expression%20Matching)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(10. Regular Expression Matching)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-10-Regular-Expression-Matching-题解"><a href="#LeetCode-10-Regular-Expression-Matching-题解" class="headerlink" title="LeetCode(10. Regular Expression Matching)题解"></a>LeetCode(10. Regular Expression Matching)题解</h1><hr>
+<p>原文如下<br>Given an input string (s) and a pattern (p), implement regular expression matching with support for ‘.’ and ‘*’.</p>
+<p>‘.’ Matches any single character.<br>‘*’ Matches zero or more of the preceding element.<br>The matching should cover the entire input string (not partial).</p>
+<p>Note:</p>
+<p>s could be empty and contains only lowercase letters a-z.<br>p could be empty and contains only lowercase letters a-z, and characters like . or *.<br>Example 1:</p>
+<p>Input:</p>
+<pre><code>s = &quot;aa&quot;
+p = &quot;a&quot;
+Output: false
+Explanation: &quot;a&quot; does not match the entire string &quot;aa&quot;.</code></pre><p>Example 2:</p>
+<p>Input:</p>
+<pre><code>s = &quot;aa&quot;
+p = &quot;a*&quot;
+Output: true
+Explanation: &apos;*&apos; means zero or more of the precedeng element, &apos;a&apos;. Therefore, by repeating &apos;a&apos; once, it becomes &quot;aa&quot;.</code></pre><p>Example 3:</p>
+<p>Input:</p>
+<pre><code>s = &quot;ab&quot;
+p = &quot;.*&quot;
+Output: true
+Explanation: &quot;.*&quot; means &quot;zero or more (*) of any character (.)&quot;.</code></pre><p>Example 4:</p>
+<p>Input:</p>
+<pre><code>s = &quot;aab&quot;
+p = &quot;c*a*b&quot;
+Output: true
+Explanation: c can be repeated 0 times, a can be repeated 1 time. Therefore it matches &quot;aab&quot;.</code></pre><p>Example 5:<br>Input:</p>
+<pre><code>s = &quot;mississippi&quot;
+p = &quot;mis*is*p*.&quot;
+Output: false</code></pre><p>这题要求使用p去生成s，s是一串英文字符，p是由英文字符、*（前面的字符重复一次或多次）、.（任意字符，不能为空）。这可以使用动态规划的思想去解决，或者直接进行递归匹配。</p>
+<p>我是采用递归的方式解决的。方法如下：</p>
+<blockquote>
+<ul>
+<li>如果p为空，s也为空时，表示匹配成功，返回True；</li>
+<li>如果p为空时，但是s不为空，表示匹配失败，因为此时已经没有办法用p来匹配s剩下的字符了，返回False。</li>
+<li>如果p的长度等于1，s应当是长度也为1并且满足s[0]==p[0]||p[0]==’.’，此时返回True，否则返回False。（其实这是为了满足后续分析不用考虑p的长度是否大于1的问题，保证后续处理时p的长度大于等于2。）</li>
+</ul>
+</blockquote>
+<p>而一般的情况：</p>
+<blockquote>
+<ul>
+<li>如果S[0]==P[0] || P[0]==’.’，表示第一个字符是可以互相匹配的。此时判断P[1],如果不是‘*’，表示P[0]并不能重复，那么直接使用同样的函数匹配S[1]和P[1]起始的各自的子串。如果P[1]==’*‘，表示P[0]可以重复0次或多次。那就存在两种情况，即匹配0或一/多次。所以可以分别运行函数匹配S[1]和P[2]开始子串、以S[1]和P[0]开始子串。但是我们只需要验证P是否能生成S，并不是要求完备性，所以只要一种情况出现True，即可返回，不用再继续试验其余情况。</li>
+<li>如果S[0]!=P[0] &amp;&amp; P[0]!=’*‘,表示当前字符是不匹配的，就查看P[1]的值，如果P[1]==’*‘,那还有救，可以让P[0]重复0次，跳过这个值，匹配S[0]和P[2]开始的子串。否则，P[1]!=’*‘表示P[0]是不可跳过的，那就只能返回False。</li>
+<li>如果P[0]==’*‘, 此时可以判断S[0]!=P[0]。注意我们在寻找P的子串时，总是尽量使得P[0]!=’*‘，而唯一能使得P[0]==’*‘的情况出现就是给定的P有诸如’**abc’、’a**c*def**ded’等连续两个‘**’出现。多个连续的‘*’其实是没意义的，所以此时可以直接跳过，运行函数匹配S[0]和P[1]开始的子串。</li>
+</ul>
+</blockquote>
+<p>对应的代码为如下——</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isMatch</span><span class="params">(<span class="built_in">string</span> s, <span class="built_in">string</span> p)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(p.empty()) <span class="keyword">return</span> s.empty();</span><br><span class="line">        <span class="keyword">if</span>(p.length() == <span class="number">1</span>) <span class="keyword">return</span> s.length()==<span class="number">1</span> &amp;&amp; (s[<span class="number">0</span>]==p[<span class="number">0</span>] || p[<span class="number">0</span>]==<span class="string">'.'</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(s.empty())&#123;</span><br><span class="line">            <span class="keyword">if</span>(p[<span class="number">0</span>]==<span class="string">'*'</span>) <span class="keyword">return</span> isMatch(s, p.substr(<span class="number">1</span>));</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">return</span> p[<span class="number">1</span>]==<span class="string">'*'</span> &amp;&amp; isMatch(s, p.substr(<span class="number">2</span>));</span><br><span class="line">        &#125;;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// s is not empty, p is not empty</span></span><br><span class="line">        <span class="keyword">if</span>(s[<span class="number">0</span>]==p[<span class="number">0</span>] || p[<span class="number">0</span>]==<span class="string">'.'</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(p[<span class="number">1</span>] != <span class="string">'*'</span>) <span class="keyword">return</span> isMatch(s.substr(<span class="number">1</span>), p.substr(<span class="number">1</span>));</span><br><span class="line">            <span class="keyword">if</span>(isMatch(s, p.substr(<span class="number">2</span>))) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            <span class="keyword">while</span>(isMatch(s.substr(<span class="number">1</span>), p)) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">if</span>(s[<span class="number">0</span>]!=p[<span class="number">0</span>] &amp;&amp; p[<span class="number">0</span>]!=<span class="string">'*'</span>) <span class="keyword">return</span> p[<span class="number">1</span>]==<span class="string">'*'</span> &amp;&amp; isMatch(s, p.substr(<span class="number">2</span>));</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">return</span> isMatch(s, p.substr(<span class="number">1</span>));</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>PS：使用C++代码实现时，可以使用string的substr函数寻找子串。</p>
+<p>还有一种使用动态规划的思路——<br>定义一个二维的DP数组，其中dp[i][j]表示s[0,i)和p[0,j)是否match，然后有下面三种情况(下面部分摘自这个帖子)：</p>
+<pre><code>1.  P[i][j] = P[i - 1][j - 1], if p[j - 1] != &apos;*&apos; &amp;&amp; (s[i - 1] == p[j - 1] || p[j - 1] == &apos;.&apos;);
+2.  P[i][j] = P[i][j - 2], if p[j - 1] == &apos;*&apos; and the pattern repeats for 0 times;
+3.  P[i][j] = P[i - 1][j] &amp;&amp; (s[i - 1] == p[j - 2] || p[j - 2] == &apos;.&apos;), if p[j - 1] == &apos;*&apos; and the pattern repeats for at least 1 times.</code></pre><p>链接在此：<a href="https://leetcode.com/problems/regular-expression-matching/discuss/5684/c-on-space-dp" target="_blank" rel="noopener">https://leetcode.com/problems/regular-expression-matching/discuss/5684/c-on-space-dp</a></p>
+<p>BitBrave, 2019-04-16.</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(100.%20Same%20Tree)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(100.%20Same%20Tree)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(100. Same Tree)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-100-Same-Tree-题解"><a href="#LeetCode-100-Same-Tree-题解" class="headerlink" title="LeetCode(100. Same Tree)题解"></a>LeetCode(100. Same Tree)题解</h1><hr>
+<p>Given two binary trees, write a function to check if they are the same or not.</p>
+<p>Two binary trees are considered the same if they are structurally identical and the nodes have the same value.</p>
+<p>Example 1:</p>
+<pre><code>Input:     1         1
+        / \       / \
+        2   3     2   3
+
+        [1,2,3],   [1,2,3]
+
+Output: true</code></pre><p>Example 2:</p>
+<pre><code>Input:     1         1
+        /           \
+        2             2
+
+        [1,2],     [1,null,2]
+
+Output: false</code></pre><p>Example 3:</p>
+<pre><code>Input:     1         1
+        / \       / \
+        2   1     1   2
+
+        [1,2,1],   [1,1,2]
+
+Output: false</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Easy题，直接使用递归计算即可。首先比较根节点，然后比较左子树和右子树，只有都相同才能返回True，否则False。</p>
+<p>代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isSameTree</span><span class="params">(TreeNode* p, TreeNode* q)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(p==<span class="literal">NULL</span>) <span class="keyword">return</span> q==<span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">if</span>(q==<span class="literal">NULL</span>) <span class="keyword">return</span> p==<span class="literal">NULL</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> p-&gt;val==q-&gt;val &amp;&amp; isSameTree(p-&gt;left, q-&gt;left) &amp;&amp; isSameTree(p-&gt;right, q-&gt;right);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(1008.%20Construct%20Binary%20Search%20Tree%20from%20Preorder%20Traversal)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(1008.%20Construct%20Binary%20Search%20Tree%20from%20Preorder%20Traversal)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1008. Construct Binary Search Tree from Preorder Traversal)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-1008-Construct-Binary-Search-Tree-from-Preorder-Traversal-题解"><a href="#LeetCode-1008-Construct-Binary-Search-Tree-from-Preorder-Traversal-题解" class="headerlink" title="LeetCode(\1008. Construct Binary Search Tree from Preorder Traversal)题解"></a>LeetCode(\1008. Construct Binary Search Tree from Preorder Traversal)题解</h1><p>Return the root node of a binary <strong>search</strong> tree that matches the given <code>preorder</code> traversal.</p>
+<p><em>(Recall that a binary search tree is a binary tree where for every node, any descendant of <code>node.left</code> has a value <code>&lt;</code> <code>node.val</code>, and any descendant of <code>node.right</code> has a value <code>&gt;</code> <code>node.val</code>. Also recall that a preorder traversal displays the value of the <code>node</code> first, then traverses <code>node.left</code>, then traverses <code>node.right</code>.)</em></p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: [8,5,1,7,10,12]</span><br><span class="line">Output: [8,5,10,1,7,null,12]</span><br></pre></td></tr></table></figure>
+
+<p> <img src="https://assets.leetcode.com/uploads/2019/03/06/1266.png" alt=""></p>
+<p><strong>Note:</strong> </p>
+<ol>
+<li><code>1 &lt;= preorder.length &lt;= 100</code></li>
+<li>The values of <code>preorder</code> are distinct.</li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个BST的前序遍历结果的数组，元素都不相同，给出其二叉树结构。</p>
+<p>分析给出的数组，第一个元素一定是二叉树的根节点，而左子树的节点值肯定都小于根节点值，右子树都大于根节点值。因此我们可以直接将数组中比第一个元素小的值都作为左子树，其余都是右子树节点。</p>
+<p>一个简单的递归算法就可以了。</p>
+<p>代码如下，时间复杂度O(n2)，空间复杂度O(1)。</p>
+<p><code>Runtime: 8 ms, faster than 33.01% of C++ online submissions for Construct Binary Search Tree from Preorder Traversal.</code></p>
+<p><code>Memory Usage: 12 MB, less than 9.52% of C++ online submissions for Construct Binary Search Tree from Preorder Traversal.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">TreeNode* <span class="title">bstFromPreorder</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; preorder)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> bstFromPreorder_(preorder, <span class="number">0</span>, preorder.<span class="built_in">size</span>()<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">TreeNode* <span class="title">bstFromPreorder_</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A, <span class="keyword">int</span> sta, <span class="keyword">int</span> <span class="built_in">end</span>)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(sta &gt; <span class="built_in">end</span>) <span class="keyword">return</span> <span class="literal">NULL</span>; </span><br><span class="line">        <span class="keyword">if</span>(sta == <span class="built_in">end</span>) <span class="keyword">new</span> TreeNode(A[sta]);</span><br><span class="line">        <span class="keyword">int</span> mid = sta + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span>(mid &lt;= <span class="built_in">end</span> &amp;&amp; A[mid] &lt; A[sta]) mid++;</span><br><span class="line">        TreeNode *root = <span class="keyword">new</span> TreeNode(A[sta]);</span><br><span class="line">        root-&gt;left = bstFromPreorder_(A, sta+<span class="number">1</span>, mid<span class="number">-1</span>);</span><br><span class="line">        root-&gt;right = bstFromPreorder_(A, mid, <span class="built_in">end</span>);</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>BitBrave，2019-11-24</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(1011.%20Capacity%20To%20Ship%20Packages%20Within%20D%20Days)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(1011.%20Capacity%20To%20Ship%20Packages%20Within%20D%20Days)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1011. Capacity To Ship Packages Within D Days)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-1011-Capacity-To-Ship-Packages-Within-D-Days-题解"><a href="#LeetCode-1011-Capacity-To-Ship-Packages-Within-D-Days-题解" class="headerlink" title="LeetCode(\1011. Capacity To Ship Packages Within D Days)题解"></a>LeetCode(\1011. Capacity To Ship Packages Within D Days)题解</h1><p>A conveyor belt has packages that must be shipped from one port to another within <code>D</code> days.</p>
+<p>The <code>i</code>-th package on the conveyor belt has a weight of <code>weights[i]</code>. Each day, we load the ship with packages on the conveyor belt (in the order given by <code>weights</code>). We may not load more weight than the maximum weight capacity of the ship.</p>
+<p>Return the least weight capacity of the ship that will result in all the packages on the conveyor belt being shipped within <code>D</code> days.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Input: weights &#x3D; [1,2,3,4,5,6,7,8,9,10], D &#x3D; 5</span><br><span class="line">Output: 15</span><br><span class="line">Explanation: </span><br><span class="line">A ship capacity of 15 is the minimum to ship all the packages in 5 days like this:</span><br><span class="line">1st day: 1, 2, 3, 4, 5</span><br><span class="line">2nd day: 6, 7</span><br><span class="line">3rd day: 8</span><br><span class="line">4th day: 9</span><br><span class="line">5th day: 10</span><br><span class="line"></span><br><span class="line">Note that the cargo must be shipped in the order given, so using a ship of capacity 14 and splitting the packages into parts like (2, 3, 4, 5), (1, 6, 7), (8), (9), (10) is not allowed.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Input: weights &#x3D; [3,2,2,4,1,4], D &#x3D; 3</span><br><span class="line">Output: 6</span><br><span class="line">Explanation: </span><br><span class="line">A ship capacity of 6 is the minimum to ship all the packages in 3 days like this:</span><br><span class="line">1st day: 3, 2</span><br><span class="line">2nd day: 2, 4</span><br><span class="line">3rd day: 1, 4</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 3:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Input: weights &#x3D; [1,2,3,1,1], D &#x3D; 4</span><br><span class="line">Output: 3</span><br><span class="line">Explanation: </span><br><span class="line">1st day: 1</span><br><span class="line">2nd day: 2</span><br><span class="line">3rd day: 3</span><br><span class="line">4th day: 1, 1</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Note:</strong></p>
+<ol>
+<li><code>1 &lt;= D &lt;= weights.length &lt;= 50000</code></li>
+<li><code>1 &lt;= weights[i] &lt;= 500</code></li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>把一个数组按顺序输入，每天一艘船，并且每天船的承载量相同，在D天之内需要全部运出去。求每艘船的承载量最少是多少。</p>
+<p>这个可以使用二分搜索的思路，二分枚举船的载重，载重下限是最大物品的重量，载重上限是所有物品的和，然后求中点是否满足D天内运输完成，如果满足则进一步降低上限，不满足就提高下限，直到找到刚好满足D天运输完成为止。</p>
+<p>时间复杂度为O(NlogM)，空间复杂度O(N)，N为包裹数目，M为总的重量。</p>
+<p><code>Runtime: 104 ms, faster than 6.49% of C++ online submissions for Capacity To Ship Packages Within D Days.</code></p>
+<p><code>Memory Usage: 12.9 MB, less than 11.11% of C++ online submissions for Capacity To Ship Packages Within D Days.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isOK</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; Sum, <span class="keyword">int</span> len, <span class="keyword">int</span> w, <span class="keyword">int</span> D)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> d = <span class="number">1</span>, j = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;=len; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (Sum[i]-Sum[j] &lt;= w) <span class="keyword">continue</span>;</span><br><span class="line">            d += <span class="number">1</span>;</span><br><span class="line">            j = i - <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (d &gt; D) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">shipWithinDays</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; weights, <span class="keyword">int</span> D)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = weights.<span class="built_in">size</span>(), m = <span class="number">0</span>;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">Sum</span><span class="params">(len + <span class="number">1</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++) &#123;</span><br><span class="line">            Sum[i+<span class="number">1</span>] = Sum[i] + weights[i];</span><br><span class="line">            m = <span class="built_in">max</span>(m, weights[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> l = m, r = Sum[len], mid;</span><br><span class="line">        <span class="keyword">while</span> (l &lt; r) &#123;</span><br><span class="line">            mid = (l + r) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span> (isOK(Sum, len, mid, D)) r = mid;</span><br><span class="line">            <span class="keyword">else</span> l = mid + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> r;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2020-01-23</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(1006.%20Clumsy%20Factorial)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(1006.%20Clumsy%20Factorial)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1006. Clumsy Factorial)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-1006-Clumsy-Factorial-题解"><a href="#LeetCode-1006-Clumsy-Factorial-题解" class="headerlink" title="LeetCode(\1006. Clumsy Factorial)题解"></a>LeetCode(\1006. Clumsy Factorial)题解</h1><p>Normally, the factorial of a positive integer <code>n</code> is the product of all positive integers less than or equal to <code>n</code>. For example, <code>factorial(10) = 10 * 9 * 8 * 7 * 6 * 5 * 4 * 3 * 2 * 1</code>.</p>
+<p>We instead make a <em>clumsy factorial:</em> using the integers in decreasing order, we swap out the multiply operations for a fixed rotation of operations: multiply (*), divide (/), add (+) and subtract (-) in this order.</p>
+<p>For example, <code>clumsy(10) = 10 * 9 / 8 + 7 - 6 * 5 / 4 + 3 - 2 * 1</code>. However, these operations are still applied using the usual order of operations of arithmetic: we do all multiplication and division steps before any addition or subtraction steps, and multiplication and division steps are processed left to right.</p>
+<p>Additionally, the division that we use is <em>floor division</em> such that <code>10 * 9 / 8</code> equals <code>11</code>. This guarantees the result is an integer.</p>
+<p><code>Implement the clumsy</code> function as defined above: given an integer <code>N</code>, it returns the clumsy factorial of <code>N</code>.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: 4</span><br><span class="line">Output: 7</span><br><span class="line">Explanation: 7 &#x3D; 4 * 3 &#x2F; 2 + 1</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: 10</span><br><span class="line">Output: 12</span><br><span class="line">Explanation: 12 &#x3D; 10 * 9 &#x2F; 8 + 7 - 6 * 5 &#x2F; 4 + 3 - 2 * 1</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Note:</strong></p>
+<ol>
+<li><code>1 &lt;= N &lt;= 10000</code></li>
+<li><code>-2^31 &lt;= answer &lt;= 2^31 - 1</code> (The answer is guaranteed to fit within a 32-bit integer.)</li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个数N，然后每个序列N,N-1,N-2,…,1，使用*/+-这几个运算符依次填充到序列中，按照序列运算的优先级计算，给出最后的结果。</p>
+<p>这个题可以直接计算就好，为了可以有效递归，我们可以首先计算N，N-1，N-2的值，然后剩下的数就是依次4个计算之后进行相加。</p>
+<p>代码如下，时间复杂度O(N)，空间复杂度O(1)。</p>
+<p><code>Runtime: 8 ms, faster than 11.39% of C++ online submissions for Clumsy Factorial.</code></p>
+<p><code>Memory Usage: 8.8 MB, less than 20.00% of C++ online submissions for Clumsy Factorial.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">clumsy_</span><span class="params">(<span class="keyword">int</span> N)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (N &lt; <span class="number">4</span>) <span class="keyword">return</span> <span class="built_in">min</span>(<span class="number">1</span>, N);</span><br><span class="line">        <span class="keyword">return</span> N - (N<span class="number">-1</span>) * (N<span class="number">-2</span>) / (N<span class="number">-3</span>) + clumsy_(N<span class="number">-4</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">clumsy</span><span class="params">(<span class="keyword">int</span> N)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (N &lt;= <span class="number">2</span>) <span class="keyword">return</span> N;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (N == <span class="number">3</span>) <span class="keyword">return</span> <span class="number">6</span>;</span><br><span class="line">        <span class="keyword">return</span> N * (N<span class="number">-1</span>) / (N<span class="number">-2</span>) + clumsy_(N<span class="number">-3</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2020-01-24</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(1014.%20Best%20Sightseeing%20Pair)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -481,488 +1019,6 @@ Given binary tree [3,9,20,null,null,15,7],
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(102.%20Binary%20Tree%20Level%20Order%20Traversal)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(102.%20Binary%20Tree%20Level%20Order%20Traversal)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(102. Binary Tree Level Order Traversal)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-102-Binary-Tree-Level-Order-Traversal-题解"><a href="#LeetCode-102-Binary-Tree-Level-Order-Traversal-题解" class="headerlink" title="LeetCode(102. Binary Tree Level Order Traversal)题解"></a>LeetCode(102. Binary Tree Level Order Traversal)题解</h1><hr>
-<p>Given a binary tree, return the level order traversal of its nodes’ values. (ie, from left to right, level by level).</p>
-<pre><code>For example:
-Given binary tree [3,9,20,null,null,15,7],
-     3
-    / \
-   9  20
-     /  \
-    15   7</code></pre><p>return its level order traversal as:</p>
-<pre><code>[
-[3],
-[9,20],
-[15,7]
-]</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>实现二叉树的层序遍历。</p>
-<p>用一个queue存储遍历的节点，用一个数count记录每一层入队列的数目。首先根节点入队列，count+1，然后以count为准进行循环出队列，每次出队列的时候，要把出队列的节点的孩子节点入队列。最后count为0时表示这一层数目全部出来了。然后再count更新为队列的size，表示下一层的数目。</p>
-<p>代码如下：</p>
-<p>Runtime: 8 ms, faster than 79.92% of C++ online submissions for Binary Tree Level Order Traversal.<br>Memory Usage: 13.9 MB, less than 58.24% of C++ online submissions for Binary Tree Level Order Traversal.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">levelOrder</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; res;</span><br><span class="line">        <span class="built_in">queue</span>&lt;TreeNode*&gt; Q;</span><br><span class="line">        <span class="keyword">int</span> count;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(root != <span class="literal">NULL</span>) Q.push(root);</span><br><span class="line">        <span class="keyword">while</span>(!Q.empty())&#123;</span><br><span class="line">            count = Q.<span class="built_in">size</span>();</span><br><span class="line">            TreeNode* tmp;</span><br><span class="line">            <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; item;</span><br><span class="line">            <span class="keyword">while</span>(count&gt;<span class="number">0</span>)&#123;</span><br><span class="line">                count--;</span><br><span class="line">                tmp = Q.front(); Q.pop();</span><br><span class="line">                item.push_back(tmp-&gt;val);</span><br><span class="line">                <span class="keyword">if</span>(tmp-&gt;left != <span class="literal">NULL</span>) Q.push(tmp-&gt;left);</span><br><span class="line">                <span class="keyword">if</span>(tmp-&gt;right != <span class="literal">NULL</span>) Q.push(tmp-&gt;right);</span><br><span class="line">            &#125;</span><br><span class="line">            res.push_back(item);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-06-27</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(1031.%20Maximum%20Sum%20of%20Two%20Non-Overlapping%20Subarrays)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(1031.%20Maximum%20Sum%20of%20Two%20Non-Overlapping%20Subarrays)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1031. Maximum Sum of Two Non-Overlapping Subarrays)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-1031-Maximum-Sum-of-Two-Non-Overlapping-Subarrays-题解"><a href="#LeetCode-1031-Maximum-Sum-of-Two-Non-Overlapping-Subarrays-题解" class="headerlink" title="LeetCode(\1031. Maximum Sum of Two Non-Overlapping Subarrays)题解"></a>LeetCode(\1031. Maximum Sum of Two Non-Overlapping Subarrays)题解</h1><p>Given an array <code>A</code> of non-negative integers, return the maximum sum of elements in two non-overlapping (contiguous) subarrays, which have lengths <code>L</code> and <code>M</code>. (For clarification, the <code>L</code>-length subarray could occur before or after the <code>M</code>-length subarray.)</p>
-<p>Formally, return the largest <code>V</code> for which <code>V = (A[i] + A[i+1] + ... + A[i+L-1]) + (A[j] + A[j+1] + ... + A[j+M-1])</code> and either:</p>
-<ul>
-<li><code>0 &lt;= i &lt; i + L - 1 &lt; j &lt; j + M - 1 &lt; A.length</code>, <strong>or</strong></li>
-<li><code>0 &lt;= j &lt; j + M - 1 &lt; i &lt; i + L - 1 &lt; A.length</code>.</li>
-</ul>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: A &#x3D; [0,6,5,2,2,5,1,9,4], L &#x3D; 1, M &#x3D; 2</span><br><span class="line">Output: 20</span><br><span class="line">Explanation: One choice of subarrays is [9] with length 1, and [6,5] with length 2.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: A &#x3D; [3,8,1,3,2,1,8,9,0], L &#x3D; 3, M &#x3D; 2</span><br><span class="line">Output: 29</span><br><span class="line">Explanation: One choice of subarrays is [3,8,1] with length 3, and [8,9] with length 2.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 3:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: A &#x3D; [2,1,5,6,0,9,5,0,3,8], L &#x3D; 4, M &#x3D; 3</span><br><span class="line">Output: 31</span><br><span class="line">Explanation: One choice of subarrays is [5,6,0,9] with length 4, and [3,8] with length 3.</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Note:</strong></p>
-<ol>
-<li><code>L &gt;= 1</code></li>
-<li><code>M &gt;= 1</code></li>
-<li><code>L + M &lt;= A.length &lt;= 1000</code></li>
-<li><code>0 &lt;= A[i] &lt;= 1000</code></li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出一个非负数元素组成的数组，给定两个长度值，要求选出两个不相重的连续子数组，其和值为所有的符合条件的数组中最大的，要求返回这个和。</p>
-<p>这个题可以依次从左到右选定一个长度的子树组，然后选择另外的数组，这个过程中保存最大值。等于就是暴力枚举。至于求解和值，可以使用一个登长的数组记录数组元素从左到右元素的依次加和。</p>
-<p>这个居然花了我蛮多时间，我果然还是太菜了。</p>
-<p><code>Runtime: 16 ms, faster than 18.19% of C++ online submissions for Maximum Sum of Two Non-Overlapping Subarrays.</code></p>
-<p><code>Memory Usage: 8.8 MB, less than 54.54% of C++ online submissions for Maximum Sum of Two Non-Overlapping Subarrays.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxSumTwoNoOverlap</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A, <span class="keyword">int</span> L, <span class="keyword">int</span> M)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = A.<span class="built_in">size</span>(), ret = <span class="number">0</span>;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">S</span><span class="params">(len+<span class="number">1</span>)</span></span>;</span><br><span class="line">        S[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++) S[i+<span class="number">1</span>] += S[i] + A[i];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=L<span class="number">-1</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="comment">// before</span></span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=M<span class="number">-1</span>; j&lt;i+<span class="number">1</span>-L; j++) ret = <span class="built_in">max</span>(ret, S[i+<span class="number">1</span>]-S[i+<span class="number">1</span>-L]+S[j+<span class="number">1</span>]-S[j+<span class="number">1</span>-M]);</span><br><span class="line">            <span class="comment">// after</span></span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=i+M; j&lt;len; j++) ret = <span class="built_in">max</span>(ret, S[i+<span class="number">1</span>]-S[i+<span class="number">1</span>-L]+S[j+<span class="number">1</span>]-S[j+<span class="number">1</span>-M]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2019-11-29</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(1038.%20Binary%20Search%20Tree%20to%20Greater%20Sum%20Tree)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(1038.%20Binary%20Search%20Tree%20to%20Greater%20Sum%20Tree)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1038. Binary Search Tree to Greater Sum Tree)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-1038-Binary-Search-Tree-to-Greater-Sum-Tree-题解"><a href="#LeetCode-1038-Binary-Search-Tree-to-Greater-Sum-Tree-题解" class="headerlink" title="LeetCode(\1038. Binary Search Tree to Greater Sum Tree)题解"></a>LeetCode(\1038. Binary Search Tree to Greater Sum Tree)题解</h1><p>Given the root of a binary <strong>search</strong> tree with distinct values, modify it so that every <code>node</code> has a new value equal to the sum of the values of the original tree that are greater than or equal to <code>node.val</code>.</p>
-<p>As a reminder, a <em>binary search tree</em> is a tree that satisfies these constraints:</p>
-<ul>
-<li>The left subtree of a node contains only nodes with keys <strong>less than</strong> the node’s key.</li>
-<li>The right subtree of a node contains only nodes with keys <strong>greater than</strong> the node’s key.</li>
-<li>Both the left and right subtrees must also be binary search trees.</li>
-</ul>
-<p><strong>Example 1:</strong></p>
-<p><strong><img src="https://assets.leetcode.com/uploads/2019/05/02/tree.png" alt="img"></strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: [4,1,6,0,2,5,7,null,null,null,3,null,null,null,8]</span><br><span class="line">Output: [30,36,21,36,35,26,15,null,null,null,33,null,null,null,8]</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Note:</strong></p>
-<ol>
-<li>The number of nodes in the tree is between <code>1</code> and <code>100</code>.</li>
-<li>Each node will have value between <code>0</code> and <code>100</code>.</li>
-<li>The given tree is a binary search tree.</li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个BST（二叉搜索树），其中每个节点的值都不一样，现在对每个值进行改变，将每个节点的值改为原本二叉树中大于等于这个节点值的节点的值的和。（理解了好久才明白这个题意！）</p>
-<p>这个题说白了就是，找到一个节点，然后统计BST中大于等于这个节点值的所有节点，把这些节点的值加起来更新为这个节点的值。而BST在中序遍历上就是一个递增的序列。因此我们可以使用一个倒着的中序遍历，然后把前面的值分别求和加到后面的值上即可。</p>
-<p>代码如下，时间复杂度O(N)，空间复杂度O(1)。</p>
-<p><code>Runtime: 0 ms, faster than 100.00% of C++ online submissions for Binary Search Tree to Greater Sum Tree.</code></p>
-<p><code>Memory Usage: 9.1 MB, less than 100.00% of C++ online submissions for Binary Search Tree to Greater Sum Tree.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">inOrder</span><span class="params">(TreeNode* root, <span class="keyword">int</span> val)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> tmp = root-&gt;val, r = inOrder(root-&gt;right, val);</span><br><span class="line">        root-&gt;val += r + val;</span><br><span class="line">        <span class="keyword">return</span> tmp + r + inOrder(root-&gt;left, root-&gt;val);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">TreeNode* <span class="title">bstToGst</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        inOrder(root, <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2019-11-22</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(106.%20Construct%20Binary%20Tree%20from%20Inorder%20and%20Postorder%20Traversal)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(106.%20Construct%20Binary%20Tree%20from%20Inorder%20and%20Postorder%20Traversal)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(106. Construct Binary Tree from Inorder and Postorder Traversal)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-106-Construct-Binary-Tree-from-Inorder-and-Postorder-Traversal-题解"><a href="#LeetCode-106-Construct-Binary-Tree-from-Inorder-and-Postorder-Traversal-题解" class="headerlink" title="LeetCode(106. Construct Binary Tree from Inorder and Postorder Traversal)题解"></a>LeetCode(106. Construct Binary Tree from Inorder and Postorder Traversal)题解</h1><hr>
-<p>Given inorder and postorder traversal of a tree, construct the binary tree.</p>
-<p>Note:<br>You may assume that duplicates do not exist in the tree.</p>
-<p>For example, given</p>
-<pre><code>inorder = [9,3,15,20,7]
-postorder = [9,15,7,20,3]
-Return the following binary tree:
-
-    3
-   / \
-  9  20
-    /  \
-   15   7</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出一个树的中序和后序遍历，恢复这个树的结构，树中元素是不重复的。</p>
-<p>对于二叉树来说，后序和中序遍历可以唯一地确定一个树的结构，如果元素没有重复的话。方法如下，首先看后序最后一个一定是根节点，然后在中序遍历里查看这个根节点的位置。位置左边的元素一定是中序遍历下的左子树，位置右边的元素一定是中序遍历下的右子树。那么确定根节点之后及左右子树后，在后序遍历中从开始节点之后取中序遍历左子树序列长度的序列，一定是后序遍历下的左子树。这样就又得到了一个左子树的前序和中序遍历。问题缩小了。同样，右子树一样可以得到。</p>
-<p>因此问题规模可以一直缩小，直到为空。当判断为空时，直接返回NULL。</p>
-<p>代码如下：</p>
-<p>Runtime: 24 ms, faster than 55.53% of C++ online submissions for Construct Binary Tree from Inorder and Postorder Traversal.<br>Memory Usage: 16.7 MB, less than 74.96% of C++ online submissions for Construct Binary Tree from Inorder and Postorder Traversal.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">TreeNode* <span class="title">build</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; postorder, <span class="keyword">int</span> psta, <span class="keyword">int</span> pend, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; inorder, <span class="keyword">int</span> ista, <span class="keyword">int</span> iend)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(psta&gt;pend) <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">        </span><br><span class="line">        TreeNode *root = <span class="keyword">new</span> TreeNode(postorder[pend]);</span><br><span class="line">        <span class="keyword">int</span> pmid, imid = ista;</span><br><span class="line">        <span class="keyword">while</span>(inorder[imid] != postorder[pend]) imid++;</span><br><span class="line">        pmid = imid - ista + psta - <span class="number">1</span>;</span><br><span class="line">        root-&gt;left = build(postorder, psta, pmid, inorder, ista, imid<span class="number">-1</span>);</span><br><span class="line">        root-&gt;right = build(postorder, pmid+<span class="number">1</span>, pend<span class="number">-1</span>, inorder, imid+<span class="number">1</span>, iend);</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">TreeNode* <span class="title">buildTree</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; inorder, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; postorder)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> plen = postorder.<span class="built_in">size</span>(), ilen = inorder.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">return</span> build(postorder, <span class="number">0</span>, plen<span class="number">-1</span>, inorder, <span class="number">0</span>, ilen<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-06-28</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(109.%20Convert%20Sorted%20List%20to%20Binary%20Search%20Tree)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(109.%20Convert%20Sorted%20List%20to%20Binary%20Search%20Tree)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(109. Convert Sorted List to Binary Search Tree)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-109-Convert-Sorted-List-to-Binary-Search-Tree-题解"><a href="#LeetCode-109-Convert-Sorted-List-to-Binary-Search-Tree-题解" class="headerlink" title="LeetCode(109. Convert Sorted List to Binary Search Tree)题解"></a>LeetCode(109. Convert Sorted List to Binary Search Tree)题解</h1><hr>
-<p>Given a singly linked list where elements are sorted in ascending order, convert it to a height balanced BST.</p>
-<p>For this problem, a height-balanced binary tree is defined as a binary tree in which the depth of the two subtrees of every node never differ by more than 1.</p>
-<p>Example:</p>
-<pre><code>Given the sorted linked list: [-10,-3,0,5,9],
-
-One possible answer is: [0,-3,9,-10,null,5], which represents the following height balanced BST:
-
-     0
-    / \
-  -3   9
-  /   /
--10  5</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个单调递增的链表序列，将其转变为BST。</p>
-<p>一个简单的方法，可以将链表内的Val都拿出来形成一个数组，然后直接每次对半分开建立BST即可，这样空间复杂度O(n)，时间复杂度O(n)。不过为了省内存，可以直接在链表上操作，空间复杂度O(1)，但是时间复杂度会变成O(n2)。这里我选择第一种。</p>
-<p>代码如下：</p>
-<p>Runtime: 712 ms, faster than 5.11% of C++ online submissions for Convert Sorted List to Binary Search Tree.<br>Memory Usage: 354.1 MB, less than 5.03% of C++ online submissions for Convert Sorted List to Binary Search Tree.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode *next;</span></span><br><span class="line"><span class="comment"> *     ListNode(int x) : val(x), next(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">TreeNode* <span class="title">buildBST</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; H, <span class="keyword">int</span> sta, <span class="keyword">int</span> <span class="built_in">end</span>)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(sta&gt;<span class="built_in">end</span>) <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">int</span> mid = (sta + <span class="built_in">end</span>) / <span class="number">2</span>;</span><br><span class="line">        TreeNode* root = <span class="keyword">new</span> TreeNode(H[mid]);</span><br><span class="line">        root-&gt;left = buildBST(H, sta, mid<span class="number">-1</span>);</span><br><span class="line">        root-&gt;right = buildBST(H, mid+<span class="number">1</span>, <span class="built_in">end</span>);</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">TreeNode* <span class="title">sortedListToBST</span><span class="params">(ListNode* head)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; H;</span><br><span class="line">        <span class="keyword">while</span>(head != <span class="literal">NULL</span>)&#123;</span><br><span class="line">            H.push_back(head-&gt;val);</span><br><span class="line">            head = head-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> buildBST(H, <span class="number">0</span>, H.<span class="built_in">size</span>()<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-06-29</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(1043.%20Partition%20Array%20for%20Maximum%20Sum)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(1043.%20Partition%20Array%20for%20Maximum%20Sum)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1043. Partition Array for Maximum Sum)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-1043-Partition-Array-for-Maximum-Sum-题解"><a href="#LeetCode-1043-Partition-Array-for-Maximum-Sum-题解" class="headerlink" title="LeetCode(\1043. Partition Array for Maximum Sum)题解"></a>LeetCode(\1043. Partition Array for Maximum Sum)题解</h1><p>Given an integer array <code>A</code>, you partition the array into (contiguous) subarrays of length at most <code>K</code>. After partitioning, each subarray has their values changed to become the maximum value of that subarray.</p>
-<p>Return the largest sum of the given array after partitioning.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: A &#x3D; [1,15,7,9,2,5,10], K &#x3D; 3</span><br><span class="line">Output: 84</span><br><span class="line">Explanation: A becomes [15,15,15,9,10,10,10]</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Note:</strong></p>
-<ol>
-<li><code>1 &lt;= K &lt;= A.length &lt;= 500</code></li>
-<li><code>0 &lt;= A[i] &lt;= 10^6</code></li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个数组A和整数K，将A分为长度不超过K的若干个子数组，将每个子数组内的元素变为其中最大的元素值，然后求所有的子数组元素之和，问最终能得到的最大和为多少。</p>
-<p>这个题可以使用DP解决，设定一个与A等长的数组dp，其中dp[i]表示A中0~i位置能得到的最大和，最终题目的答案就是dp[A.size()-1]。</p>
-<p>状态转移方程是什么呢，因为子数组长度最多为K长度，因此我们考虑最后一个子数组的长度即可。即：</p>
-<p>dp[i] = max(dp[i-j] + max(A[i-j+1], A[i-j+2], …, A[i])),    j = 1,2, …, K.</p>
-<p>代码如下，时间复杂度O(nk), 空间复杂度O(n).</p>
-<p><code>Runtime: 16 ms, faster than 72.94% of C++ online submissions for Partition Array for Maximum Sum.</code></p>
-<p><code>Memory Usage: 8.7 MB, less than 100.00% of C++ online submissions for Partition Array for Maximum Sum.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxSumAfterPartitioning</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A, <span class="keyword">int</span> K)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = A.<span class="built_in">size</span>();</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">dp</span><span class="params">(len + <span class="number">1</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">        <span class="comment">//dp[0] = A[0];</span></span><br><span class="line">            </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++) &#123;</span><br><span class="line">            <span class="keyword">int</span> m = A[i];</span><br><span class="line">            dp[i+<span class="number">1</span>] = dp[i] + m;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=i; j&gt;=<span class="number">0</span> <span class="keyword">and</span> j&gt;i-K; j--) &#123;</span><br><span class="line">                m = <span class="built_in">max</span>(m, A[j]);</span><br><span class="line">                dp[i+<span class="number">1</span>] = <span class="built_in">max</span>(dp[i+<span class="number">1</span>], dp[j] + m * (i-j+<span class="number">1</span>));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp[len];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2020-01-05</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1033,12 +1089,12 @@ One possible answer is: [0,-3,9,-10,null,5], which represents the following heig
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">371</span>
+          <span class="site-state-item-count">377</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">46</span>
+        <span class="site-state-item-count">52</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
