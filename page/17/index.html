@@ -168,6 +168,271 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(129.%20Sum%20Root%20to%20Leaf%20Numbers)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(129.%20Sum%20Root%20to%20Leaf%20Numbers)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(129. Sum Root to Leaf Numbers)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-129-Sum-Root-to-Leaf-Numbers-题解"><a href="#LeetCode-129-Sum-Root-to-Leaf-Numbers-题解" class="headerlink" title="LeetCode(129. Sum Root to Leaf Numbers)题解"></a>LeetCode(129. Sum Root to Leaf Numbers)题解</h1><hr>
+<p>Given a binary tree containing digits from 0-9 only, each root-to-leaf path could represent a number.</p>
+<p>An example is the root-to-leaf path 1-&gt;2-&gt;3 which represents the number 123.</p>
+<p>Find the total sum of all root-to-leaf numbers.</p>
+<p>Note: A leaf is a node with no children.</p>
+<p>Example:</p>
+<pre><code>Input: [1,2,3]
+    1
+   / \
+  2   3
+Output: 25
+Explanation:
+The root-to-leaf path 1-&gt;2 represents the number 12.
+The root-to-leaf path 1-&gt;3 represents the number 13.
+Therefore, sum = 12 + 13 = 25.</code></pre><p>Example 2:</p>
+<pre><code>Input: [4,9,0,5,1]
+    4
+   / \
+  9   0
+ / \
+5   1
+Output: 1026
+Explanation:
+The root-to-leaf path 4-&gt;9-&gt;5 represents the number 495.
+The root-to-leaf path 4-&gt;9-&gt;1 represents the number 491.
+The root-to-leaf path 4-&gt;0 represents the number 40.
+Therefore, sum = 495 + 491 + 40 = 1026.</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个二叉树，每个节点的值为0-9，每个根节点到孩子节点的值组合起来是一个数。求出所有路径上的值的和。</p>
+<p>这个题简单的分叉递归就可以了。每次当前再每次向下走的时候都意味着当前数字向左移一位，直接*10即可。</p>
+<p>代码如下：</p>
+<p>Runtime: 0 ms, faster than 100.00% of C++ online submissions for Sum Root to Leaf Numbers.<br>Memory Usage: 12.3 MB, less than 73.12% of C++ online submissions for Sum Root to Leaf Numbers.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">sumNumbers_</span><span class="params">(TreeNode* root, <span class="keyword">int</span> res)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root-&gt;left == <span class="literal">NULL</span> &amp;&amp; root-&gt;right == <span class="literal">NULL</span>) <span class="keyword">return</span> res * <span class="number">10</span> + root-&gt;val;</span><br><span class="line">        <span class="keyword">int</span> R = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span>(root-&gt;right != <span class="literal">NULL</span>) R = sumNumbers_(root-&gt;right, res * <span class="number">10</span> + root-&gt;val);</span><br><span class="line">        <span class="keyword">if</span>(root-&gt;left != <span class="literal">NULL</span>) R += sumNumbers_(root-&gt;left, res * <span class="number">10</span> + root-&gt;val);</span><br><span class="line">        <span class="keyword">return</span> R;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">sumNumbers</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        res = sumNumbers_(root, res);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-07-06</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(13.%20Roman%20to%20Integer)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(13.%20Roman%20to%20Integer)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(13. Roman to Integer)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-13-Roman-to-Integer-题解"><a href="#LeetCode-13-Roman-to-Integer-题解" class="headerlink" title="LeetCode(13. Roman to Integer)题解"></a>LeetCode(13. Roman to Integer)题解</h1><hr>
+<p>原文如下：<br>Roman numerals are represented by seven different symbols: I, V, X, L, C, D and M.</p>
+<pre><code>Symbol       Value
+I             1
+V             5
+X             10
+L             50
+C             100
+D             500
+M             1000</code></pre><p>For example, two is written as II in Roman numeral, just two one’s added together. Twelve is written as, XII, which is simply X + II. The number twenty seven is written as XXVII, which is XX + V + II.</p>
+<p>Roman numerals are usually written largest to smallest from left to right. However, the numeral for four is not IIII. Instead, the number four is written as IV. Because the one is before the five we subtract it making four. The same principle applies to the number nine, which is written as IX. There are six instances where subtraction is used:</p>
+<pre><code>I can be placed before V (5) and X (10) to make 4 and 9. 
+X can be placed before L (50) and C (100) to make 40 and 90. 
+C can be placed before D (500) and M (1000) to make 400 and 900.
+Given a roman numeral, convert it to an integer. Input is guaranteed to be within the range from 1 to 3999.
+
+Example 1:
+
+Input: &quot;III&quot;
+Output: 3
+Example 2:
+
+Input: &quot;IV&quot;
+Output: 4
+Example 3:
+
+Input: &quot;IX&quot;
+Output: 9
+Example 4:
+
+Input: &quot;LVIII&quot;
+Output: 58
+Explanation: L = 50, V= 5, III = 3.
+Example 5:
+
+Input: &quot;MCMXCIV&quot;
+Output: 1994
+Explanation: M = 1000, CM = 900, XC = 90 and IV = 4.</code></pre><h2 id="解题思路（easy，直接转换，只是注意一下表达4-9时的方式即可）。代码如下："><a href="#解题思路（easy，直接转换，只是注意一下表达4-9时的方式即可）。代码如下：" class="headerlink" title="解题思路（easy，直接转换，只是注意一下表达4 9时的方式即可）。代码如下："></a>解题思路（easy，直接转换，只是注意一下表达4 9时的方式即可）。代码如下：</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">romanToInt</span><span class="params">(<span class="built_in">string</span> s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> num = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; s.<span class="built_in">size</span>(); i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(s[i]==<span class="string">'M'</span>) num += <span class="number">1000</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(s[i]==<span class="string">'D'</span>) num += <span class="number">500</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(s[i]==<span class="string">'C'</span>)&#123;</span><br><span class="line">                <span class="keyword">if</span>(i+<span class="number">1</span> &lt; s.<span class="built_in">size</span>()&amp;&amp;(s[i+<span class="number">1</span>]==<span class="string">'M'</span> || s[i+<span class="number">1</span>]==<span class="string">'D'</span>)) num -= <span class="number">100</span>;</span><br><span class="line">                <span class="keyword">else</span> num += <span class="number">100</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(s[i]==<span class="string">'L'</span>) num += <span class="number">50</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(s[i]==<span class="string">'X'</span>)&#123;</span><br><span class="line">                <span class="keyword">if</span>(i+<span class="number">1</span> &lt; s.<span class="built_in">size</span>()&amp;&amp;(s[i+<span class="number">1</span>]==<span class="string">'C'</span> || s[i+<span class="number">1</span>]==<span class="string">'L'</span>)) num -= <span class="number">10</span>;</span><br><span class="line">                <span class="keyword">else</span> num += <span class="number">10</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(s[i]==<span class="string">'V'</span>) num += <span class="number">5</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(s[i]==<span class="string">'I'</span>)&#123;</span><br><span class="line">                <span class="keyword">if</span>(i+<span class="number">1</span> &lt; s.<span class="built_in">size</span>()&amp;&amp;(s[i+<span class="number">1</span>]==<span class="string">'X'</span> || s[i+<span class="number">1</span>]==<span class="string">'V'</span>)) num -= <span class="number">1</span>;</span><br><span class="line">                <span class="keyword">else</span> num += <span class="number">1</span>;</span><br><span class="line">            &#125;;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> num;</span><br><span class="line">    &#125;;</span><br><span class="line">    </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-04-18</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(130.%20Surrounded%20Regions)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(130.%20Surrounded%20Regions)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(130. Surrounded Regions)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-130-Surrounded-Regions-题解"><a href="#LeetCode-130-Surrounded-Regions-题解" class="headerlink" title="LeetCode(130. Surrounded Regions)题解"></a>LeetCode(130. Surrounded Regions)题解</h1><hr>
+<p>Given a 2D board containing ‘X’ and ‘O’ (the letter O), capture all regions surrounded by ‘X’.</p>
+<p>A region is captured by flipping all ‘O’s into ‘X’s in that surrounded region.</p>
+<p>Example:</p>
+<pre><code>X X X X
+X O O X
+X X O X
+X O X X</code></pre><p>After running your function, the board should be:</p>
+<pre><code>X X X X
+X X X X
+X X X X
+X O X X</code></pre><p>Explanation:</p>
+<pre><code>Surrounded regions shouldn’t be on the border, which means that any &apos;O&apos; on the border of the board are not flipped to &apos;X&apos;. Any &apos;O&apos; that is not on the border and it is not connected to an &apos;O&apos; on the border will be flipped to &apos;X&apos;. Two cells are connected if they are adjacent cells connected horizontally or vertically.</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个二维矩阵，将其中被X包围的O都给替换成X。</p>
+<p>这题可以看做是图的广度遍历。虽然图的深度遍历也可以做，但是对本题而言，会超时。矩阵过大时，递归栈会变得很深。 </p>
+<p>思路是： </p>
+<p>因此可以使用队列的方式，将边缘的O全部转化成#，最后遍历矩阵遇到的O说明都是没有和边缘挨着的，是被包围的，最后将O变为X，将#变为O；</p>
+<p>代码如下：</p>
+<p>Runtime: 24 ms, faster than 98.26% of C++ online submissions for Surrounded Regions.<br>Memory Usage: 14.2 MB, less than 56.97% of C++ online submissions for Surrounded Regions.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">pos</span>&#123;</span></span><br><span class="line">    <span class="keyword">int</span> i,j;</span><br><span class="line">    pos(<span class="keyword">int</span> a, <span class="keyword">int</span> b)&#123;</span><br><span class="line">        i = a; j = b;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">solve</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">char</span>&gt;&gt;&amp; board)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> row, col;</span><br><span class="line">        <span class="keyword">if</span>(board.<span class="built_in">size</span>() ==<span class="number">0</span> || board[<span class="number">0</span>].<span class="built_in">size</span>() == <span class="number">0</span>) <span class="keyword">return</span>;</span><br><span class="line">        row = board.<span class="built_in">size</span>();</span><br><span class="line">        col = board[<span class="number">0</span>].<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> u = <span class="number">0</span>, d = row<span class="number">-1</span>, l = <span class="number">0</span>, r = col<span class="number">-1</span>; </span><br><span class="line">        <span class="built_in">queue</span>&lt;pos&gt; Q;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;col; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(board[<span class="number">0</span>][i] == <span class="string">'O'</span>)&#123;</span><br><span class="line">                Q.push(pos(<span class="number">0</span>,i));</span><br><span class="line">                board[<span class="number">0</span>][i] = <span class="string">'#'</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(board[row<span class="number">-1</span>][i] == <span class="string">'O'</span>)&#123;</span><br><span class="line">                Q.push(pos(row<span class="number">-1</span>,i));</span><br><span class="line">                board[row<span class="number">-1</span>][i] = <span class="string">'#'</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;row<span class="number">-1</span>; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(board[i][<span class="number">0</span>] == <span class="string">'O'</span>)&#123;</span><br><span class="line">                Q.push(pos(i,<span class="number">0</span>));</span><br><span class="line">                board[i][<span class="number">0</span>] = <span class="string">'#'</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(board[i][col<span class="number">-1</span>] == <span class="string">'O'</span>)&#123;</span><br><span class="line">                Q.push(pos(i, col<span class="number">-1</span>));</span><br><span class="line">                board[i][col<span class="number">-1</span>] = <span class="string">'#'</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">while</span>(!Q.empty())&#123;</span><br><span class="line">            pos t = Q.front(); Q.pop();</span><br><span class="line">            <span class="keyword">if</span>(t.i&gt;<span class="number">0</span> &amp;&amp; board[t.i<span class="number">-1</span>][t.j] == <span class="string">'O'</span>)&#123;</span><br><span class="line">                board[t.i<span class="number">-1</span>][t.j] = <span class="string">'#'</span>;</span><br><span class="line">                Q.push(pos(t.i<span class="number">-1</span>,t.j));             </span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(t.i&lt;row<span class="number">-1</span> &amp;&amp; board[t.i+<span class="number">1</span>][t.j] == <span class="string">'O'</span>)&#123;</span><br><span class="line">                board[t.i+<span class="number">1</span>][t.j] = <span class="string">'#'</span>;</span><br><span class="line">                Q.push(pos(t.i+<span class="number">1</span>,t.j));             </span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(t.j&gt;<span class="number">0</span> &amp;&amp; board[t.i][t.j<span class="number">-1</span>] == <span class="string">'O'</span>)&#123;</span><br><span class="line">                board[t.i][t.j<span class="number">-1</span>] = <span class="string">'#'</span>;</span><br><span class="line">                Q.push(pos(t.i,t.j<span class="number">-1</span>));             </span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(t.j&lt;col<span class="number">-1</span> &amp;&amp; board[t.i][t.j+<span class="number">1</span>] == <span class="string">'O'</span>)&#123;</span><br><span class="line">                board[t.i][t.j+<span class="number">1</span>] = <span class="string">'#'</span>;</span><br><span class="line">                Q.push(pos(t.i,t.j+<span class="number">1</span>));             </span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;row; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;col; j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>( board[i][j] == <span class="string">'#'</span>) board[i][j] = <span class="string">'O'</span>;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span>(board[i][j] == <span class="string">'O'</span>) board[i][j] = <span class="string">'X'</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-07-07</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(131.%20Palindrome%20Partitioning)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -723,241 +988,6 @@ Node 2&apos;s value is 2, its next pointer points to null and its random pointer
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(139.%20Word%20Break)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(139.%20Word%20Break)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(139. Word Break)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-139-Word-Break-题解"><a href="#LeetCode-139-Word-Break-题解" class="headerlink" title="LeetCode(139. Word Break)题解"></a>LeetCode(139. Word Break)题解</h1><hr>
-<p>Given a non-empty string s and a dictionary wordDict containing a list of non-empty words, determine if s can be segmented into a space-separated sequence of one or more dictionary words.</p>
-<p>Note:</p>
-<pre><code>The same word in the dictionary may be reused multiple times in the segmentation.
-You may assume the dictionary does not contain duplicate words.</code></pre><p>Example 1:</p>
-<pre><code>Input: s = &quot;leetcode&quot;, wordDict = [&quot;leet&quot;, &quot;code&quot;]
-Output: true
-Explanation: Return true because &quot;leetcode&quot; can be segmented as &quot;leet code&quot;.</code></pre><p>Example 2:</p>
-<pre><code>Input: s = &quot;applepenapple&quot;, wordDict = [&quot;apple&quot;, &quot;pen&quot;]
-Output: true
-Explanation: Return true because &quot;applepenapple&quot; can be segmented as &quot;apple pen apple&quot;.
-            Note that you are allowed to reuse a dictionary word.</code></pre><p>Example 3:</p>
-<pre><code>Input: s = &quot;catsandog&quot;, wordDict = [&quot;cats&quot;, &quot;dog&quot;, &quot;sand&quot;, &quot;and&quot;, &quot;cat&quot;]
-Output: false</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出一个字符串，和一个单词的字典。查看是否能将字符串由单词组成。</p>
-<p>可以使用DP的办法。用一个和字符串长度一致的数组记录。元素D[i]表示前i个字符是否能由字典组成。</p>
-<p>初始化D中元素全部为false。</p>
-<p>D[0] = true</p>
-<p>假设已经完成了D[i], 当完成D[i+1]时，查看第i+1个字符是否在字典内，在则D[i+1] = D[i]，如果结果为true就结束. 如果不在或者为false，则计算第i，i+1个字符组合是否在字典内。依旧按照上述判断。直到走到头。</p>
-<p>代码如下：</p>
-<p>Runtime: 12 ms, faster than 63.36% of C++ online submissions for Word Break.<br>Memory Usage: 11.9 MB, less than 58.91% of C++ online submissions for Word Break.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">wordBreak</span><span class="params">(<span class="built_in">string</span> s, <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&amp; wordDict)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = s.<span class="built_in">size</span>();</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">bool</span>&gt; <span class="title">D</span><span class="params">(len+<span class="number">1</span>, <span class="literal">false</span>)</span></span>;</span><br><span class="line">        D[<span class="number">0</span>] = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=i; j&gt;=<span class="number">0</span>; j--)&#123;</span><br><span class="line">                <span class="keyword">if</span>(<span class="built_in">find</span>(wordDict.<span class="built_in">begin</span>(), wordDict.<span class="built_in">end</span>(), s.substr(j, i-j+<span class="number">1</span>)) != wordDict.<span class="built_in">end</span>())&#123;</span><br><span class="line">                    D[i+<span class="number">1</span>] = D[j];</span><br><span class="line">                    <span class="keyword">if</span>(D[i+<span class="number">1</span>] == <span class="literal">true</span>) <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> D[len];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-07-15</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(14.%20Longest%20Common%20Prefix)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(14.%20Longest%20Common%20Prefix)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(14. Longest Common Prefix)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-14-Longest-Common-Prefix-题解"><a href="#LeetCode-14-Longest-Common-Prefix-题解" class="headerlink" title="LeetCode(14. Longest Common Prefix)题解"></a>LeetCode(14. Longest Common Prefix)题解</h1><hr>
-<p>原文如下：<br>Write a function to find the longest common prefix string amongst an array of strings.</p>
-<p>If there is no common prefix, return an empty string “”.</p>
-<pre><code>Example 1:
-
-Input: [&quot;flower&quot;,&quot;flow&quot;,&quot;flight&quot;]
-Output: &quot;fl&quot;
-Example 2:
-
-Input: [&quot;dog&quot;,&quot;racecar&quot;,&quot;car&quot;]
-Output: &quot;&quot;
-Explanation: There is no common prefix among the input strings.</code></pre><p>Note:</p>
-<p>All given inputs are in lowercase letters a-z.</p>
-<h2 id="解题思路（easy-直接比较即可。）代码如下："><a href="#解题思路（easy-直接比较即可。）代码如下：" class="headerlink" title="解题思路（easy, 直接比较即可。）代码如下："></a>解题思路（easy, 直接比较即可。）代码如下：</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">string</span> <span class="title">longestCommonPrefix</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&amp; strs)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(strs.<span class="built_in">size</span>() == <span class="number">0</span>) <span class="keyword">return</span> <span class="string">""</span>;</span><br><span class="line">        <span class="built_in">string</span> com_pre = <span class="string">""</span>;</span><br><span class="line">        <span class="keyword">int</span> slen = INT_MAX;</span><br><span class="line">        <span class="comment">// find shortest string in vector</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;strs.<span class="built_in">size</span>(); i++) slen = (slen &lt; strs[i].<span class="built_in">size</span>()) ? slen : strs[i].<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span> (slen == INT_MAX) <span class="keyword">return</span> <span class="string">""</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;slen; i++)&#123;</span><br><span class="line">            <span class="keyword">char</span> a = strs[<span class="number">0</span>][i];</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> p = <span class="number">1</span>; p&lt;strs.<span class="built_in">size</span>(); p++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(strs[p][i] != a) <span class="keyword">return</span> com_pre;</span><br><span class="line">            &#125;;</span><br><span class="line">            com_pre += a;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> com_pre;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(140.%20Word%20Break%20II)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(140.%20Word%20Break%20II)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(140. Word Break II)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-140-Word-Break-II-题解"><a href="#LeetCode-140-Word-Break-II-题解" class="headerlink" title="LeetCode(\140. Word Break II)题解"></a>LeetCode(\140. Word Break II)题解</h1><p>Given a <strong>non-empty</strong> string <em>s</em> and a dictionary <em>wordDict</em> containing a list of <strong>non-empty</strong> words, add spaces in <em>s</em> to construct a sentence where each word is a valid dictionary word. Return all such possible sentences.</p>
-<p><strong>Note:</strong></p>
-<ul>
-<li>The same word in the dictionary may be reused multiple times in the segmentation.</li>
-<li>You may assume the dictionary does not contain duplicate words.</li>
-</ul>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Input:</span><br><span class="line">s &#x3D; &quot;catsanddog&quot;</span><br><span class="line">wordDict &#x3D; [&quot;cat&quot;, &quot;cats&quot;, &quot;and&quot;, &quot;sand&quot;, &quot;dog&quot;]</span><br><span class="line">Output:</span><br><span class="line">[</span><br><span class="line">  &quot;cats and dog&quot;,</span><br><span class="line">  &quot;cat sand dog&quot;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Input:</span><br><span class="line">s &#x3D; &quot;pineapplepenapple&quot;</span><br><span class="line">wordDict &#x3D; [&quot;apple&quot;, &quot;pen&quot;, &quot;applepen&quot;, &quot;pine&quot;, &quot;pineapple&quot;]</span><br><span class="line">Output:</span><br><span class="line">[</span><br><span class="line">  &quot;pine apple pen apple&quot;,</span><br><span class="line">  &quot;pineapple pen apple&quot;,</span><br><span class="line">  &quot;pine applepen apple&quot;</span><br><span class="line">]</span><br><span class="line">Explanation: Note that you are allowed to reuse a dictionary word.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 3:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Input:</span><br><span class="line">s &#x3D; &quot;catsandog&quot;</span><br><span class="line">wordDict &#x3D; [&quot;cats&quot;, &quot;dog&quot;, &quot;sand&quot;, &quot;and&quot;, &quot;cat&quot;]</span><br><span class="line">Output:</span><br><span class="line">[]</span><br></pre></td></tr></table></figure>
-
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个字符串s和一个单词字典Set。对s中某些字符处加上空格，使之每个单词都存在于字典Set中。找出所有的加空格方案，如果不存在就返回空数组。</p>
-<p>这个题使用DP解决。构建一个状态数组D，D(i+1)记录字符串s中0~i的所有组合方案。那么最后返回D(s.size())即可。如何填充这个数组呢？</p>
-<ul>
-<li>填充D(i)，设定j=0,1,2,…,i.判断单词s(j,i)在不在字典内，如果在就将D(j)中所有单词方案后面加上单词s(j,i)。</li>
-<li>如果不在就选择下一个j。</li>
-</ul>
-<p>按照上述的办法在一个函数内理论上是可行的，但是提交的时候内存爆了。网上查了才发现一样的办法使用dfs就没有问题，我猜想应该是递归时C++会分配更多的空间，或者说不算内存限制，从而可以避免超出内存。因此我将代码改成了dfs 形式，但是内核和上述是完全一样的。</p>
-<p>代码如下，假设s的长度为N，时间复杂度最好为O(n2)，空间复杂度为最好为O(N2)。如果字典特别大，那方案就会特别多，就是指数级的时间复杂度和空间复杂度O(N!)。</p>
-<p><code>Runtime: 32 ms, faster than 24.42% of C++ online submissions for Word Break II.</code></p>
-<p><code>Memory Usage: 21.5 MB, less than 6.06% of C++ online submissions for Word Break II.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; <span class="title">dfs</span><span class="params">(<span class="built_in">string</span> s, <span class="keyword">int</span> <span class="built_in">end</span>, <span class="built_in">unordered_set</span>&lt;<span class="built_in">string</span>&gt; Set, <span class="built_in">unordered_map</span>&lt;<span class="keyword">int</span>,<span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&gt;&amp; D)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(D.<span class="built_in">find</span>(<span class="built_in">end</span>+<span class="number">1</span>) != D.<span class="built_in">end</span>()) <span class="keyword">return</span> D[<span class="built_in">end</span>+<span class="number">1</span>];</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; res;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="built_in">end</span>; i&gt;=<span class="number">0</span>; i--)&#123;</span><br><span class="line">            <span class="built_in">string</span> t = s.substr(i, <span class="built_in">end</span>-i+<span class="number">1</span>);</span><br><span class="line">            <span class="keyword">if</span>(Set.<span class="built_in">find</span>(t) != Set.<span class="built_in">end</span>())&#123;</span><br><span class="line">                <span class="keyword">if</span>(i == <span class="number">0</span>) res.push_back(t);</span><br><span class="line">                <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; tmp=dfs(s, i<span class="number">-1</span>, Set, D);</span><br><span class="line">                <span class="keyword">for</span>(<span class="built_in">string</span> ss:tmp)&#123;</span><br><span class="line">                    res.push_back(ss + <span class="string">" "</span> + t);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        D[<span class="built_in">end</span>+<span class="number">1</span>] = res;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; <span class="title">wordBreak</span><span class="params">(<span class="built_in">string</span> s, <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&amp; wordDict)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = s.<span class="built_in">size</span>();</span><br><span class="line">        <span class="function"><span class="built_in">unordered_set</span>&lt;<span class="built_in">string</span>&gt; <span class="title">Set</span><span class="params">(wordDict.<span class="built_in">begin</span>(), wordDict.<span class="built_in">end</span>())</span></span>;</span><br><span class="line">        <span class="built_in">unordered_map</span>&lt;<span class="keyword">int</span>, <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&gt; D;</span><br><span class="line">        D[<span class="number">0</span>] = <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;();</span><br><span class="line">        </span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; res = dfs(s, len<span class="number">-1</span>, Set, D);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2019-12-21</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1028,7 +1058,7 @@ Explanation: There is no common prefix among the input strings.</code></pre><p>N
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">377</span>
+          <span class="site-state-item-count">380</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
