@@ -168,6 +168,167 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(756.%20Pyramid%20Transition%20Matrix)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(756.%20Pyramid%20Transition%20Matrix)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(756. Pyramid Transition Matrix)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-756-Pyramid-Transition-Matrix-题解"><a href="#LeetCode-756-Pyramid-Transition-Matrix-题解" class="headerlink" title="LeetCode(756. Pyramid Transition Matrix)题解"></a>LeetCode(756. Pyramid Transition Matrix)题解</h1><p>We are stacking blocks to form a pyramid. Each block has a color which is a one letter string.</p>
+<p>We are allowed to place any color block <code>C</code> on top of two adjacent blocks of colors <code>A</code> and <code>B</code>, if and only if <code>ABC</code> is an allowed triple.</p>
+<p>We start with a bottom row of <code>bottom</code>, represented as a single string. We also start with a list of allowed triples <code>allowed</code>. Each allowed triple is represented as a string of length 3.</p>
+<p>Return true if we can build the pyramid all the way to the top, otherwise false.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Input: bottom &#x3D; &quot;BCD&quot;, allowed &#x3D; [&quot;BCG&quot;, &quot;CDE&quot;, &quot;GEA&quot;, &quot;FFF&quot;]</span><br><span class="line">Output: true</span><br><span class="line">Explanation:</span><br><span class="line">We can stack the pyramid like this:</span><br><span class="line">    A</span><br><span class="line">   &#x2F; \</span><br><span class="line">  G   E</span><br><span class="line"> &#x2F; \ &#x2F; \</span><br><span class="line">B   C   D</span><br><span class="line"></span><br><span class="line">We are allowed to place G on top of B and C because BCG is an allowed triple.  Similarly, we can place E on top of C and D, then A on top of G and E.</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Input: bottom &#x3D; &quot;AABA&quot;, allowed &#x3D; [&quot;AAA&quot;, &quot;AAB&quot;, &quot;ABA&quot;, &quot;ABB&quot;, &quot;BAC&quot;]</span><br><span class="line">Output: false</span><br><span class="line">Explanation:</span><br><span class="line">We can&#39;t stack the pyramid to the top.</span><br><span class="line">Note that there could be allowed triples (A, B, C) and (A, B, D) with C !&#x3D; D.</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Note:</strong></p>
+<ol>
+<li><code>bottom</code> will be a string with length in range <code>[2, 8]</code>.</li>
+<li><code>allowed</code> will have length in range <code>[0, 200]</code>.</li>
+<li>Letters in all strings will be chosen from the set <code>{&#39;A&#39;, &#39;B&#39;, &#39;C&#39;, &#39;D&#39;, &#39;E&#39;, &#39;F&#39;, &#39;G&#39;}</code>.</li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>我们正在堆叠块以形成金字塔。每个块都有一个字母字符串的颜色。当且仅当ABC是允许的三元组时，我们才可以将任何颜色块C放置在两个相邻的颜色A和B块之上。我们从底部的底部一行开始，以单个字符串表示。我们还从允许的三元组列表开始。每个允许的三元组都表示为长度为3的字符串。如果我们可以一路建造金字塔，则返回true，否则返回false。</p>
+<p>这个题可以直接使用DFS，首先将允许的三元组变为一个set，然后每次遍历情况，使用DFS一层层往上填充，如果能填充到最后，则返回true，不能则返回false。</p>
+<p>代码如下，时间复杂度理论上为所有的可能情况。空间复杂度就O(n)。</p>
+<p><code>Runtime: 68 ms, faster than 6.33% of Python3 online submissions for Pyramid Transition Matrix.</code></p>
+<p><code>Memory Usage: 15.3 MB, less than 50.00% of Python3 online submissions for Pyramid Transition Matrix.</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    Set = set()</span><br><span class="line">    A = [<span class="string">'A'</span>, <span class="string">'B'</span>, <span class="string">'C'</span>, <span class="string">'D'</span>, <span class="string">'E'</span>, <span class="string">'F'</span>, <span class="string">'G'</span>]</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">DFS</span><span class="params">(self, S: str)</span> -&gt; bool:</span></span><br><span class="line">        <span class="keyword">if</span> len(S) == <span class="number">1</span>: <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">        ret = [<span class="string">""</span>]</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(len(S) - <span class="number">1</span>):</span><br><span class="line">            T = [a <span class="keyword">for</span> a <span class="keyword">in</span> self.A <span class="keyword">if</span> S[i] + S[i+<span class="number">1</span>] + a <span class="keyword">in</span> self.Set]</span><br><span class="line">            <span class="keyword">if</span> len(T) == <span class="number">0</span>: <span class="keyword">return</span> <span class="literal">False</span> </span><br><span class="line">            R = []</span><br><span class="line">            <span class="keyword">for</span> t <span class="keyword">in</span> T:</span><br><span class="line">                R += ([r + t <span class="keyword">for</span> r <span class="keyword">in</span> ret])</span><br><span class="line">            ret = R  </span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> r <span class="keyword">in</span> ret:</span><br><span class="line">            <span class="keyword">if</span> self.DFS(r): <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">pyramidTransition</span><span class="params">(self, bottom: str, allowed: List[str])</span> -&gt; bool:</span></span><br><span class="line">        self.Set = set(allowed)</span><br><span class="line">        <span class="keyword">return</span> self.DFS(bottom)</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-10-12</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(76.%20Minimum%20Window%20Substring)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(76.%20Minimum%20Window%20Substring)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(76. Minimum Window Substring)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-76-Minimum-Window-Substring-题解"><a href="#LeetCode-76-Minimum-Window-Substring-题解" class="headerlink" title="LeetCode(76. Minimum Window Substring)题解"></a>LeetCode(76. Minimum Window Substring)题解</h1><hr>
+<p>Given a string S and a string T, find the minimum window in S which will contain all the characters in T in complexity O(n).</p>
+<p>Example:</p>
+<pre><code>Input: S = &quot;ADOBECODEBANC&quot;, T = &quot;ABC&quot;
+Output: &quot;BANC&quot;</code></pre><p>Note:</p>
+<pre><code>If there is no such window in S that covers all characters in T, return the empty string &quot;&quot;.
+If there is such window, you are guaranteed that there will always be only one unique minimum window in S.</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给两个字符串S和T，判断字符串S内包含T的最小的子字符串，并返回。如果不包含返回“”。</p>
+<p>可以使用双指针的办法做到O(n)的时间复杂度。<br>首先建立两个map，MS和MP，分别记录S内和T内各个字符的数目</p>
+<p>然后采用如下规则更新left和right。初始化left=right=0，从左到右遍历S。</p>
+<p>查看遍历的字符是否在T内并且MT[S[right]]&gt;0，在就MT[S[right]]–，对应的记录T的个数的变量tcount–,然后right++，重复上述过程，直到tcount=0。表示此时left和right之间的S的子串包含了所有的T。</p>
+<p>然后正式施行双指针法。重新用整个T更新MT，用left和right之间的字符更新MS，用scount = right-left+1。用一个begin和end记录最窄的S内包含T的子字符串。查看S[left]是否在T内（MT[S[left]]&gt;0），不在的话就直接left++。</p>
+<p>如果在的话，就将MS[S[left]]–,然后left++，scount–;此时查看left和right之间是否满足T(tcount&lt;=scount; MT[S[left-1]]&lt;=MS[S[left]])。如果满足就更新begin和end。如果不满足表示当前left和right之间的数是不能覆盖T的。这时候就将right++，并进行操作scount++，MS[S[right]]++。直到满足覆盖T的条件。再更新begin和end。</p>
+<p>当right到达最后，在此要求right++时，就直接返回。或者left&gt;=right时，也直接返回。最后返回S[begin,end]之间的字符即可。</p>
+<p>同时因为给出的题目内是字母或者ASCLL字符。所以可以直接使用一个vector[128]的数组，这样也很方便。我偷懒就使用了这样的方式。</p>
+<p>代码如下：</p>
+<p>Runtime: 8 ms, faster than 97.89% of C++ online submissions for Minimum Window Substring.<br>Memory Usage: 10.2 MB, less than 42.93% of C++ online submissions for Minimum Window Substring.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">string</span> <span class="title">minWindow</span><span class="params">(<span class="built_in">string</span> s, <span class="built_in">string</span> t)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(s==<span class="string">""</span> || t==<span class="string">""</span>) <span class="keyword">return</span> <span class="string">""</span>;</span><br><span class="line">        <span class="keyword">int</span> tcount = t.<span class="built_in">size</span>(), slen = s.<span class="built_in">size</span>(), tlen = t.<span class="built_in">size</span>(), left = <span class="number">0</span>, right = <span class="number">0</span>, <span class="built_in">begin</span> = <span class="number">0</span>, <span class="built_in">end</span> = <span class="number">0</span>;</span><br><span class="line">        vector&lt;int&gt; MS(128, 0), MT(128, 0);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;tlen; i++) MT[t[i]]++;</span><br><span class="line">        <span class="keyword">while</span>(tcount&gt;<span class="number">0</span> &amp;&amp; right&lt;slen)&#123;</span><br><span class="line">            <span class="keyword">if</span>(MT[s[right]] &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                MT[s[right]]--;</span><br><span class="line">                tcount--;</span><br><span class="line">            &#125;</span><br><span class="line">            right++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(tcount&gt;<span class="number">0</span>) <span class="keyword">return</span> <span class="string">""</span>;</span><br><span class="line">        <span class="built_in">end</span> = --right;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;tlen; i++) MT[t[i]]++;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=left; i&lt;=right; i++) MS[s[i]]++;</span><br><span class="line">        <span class="keyword">while</span>(right&lt;slen)&#123;</span><br><span class="line">            <span class="keyword">if</span>(MT[s[left]]==<span class="number">0</span>)&#123;</span><br><span class="line">                left++;</span><br><span class="line">                <span class="keyword">if</span>(right-left&lt;<span class="built_in">end</span>-<span class="built_in">begin</span>)&#123;</span><br><span class="line">                    <span class="built_in">begin</span> = left; <span class="built_in">end</span> = right;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            MS[s[left]]--;</span><br><span class="line">            <span class="keyword">while</span>(MS[s[left]]&lt;MT[s[left]] &amp;&amp; right+<span class="number">1</span> &lt; slen) MS[s[++right]]++;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span>(MS[s[left]]&lt;MT[s[left]]) <span class="keyword">break</span>;</span><br><span class="line">            </span><br><span class="line">            left++;</span><br><span class="line">            <span class="keyword">if</span>(right-left&lt;<span class="built_in">end</span>-<span class="built_in">begin</span>)&#123;</span><br><span class="line">                <span class="built_in">begin</span> = left; <span class="built_in">end</span> = right;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> s.substr(<span class="built_in">begin</span>, <span class="built_in">end</span>-<span class="built_in">begin</span>+<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-06-24</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(763.%20Partition%20Labels)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -779,174 +940,6 @@ for (int i = 0; i &lt; len; i++) {
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(797.%20All%20Paths%20From%20Source%20to%20Target)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(797.%20All%20Paths%20From%20Source%20to%20Target)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(797. All Paths From Source to Target)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-797-All-Paths-From-Source-to-Target-题解"><a href="#LeetCode-797-All-Paths-From-Source-to-Target-题解" class="headerlink" title="LeetCode(797. All Paths From Source to Target)题解"></a>LeetCode(797. All Paths From Source to Target)题解</h1><p>Given a directed, acyclic graph of <code>N</code> nodes.  Find all possible paths from node <code>0</code> to node <code>N-1</code>, and return them in any order.</p>
-<p>The graph is given as follows:  the nodes are 0, 1, …, graph.length - 1.  graph[i] is a list of all nodes j for which the edge (i, j) exists.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Example:</span><br><span class="line">Input: [[1,2], [3], [3], []] </span><br><span class="line">Output: [[0,1,3],[0,2,3]] </span><br><span class="line">Explanation: The graph looks like this:</span><br><span class="line">0---&gt;1</span><br><span class="line">|    |</span><br><span class="line">v    v</span><br><span class="line">2---&gt;3</span><br><span class="line">There are two paths: 0 -&gt; 1 -&gt; 3 and 0 -&gt; 2 -&gt; 3.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Note:</strong></p>
-<ul>
-<li>The number of nodes in the graph will be in the range <code>[2, 15]</code>.</li>
-<li>You can print different paths in any order, but you should keep the order of nodes inside one path.</li>
-</ul>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个有向无环图，找出其中所有的源点到汇点的路径。</p>
-<p>从原点出发，使用DFS，记录所有的路径即可，时间复杂度O(n)。</p>
-<p><code>Runtime: 196 ms, faster than 5.58% of Python3 online submissions for All Paths From Source to Target.</code></p>
-<p><code>Memory Usage: 16.3 MB, less than 20.00% of Python3 online submissions for All Paths From Source to Target.</code></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span><span class="params">(object)</span>:</span></span><br><span class="line">    Path = []</span><br><span class="line">    path = []</span><br><span class="line">    Sta = <span class="number">0</span></span><br><span class="line">    End = <span class="number">-1</span></span><br><span class="line">    G = []</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">findPath</span><span class="params">(self, node)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> node == self.End:</span><br><span class="line">            self.Path.append([i <span class="keyword">for</span> i <span class="keyword">in</span> self.path])</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        </span><br><span class="line">        self.path.append(<span class="string">""</span>)</span><br><span class="line">        <span class="keyword">for</span> next_node <span class="keyword">in</span> self.G[node]:</span><br><span class="line">            self.path[<span class="number">-1</span>] = next_node</span><br><span class="line">            self.findPath(next_node)</span><br><span class="line">        </span><br><span class="line">        self.path = self.path[:<span class="number">-1</span>]</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">allPathsSourceTarget</span><span class="params">(self, graph)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :type graph: List[List[int]]</span></span><br><span class="line"><span class="string">        :rtype: List[List[int]]</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        </span><br><span class="line">        self.G = graph</span><br><span class="line">        self.End = len(graph) - <span class="number">1</span></span><br><span class="line">      </span><br><span class="line">        self.path = [self.Sta]</span><br><span class="line">        self.findPath(self.Sta)</span><br><span class="line">        <span class="keyword">import</span> copy</span><br><span class="line">        Paths = copy.deepcopy(self.Path)</span><br><span class="line">        self.Path.clear()</span><br><span class="line">        <span class="keyword">return</span> Paths</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-10-07</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(795.%20Number%20of%20Subarrays%20with%20Bounded%20Maximum)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(795.%20Number%20of%20Subarrays%20with%20Bounded%20Maximum)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(795. Number of Subarrays with Bounded Maximum)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-795-Number-of-Subarrays-with-Bounded-Maximum-题解"><a href="#LeetCode-795-Number-of-Subarrays-with-Bounded-Maximum-题解" class="headerlink" title="LeetCode(\795. Number of Subarrays with Bounded Maximum)题解"></a>LeetCode(\795. Number of Subarrays with Bounded Maximum)题解</h1><p>We are given an array <code>A</code> of positive integers, and two positive integers <code>L</code> and <code>R</code> (<code>L &lt;= R</code>).</p>
-<p>Return the number of (contiguous, non-empty) subarrays such that the value of the maximum array element in that subarray is at least <code>L</code> and at most <code>R</code>.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Example :</span><br><span class="line">Input: </span><br><span class="line">A &#x3D; [2, 1, 4, 3]</span><br><span class="line">L &#x3D; 2</span><br><span class="line">R &#x3D; 3</span><br><span class="line">Output: 3</span><br><span class="line">Explanation: There are three subarrays that meet the requirements: [2], [2, 1], [3].</span><br></pre></td></tr></table></figure>
-
-<p><strong>Note:</strong></p>
-<ul>
-<li>L, R and <code>A[i]</code> will be an integer in the range <code>[0, 10^9]</code>.</li>
-<li>The length of <code>A</code> will be in the range of <code>[1, 50000]</code>.</li>
-</ul>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个正数数组A，以及两个L和R。现在从A中取出不同的子数组（子数组必须元素在A内连续），子数组内的元素之和必须在[L,R]区间内，问有多少种这样的子数组。</p>
-<p>这个题可以使用简单的遍历，首先想如果A中某个位置的元素大于R，那么这个元素就将A分割成了两个子数组，在左边和右边分别找就可以了，更深入之后可以假设从左到右遍历，遇到一个值就这样判断：</p>
-<p>我们维护一个值k记录一个位置，表示当前遍历到位置i-1时，和k之间的元素之和都小于等于R，同时记录这个结果值S，维护一个结果值ret，初始化S=i=k=ret=0。</p>
-<ul>
-<li><p>我们寻找元素中连续子数组之和小于等于R的子数组个数。那么遍历到i时——</p>
-</li>
-<li><p>计算S+A[i]，如果小于等于R，就ret += i-k+1，i++。否则表示这个序列和不满足，就不断S -= S[k]，然后k++直到S + A[i]小于等于R，然后再执行ret += i-k+1，i++。如果直到k==i时都不满足，则直接k=i+1，i++，S=0。</p>
-</li>
-<li><p>这样走到最后，计算出数组中所有元素和小于等于R的连续子数组个数ret，这时候，再计算A中连续子树组元素之和小于L的个数，初始化S=i=k=0。</p>
-</li>
-<li><p>计算S+A[i]，如果小于L，就ret -= i-k+1，i++。否则表示这个序列和不满足，就不断S -= S[k]，然后k++直到S + A[i]小于L，然后再执行ret += i-k+1，i++。如果直到k==i时都不满足，则直接k=i+1，i++，S=0。</p>
-</li>
-<li><p>这样走到最后，就可以得到所有元素和在[L, R]的连续子数组的个数了。</p>
-</li>
-</ul>
-<p>代码如下，时间复杂度O(n)，因为从初始化开始k和i数一直在不断增大，最多增加N次，同时空间复杂度O(n)。</p>
-<p><code>Runtime: 36 ms, faster than 86.26% of C++ online submissions for Number of Subarrays with Bounded Maximum.</code></p>
-<p><code>Memory Usage: 12.3 MB, less than 66.67% of C++ online submissions for Number of Subarrays with Bounded Maximum.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">numSubarrayBoundedMax</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A, <span class="keyword">int</span> L, <span class="keyword">int</span> R)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> S = <span class="number">0</span>, k = <span class="number">0</span>, ret = <span class="number">0</span>, len = A.<span class="built_in">size</span>();</span><br><span class="line">        <span class="comment">// &lt;=R</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">while</span>(k&lt;=i &amp;&amp; S+A[i]&gt;R) k++;</span><br><span class="line">            ret += i - k + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// &lt;L</span></span><br><span class="line">        S = k = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">while</span>(k&lt;=i &amp;&amp; S+A[i]&gt;=L) k++;</span><br><span class="line">            ret -= i - k + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>同时也可以优化到一个循环里去，如下。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">numSubarrayBoundedMax</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A, <span class="keyword">int</span> L, <span class="keyword">int</span> R)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> SL = <span class="number">0</span>, SR = <span class="number">0</span>, kr = <span class="number">0</span>, kl = <span class="number">0</span>, ret = <span class="number">0</span>, len = A.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">while</span>(kr&lt;=i &amp;&amp; SR+A[i]&gt;R) kr++;    <span class="comment">// &lt;=R   </span></span><br><span class="line">            <span class="keyword">while</span>(kl&lt;=i &amp;&amp; SL+A[i]&gt;=L) kl++; <span class="comment">// &lt;L</span></span><br><span class="line">            </span><br><span class="line">            ret += kl - kr;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave,2019-10-25</p>
-<ul>
-<li>A[i]&gt;R，表示这个元素不符合条件，i++，S=0，k=i+1</li>
-<li>A[i]==R，表示这个元素更好符合条件，但是只能组成一个单数组。i++，S=0，k=i+1，ret += 1</li>
-<li>A[i]&lt;R，表示这个数组符合条件，并且可以和前面的元素组合形成多个子数组。计算Sum(A[k..i])的和，</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1017,7 +1010,7 @@ for (int i = 0; i &lt; len; i++) {
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">386</span>
+          <span class="site-state-item-count">388</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

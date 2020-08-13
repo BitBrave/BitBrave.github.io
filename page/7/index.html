@@ -168,6 +168,168 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/08/LeetCode(315.%20Count%20of%20Smaller%20Numbers%20After%20Self)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/05/08/LeetCode(315.%20Count%20of%20Smaller%20Numbers%20After%20Self)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(315. Count of Smaller Numbers After Self)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-05-08 00:04:54" itemprop="dateCreated datePublished" datetime="2020-05-08T00:04:54+08:00">2020-05-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-05-09 20:16:23" itemprop="dateModified" datetime="2020-05-09T20:16:23+08:00">2020-05-09</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-315-Count-of-Smaller-Numbers-After-Self-题解"><a href="#LeetCode-315-Count-of-Smaller-Numbers-After-Self-题解" class="headerlink" title="LeetCode(\315. Count of Smaller Numbers After Self)题解"></a>LeetCode(\315. Count of Smaller Numbers After Self)题解</h1><p>You are given an integer array <em>nums</em> and you have to return a new <em>counts</em> array. The <em>counts</em> array has the property where <code>counts[i]</code> is the number of smaller elements to the right of <code>nums[i]</code>.</p>
+<p><strong>Example:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Input: [5,2,6,1]</span><br><span class="line">Output: [2,1,1,0] </span><br><span class="line">Explanation:</span><br><span class="line">To the right of 5 there are 2 smaller elements (2 and 1).</span><br><span class="line">To the right of 2 there is only 1 smaller element (1).</span><br><span class="line">To the right of 6 there is 1 smaller element (1).</span><br><span class="line">To the right of 1 there is 0 smaller element.</span><br></pre></td></tr></table></figure>
+
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Hard</p>
+<p>给定一个整数数组 nums，按要求返回一个新数组 counts。数组 counts 有该性质： counts[i] 的值是  nums[i] 右侧小于 nums[i] 的元素的数量。</p>
+<p>这个最暴力的就是n2时间，每一个数都遍历一下右边有几个小于该数。</p>
+<p>但是这里可以利用归并分治的思想，就跟求逆序数一样。我们对这个数组进行排序，不过是根据元素值对对应的位置进行排序。</p>
+<p>对于一个数组，我们进行二分，假设左边和右边子数组内的每个元素之间的关系已经定了，那么现在就只考虑左边的和右边的关系了。两个子数组都是升序。那么从两个子数组的开始向后每次选择最小的进入最终的，对于左边某个数，如果大于右边这个数，那么就肯定大于这个数前面的所有数，所以我们用一个count记录右边数组已经走过的长度，如果右边大于等于左边这个数，说明左边这个数必须被选走了，因为右边后面不会再有小于左边的这个数的元素了。所有左边这个元素的对应结果就加上count。</p>
+<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，这就是一个完全的归并排序，只不过在中间记录了一下数而已。时间上，O(nlogn)，空间上，O(n)。</p>
+<p><code>Runtime: 28 ms, faster than 85.00% of C++ online submissions for Count of Smaller Numbers After Self.</code></p>
+<p><code>Memory Usage: 28.6 MB, less than 50.00% of C++ online submissions for Count of Smaller Numbers After Self.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; Count;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; pos, Nums;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Merge</span><span class="params">(<span class="keyword">int</span> sta, <span class="keyword">int</span> mid, <span class="keyword">int</span> <span class="built_in">end</span>)</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">tmp</span><span class="params">(pos.<span class="built_in">begin</span>()+sta, pos.<span class="built_in">begin</span>()+<span class="built_in">end</span>+<span class="number">1</span>)</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> l = sta, r = mid + <span class="number">1</span>, count = <span class="number">0</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> k=sta; k&lt;=<span class="built_in">end</span>; k++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (l &gt; mid) pos[k] = tmp[r++-sta];</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (r &gt; <span class="built_in">end</span>) &#123;</span><br><span class="line">                Count[tmp[l-sta]] += count;</span><br><span class="line">                pos[k] = tmp[l++-sta];</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (Nums[tmp[l-sta]] &gt; Nums[tmp[r-sta]]) &#123;</span><br><span class="line">                pos[k] = tmp[r++-sta];</span><br><span class="line">                count++;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                Count[tmp[l-sta]] += count;</span><br><span class="line">                pos[k] = tmp[l++-sta];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">MergeSort</span><span class="params">(<span class="keyword">int</span> sta, <span class="keyword">int</span> <span class="built_in">end</span>)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (sta &gt;= <span class="built_in">end</span>) <span class="keyword">return</span>;</span><br><span class="line">        <span class="keyword">int</span> mid = (sta + <span class="built_in">end</span>) / <span class="number">2</span>;</span><br><span class="line">        MergeSort(sta, mid);</span><br><span class="line">        MergeSort(mid+<span class="number">1</span>, <span class="built_in">end</span>);</span><br><span class="line"></span><br><span class="line">        Merge(sta, mid, <span class="built_in">end</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">countSmaller</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = nums.<span class="built_in">size</span>();</span><br><span class="line">        Count = <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(len, <span class="number">0</span>);</span><br><span class="line">        pos = <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(len);</span><br><span class="line">        Nums = nums;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++) pos[i] = i;</span><br><span class="line"></span><br><span class="line">        MergeSort(<span class="number">0</span>, len - <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">return</span> Count;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2020-05-07</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/01/LeetCode(LCP%2012.%20%E5%B0%8F%E5%BC%A0%E5%88%B7%E9%A2%98%E8%AE%A1%E5%88%92)%E6%98%A5%E5%AD%A3%E7%BC%96%E7%A8%8B%E8%B5%9B2%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/05/01/LeetCode(LCP%2012.%20%E5%B0%8F%E5%BC%A0%E5%88%B7%E9%A2%98%E8%AE%A1%E5%88%92)%E6%98%A5%E5%AD%A3%E7%BC%96%E7%A8%8B%E8%B5%9B2%E9%A2%98/" class="post-title-link" itemprop="url">LeetCode(LCP 12. 小张刷题计划)春季编程赛2题</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-05-01 17:37:31 / 修改时间：17:37:34" itemprop="dateCreated datePublished" datetime="2020-05-01T17:37:31+08:00">2020-05-01</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-LCP-12-小张刷题计划-春季编程赛2题"><a href="#LeetCode-LCP-12-小张刷题计划-春季编程赛2题" class="headerlink" title="LeetCode(LCP 12. 小张刷题计划)春季编程赛2题"></a>LeetCode(<a href="https://leetcode-cn.com/problems/xiao-zhang-shua-ti-ji-hua/" target="_blank" rel="noopener">LCP 12. 小张刷题计划</a>)春季编程赛2题</h1><p>为了提高自己的代码能力，小张制定了 LeetCode 刷题计划，他选中了 LeetCode 题库中的 n 道题，编号从 0 到 n-1，并计划在 m 天内按照题目编号顺序刷完所有的题目（注意，小张不能用多天完成同一题）。</p>
+<p>在小张刷题计划中，小张需要用 time[i] 的时间完成编号 i 的题目。此外，小张还可以使用场外求助功能，通过询问他的好朋友小杨题目的解法，可以省去该题的做题时间。为了防止“小张刷题计划”变成“小杨刷题计划”，小张每天最多使用一次求助。</p>
+<p>我们定义 m 天中做题时间最多的一天耗时为 T（小杨完成的题目不计入做题总时间）。请你帮小张求出最小的 T是多少。</p>
+<p>示例 1：</p>
+<p>输入：time = [1,2,3,3], m = 2</p>
+<p>输出：3</p>
+<p>解释：第一天小张完成前三题，其中第三题找小杨帮忙；第二天完成第四题，并且找小杨帮忙。这样做题时间最多的一天花费了 3 的时间，并且这个值是最小的。</p>
+<p>示例 2：</p>
+<p>输入：time = [999,999,999], m = 4</p>
+<p>输出：0</p>
+<p>解释：在前三天中，小张每天求助小杨一次，这样他可以在三天内完成所有的题目并不花任何时间。</p>
+<p>限制：</p>
+<p>1 &lt;= time.length &lt;= 10^5<br>1 &lt;= time[i] &lt;= 10000<br>1 &lt;= m &lt;= 1000</p>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Medium</p>
+<p>为了提高自己的代码能力，小张制定了 LeetCode 刷题计划，他选中了 LeetCode 题库中的 n 道题，编号从 0 到 n-1，并计划在 m 天内按照题目编号顺序刷完所有的题目（注意，小张不能用多天完成同一题）。</p>
+<p>在小张刷题计划中，小张需要用 time[i] 的时间完成编号 i 的题目。此外，小张还可以使用场外求助功能，通过询问他的好朋友小杨题目的解法，可以省去该题的做题时间。为了防止“小张刷题计划”变成“小杨刷题计划”，小张每天最多使用一次求助。</p>
+<p>我们定义 m 天中做题时间最多的一天耗时为 T（小杨完成的题目不计入做题总时间）。请你帮小张求出最小的 T是多少。</p>
+<p>这个题可以使用一个稍微改变的二分法来做。经典的二分法是将N个数分成M段，然后使得其中最大段元素之和最小。然后我们可以计算出分成当M=1时，答案为所有元素的和，当M=N时，答案为N中的最大元素。因此，M在1和N之间时，答案一定在所有元素和和最大元素之间。那就不断二分，查看以二分的值为界进行分段，是否能分为M，如果超过M段，说明二分值太小了，就增大，如果小于M段，说明二分值太大了，就减小M值。如果等于，那就有可能是答案，但是是有可能，这时候如果上界下界不一致的话还是不能确定，因为要找最小值，所以这时候还是要取左边界，中间值为新的上下界。</p>
+<p>投射到本题目，我们在分段之后，可以从每个段里面去掉一个数，那肯定是去最大的数，因此这里计算分段的和的时候减去最大值值即可。</p>
+<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间上，O(NlogM)，空间上，O(N)。N为元素个数，M为所有元素之和。</p>
+<p><code>执行用时 :228 ms, 在所有 C++ 提交中击败了13.64%的用户</code></p>
+<p><code>内存消耗 :28.8 MB, 在所有 C++ 提交中击败了100.00%的用户</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minTime</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; time, <span class="keyword">int</span> m)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = time.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span> (n &lt;= m) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> L = <span class="number">0</span>, R = accumulate(time.<span class="built_in">begin</span>(), time.<span class="built_in">end</span>(), <span class="number">0</span>) - *max_element(time.<span class="built_in">begin</span>(), time.<span class="built_in">end</span>());</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (L &lt; R) &#123;</span><br><span class="line">            <span class="keyword">int</span> mid = (L + R) / <span class="number">2</span>, M = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">int</span> max_ = <span class="number">0</span>, sum = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> t : time) &#123;</span><br><span class="line">                max_ = <span class="built_in">max</span>(max_, t);</span><br><span class="line">                sum += t;</span><br><span class="line">                <span class="keyword">if</span> (sum - max_ &gt; mid) &#123;</span><br><span class="line">                    max_ = t;</span><br><span class="line">                    sum = t;</span><br><span class="line">                    M++;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            M++;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (M &gt; m) L = mid + <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span> R = mid;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> R;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2020-05-01</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/30/LeetCode(LCP%2011.%20%E6%9C%9F%E6%9C%9B%E4%B8%AA%E6%95%B0%E7%BB%9F%E8%AE%A1)%E6%98%A5%E5%AD%A3%E7%BC%96%E7%A8%8B%E8%B5%9B1%E9%A2%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -850,174 +1012,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/16/LeetCode(467.%20Unique%20Substrings%20in%20Wraparound%20String)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/04/16/LeetCode(467.%20Unique%20Substrings%20in%20Wraparound%20String)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(467. Unique Substrings in Wraparound String)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-04-16 12:27:20 / 修改时间：12:27:23" itemprop="dateCreated datePublished" datetime="2020-04-16T12:27:20+08:00">2020-04-16</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-467-Unique-Substrings-in-Wraparound-String-题解"><a href="#LeetCode-467-Unique-Substrings-in-Wraparound-String-题解" class="headerlink" title="LeetCode(\467. Unique Substrings in Wraparound String)题解"></a>LeetCode(\467. Unique Substrings in Wraparound String)题解</h1><p>Consider the string <code>s</code> to be the infinite wraparound string of “abcdefghijklmnopqrstuvwxyz”, so <code>s</code> will look like this: “…zabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcd….”.</p>
-<p>Now we have another string <code>p</code>. Your job is to find out how many unique non-empty substrings of <code>p</code> are present in <code>s</code>. In particular, your input is the string <code>p</code> and you need to output the number of different non-empty substrings of <code>p</code> in the string <code>s</code>.</p>
-<p><strong>Note:</strong> <code>p</code> consists of only lowercase English letters and the size of p might be over 10000.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Input: &quot;a&quot;</span><br><span class="line">Output: 1</span><br><span class="line"></span><br><span class="line">Explanation: Only the substring &quot;a&quot; of string &quot;a&quot; is in the string s.</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: &quot;cac&quot;</span><br><span class="line">Output: 2</span><br><span class="line">Explanation: There are two substrings &quot;a&quot;, &quot;c&quot; of string &quot;cac&quot; in the string s.</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Example 3:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: &quot;zab&quot;</span><br><span class="line">Output: 6</span><br><span class="line">Explanation: There are six substrings &quot;z&quot;, &quot;a&quot;, &quot;b&quot;, &quot;za&quot;, &quot;ab&quot;, &quot;zab&quot; of string &quot;zab&quot; in the string s.</span><br></pre></td></tr></table></figure>
-
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Medium</p>
-<p>有一个由’abcd…zabcd..z….’无限扩展的字符串s，现给定一个字符串p，寻找p中有多少子串时s中的子串。</p>
-<p>这是一个DP问题，想不到转移方程的话是有点难的（比如说我）。我就以我的理解写一下这个题怎么做吧。</p>
-<p>首先s中的字符可以看成都是连续的abcd…，那么p中就是要找有多少个连续子串。进一步的，我们可以找出以具体某一个字符结尾的子字符串有多少个。比如怕p中以‘a’结尾的子串数目。然后将26个字符结尾的子串数目相加即可。</p>
-<p>以‘a’为例子，那现在问题就变成了，从p中找出以‘a’结尾的子串数目。这个子串是连续的，也就是说，以‘a’结尾的长度为1的子串只能是‘a’，长度为2的只能是‘za’，长度为3的只能是‘yza’，以此类推。那也就是说，p中以‘a’结尾的最长连续子串一定包含了p中所有以‘a’结尾的连续子串，最长连续子串的长度就是p中所有以‘a’结尾的子串的数目。</p>
-<p>那好，这个题目的问题就变成了，在p中找出分别以‘a’、‘b’、…、‘z’结尾的最长连续子串的数目。一个办法是，在p中分别找到‘a’、‘b’、‘c’，···，‘z’的字符的位置，然后向前遍历，寻找最长的连续子串。但这样比较耗时。一个更好的办法是，建立一个26大小的数组，分别记录以不同字符结尾的最长连续子串的长度。然后从左到右遍历字符串p，记录走到当前位置时的连续子串的长度，如果跟前面可以组成连续的，就是在现有记录的长度上++，否则就是1，然后作为当前位置的连续子串的长度，最后把这个位置的字符的最长连续子串的长度进行更新。看到这相信大家都明白了，这个记录长度的做法就是最长子序列的方法。</p>
-<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间上，O(N)，空间上，O(1)。</p>
-<p><code>Runtime: 8 ms, faster than 91.17% of C++ online submissions for Unique Substrings in Wraparound String.</code></p>
-<p><code>Memory Usage: 7.4 MB, less than 100.00% of C++ online submissions for Unique Substrings in Wraparound String.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">findSubstringInWraproundString</span><span class="params">(<span class="built_in">string</span> p)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = p.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span> (len &lt;= <span class="number">1</span>) <span class="keyword">return</span> len; </span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">dp</span><span class="params">(<span class="number">26</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> con_len = <span class="number">1</span>;</span><br><span class="line">        dp[p[<span class="number">0</span>]-<span class="string">'a'</span>] = con_len;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;len; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (p[i]-p[i<span class="number">-1</span>]==<span class="number">1</span> || p[i<span class="number">-1</span>]-p[i]==<span class="number">25</span>) con_len++;</span><br><span class="line">            <span class="keyword">else</span> con_len = <span class="number">1</span>;</span><br><span class="line">            </span><br><span class="line">            dp[p[i]-<span class="string">'a'</span>] = <span class="built_in">max</span>(dp[p[i]-<span class="string">'a'</span>], con_len);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// accumulate带有三个形参：头两个形参指定要累加的元素范围，第三个形参则是累加的初值。</span></span><br><span class="line">        <span class="keyword">return</span> accumulate(dp.<span class="built_in">begin</span>(), dp.<span class="built_in">end</span>(), <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/12/LeetCode(464.%20Can%20I%20Win)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/04/12/LeetCode(464.%20Can%20I%20Win)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(464. Can I Win)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-04-12 22:16:45" itemprop="dateCreated datePublished" datetime="2020-04-12T22:16:45+08:00">2020-04-12</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-13 11:03:18" itemprop="dateModified" datetime="2020-04-13T11:03:18+08:00">2020-04-13</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-464-Can-I-Win-题解"><a href="#LeetCode-464-Can-I-Win-题解" class="headerlink" title="LeetCode(\464. Can I Win)题解"></a>LeetCode(\464. Can I Win)题解</h1><p>In the “100 game,” two players take turns adding, to a running total, any integer from 1..10. The player who first causes the running total to reach or exceed 100 wins.</p>
-<p>What if we change the game so that players cannot re-use integers?</p>
-<p>For example, two players might take turns drawing from a common pool of numbers of 1..15 without replacement until they reach a total &gt;= 100.</p>
-<p>Given an integer <code>maxChoosableInteger</code> and another integer <code>desiredTotal</code>, determine if the first player to move can force a win, assuming both players play optimally.</p>
-<p>You can always assume that <code>maxChoosableInteger</code> will not be larger than 20 and <code>desiredTotal</code> will not be larger than 300.</p>
-<p><strong>Example</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Input:</span><br><span class="line">maxChoosableInteger &#x3D; 10</span><br><span class="line">desiredTotal &#x3D; 11</span><br><span class="line"></span><br><span class="line">Output:</span><br><span class="line">false</span><br><span class="line"></span><br><span class="line">Explanation:</span><br><span class="line">No matter which integer the first player choose, the first player will lose.</span><br><span class="line">The first player can choose an integer from 1 up to 10.</span><br><span class="line">If the first player choose 1, the second player can only choose integers from 2 up to 10.</span><br><span class="line">The second player will win by choosing 10 and get a total &#x3D; 11, which is &gt;&#x3D; desiredTotal.</span><br><span class="line">Same with other integers chosen by the first player, the second player will always win.</span><br></pre></td></tr></table></figure>
-
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Medium</p>
-<p>给一个maxChoosableInteger和desiredTotal，两个人依次在1，2，···，maxChoosableInteger选一个数，不可重复选，选一个少一个。如果谁先选择一个数使得两人选过的数之和大于等于desiredTotal，就判断这个人胜利。假设两人都按最优策略来走，那么请问第一个选的人是赢是输。</p>
-<p>这个题虽然是Medium，但对我来说还是挺难的。首先还是说下思路。</p>
-<p>首先是使用回溯法，建立一个递归函数helper，表示在当前选定条件下，接下来第一个选择的人是一定胜利还是一定输。因为maxChoosableInteger不大，所以可以用一个字符串pos的01串来表示哪些数已经被选择了，然后使用递归，在里面依次选择还未被选择的数，再更新pos和剩下的整数。这里使用Map记录已经得到结果的pos的值。</p>
-<p>写出了这个代码，一般都会想到是不是能使用DP解决问题。从这个代码就可以看出来，一个pos依赖于后面的pos的选取，只是要把pos中的一个0变为1而已。其实如果数能重用的话，就很容易转为DP，f(i) = ~f(i-d)。这里一个数只能用一次，因此很难使用DP。</p>
-<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间上为O(N2)，空间上理论上是O(2^N)，但实际上用不到这么多。</p>
-<p><code>Runtime: 800 ms, faster than 6.46% of C++ online submissions for Can I Win.</code></p>
-<p><code>Memory Usage: 119.8 MB, less than 20.00% of C++ online submissions for Can I Win.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">    <span class="built_in">unordered_map</span>&lt;<span class="built_in">string</span>, <span class="keyword">bool</span>&gt; M;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">helper</span><span class="params">(<span class="keyword">int</span> maxChoosableInteger, <span class="keyword">int</span> desiredTotal, <span class="built_in">string</span> pos_)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (M.<span class="built_in">find</span>(pos_) != M.<span class="built_in">end</span>()) <span class="keyword">return</span> M[pos_];</span><br><span class="line">        M[pos_] = <span class="literal">false</span>;</span><br><span class="line">        <span class="built_in">string</span> pos = pos_;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;=maxChoosableInteger; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (pos[i] == <span class="string">'1'</span>) <span class="keyword">continue</span>;</span><br><span class="line"></span><br><span class="line">            pos[i] = <span class="string">'1'</span>;</span><br><span class="line">            <span class="keyword">if</span> (desiredTotal&lt;=i) &#123;</span><br><span class="line">                M[pos_] = <span class="literal">true</span>;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (!helper(maxChoosableInteger, desiredTotal-i, pos)) &#123;</span><br><span class="line">                M[pos_] = <span class="literal">true</span>;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            pos[i] = <span class="string">'0'</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">canIWin</span><span class="params">(<span class="keyword">int</span> maxChoosableInteger, <span class="keyword">int</span> desiredTotal)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (desiredTotal &lt;= maxChoosableInteger) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">if</span> ((maxChoosableInteger + <span class="number">1</span>) * maxChoosableInteger / <span class="number">2</span> &lt; desiredTotal) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="function"><span class="built_in">string</span> <span class="title">pos</span><span class="params">(maxChoosableInteger+<span class="number">1</span>, <span class="string">'0'</span>)</span></span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> helper(maxChoosableInteger, desiredTotal, pos);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2020-04-12.</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1088,7 +1082,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">386</span>
+          <span class="site-state-item-count">388</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

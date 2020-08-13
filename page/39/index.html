@@ -168,6 +168,173 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(98.%20Validate%20Binary%20Search%20Tree)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(98.%20Validate%20Binary%20Search%20Tree)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(98. Validate Binary Search Tree)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-98-Validate-Binary-Search-Tree-题解"><a href="#LeetCode-98-Validate-Binary-Search-Tree-题解" class="headerlink" title="LeetCode(98. Validate Binary Search Tree)题解"></a>LeetCode(98. Validate Binary Search Tree)题解</h1><hr>
+<p>Given a binary tree, determine if it is a valid binary search tree (BST).</p>
+<p>Assume a BST is defined as follows:</p>
+<p>The left subtree of a node contains only nodes with keys less than the node’s key.<br>The right subtree of a node contains only nodes with keys greater than the node’s key.<br>Both the left and right subtrees must also be binary search trees.</p>
+<pre><code>Example 1:
+
+    2
+   / \
+  1   3
+
+Input: [2,1,3]
+Output: true</code></pre><p>Example 2:</p>
+<pre><code>    5
+   / \
+  1   4
+     / \
+    3   6
+
+Input: [5,1,4,null,null,3,6]
+Output: false
+Explanation: The root node&apos;s value is 5 but its right child&apos;s value is 4.</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出1个二叉树，判断是不是一个二叉搜索树。</p>
+<p>前向遍历下，二叉搜索树是一个递增序列，因此直接前向遍历树，如果发现数不是递增的就是错误的。</p>
+<p>代码如下：</p>
+<p>Runtime: 16 ms, faster than 87.95% of C++ online submissions for Validate Binary Search Tree.<br>Memory Usage: 20.9 MB, less than 19.46% of C++ online submissions for Validate Binary Search Tree.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">fowardT</span><span class="params">(TreeNode* root, <span class="keyword">double</span> &amp;last, <span class="keyword">bool</span> &amp;l)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">if</span>(!fowardT(root-&gt;left, last, l)) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">if</span>(root-&gt;val &lt;= last &amp;&amp; !l) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        l = <span class="literal">false</span>;</span><br><span class="line">        last = root-&gt;val;</span><br><span class="line">        <span class="keyword">return</span> fowardT(root-&gt;right, last, l);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isValidBST</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">double</span> last = INT_MIN;</span><br><span class="line">        <span class="keyword">bool</span> l = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">return</span> fowardT(root, last, l);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2019-06-13</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(986.%20Interval%20List%20Intersections)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(986.%20Interval%20List%20Intersections)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(986. Interval List Intersections)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-986-Interval-List-Intersections-题解"><a href="#LeetCode-986-Interval-List-Intersections-题解" class="headerlink" title="LeetCode(986. Interval List Intersections)题解"></a>LeetCode(986. Interval List Intersections)题解</h1><p>Given two lists of <strong>closed</strong> intervals, each list of intervals is pairwise disjoint and in sorted order.</p>
+<p>Return the intersection of these two interval lists.</p>
+<p><em>(Formally, a closed interval [a, b] (with a &lt;= b) denotes the set of real numbers x with a &lt;= x &lt;= b.  The intersection of two closed intervals is a set of real numbers that is either empty, or can be represented as a closed interval.  For example, the intersection of [1, 3] and [2, 4] is [2, 3].)</em></p>
+<p><strong>Example 1:</strong></p>
+<p><strong><img src="https://assets.leetcode.com/uploads/2019/01/30/interval1.png" alt="img"></strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: A &#x3D; [[0,2],[5,10],[13,23],[24,25]], B &#x3D; [[1,5],[8,12],[15,24],[25,26]]</span><br><span class="line">Output: [[1,2],[5,5],[8,10],[15,23],[24,24],[25,25]]</span><br><span class="line">Reminder: The inputs and the desired output are lists of Interval objects, and not arrays or lists.</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Note:</strong></p>
+<ol>
+<li><code>0 &lt;= A.length &lt; 1000</code></li>
+<li><code>0 &lt;= B.length &lt; 1000</code></li>
+<li><code>0 &lt;= A[i].start, A[i].end, B[i].start, B[i].end &lt; 10^9</code></li>
+</ol>
+<p><strong>NOTE:</strong> input types have been changed on April 15, 2019. Please reset to default code definition to get new method signature.</p>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出两个区间数组，每个数组内按照坐标轴顺序给出了一些不相合的区间。现在求这两个数组的区间的子集，即重合的区间。</p>
+<p>这个题很简单，可以直接使用双指针法，从两个数组的开头分别分配一个指针，然后逐步向右，每一步都进行两个区间的比较，如果有交集就记录下来，没有就算了。然后将区间中右边界更靠坐的区间放弃，选择对应数组内的下一个即可。</p>
+<p>代码如下，时间复杂度O(N)，空间复杂度O(1)。</p>
+<p><code>Runtime: 52 ms, faster than 77.47% of C++ online submissions for Interval List Intersections.</code></p>
+<p><code>Memory Usage: 15.8 MB, less than 80.00% of C++ online submissions for Interval List Intersections.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">intervalIntersection</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; A, <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; B)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; ret;</span><br><span class="line">        <span class="keyword">int</span> lenA = A.<span class="built_in">size</span>(), lenB = B.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">0</span>, j = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(i &lt; lenA <span class="keyword">and</span> j &lt; lenB)&#123;</span><br><span class="line">            <span class="keyword">if</span>(A[i][<span class="number">0</span>] &gt; B[j][<span class="number">1</span>]) j++;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(A[i][<span class="number">1</span>] &lt; B[j][<span class="number">0</span>]) i++;</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                ret.push_back(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(&#123;<span class="built_in">max</span>(A[i][<span class="number">0</span>], B[j][<span class="number">0</span>]), <span class="built_in">min</span>(A[i][<span class="number">1</span>], B[j][<span class="number">1</span>])&#125;));</span><br><span class="line">                <span class="keyword">if</span>(A[i][<span class="number">1</span>] &lt; B[j][<span class="number">1</span>]) i++;</span><br><span class="line">                <span class="keyword">else</span> j++;</span><br><span class="line">            &#125; </span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>BitBrave，2019-11-25</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(99.%20Recover%20Binary%20Search%20Tree)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -797,7 +964,7 @@ The median is (2 + 3)/2 = 2.5</code></pre><p>这道题让我们求两个有序�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">386</span>
+          <span class="site-state-item-count">388</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

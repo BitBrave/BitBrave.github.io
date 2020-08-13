@@ -168,6 +168,182 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(1094.%20Car%20Pooling)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(1094.%20Car%20Pooling)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1094. Car Pooling)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-1094-Car-Pooling-题解"><a href="#LeetCode-1094-Car-Pooling-题解" class="headerlink" title="LeetCode(\1094. Car Pooling)题解"></a>LeetCode(\1094. Car Pooling)题解</h1><p>You are driving a vehicle that has <code>capacity</code> empty seats initially available for passengers. The vehicle <strong>only</strong> drives east (ie. it <strong>cannot</strong> turn around and drive west.)</p>
+<p>Given a list of <code>trips</code>, <code>trip[i] = [num_passengers, start_location, end_location]</code> contains information about the <code>i</code>-th trip: the number of passengers that must be picked up, and the locations to pick them up and drop them off. The locations are given as the number of kilometers due east from your vehicle’s initial location.</p>
+<p>Return <code>true</code> if and only if it is possible to pick up and drop off all passengers for all the given trips. </p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: trips &#x3D; [[2,1,5],[3,3,7]], capacity &#x3D; 4</span><br><span class="line">Output: false</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: trips &#x3D; [[2,1,5],[3,3,7]], capacity &#x3D; 5</span><br><span class="line">Output: true</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 3:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: trips &#x3D; [[2,1,5],[3,5,7]], capacity &#x3D; 3</span><br><span class="line">Output: true</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 4:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: trips &#x3D; [[3,2,7],[3,7,9],[8,3,9]], capacity &#x3D; 11</span><br><span class="line">Output: true</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p><strong>Constraints:</strong></p>
+<ol>
+<li><code>trips.length &lt;= 1000</code></li>
+<li><code>trips[i].length == 3</code></li>
+<li><code>1 &lt;= trips[i][0] &lt;= 100</code></li>
+<li><code>0 &lt;= trips[i][1] &lt; trips[i][2] &lt;= 1000</code></li>
+<li><code>1 &lt;= capacity &lt;= 100000</code></li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>有一个车站序列，一辆固定容量的汽车每站停下来下乘客和上乘客。问给定一个乘客的上下站位置和数目的数组，判断这个汽车是否可以成功载人到终点。</p>
+<p>这个题有点类似于教室安排的情况，用最少的教室来排出所有的课，这个题转化过来就是满足开课的最小教室数和给定的教室数之间的比较。</p>
+<p>因此我们可以使用Greedy办法做，设定一个与车站数等长的数组，数组i位置记录车站i-1到i之间的乘客数目。因此我们需要做的就是用乘客组来填充这个数组。最后遍历数组，如果有数大于车的载重返回False，否则返回True。</p>
+<p>代码如下，时间复杂度O(乘客组数*车站数)，空间复杂度O(车站数)。</p>
+<p><code>Runtime: 20 ms, faster than 16.98% of C++ online submissions for Car Pooling.</code></p>
+<p><code>Memory Usage: 10.4 MB, less than 100.00% of C++ online submissions for Car Pooling.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">carPooling</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; trips, <span class="keyword">int</span> capacity)</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">ret</span><span class="params">(<span class="number">1001</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; trip : trips) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i=trip[<span class="number">1</span>]; i&lt;trip[<span class="number">2</span>]; i++) &#123;</span><br><span class="line">                ret[i] += trip[<span class="number">0</span>];</span><br><span class="line">                <span class="keyword">if</span> (ret[i] &gt; capacity) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// for (int r : ret) &#123;</span></span><br><span class="line">        <span class="comment">//     if (r &gt; capacity) return false;</span></span><br><span class="line">        <span class="comment">// &#125;</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2019-12-19</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(1139.%20Largest%201-Bordered%20Square)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(1139.%20Largest%201-Bordered%20Square)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1139. Largest 1-Bordered Square)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-1139-Largest-1-Bordered-Square-题解"><a href="#LeetCode-1139-Largest-1-Bordered-Square-题解" class="headerlink" title="LeetCode(\1139. Largest 1-Bordered Square)题解"></a>LeetCode(\1139. Largest 1-Bordered Square)题解</h1><p>Given a 2D <code>grid</code> of <code>0</code>s and <code>1</code>s, return the number of elements in the largest <strong>square</strong> subgrid that has all <code>1</code>s on its <strong>border</strong>, or <code>0</code> if such a subgrid doesn’t exist in the <code>grid</code>.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: grid &#x3D; [[1,1,1],[1,0,1],[1,1,1]]</span><br><span class="line">Output: 9</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: grid &#x3D; [[1,1,0,0]]</span><br><span class="line">Output: 1</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>1 &lt;= grid.length &lt;= 100</code></li>
+<li><code>1 &lt;= grid[0].length &lt;= 100</code></li>
+<li><code>grid[i][j]</code> is <code>0</code> or <code>1</code></li>
+</ul>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个由0和1组成的数组，找出其中由1圈成的最大的正方形的面积。</p>
+<p>这个题可以使用DP完成，从上到下，从左到右对每一个元素，我们分别计算以这个元素为正方形右下角时的最大正方形面积。分别找出元素对应的向上的列和向左的行的连续1组成的元素，然后计算对应边长的合法正方形面积。</p>
+<p>这个题的DP思想体现在哪里呢？按照上述办法计算时，我们需要计算指定元素为右下角时的最大正方形，这需要O(N2)时间，全部计算一遍就需要O(N4)，但是我们分别维护两个等大的DP数组，记录元素对应向上数的连续1的个数，元素对应向左数的行的连续1的个数。而这是DP可以计算的，总共花费O(n2)时间，最后计算上述答案时只需要O(n3)时间。</p>
+<p>代码如下，时间复杂度O(n3)，空间复杂度O(n2)。</p>
+<p><code>Runtime: 16 ms, faster than 73.07% of C++ online submissions for Largest 1-Bordered Square.</code></p>
+<p><code>Memory Usage: 10.8 MB, less than 100.00% of C++ online submissions for Largest 1-Bordered Square.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">largest1_</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; Row, <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; Col, <span class="keyword">int</span> r, <span class="keyword">int</span> c)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> ret = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> m = <span class="built_in">min</span>(Row[r][c], Col[r][c]);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;m; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">min</span>(Col[r][c-i], Row[r-i][c]) &gt; i) ret = <span class="built_in">max</span>(ret, (i+<span class="number">1</span>) * (i+<span class="number">1</span>));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">largest1BorderedSquare</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; grid)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> rlen = grid.<span class="built_in">size</span>(), clen = grid[<span class="number">0</span>].<span class="built_in">size</span>(), ret = <span class="number">0</span>;</span><br><span class="line">        vector&lt;vector&lt;int&gt;&gt; Row(rlen+1, vector&lt;int&gt;(clen+1,0)), Col(rlen+1, vector&lt;int&gt;(clen+1,0));</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> r=<span class="number">0</span>; r&lt;rlen; r++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> c=<span class="number">0</span>; c&lt;clen; c++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (grid[r][c]==<span class="number">0</span>) &#123;</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                Row[r+<span class="number">1</span>][c+<span class="number">1</span>] = Row[r+<span class="number">1</span>][c] + <span class="number">1</span>;</span><br><span class="line">                Col[r+<span class="number">1</span>][c+<span class="number">1</span>] = Col[r][c+<span class="number">1</span>] + <span class="number">1</span>;</span><br><span class="line">                </span><br><span class="line">                ret = <span class="built_in">max</span>(ret, largest1_(Row, Col, r+<span class="number">1</span>, c+<span class="number">1</span>));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>BitBrave，2019-12-18</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(114.%20Flatten%20Binary%20Tree%20to%20Linked%20List)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -882,156 +1058,6 @@ Explanation: M = 1000, CM = 900, XC = 90 and IV = 4.</code></pre><h2 id="题目�
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(120.%20Triangle)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(120.%20Triangle)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(120. Triangle)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-120-Triangle-题解"><a href="#LeetCode-120-Triangle-题解" class="headerlink" title="LeetCode(120. Triangle)题解"></a>LeetCode(120. Triangle)题解</h1><hr>
-<p>Given a triangle, find the minimum path sum from top to bottom. Each step you may move to adjacent numbers on the row below.</p>
-<p>For example, given the following triangle</p>
-<pre><code>[
-       [2],
-      [3,4],
-     [6,5,7],
-    [4,1,8,3]
-]</code></pre><p>The minimum path sum from top to bottom is 11 (i.e., 2 + 3 + 5 + 1 = 11).</p>
-<p>Note:</p>
-<pre><code>Bonus point if you are able to do this using only O(n) extra space, where n is the total number of rows in the triangle.</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个三角形T，从顶到底找一个最短的路径，只能从相邻的往下走。要求额外空间不能超过O(n).</p>
-<p>这里可以使用DP的办法。首先不要考虑空间的限制。观察三角形，0行一个数，1行两个数，2行三个数，···，n行n+1个数。我们用一个二维数组来记录，D[i][j]表示当前走到第i行中以第j个数为终点的最短路径值，其中j的取值范围为0-i。因此可以有如下最优子结构。</p>
-<p>如果j=0，D[i][j] = D[i-1][0] + T[i][0]</p>
-<p>如果j=i，D[i][j] = D[i-1][i-1] + T[i][i]</p>
-<p>其它情况， D[i][j] = min(D[i-1][j-1], D[i-1][j]) + T[i][j]</p>
-<p>初始情况D[0][0] = T[0][0]</p>
-<p>观察最优子结构，可以发现每次只用到了上一行相邻的位置元素。因此我们可以把矩阵缩小到2*n，达到O(n)的空间复杂度。</p>
-<p>代码如下：</p>
-<p>Runtime: 8 ms, faster than 76.88% of C++ online submissions for Triangle.<br>Memory Usage: 9.6 MB, less than 93.97% of C++ online submissions for Triangle.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minimumTotal</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; triangle)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = triangle.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span>(n == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">D</span><span class="params">(<span class="number">2</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(n, <span class="number">0</span>))</span></span>;</span><br><span class="line">        D[<span class="number">0</span>][<span class="number">0</span>] = triangle[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;n; i++)&#123;</span><br><span class="line">            D[<span class="number">1</span>][<span class="number">0</span>] = D[<span class="number">0</span>][<span class="number">0</span>] + triangle[i][<span class="number">0</span>];</span><br><span class="line">            D[<span class="number">1</span>][i] = D[<span class="number">0</span>][i<span class="number">-1</span>] + triangle[i][i];</span><br><span class="line">            <span class="comment">//cout&lt;&lt;D[1][0]&lt;&lt;" "&lt;&lt;D[1][i]&lt;&lt;endl;</span></span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>; j&lt;i; j++) &#123;</span><br><span class="line">                D[<span class="number">1</span>][j] = <span class="built_in">min</span>(D[<span class="number">0</span>][j<span class="number">-1</span>], D[<span class="number">0</span>][j]) + triangle[i][j];</span><br><span class="line">                <span class="comment">//cout&lt;&lt;D[1][j]&lt;&lt;endl;</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;=i; j++) D[<span class="number">0</span>][j] = D[<span class="number">1</span>][j];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> *min_element(D[<span class="number">0</span>].<span class="built_in">begin</span>(),D[<span class="number">0</span>].<span class="built_in">end</span>());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-07-04</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(119.%20Pascal's%20Triangle%20II)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(119.%20Pascal's%20Triangle%20II)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(119. Pascal's Triangle II)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-119-Pascal’s-Triangle-II-题解"><a href="#LeetCode-119-Pascal’s-Triangle-II-题解" class="headerlink" title="LeetCode(119. Pascal’s Triangle II)题解"></a>LeetCode(119. Pascal’s Triangle II)题解</h1><hr>
-<p>Given a non-negative index k where k ≤ 33, return the kth index row of the Pascal’s triangle.</p>
-<p>Note that the row index starts from 0.</p>
-<p><img src="https://upload.wikimedia.org/wikipedia/commons/0/0d/PascalTriangleAnimated2.gif" alt="In Pascal&#39;s triangle, each number is the sum of the two numbers directly above it."></p>
-<p>Example:</p>
-<pre><code>Input: 3
-Output: [1,3,3,1]</code></pre><p>Follow up:</p>
-<pre><code>Could you optimize your algorithm to use only O(k) extra space?</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Easy，就是简单计算一下杨辉三角（帕斯卡三角）在给定的第N行的数而已。其中第N行由上一行的数相邻相加得到2到n-1的数。最两边为1.第一行为1.</p>
-<p>一个简单的for循环就可以了。</p>
-<p>代码如下：</p>
-<p>Runtime: 0 ms, faster than 100.00% of C++ online submissions for Pascal’s Triangle II.<br>Memory Usage: 8.5 MB, less than 46.65% of C++ online submissions for Pascal’s Triangle II.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">getRow</span><span class="params">(<span class="keyword">int</span> rowIndex)</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">res</span><span class="params">(rowIndex+<span class="number">1</span>, <span class="number">1</span>)</span></span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">2</span>; i&lt;rowIndex+<span class="number">1</span>; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> k=i<span class="number">-1</span>; k&gt;<span class="number">0</span>; k--) res[k] += res[k<span class="number">-1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-06-09</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1102,7 +1128,7 @@ Output: [1,3,3,1]</code></pre><p>Follow up:</p>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">386</span>
+          <span class="site-state-item-count">388</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

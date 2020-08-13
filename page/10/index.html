@@ -168,6 +168,180 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/26/LeetCode(995.%20Minimum%20Number%20of%20K%20Consecutive%20Bit%20Flips)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/26/LeetCode(995.%20Minimum%20Number%20of%20K%20Consecutive%20Bit%20Flips)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(995. Minimum Number of K Consecutive Bit Flips)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-03-26 18:09:57 / 修改时间：18:11:16" itemprop="dateCreated datePublished" datetime="2020-03-26T18:09:57+08:00">2020-03-26</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-995-Minimum-Number-of-K-Consecutive-Bit-Flips-题解"><a href="#LeetCode-995-Minimum-Number-of-K-Consecutive-Bit-Flips-题解" class="headerlink" title="LeetCode(\995. Minimum Number of K Consecutive Bit Flips)题解"></a>LeetCode(\995. Minimum Number of K Consecutive Bit Flips)题解</h1><p>In an array <code>A</code> containing only 0s and 1s, a <em><code>K</code>-bit flip</em> consists of choosing a (contiguous) subarray of length <code>K</code> and simultaneously changing every 0 in the subarray to 1, and every 1 in the subarray to 0.</p>
+<p>Return the minimum number of <code>K</code>-bit flips required so that there is no 0 in the array. If it is not possible, return <code>-1</code>.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: A &#x3D; [0,1,0], K &#x3D; 1</span><br><span class="line">Output: 2</span><br><span class="line">Explanation: Flip A[0], then flip A[2].</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: A &#x3D; [1,1,0], K &#x3D; 2</span><br><span class="line">Output: -1</span><br><span class="line">Explanation: No matter how we flip subarrays of size 2, we can&#39;t make the array become [1,1,1].</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 3:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Input: A &#x3D; [0,0,0,1,0,1,1,0], K &#x3D; 3</span><br><span class="line">Output: 3</span><br><span class="line">Explanation:</span><br><span class="line">Flip A[0],A[1],A[2]: A becomes [1,1,1,1,0,1,1,0]</span><br><span class="line">Flip A[4],A[5],A[6]: A becomes [1,1,1,1,1,0,0,0]</span><br><span class="line">Flip A[5],A[6],A[7]: A becomes [1,1,1,1,1,1,1,1]</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Note:</strong></p>
+<ol>
+<li><code>1 &lt;= A.length &lt;= 30000</code></li>
+<li><code>1 &lt;= K &lt;= A.length</code></li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Hard</p>
+<p>将一个由0和1组成的数组的连续k个元素进行翻转，0变为1，1变为0，求最少的翻转次数将数组的元素全部变为1。如果不能变为1，就返回-1。</p>
+<p>本题可以使用Greedy的办法，我们假设一个数组有解，并且存在一个最优方案，每一个都将一部分连续数组进行翻转，那么这些翻转是没有顺序的，不管什么顺序都能得到最终解。同时翻转的时候，最左边的翻转位置一定是0，因为不是的话，肯定还有更左边的才能将其翻为1。因此我们可以从左到右维持一个长度为K的窗口，依次划过去，如果出窗口的元素为0，就将窗口内的元素翻转，次数+1，否则就略过。走到最后，如果窗口内还有0存在，就表示不能得到答案，无解。否则就返回次数即可。</p>
+<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间复杂度O(N)，空间复杂度O(N)。</p>
+<p><code>Runtime: 108 ms, faster than 27.75% of C++ online submissions for Minimum Number of K Consecutive Bit Flips.</code></p>
+<p><code>Memory Usage: 17.7 MB, less than 100.00% of C++ online submissions for Minimum Number of K Consecutive Bit Flips.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minKBitFlips</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A, <span class="keyword">int</span> K)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>, len = A.<span class="built_in">size</span>(), flip = <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">queue</span>&lt;<span class="keyword">int</span>&gt; Q;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;K; i++) Q.push(A[i]);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=K; i&lt;len; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (flip ^ Q.front() == <span class="number">0</span>) &#123;</span><br><span class="line">                res++;</span><br><span class="line">                flip = <span class="number">1</span> - flip;</span><br><span class="line">            &#125;</span><br><span class="line">            Q.pop();</span><br><span class="line">            Q.push(flip ^ A[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (flip ^ Q.front() == <span class="number">0</span>) &#123;</span><br><span class="line">            res++;</span><br><span class="line">            flip = <span class="number">1</span> - flip;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">while</span> (!Q.empty() <span class="keyword">and</span> flip ^ Q.front() == <span class="number">1</span>) Q.pop();</span><br><span class="line">        <span class="keyword">if</span> (!Q.empty()) <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>Bitbrave，2020-03-25.</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/26/LeetCode(1392.%20Longest%20Happy%20Prefix)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/26/LeetCode(1392.%20Longest%20Happy%20Prefix)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1392. Longest Happy Prefix)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-03-26 16:42:18 / 修改时间：16:42:19" itemprop="dateCreated datePublished" datetime="2020-03-26T16:42:18+08:00">2020-03-26</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-1392-Longest-Happy-Prefix-题解"><a href="#LeetCode-1392-Longest-Happy-Prefix-题解" class="headerlink" title="LeetCode(\1392. Longest Happy Prefix)题解"></a>LeetCode(\1392. Longest Happy Prefix)题解</h1><p>A string is called a <em>happy prefix</em> if is a <strong>non-empty</strong> prefix which is also a suffix (excluding itself).</p>
+<p>Given a string <code>s</code>. Return the <strong>longest happy prefix</strong> of <code>s</code> .</p>
+<p>Return an empty string if no such prefix exists.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: s &#x3D; &quot;level&quot;</span><br><span class="line">Output: &quot;l&quot;</span><br><span class="line">Explanation: s contains 4 prefix excluding itself (&quot;l&quot;, &quot;le&quot;, &quot;lev&quot;, &quot;leve&quot;), and suffix (&quot;l&quot;, &quot;el&quot;, &quot;vel&quot;, &quot;evel&quot;). The largest prefix which is also suffix is given by &quot;l&quot;.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: s &#x3D; &quot;ababab&quot;</span><br><span class="line">Output: &quot;abab&quot;</span><br><span class="line">Explanation: &quot;abab&quot; is the largest prefix which is also suffix. They can overlap in the original string.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 3:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: s &#x3D; &quot;leetcodeleet&quot;</span><br><span class="line">Output: &quot;leet&quot;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 4:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: s &#x3D; &quot;a&quot;</span><br><span class="line">Output: &quot;&quot;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>1 &lt;= s.length &lt;= 10^5</code></li>
+<li><code>s</code> contains only lowercase English letters.</li>
+</ul>
+<p><a href="https://leetcode.com/problems/longest-happy-prefix/discuss" target="_blank" rel="noopener">Discuss</a></p>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Hard</p>
+<p>求出一个字符串的公共前后缀最长值。</p>
+<p>这个乍一看很难在O(n)的时间内解决。但是知道KMP的人来说，这就是求Next数组而已。同时Rolling hash也可以解决，将字符串映射到一个值，将前缀的值依次放入Set 中，然后将后缀依次转为整数，然后在O(1)时间内就可以判断是否存在。</p>
+<p>这里我使用Next的方式。</p>
+<p>代码如下，时间复杂度O(N)，空间复杂度O(N)。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">string</span> <span class="title">longestPrefix</span><span class="params">(<span class="built_in">string</span> s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = s.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> j = <span class="number">1</span>, t = <span class="number">0</span>;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">Next</span><span class="params">(len + <span class="number">2</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">        <span class="keyword">while</span> (j &lt;= len) &#123;</span><br><span class="line">            <span class="keyword">if</span> (t == <span class="number">0</span> || s[j<span class="number">-1</span>] == s[t<span class="number">-1</span>]) &#123;</span><br><span class="line">                Next[j+<span class="number">1</span>] = t + <span class="number">1</span>;</span><br><span class="line">                j++;</span><br><span class="line">                t++;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                t = Next[t];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> s.substr(<span class="number">0</span>, Next[len+<span class="number">1</span>]<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2020-03-25</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/26/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%E7%AE%97%E6%B3%95KMP/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -873,208 +1047,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/05/LeetCode(456.%20132%20Pattern)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/03/05/LeetCode(456.%20132%20Pattern)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(456. 132 Pattern)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-03-05 23:04:42 / 修改时间：23:04:54" itemprop="dateCreated datePublished" datetime="2020-03-05T23:04:42+08:00">2020-03-05</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-456-132-Pattern-题解"><a href="#LeetCode-456-132-Pattern-题解" class="headerlink" title="LeetCode(\456. 132 Pattern)题解"></a>LeetCode(\456. 132 Pattern)题解</h1><p>Given a sequence of n integers a1, a2, …, an, a 132 pattern is a subsequence a<strong>i</strong>, a<strong>j</strong>, a<strong>k</strong> such that <strong>i</strong> &lt; <strong>j</strong> &lt; <strong>k</strong> and a<strong>i</strong> &lt; a<strong>k</strong> &lt; a<strong>j</strong>. Design an algorithm that takes a list of n numbers as input and checks whether there is a 132 pattern in the list.</p>
-<p><strong>Note:</strong> n will be less than 15,000.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Input: [1, 2, 3, 4]</span><br><span class="line"></span><br><span class="line">Output: False</span><br><span class="line"></span><br><span class="line">Explanation: There is no 132 pattern in the sequence.</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Input: [3, 1, 4, 2]</span><br><span class="line"></span><br><span class="line">Output: True</span><br><span class="line"></span><br><span class="line">Explanation: There is a 132 pattern in the sequence: [1, 4, 2].</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Example 3:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Input: [-1, 3, 2, 0]</span><br><span class="line"></span><br><span class="line">Output: True</span><br><span class="line"></span><br><span class="line">Explanation: There are three 132 patterns in the sequence: [-1, 3, 2], [-1, 3, 0] and [-1, 2, 0].</span><br></pre></td></tr></table></figure>
-
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Medium</p>
-<p>给定一个整数数组A，判断其中是否存在这样的模式：有三个位置，i&lt;j&lt;k。每个位置上的元素关系为Ai&lt;Ak&lt;Aj即132模式，如果有这样的模式存在就返回True，否则False。</p>
-<p>这个题明确使用Stack，可以在线性时间内解决，但是我只能想到平方的解法，就是以每个元素Aj，分别寻找左边最小的和右边比当前值小的最大值，然后判断。参考网上别人的解法才发现，Stack实在是太美妙了。</p>
-<p>我们如何来利用Stack呢？</p>
-<p>可以这样想，我们找到一个元素a，只要得到左边的最小元素b和右边的比a小的数中最大的那个c，只要bac满足条件，那么算法就以True结束了，如果不满足，那么以这个元素a作为中间值肯定是不可以的。找元素左边最小的很容易，我们O(n)的时间就可以，主要是如何寻找c？</p>
-<p>这里可以用一个Stack来，我们可以维护一个递减栈，一般来说一个递减栈是用来确定一个元素离它最近的比他大的元素值的。但是我们在递减栈出栈的过程中，记录下最后那个出栈的元素，那么那个元素就是比当前元素小的元素中，最大的那个了。</p>
-<p>因此，再完善一点，算法的流程就是：</p>
-<ul>
-<li>我们构建一个Stack（存储一个递减序列），从数组A的后边向前边遍历，设定一个整数s记录最近出栈的元素，初始化s=INT_MIN。</li>
-<li>从后向前遍历元素，走到元素a时，判断a是否小于s，如果小于，说明s已经被更新了，栈内肯定插入了更大值，因为从后向前遍历，这个更大值的位置肯定在s和a之间，因此符合132的模式，返回True。否则进行下一步。</li>
-<li>如果栈为空，直接将a入栈，否则判断元素是否大于栈顶元素，如果大于，那么就不断出栈直到栈为空或者a小于等于栈顶元素，然后将a入栈，此时s更新为最近一次出栈的元素，因为是个递减栈，所以s一定小于a同时s是数组右边小于a的元素中最大的那个，此时也可以说s元素的左边一定有一个比他的大的元素存在。</li>
-<li>重复上述操作，知道遍历完整个数组才退出循环，表示这个数组内不存在132的模式，否则肯定会提前结束循环。因此直接返回False。</li>
-</ul>
-<h2 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h2><p>代码如下，时间上，$O(N)$，空间上，$O(N)$。</p>
-<p><code>Runtime: 24 ms, faster than 82.89% of C++ online submissions for 132 Pattern.</code></p>
-<p><code>Memory Usage: 9.4 MB, less than 100.00% of C++ online submissions for 132 Pattern.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">find132pattern</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">stack</span>&lt;<span class="keyword">int</span>&gt; S;</span><br><span class="line">        <span class="keyword">int</span> c = INT_MIN, len = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=len<span class="number">-1</span>; i&gt;=<span class="number">0</span>; i--) &#123;</span><br><span class="line">            <span class="keyword">if</span> (nums[i] &lt; c) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">while</span> (!S.empty() <span class="keyword">and</span> nums[i] &gt; S.top()) &#123;</span><br><span class="line">                c = S.top();</span><br><span class="line">                S.pop();</span><br><span class="line">            &#125;</span><br><span class="line">            S.push(nums[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2020-03-05</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/03/LeetCode(1368.%20Minimum%20Cost%20to%20Make%20at%20Least%20One%20Valid%20Path%20in%20a%20Grid)%E5%91%A8%E8%B5%9B%E7%AC%AC4%E9%A2%98%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/03/03/LeetCode(1368.%20Minimum%20Cost%20to%20Make%20at%20Least%20One%20Valid%20Path%20in%20a%20Grid)%E5%91%A8%E8%B5%9B%E7%AC%AC4%E9%A2%98%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(1368. Minimum Cost to Make at Least One Valid Path in a Grid)周赛第4题题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-03-03 23:43:15 / 修改时间：23:43:16" itemprop="dateCreated datePublished" datetime="2020-03-03T23:43:15+08:00">2020-03-03</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-1368-Minimum-Cost-to-Make-at-Least-One-Valid-Path-in-a-Grid-周赛第4题题解"><a href="#LeetCode-1368-Minimum-Cost-to-Make-at-Least-One-Valid-Path-in-a-Grid-周赛第4题题解" class="headerlink" title="LeetCode(\1368. Minimum Cost to Make at Least One Valid Path in a Grid)周赛第4题题解"></a>LeetCode(\1368. Minimum Cost to Make at Least One Valid Path in a Grid)周赛第4题题解</h1><p>Given a <em>m</em> x <em>n</em> <code>grid</code>. Each cell of the <code>grid</code> has a sign pointing to the next cell you should visit if you are currently in this cell. The sign of <code>grid[i][j]</code> can be:</p>
-<ul>
-<li><strong>1</strong> which means go to the cell to the right. (i.e go from <code>grid[i][j]</code> to <code>grid[i][j + 1]</code>)</li>
-<li><strong>2</strong> which means go to the cell to the left. (i.e go from <code>grid[i][j]</code> to <code>grid[i][j - 1]</code>)</li>
-<li><strong>3</strong> which means go to the lower cell. (i.e go from <code>grid[i][j]</code> to <code>grid[i + 1][j]</code>)</li>
-<li><strong>4</strong> which means go to the upper cell. (i.e go from <code>grid[i][j]</code> to <code>grid[i - 1][j]</code>)</li>
-</ul>
-<p>Notice that there could be some <strong>invalid signs</strong> on the cells of the <code>grid</code> which points outside the <code>grid</code>.</p>
-<p>You will initially start at the upper left cell <code>(0,0)</code>. A valid path in the grid is a path which starts from the upper left cell <code>(0,0)</code> and ends at the bottom-right cell <code>(m - 1, n - 1)</code> following the signs on the grid. The valid path <strong>doesn’t have to be the shortest</strong>.</p>
-<p>You can modify the sign on a cell with <code>cost = 1</code>. You can modify the sign on a cell <strong>one time only</strong>.</p>
-<p>Return <em>the minimum cost</em> to make the grid have at least one valid path.</p>
-<p><strong>Example 1:</strong></p>
-<p><img src="https://assets.leetcode.com/uploads/2020/02/13/grid1.png" alt="img"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Input: grid &#x3D; [[1,1,1,1],[2,2,2,2],[1,1,1,1],[2,2,2,2]]</span><br><span class="line">Output: 3</span><br><span class="line">Explanation: You will start at point (0, 0).</span><br><span class="line">The path to (3, 3) is as follows. (0, 0) --&gt; (0, 1) --&gt; (0, 2) --&gt; (0, 3) change the arrow to down with cost &#x3D; 1 --&gt; (1, 3) --&gt; (1, 2) --&gt; (1, 1) --&gt; (1, 0) change the arrow to down with cost &#x3D; 1 --&gt; (2, 0) --&gt; (2, 1) --&gt; (2, 2) --&gt; (2, 3) change the arrow to down with cost &#x3D; 1 --&gt; (3, 3)</span><br><span class="line">The total cost &#x3D; 3.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<p><img src="https://assets.leetcode.com/uploads/2020/02/13/grid2.png" alt="img"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: grid &#x3D; [[1,1,3],[3,2,2],[1,1,4]]</span><br><span class="line">Output: 0</span><br><span class="line">Explanation: You can follow the path from (0, 0) to (2, 2).</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 3:</strong></p>
-<p><img src="https://assets.leetcode.com/uploads/2020/02/13/grid3.png" alt="img"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: grid &#x3D; [[1,2],[4,3]]</span><br><span class="line">Output: 1</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 4:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: grid &#x3D; [[2,2,2],[2,2,2]]</span><br><span class="line">Output: 3</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 5:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: grid &#x3D; [[4]]</span><br><span class="line">Output: 0</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Constraints:</strong></p>
-<ul>
-<li><code>m == grid.length</code></li>
-<li><code>n == grid[i].length</code></li>
-<li><code>1 &lt;= m, n &lt;= 100</code></li>
-</ul>
-<p><a href="https://leetcode.com/problems/minimum-cost-to-make-at-least-one-valid-path-in-a-grid/discuss" target="_blank" rel="noopener">Discuss</a></p>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>一个M*N大小的矩阵，每个矩阵元素为1234中的一个，分别表示一个方向，左右下上。从左上角开始，到右下角找一条路，我们可以将某个元素改变方向，改一次代价+1。找出代价最小的办法，使得存在至少一条可达的路径。当然，如果不用改就有路径，那就代价为0，是最好的。</p>
-<p>这个题一开始可能会想到用DP，但是从左上角到右下角的路径并不是只能向右向下的，而是可以迂回的，所以用DP很难构造出有效的状态转移方程。我是参考了大佬们的解法才发现如下的解法。</p>
-<p>将每个元素位置看成一个点，矩阵一共有M*N个点。点与点之间有边相连，一个点有四条边，其原本的方向所指的方向上，边权值为0，其余三条边的边权值为1。那么一个矩阵最终可以转化为一个0-1图。以左上角为源点，右下角为汇点。这个题就可以变为寻找一条由源点到汇点的最短路。可以使用的方法有0-1BFS和Dijkstra。</p>
-<h3 id="0-1-BFS"><a href="#0-1-BFS" class="headerlink" title="0-1 BFS"></a>0-1 BFS</h3><p>0-1BFS问题是指最短路问题中，边权只有 0 和 1 的特殊情况。写法类似 SPFA + SLF(Small Label First) 优化。需要一个 deque 。把权值 0 的边扩展到的点放到队首，权值 1 的边扩展到的点放到队尾。时间复杂度 O(V + E) 。</p>
-<p>在这个题中，我们准备一个双向队列，和一个二维数组记录左上角到每个点的最短路径长度。首先将左上角的点入队列，然后在队列不空的情况下，弹出队首的点，查看其出边，对于可以松弛的点，就更新长度，同时如果权值为0就将对应的点插入队首，否则插入队尾。直到最后队列为空。</p>
-<h3 id="时空复杂度"><a href="#时空复杂度" class="headerlink" title="时空复杂度"></a>时空复杂度</h3><p>代码如下，时间上，$O(V+E) = O(MN)$，空间上，$O(MN)$。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minCost</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; grid)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 0-1 BFS</span></span><br><span class="line">        <span class="keyword">int</span> m = grid.<span class="built_in">size</span>(), n = grid[<span class="number">0</span>].<span class="built_in">size</span>();</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">dis</span><span class="params">(m, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(n, INT_MAX))</span></span>;</span><br><span class="line">        <span class="built_in">deque</span>&lt;pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt;&gt; Q;</span><br><span class="line">        </span><br><span class="line">        Q.push_back(make_pair(<span class="number">0</span>, <span class="number">0</span>));</span><br><span class="line">        dis[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (!Q.empty()) &#123;</span><br><span class="line">            pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; p = Q.front(); Q.pop_front();</span><br><span class="line">            <span class="keyword">int</span> w = <span class="number">0</span>, i = p.first, j = p.second;</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// right 1</span></span><br><span class="line">            <span class="keyword">if</span> (j &lt; n<span class="number">-1</span>) &#123;</span><br><span class="line">                w = grid[i][j] == <span class="number">1</span> ? <span class="number">0</span> : <span class="number">1</span>;</span><br><span class="line">                <span class="keyword">if</span> (dis[i][j] + w &lt; dis[i][j+<span class="number">1</span>]) &#123;</span><br><span class="line">                    dis[i][j+<span class="number">1</span>] = dis[i][j] + w;</span><br><span class="line">                    <span class="keyword">if</span> (w == <span class="number">0</span>) Q.push_front(make_pair(i, j+<span class="number">1</span>));</span><br><span class="line">                    <span class="keyword">else</span> Q.push_back(make_pair(i, j+<span class="number">1</span>));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// left 2</span></span><br><span class="line">            <span class="keyword">if</span> (j &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                w = grid[i][j] == <span class="number">2</span> ? <span class="number">0</span> : <span class="number">1</span>;</span><br><span class="line">                <span class="keyword">if</span> (dis[i][j] + w &lt; dis[i][j<span class="number">-1</span>]) &#123;</span><br><span class="line">                    dis[i][j<span class="number">-1</span>] = dis[i][j] + w;</span><br><span class="line">                    <span class="keyword">if</span> (w == <span class="number">0</span>) Q.push_front(make_pair(i, j<span class="number">-1</span>));</span><br><span class="line">                    <span class="keyword">else</span> Q.push_back(make_pair(i, j<span class="number">-1</span>));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// down 3</span></span><br><span class="line">            <span class="keyword">if</span> (i &lt; m<span class="number">-1</span>) &#123;</span><br><span class="line">                w = grid[i][j] == <span class="number">3</span> ? <span class="number">0</span> : <span class="number">1</span>;</span><br><span class="line">                <span class="keyword">if</span> (dis[i][j] + w &lt; dis[i+<span class="number">1</span>][j]) &#123;</span><br><span class="line">                    dis[i+<span class="number">1</span>][j] = dis[i][j] + w;</span><br><span class="line">                    <span class="keyword">if</span> (w == <span class="number">0</span>) Q.push_front(make_pair(i+<span class="number">1</span>, j));</span><br><span class="line">                    <span class="keyword">else</span> Q.push_back(make_pair(i+<span class="number">1</span>, j));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// up 4</span></span><br><span class="line">            <span class="keyword">if</span> (i &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                w = grid[i][j] == <span class="number">4</span> ? <span class="number">0</span> : <span class="number">1</span>;</span><br><span class="line">                <span class="keyword">if</span> (dis[i][j] + w &lt; dis[i<span class="number">-1</span>][j]) &#123;</span><br><span class="line">                    dis[i<span class="number">-1</span>][j] = dis[i][j] + w;</span><br><span class="line">                    <span class="keyword">if</span> (w == <span class="number">0</span>) Q.push_front(make_pair(i<span class="number">-1</span>, j));</span><br><span class="line">                    <span class="keyword">else</span> Q.push_back(make_pair(i<span class="number">-1</span>, j));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> dis[m<span class="number">-1</span>][n<span class="number">-1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<h3 id="Dijkstra"><a href="#Dijkstra" class="headerlink" title="Dijkstra"></a>Dijkstra</h3><p>Dijkstra是用于寻找正权值图中，源点到其它点的最短路径的办法，若有N个节点，时间复杂度一般为$O(n^2)$。</p>
-<p>本题中，构建图之后，我们可以直接应用Dijkstra算法求出最短路径长度。</p>
-<h3 id="时空复杂度-1"><a href="#时空复杂度-1" class="headerlink" title="时空复杂度"></a>时空复杂度</h3><p>代码如下，时间上，$O((MN)^2)$，空间上，$O(MN)$。在实际使用中是超时的。。。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> m, <span class="keyword">int</span> n, <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">bool</span>&gt;&gt;&amp; visit, <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; dis, <span class="keyword">int</span>&amp; x, <span class="keyword">int</span>&amp; y)</span> </span>&#123;</span><br><span class="line">        x = <span class="number">-1</span>;</span><br><span class="line">        y = <span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;m; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;n; j++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (visit[i][j]) <span class="keyword">continue</span>;</span><br><span class="line">                <span class="keyword">if</span> (x == <span class="number">-1</span> <span class="keyword">or</span> dis[i][j] &lt; dis[x][y]) &#123;</span><br><span class="line">                    x = i;</span><br><span class="line">                    y = j;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minCost</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; grid)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// Dijkstra</span></span><br><span class="line">        <span class="keyword">int</span> m = grid.<span class="built_in">size</span>(), n = grid[<span class="number">0</span>].<span class="built_in">size</span>(), len = m * n - <span class="number">1</span>;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">bool</span>&gt;&gt; <span class="title">visit</span><span class="params">(m, <span class="built_in">vector</span>&lt;<span class="keyword">bool</span>&gt;(n, <span class="literal">false</span>))</span></span>;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">dis</span><span class="params">(m, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(n, INT_MAX))</span></span>;</span><br><span class="line">        </span><br><span class="line">        dis[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> k=<span class="number">0</span>; k&lt;len; k++) &#123;</span><br><span class="line">            <span class="comment">// find the point with shortest path distance in no-visit set</span></span><br><span class="line">            <span class="keyword">int</span> i, j, w;</span><br><span class="line">            <span class="built_in">find</span>(m, n, visit, dis, i, j);</span><br><span class="line">            visit[i][j] = <span class="literal">true</span>;</span><br><span class="line">            <span class="comment">//cout&lt;&lt;"shortest "&lt;&lt;i&lt;&lt;j&lt;&lt;" dis: "&lt;&lt;dis[i][j]&lt;&lt;endl;</span></span><br><span class="line">            <span class="comment">// right 1</span></span><br><span class="line">            w = grid[i][j] == <span class="number">1</span> ? <span class="number">0</span> : <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (j &lt; n<span class="number">-1</span> <span class="keyword">and</span> dis[i][j] + w &lt; dis[i][j+<span class="number">1</span>]) dis[i][j+<span class="number">1</span>] = dis[i][j] + w;</span><br><span class="line">            <span class="comment">// left 2</span></span><br><span class="line">            w = grid[i][j] == <span class="number">2</span> ? <span class="number">0</span> : <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (j &gt; <span class="number">0</span> <span class="keyword">and</span> dis[i][j] + w &lt; dis[i][j<span class="number">-1</span>]) dis[i][j<span class="number">-1</span>] = dis[i][j] + w;</span><br><span class="line">            <span class="comment">// down 3</span></span><br><span class="line">            w = grid[i][j] == <span class="number">3</span> ? <span class="number">0</span> : <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (i &lt; m<span class="number">-1</span> <span class="keyword">and</span> dis[i][j] + w &lt; dis[i+<span class="number">1</span>][j]) dis[i+<span class="number">1</span>][j] = dis[i][j] + w;</span><br><span class="line">            <span class="comment">// up 4</span></span><br><span class="line">            w = grid[i][j] == <span class="number">4</span> ? <span class="number">0</span> : <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (i &gt; <span class="number">0</span> <span class="keyword">and</span> dis[i][j] + w &lt; dis[i<span class="number">-1</span>][j]) dis[i<span class="number">-1</span>][j] = dis[i][j] + w;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dis[m<span class="number">-1</span>][n<span class="number">-1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2020-03-03</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1145,7 +1117,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">386</span>
+          <span class="site-state-item-count">388</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
