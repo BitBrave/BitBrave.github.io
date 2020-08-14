@@ -168,6 +168,94 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(89.%20Gray%20Code)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(89.%20Gray%20Code)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(89. Gray Code)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-89-Gray-Code-题解"><a href="#LeetCode-89-Gray-Code-题解" class="headerlink" title="LeetCode(89. Gray Code)题解"></a>LeetCode(89. Gray Code)题解</h1><hr>
+<p>The gray code is a binary numeral system where two successive values differ in only one bit.</p>
+<p>Given a non-negative integer n representing the total number of bits in the code, print the sequence of gray code. A gray code sequence must begin with 0.</p>
+<p>Example 1:</p>
+<pre><code>Input: 2
+Output: [0,1,3,2]
+Explanation:
+00 - 0
+01 - 1
+11 - 3
+10 - 2
+
+For a given n, a gray code sequence may not be uniquely defined.
+For example, [0,2,3,1] is also a valid gray code sequence.
+
+00 - 0
+10 - 2
+11 - 3
+01 - 1</code></pre><p>Example 2:</p>
+<pre><code>Input: 0
+Output: [0]
+Explanation: We define the gray code sequence to begin with 0.
+            A gray code sequence of n has size = 2n, which for n = 0 the size is 20 = 1.
+            Therefore, for n = 0 the gray code sequence is [0].</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>灰色代码是一个二进制数字系统，其中两个连续的值只相差一位。给定一个非负整数n表示代码中的总比特数，打印灰色代码序列。灰色代码序列必须以0开头。</p>
+<p>直白的解释就是，对给定的n，设计n个01组成的序列，一共2的n次方个，一次排列，使得每个序列之间只相差一个字符。</p>
+<p>可以使用类似于递归的办法解决（一个for循环就可以）。假设n-1的情况下有2的n-1次方个序列已经排好了，那个扩展到n的时候。首先将0加到所有序列之上，形成一个2的n-1次方个的序列集，按顺序存储。然后将所有开头的0换成1，倒顺序存储到序列集内。如此即完成了2的n次方的组合。</p>
+<p>代码如下：</p>
+<p>Runtime: 4 ms, faster than 92.85% of C++ online submissions for Gray Code.<br>Memory Usage: 8.6 MB, less than 57.17% of C++ online submissions for Gray Code.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">grayCode</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; res;</span><br><span class="line">        <span class="keyword">int</span> len = <span class="number">1</span>, t = <span class="number">0</span>;</span><br><span class="line">        res.push_back(<span class="number">0</span>);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;n; i++)&#123;</span><br><span class="line">            t = <span class="built_in">pow</span>(<span class="number">2</span>, i);</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=len<span class="number">-1</span>; j&gt;<span class="number">-1</span>; j--) res.push_back(t + res[j]);</span><br><span class="line">            len *= <span class="number">2</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BItBrave，2019-06-19</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(898.%20Bitwise%20ORs%20of%20Subarrays)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -944,87 +1032,6 @@ Output: 1-&gt;4-&gt;3-&gt;2-&gt;5-&gt;NULL</code></pre><h2 id="解题思路"><a 
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(923.%203Sum%20With%20Multiplicity)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(923.%203Sum%20With%20Multiplicity)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(923. 3Sum With Multiplicity)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-923-3Sum-With-Multiplicity-题解"><a href="#LeetCode-923-3Sum-With-Multiplicity-题解" class="headerlink" title="LeetCode(923. 3Sum With Multiplicity)题解"></a>LeetCode(923. 3Sum With Multiplicity)题解</h1><p>Given an integer array <code>A</code>, and an integer <code>target</code>, return the number of tuples <code>i, j, k</code>  such that <code>i &lt; j &lt; k</code> and <code>A[i] + A[j] + A[k] == target</code>.</p>
-<p><strong>As the answer can be very large, return it modulo 10^9 + 7</strong>.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Input: A &#x3D; [1,1,2,2,3,3,4,4,5,5], target &#x3D; 8</span><br><span class="line">Output: 20</span><br><span class="line">Explanation: </span><br><span class="line">Enumerating by the values (A[i], A[j], A[k]):</span><br><span class="line">(1, 2, 5) occurs 8 times;</span><br><span class="line">(1, 3, 4) occurs 8 times;</span><br><span class="line">(2, 2, 4) occurs 2 times;</span><br><span class="line">(2, 3, 3) occurs 2 times.</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Input: A &#x3D; [1,1,2,2,2,2], target &#x3D; 5</span><br><span class="line">Output: 12</span><br><span class="line">Explanation: </span><br><span class="line">A[i] &#x3D; 1, A[j] &#x3D; A[k] &#x3D; 2 occurs 12 times:</span><br><span class="line">We choose one 1 from [1,1] in 2 ways,</span><br><span class="line">and two 2s from [2,2,2,2] in 6 ways.</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Note:</strong></p>
-<ol>
-<li><code>3 &lt;= A.length &lt;= 3000</code></li>
-<li><code>0 &lt;= A[i] &lt;= 100</code></li>
-<li><code>0 &lt;= target &lt;= 300</code></li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个数组，数组中有重复元素，现在要求找出三个不同位置的元素（值可以一样），其和为一个固定值target。问有多少个这样的组合。</p>
-<p>这个题很明显就是使用双指针法，将数组升序排序，然后从左到右遍历一个元素，选定一个元素后，从其右边维护一个双指针，如果相加的和大于目标值则右指针左移，如果小于目标值则左指针右移。这里因为有重复元素，所以可以用一个字典记录重复元素出现的次数，而排序的就只排序不同的元素即可。</p>
-<p>代码如下，时间复杂度O(n2)，空间复杂度O(n)。</p>
-<p><code>Runtime: 68 ms, faster than 99.06% of Python3 online submissions for 3Sum With Multiplicity.</code></p>
-<p><code>Memory Usage: 12.7 MB, less than 100.00% of Python3 online submissions for 3Sum With Multiplicity.</code></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">threeSumMulti</span><span class="params">(self, A: List[int], target: int)</span> -&gt; int:</span></span><br><span class="line">        ret = <span class="number">0</span></span><br><span class="line">        dicA = Counter(A)</span><br><span class="line">        uA = sorted(list(dicA))</span><br><span class="line">        l, r, size, mod = <span class="number">0</span>, <span class="number">0</span>, len(uA), pow(<span class="number">10</span>, <span class="number">9</span>) + <span class="number">7</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(size):</span><br><span class="line">            l, r = i, size - <span class="number">1</span></span><br><span class="line">            s = target - uA[i]</span><br><span class="line">            <span class="keyword">while</span> l &lt;= r:</span><br><span class="line">                <span class="keyword">if</span> uA[l] + uA[r] &gt; s: r -= <span class="number">1</span> </span><br><span class="line">                <span class="keyword">elif</span> uA[l] + uA[r] &lt; s: l += <span class="number">1</span></span><br><span class="line">                <span class="keyword">elif</span> i != l <span class="keyword">and</span> l != r: ret = (ret + dicA[uA[i]]*dicA[uA[l]]*dicA[uA[r]]) % mod; l += <span class="number">1</span>; r -= <span class="number">1</span></span><br><span class="line">                <span class="keyword">elif</span> i == l <span class="keyword">and</span> l != r: ret = (ret + dicA[uA[i]]*(dicA[uA[i]]<span class="number">-1</span>)*dicA[uA[r]]/<span class="number">2</span>) % mod; l += <span class="number">1</span>; r -= <span class="number">1</span></span><br><span class="line">                <span class="keyword">elif</span> i != l <span class="keyword">and</span> l == r: ret = (ret + dicA[uA[i]]*dicA[uA[r]]*(dicA[uA[r]]<span class="number">-1</span>)/<span class="number">2</span>) % mod; l += <span class="number">1</span>; r -= <span class="number">1</span></span><br><span class="line">                <span class="keyword">else</span>: ret = (ret + dicA[uA[i]]*(dicA[uA[i]]<span class="number">-1</span>)*(dicA[uA[i]]<span class="number">-2</span>)/<span class="number">6</span>) % mod; l += <span class="number">1</span>; r -= <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> int(ret)</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2019-11-19</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1095,12 +1102,12 @@ Output: 1-&gt;4-&gt;3-&gt;2-&gt;5-&gt;NULL</code></pre><h2 id="解题思路"><a 
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">388</span>
+          <span class="site-state-item-count">389</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-count">56</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>

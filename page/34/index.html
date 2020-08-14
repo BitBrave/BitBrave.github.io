@@ -168,6 +168,90 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(850.%20Rectangle%20Area%20II)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(850.%20Rectangle%20Area%20II)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(850. Rectangle Area II)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-850-Rectangle-Area-II-题解"><a href="#LeetCode-850-Rectangle-Area-II-题解" class="headerlink" title="LeetCode(850. Rectangle Area II)题解"></a>LeetCode(850. Rectangle Area II)题解</h1><p>We are given a list of (axis-aligned) <code>rectangles</code>.  Each <code>rectangle[i] = [x1, y1, x2, y2]</code>, where (x1, y1) are the coordinates of the bottom-left corner, and (x2, y2) are the coordinates of the top-right corner of the <code>i</code>th rectangle.</p>
+<p>Find the total area covered by all <code>rectangles</code> in the plane.  Since the answer may be too large, <strong>return it modulo 10^9 + 7</strong>.</p>
+<p><img src="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/06/06/rectangle_area_ii_pic.png" alt="img"></p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: [[0,0,2,2],[1,0,2,3],[1,0,3,1]]</span><br><span class="line">Output: 6</span><br><span class="line">Explanation: As illustrated in the picture.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: [[0,0,1000000000,1000000000]]</span><br><span class="line">Output: 49</span><br><span class="line">Explanation: The answer is 10^18 modulo (10^9 + 7), which is (10^9)^2 &#x3D; (-7)^2 &#x3D; 49.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Note:</strong></p>
+<ul>
+<li><code>1 &lt;= rectangles.length &lt;= 200</code></li>
+<li><code>rectanges[i].length = 4</code></li>
+<li><code>0 &lt;= rectangles[i][j] &lt;= 10^9</code></li>
+<li><code>The total area covered by all rectangles will never exceed</code>2^63 - 1<code>and thus will fit in a 64-bit signed integer.</code></li>
+</ul>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给出一些矩阵，求出这些矩阵的面积之和（有的矩阵之间有重叠）。</p>
+<p>首先考虑两个矩阵，只有三种情况，相交、相离、想含。其中相离合相含是比较好分析的，相交则有些复杂。但是这三种皆可以将两个矩阵分成几个不相交的矩阵，如相交可以分成三个（一个原始矩阵，另一个矩阵分割为两个）。</p>
+<p>因此，我们可以维护一个List或者Vector，存储不相交的矩阵。将所有输入的矩阵通过分割全部转为相离的矩阵存入这个数组，最后只需计算这些矩阵的面积和即可。</p>
+<p>如何来构建并维护这个数组呢？分别遍历这些矩阵，当输入一个矩阵时，分别判断这个矩阵是否与List中的每个矩阵相交相离或包含，如果除了相离之外的其他关系，就将输入的矩阵进行分割，再分别判定分割完的矩阵与其他数组内矩阵的位置关系，直到分割完的矩阵与数组内所有矩阵都处于相离关系。每次在判断第i+1个矩阵的时候，数组内矩阵会最多增加4i+4个。最终上限为N个矩阵的话有 $ 2N^2 - 1$个。</p>
+<p>这里有一个对应的解法，<a href="https://leetcode.com/problems/rectangle-area-ii/discuss/138028/Clean-Recursive-Solution-Java" target="_blank" rel="noopener">点击进入</a>。</p>
+<p>代码如下，时间复杂度$O(n^2)$，空间复杂度$O(n^2)$。</p>
+<p><code>Runtime: 124 ms, faster than 6.09% of C++ online submissions for Rectangle Area II.</code></p>
+<p><code>Memory Usage: 64.5 MB, less than 25.00% of C++ online submissions for Rectangle Area II.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; V;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">rectangleArea</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; rectangles)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> mod = <span class="built_in">pow</span>(<span class="number">10</span>, <span class="number">9</span>) + <span class="number">7</span>;</span><br><span class="line">        <span class="keyword">int</span> a, b;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; rec : rectangles) addRectangle(rec, <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">for</span>(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; v : V)&#123;</span><br><span class="line">            a =  (v[<span class="number">2</span>]-v[<span class="number">0</span>]) % mod;</span><br><span class="line">            b =  (v[<span class="number">3</span>]-v[<span class="number">1</span>]) % mod;</span><br><span class="line">            res = (res + ((<span class="keyword">long</span>)a * (<span class="keyword">long</span>)b) % mod) % mod;  </span><br><span class="line">        &#125; </span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 判断rec与V中第start开始的矩阵位置情况，并决定是否需要进入start+1的情况。</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">addRectangle</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; rec, <span class="keyword">int</span> start)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(start &gt;= V.<span class="built_in">size</span>())&#123;</span><br><span class="line">            V.push_back(rec);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 相交？</span></span><br><span class="line">        <span class="keyword">if</span>(rec[<span class="number">0</span>] &gt; V[start][<span class="number">2</span>] <span class="keyword">or</span> rec[<span class="number">2</span>] &lt; V[start][<span class="number">0</span>] <span class="keyword">or</span> rec[<span class="number">1</span>] &gt; V[start][<span class="number">3</span>] <span class="keyword">or</span> rec[<span class="number">3</span>] &lt; V[start][<span class="number">1</span>]) <span class="keyword">return</span> addRectangle(rec, start + <span class="number">1</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 左边相交？</span></span><br><span class="line">        <span class="keyword">if</span>(rec[<span class="number">0</span>] &lt; V[start][<span class="number">0</span>]) addRectangle(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(&#123;rec[<span class="number">0</span>], rec[<span class="number">1</span>], V[start][<span class="number">0</span>], rec[<span class="number">3</span>]&#125;), start + <span class="number">1</span>);</span><br><span class="line">        <span class="comment">// 右边相交？</span></span><br><span class="line">        <span class="keyword">if</span>(rec[<span class="number">2</span>] &gt; V[start][<span class="number">2</span>]) addRectangle(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(&#123;V[start][<span class="number">2</span>], rec[<span class="number">1</span>], rec[<span class="number">2</span>], rec[<span class="number">3</span>]&#125;), start + <span class="number">1</span>);</span><br><span class="line">        <span class="comment">// 下边相交？</span></span><br><span class="line">        <span class="keyword">if</span>(rec[<span class="number">1</span>] &lt; V[start][<span class="number">1</span>]) addRectangle(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(&#123;<span class="built_in">max</span>(rec[<span class="number">0</span>], V[start][<span class="number">0</span>]), rec[<span class="number">1</span>], <span class="built_in">min</span>(rec[<span class="number">2</span>], V[start][<span class="number">2</span>]), V[start][<span class="number">1</span>]&#125;), start + <span class="number">1</span>);</span><br><span class="line">        <span class="comment">// 上边相交？</span></span><br><span class="line">        <span class="keyword">if</span>(rec[<span class="number">3</span>] &gt; V[start][<span class="number">3</span>]) addRectangle(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(&#123;<span class="built_in">max</span>(rec[<span class="number">0</span>], V[start][<span class="number">0</span>]), V[start][<span class="number">3</span>], <span class="built_in">min</span>(rec[<span class="number">2</span>], V[start][<span class="number">2</span>]), rec[<span class="number">3</span>]&#125;), start + <span class="number">1</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-09-027</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(856.%20Score%20of%20Parentheses)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -942,87 +1026,6 @@ Output: false</code></pre><h2 id="解题思路"><a href="#解题思路" class="h
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(877.%20Stone%20Game)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(877.%20Stone%20Game)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(877. Stone Game)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-877-Stone-Game-题解"><a href="#LeetCode-877-Stone-Game-题解" class="headerlink" title="LeetCode(877. Stone Game)题解"></a>LeetCode(877. Stone Game)题解</h1><p>Alex and Lee play a game with piles of stones.  There are an even number of piles <strong>arranged in a row</strong>, and each pile has a positive integer number of stones <code>piles[i]</code>.</p>
-<p>The objective of the game is to end with the most stones.  The total number of stones is odd, so there are no ties.</p>
-<p>Alex and Lee take turns, with Alex starting first.  Each turn, a player takes the entire pile of stones from either the beginning or the end of the row.  This continues until there are no more piles left, at which point the person with the most stones wins.</p>
-<p>Assuming Alex and Lee play optimally, return <code>True</code> if and only if Alex wins the game.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Input: [5,3,4,5]</span><br><span class="line">Output: true</span><br><span class="line">Explanation: </span><br><span class="line">Alex starts first, and can only take the first 5 or the last 5.</span><br><span class="line">Say he takes the first 5, so that the row becomes [3, 4, 5].</span><br><span class="line">If Lee takes 3, then the board is [4, 5], and Alex takes 5 to win with 10 points.</span><br><span class="line">If Lee takes the last 5, then the board is [3, 4], and Alex takes 4 to win with 9 points.</span><br><span class="line">This demonstrated that taking the first 5 was a winning move for Alex, so we return true.</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Note:</strong></p>
-<ol>
-<li><code>2 &lt;= piles.length &lt;= 500</code></li>
-<li><code>piles.length</code> is even.</li>
-<li><code>1 &lt;= piles[i] &lt;= 500</code></li>
-<li><code>sum(piles)</code> is odd.</li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>有一个从左到右一堆堆排列的石子，每堆石子有不同的数量，但是石子的总数是奇数，石子的堆数是偶数。现在A和B玩一个游戏，从A开始，轮流从左边或者右边选一堆石子，最后每个人都有相同堆数的石子，但是因为石子的数目是奇数，因此两个人的石子数不可能一样。最后，得到石子多的人获得游戏的胜利，假设A和B都是按照最优的策略选择石子，判断A是否能获胜。</p>
-<p>这个题可以用常规的DP来做，转一下思路，A寻找最大的值，而B是从A得到的值中取值。</p>
-<p>也可以如下思路，这个石子的数量是奇数但是堆数是偶数，所以AB一定有个胜负，如果A胜利，则不管，如果是B胜利，就将选择顺序对调，还是A胜利。因此A一定总是胜利的。比如如下策略：将初始的石子按顺序编号，按照从1到N。分别计算奇数序号堆的石子总数和偶数序号堆的石子总数，一定有一堆大的，选择大的那一系列石子堆，则可以保证最后得到最多的石子。</p>
-<p>这个在<a href="[https://github.com/MisterBooo/LeetCodeAnimation/blob/master/notes/LeetCode%E7%AC%AC877%E5%8F%B7%E9%97%AE%E9%A2%98%EF%BC%9A%E7%9F%B3%E5%AD%90%E6%B8%B8%E6%88%8F.md](https://github.com/MisterBooo/LeetCodeAnimation/blob/master/notes/LeetCode第877号问题：石子游戏.md)">这个链接里</a>里有详细的解说。</p>
-<p>代码如下。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">stoneGame</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; piles)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p> BitBrave, 2019-10-05</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1093,12 +1096,12 @@ Output: false</code></pre><h2 id="解题思路"><a href="#解题思路" class="h
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">388</span>
+          <span class="site-state-item-count">389</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-count">56</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
