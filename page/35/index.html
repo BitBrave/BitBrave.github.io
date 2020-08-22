@@ -168,6 +168,329 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(858.%20Mirror%20Reflection)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(858.%20Mirror%20Reflection)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(858. Mirror Reflection)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-858-Mirror-Reflection-题解"><a href="#LeetCode-858-Mirror-Reflection-题解" class="headerlink" title="LeetCode(858. Mirror Reflection)题解"></a>LeetCode(858. Mirror Reflection)题解</h1><p>There is a special square room with mirrors on each of the four walls.  Except for the southwest corner, there are receptors on each of the remaining corners, numbered <code>0</code>, <code>1</code>, and <code>2</code>.</p>
+<p>The square room has walls of length <code>p</code>, and a laser ray from the southwest corner first meets the east wall at a distance <code>q</code> from the <code>0</code>th receptor.</p>
+<p>Return the number of the receptor that the ray meets first.  (It is guaranteed that the ray will meet a receptor eventually.)</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: p &#x3D; 2, q &#x3D; 1</span><br><span class="line">Output: 2</span><br><span class="line">Explanation: The ray meets receptor 2 the first time it gets reflected back to the left wall.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Note:</strong></p>
+<ol>
+<li><code>1 &lt;= p &lt;= 1000</code></li>
+<li><code>0 &lt;= q &lt;= p</code></li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>有一个正方形的房间，有一束光从左下角射入，保证最后一定会到达其余三个角中的一个，求出能到达的第一个角的位置编号。</p>
+<p>先说说我的解法，完全是最死板的方法，计算每一次反射的落点，可以知道光线在传播的过程中与正方形的边形成的三角形是相似的，并且光线无论何时都与正方形的横边的夹角是一样的，与竖边的夹角也是始终不变的。因此在知道光线的前两个在墙壁上的落点，就可以知道其下一个落点。</p>
+<p>就这样，使用一个函数，输入前两个落点，返回光线第三个落点，然后判断这个落点是不是角。</p>
+<p>特别注意，特别注意，特别注意！用C++或者python实现的时候，因为数据精度的问题，明明正确答案，总是会因为精度限制导致不能相等，从而不能AC，我花了好多时间在这上面debug。最后用python用一个比较笨的法子，使用round函数四舍五入，当然在这之前要扩大范围。最后算是AC了。</p>
+<p><code>Runtime: 52 ms, faster than 6.06% of Python3 online submissions for Mirror Reflection.</code></p>
+<p><code>Memory Usage: 13.8 MB, less than 6.67% of Python3 online submissions for Mirror Reflection.</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># my solution algorithm</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span><span class="params">(object)</span>:</span></span><br><span class="line">    p = <span class="number">0.0</span></span><br><span class="line">    x, y = <span class="number">0.0</span>, <span class="number">0.0</span></span><br><span class="line">    tan_a, tan_b = <span class="number">0.0</span>, <span class="number">0.0</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">findNextPoint</span><span class="params">(self, a, b, c, d)</span>:</span></span><br><span class="line">        <span class="keyword">global</span> p, x, y, tan_a, tan_b</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">if</span> d == <span class="number">0</span>: </span><br><span class="line">            <span class="keyword">if</span> a &lt; c:</span><br><span class="line">                <span class="keyword">if</span> (p-c)*tan_a &lt; p:  x = p; y = (p-c) * tan_a</span><br><span class="line">                <span class="keyword">else</span>: x = c + p * tan_b; y = p</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">if</span> c*tan_a &lt; p: x = <span class="number">0</span>; y = c * tan_a</span><br><span class="line">                <span class="keyword">else</span>: x = c - p * tan_b; y = p</span><br><span class="line">        <span class="keyword">elif</span> d == p:</span><br><span class="line">            <span class="keyword">if</span> a &lt; c:</span><br><span class="line">                <span class="keyword">if</span> (p-c)*tan_a &lt; p: x = p; y = p - (p-c) * tan_a</span><br><span class="line">                <span class="keyword">else</span>: x = c + p * tan_b; y = <span class="number">0</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">if</span> c*tan_a &lt; p: x = <span class="number">0</span>; y = p - c * tan_a</span><br><span class="line">                <span class="keyword">else</span>: x = c - p * tan_b; y = <span class="number">0</span></span><br><span class="line">        <span class="keyword">elif</span> c == <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">if</span> b &lt; d:</span><br><span class="line">                <span class="keyword">if</span> (p-d)*tan_b &lt; p: x = (p-d)*tan_b; y = p</span><br><span class="line">                <span class="keyword">else</span>: x = p; y = d + p * tan_a</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">if</span> d*tan_b &lt; p: x = d * tan_b; y = <span class="number">0</span></span><br><span class="line">                <span class="keyword">else</span>: x = p; y = d - p * tan_a</span><br><span class="line">        <span class="keyword">elif</span> c == p: </span><br><span class="line">            <span class="keyword">if</span> b &lt; d:</span><br><span class="line">                <span class="keyword">if</span> (p-d)*tan_b &lt; p: x = p - (p-d) * tan_b; y = p </span><br><span class="line">                <span class="keyword">else</span>: x = <span class="number">0</span>; y = d + p * tan_a </span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">if</span> d*tan_b &lt; p: x = p - d * tan_b; y = <span class="number">0</span></span><br><span class="line">                <span class="keyword">else</span>: x = <span class="number">0</span>; y = d - p * tan_a</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">mirrorReflection</span><span class="params">(self, p_, q)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :type p: int</span></span><br><span class="line"><span class="string">        :type q: int</span></span><br><span class="line"><span class="string">        :rtype: int</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="keyword">global</span> p, x, y, tan_a, tan_b</span><br><span class="line">        a, b, c, d = <span class="number">0</span>, <span class="number">0</span>, p_, q</span><br><span class="line">        <span class="keyword">if</span> d == p_: <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line"></span><br><span class="line">        p = p_</span><br><span class="line">        tan_a = q / p</span><br><span class="line">        tan_b = p / q; </span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            self.findNextPoint(a, b, c, d)</span><br><span class="line"></span><br><span class="line">            x = round(x*<span class="number">10000000</span>) / <span class="number">10000000.0</span></span><br><span class="line">            y = round(y*<span class="number">10000000</span>) / <span class="number">10000000.0</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> x == p <span class="keyword">and</span> y == <span class="number">0</span>: <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">            <span class="keyword">elif</span> x == p <span class="keyword">and</span> y == p: <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">            <span class="keyword">elif</span> x == <span class="number">0</span> <span class="keyword">and</span> y == p: <span class="keyword">return</span> <span class="number">2</span></span><br><span class="line">            a, b, c, d = c, d, x, y</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span></span><br></pre></td></tr></table></figure>
+
+<p>以上我用笨办法一步步做出来的，后来参考网上的资料发现这个题有更简单的办法。一般来说，数学算法题都是可以使用比较精妙的办法解决的。参考资料在此，<a href="https://www.cnblogs.com/grandyang/p/10646040.html" target="_blank" rel="noopener">点击链接</a>。</p>
+<p>思路就是，翻转光线太麻烦，直接翻转房间，偶数房间翻转是与原始房间镜面对称的，而奇数房间翻转是与原始房间相同的。同时，根据p/q的比值（要进行化简），分别确定正方形像右和向上的翻转次数，从而确保光线可以直接沿直线到达右上角。然后根据此时右上角的房间的角编号确定是角。</p>
+<p>总体来说如下：</p>
+<p>​    1、p为奇数，q为奇数，右上角编号为1；</p>
+<p>​    2、p为奇数，q为偶数，右上角编号为0；</p>
+<p>​    3、p为偶数，q为奇数，右上角编号为2；</p>
+<p>这里要注意，是没有q和p同时为偶数的，这是因为同时为偶数的时候，p和q可以化简，直到两个不全为偶数。比如4和2与2和1其实是一样的，因此，可以先得到p和q的最大公约数，然后各自除去这个公约数，再按照上述判断。</p>
+<p>这样优化之后，时间复杂度O(1), 空间复杂度O(1)，代码如下。</p>
+<p><code>Runtime: 0 ms, faster than 100.00% of C++ online submissions for Mirror Reflection.</code></p>
+<p><code>Memory Usage: 8.1 MB, less than 100.00% of C++ online submissions for Mirror Reflection.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span>   </span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">gcd</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (a % b == <span class="number">0</span>) ? b : gcd(b, a % b);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">mirrorReflection</span><span class="params">(<span class="keyword">int</span> p, <span class="keyword">int</span> q)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> r = gcd(p, q);</span><br><span class="line">        p = p / r;</span><br><span class="line">        q = q / r;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span> - p % <span class="number">2</span> + q % <span class="number">2</span>; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2019-10-08</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(86.%20Partition%20List)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(86.%20Partition%20List)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(86. Partition List)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-86-Partition-List-题解"><a href="#LeetCode-86-Partition-List-题解" class="headerlink" title="LeetCode(86. Partition List)题解"></a>LeetCode(86. Partition List)题解</h1><hr>
+<p>Given a linked list and a value x, partition it such that all nodes less than x come before nodes greater than or equal to x.</p>
+<p>You should preserve the original relative order of the nodes in each of the two partitions.</p>
+<p>Example:</p>
+<pre><code>Input: head = 1-&gt;4-&gt;3-&gt;2-&gt;5-&gt;2, x = 3
+Output: 1-&gt;2-&gt;2-&gt;4-&gt;3-&gt;5</code></pre><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给定一个链表和一个值X，将链表中节点值小于X的都排在节点大于等于X的节点的前面。在此基础上，各个节点保持相应的原始次序。</p>
+<p>使用两个指针A和B，分别记录小于X和大于等于X的节点的链表的开始。一开始都为NULL。</p>
+<p>从左到右遍历链表，如果当前节点S的值小于X，然后判断A，如果A为NULL，则表示这是第一个小于X的节点。直接A = S，如果A不为空则A-&gt;next = S; A = A-&gt;next;</p>
+<p>反之，如果当前节点S的值大于等于X，然后判断B，如果B为NULL，则表示这是第一个大于等于X的节点。直接B = S，如果B不为空则B-&gt;next = S; B = B-&gt;next;</p>
+<p>最后遍历完成之后，如果AB都为空，返回NULL。如果A为空，B-&gt;next = NULL,返回B对应的头链表指针。如果B为空，A-&gt;next=NULL, 返回A对应的头指针。都不为空格则，A-&gt;next = B的头指针，B-&gt;next = NULL;</p>
+<p>因此在使用A，B的时候，要记录下对应链表的头指针。</p>
+<p>代码如下：</p>
+<p>Runtime: 4 ms, faster than 98.82% of C++ online submissions for Partition List.<br>Memory Usage: 8.7 MB, less than 22.67% of C++ online submissions for Partition List.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode *next;</span></span><br><span class="line"><span class="comment"> *     ListNode(int x) : val(x), next(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">ListNode* <span class="title">partition</span><span class="params">(ListNode* head, <span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (head == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">        ListNode *A = <span class="literal">NULL</span>, *A1 = <span class="literal">NULL</span>, *B = <span class="literal">NULL</span>, *B1 = <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">while</span> (head != <span class="literal">NULL</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span>(head-&gt;val &lt; x)&#123;</span><br><span class="line">                <span class="keyword">if</span>(A == <span class="literal">NULL</span>)&#123;</span><br><span class="line">                    A = head;</span><br><span class="line">                    A1 = A;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> &#123;</span><br><span class="line">                    A-&gt;next = head;</span><br><span class="line">                    A = A-&gt;next;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">if</span>(B == <span class="literal">NULL</span>)&#123;</span><br><span class="line">                    B = head;</span><br><span class="line">                    B1 = B;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> &#123;</span><br><span class="line">                    B-&gt;next = head;</span><br><span class="line">                    B = B-&gt;next;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            head = head-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(A == <span class="literal">NULL</span>)&#123;</span><br><span class="line">            B-&gt;next = <span class="literal">NULL</span>;</span><br><span class="line">            <span class="keyword">return</span> B1;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(B == <span class="literal">NULL</span>)&#123;</span><br><span class="line">            A-&gt;next = <span class="literal">NULL</span>;</span><br><span class="line">            <span class="keyword">return</span> A1;</span><br><span class="line">        &#125;</span><br><span class="line">        A-&gt;next = B1;</span><br><span class="line">        B-&gt;next = <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">return</span> A1;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-06-21</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(861.%20Score%20After%20Flipping%20Matrix)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(861.%20Score%20After%20Flipping%20Matrix)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(861. Score After Flipping Matrix)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-861-Score-After-Flipping-Matrix-题解"><a href="#LeetCode-861-Score-After-Flipping-Matrix-题解" class="headerlink" title="LeetCode(861. Score After Flipping Matrix)题解"></a>LeetCode(861. Score After Flipping Matrix)题解</h1><p>We have a two dimensional matrix <code>A</code> where each value is <code>0</code> or <code>1</code>.</p>
+<p>A move consists of choosing any row or column, and toggling each value in that row or column: changing all <code>0</code>s to <code>1</code>s, and all <code>1</code>s to <code>0</code>s.</p>
+<p>After making any number of moves, every row of this matrix is interpreted as a binary number, and the score of the matrix is the sum of these numbers.</p>
+<p>Return the highest possible score.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Input: [[0,0,1,1],[1,0,1,0],[1,1,0,0]]</span><br><span class="line">Output: 39</span><br><span class="line">Explanation:</span><br><span class="line">Toggled to [[1,1,1,1],[1,0,0,1],[1,1,1,1]].</span><br><span class="line">0b1111 + 0b1001 + 0b1111 &#x3D; 15 + 9 + 15 &#x3D; 39</span><br></pre></td></tr></table></figure>
+
+<p><strong>Note:</strong></p>
+<ol>
+<li><code>1 &lt;= A.length &lt;= 20</code></li>
+<li><code>1 &lt;= A[0].length &lt;= 20</code></li>
+<li><code>A[i][j]</code> is <code>0</code> or <code>1</code>.</li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>有一个二维矩阵，元素为0和1.给定针对行或者列的操作，将元素依次翻转，0变为1,1变为0.在做了一些翻转操作之后，矩阵有一个得分就是每一行的元素组成的一个二进制数之和。</p>
+<p>求这个数最大是多少？</p>
+<p>首先，一个二进制数，只要前面的为1，后面全为0也可以变得很大，即1需要尽可能在前面。因此，我们采用一个贪心的Algorithm：首先对每一行进行遍历，只要这一行第一个数为0，就进行翻转，否则就不翻转，因为翻转就 变小了。然后遍历每一列，只要这一列中1的个数少于0的个数，就进行翻转，因为这些数处于同级的关系，要尽可能多的变成1，否则就不翻转。</p>
+<p>实验证明是可行的。</p>
+<p>代码如下，空间复杂度O(1)，时间复杂度O(n2)。</p>
+<p><code>Runtime: 4 ms, faster than 67.24% of C++ online submissions for Score After Flipping Matrix.</code></p>
+<p><code>Memory Usage: 9 MB, less than 20.00% of C++ online submissions for Score After Flipping Matrix.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; B;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">flipping</span><span class="params">(<span class="keyword">int</span> pos, <span class="keyword">int</span> dir, <span class="keyword">int</span> len)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(dir == <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; len; i++) B[pos][i] = <span class="number">1</span> - B[pos][i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(dir == <span class="number">1</span>)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; len; i++) B[i][pos] = <span class="number">1</span> - B[i][pos];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">matrixScore</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; A)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>, row = A.<span class="built_in">size</span>(), col = A[<span class="number">0</span>].<span class="built_in">size</span>();</span><br><span class="line">        B = A;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;row; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(B[i][<span class="number">0</span>] == <span class="number">0</span>) flipping(i, <span class="number">0</span>, col);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> t;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;col; j++)&#123;</span><br><span class="line">            t = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;row; i++) t += B[i][j];</span><br><span class="line">            <span class="keyword">if</span>(t*<span class="number">2</span> &lt; row) flipping(j, <span class="number">1</span>, row);</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// Compute</span></span><br><span class="line">            t = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;row; i++) t += B[i][j];</span><br><span class="line">            res += t * <span class="built_in">pow</span>(<span class="number">2</span>, col - <span class="number">1</span> - j);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave, 2019-09-29</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(863.%20All%20Nodes%20Distance%20K%20in%20Binary%20Tree)%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="XJ">
+      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BitBrave">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/24/LeetCode(863.%20All%20Nodes%20Distance%20K%20in%20Binary%20Tree)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(863. All Nodes Distance K in Binary Tree)题解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LeetCode-863-All-Nodes-Distance-K-in-Binary-Tree-题解"><a href="#LeetCode-863-All-Nodes-Distance-K-in-Binary-Tree-题解" class="headerlink" title="LeetCode(863. All Nodes Distance K in Binary Tree)题解"></a>LeetCode(863. All Nodes Distance K in Binary Tree)题解</h1><p>We are given a binary tree (with root node <code>root</code>), a <code>target</code> node, and an integer value <code>K</code>.</p>
+<p>Return a list of the values of all nodes that have a distance <code>K</code> from the <code>target</code> node.  The answer can be returned in any order.</p>
+<p> <img src="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/06/28/sketch0.png" alt=""></p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Input: root &#x3D; [3,5,1,6,2,0,8,null,null,7,4], target &#x3D; 5, K &#x3D; 2</span><br><span class="line"></span><br><span class="line">Output: [7,4,1]</span><br><span class="line"></span><br><span class="line">Explanation: </span><br><span class="line">The nodes that are a distance 2 from the target node (with value 5)</span><br><span class="line">have values 7, 4, and 1.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Note that the inputs &quot;root&quot; and &quot;target&quot; are actually TreeNodes.</span><br><span class="line">The descriptions of the inputs above are just serializations of these objects.</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Note:</strong></p>
+<ol>
+<li>The given tree is non-empty.</li>
+<li>Each node in the tree has unique values <code>0 &lt;= node.val &lt;= 500</code>.</li>
+<li>The <code>target</code> node is a node in the tree.</li>
+<li><code>0 &lt;= K &lt;= 1000</code>.</li>
+</ol>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给定一个二叉树和二叉树中的一个节点，找出树中离这个节点K距离的所有点。</p>
+<p>这个题可以使用递归解决。</p>
+<p>首先使用一个递归函数，输入根节点，目标节点，使用DFS寻找到根节点与目标节点的路径。得到路径之后，使用一个新的递归函数，输入一个节点，寻找以这个节点为根节点的情况下离根节点距离为L的节点，可以使用BFS。这时候，可以输入目标节点，长度K，或者目标节点的父节点的另一个孩子节点，长度K-2，爷爷节点的另一个孩子节点，长度N-3，····以此类推即可。</p>
+<p>代码如下，时间复杂度O(n)，空间复杂度O(n)。</p>
+<p><code>Runtime: 8 ms, faster than 70.58% of C++ online submissions for All Nodes Distance K in Binary Tree.</code></p>
+<p><code>Memory Usage: 15 MB, less than 100.00% of C++ online submissions for All Nodes Distance K in Binary Tree.</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">    <span class="built_in">vector</span>&lt;TreeNode *&gt; path;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; res;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">findPath</span><span class="params">(TreeNode* root, TreeNode* target)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        path.push_back(root);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(root == target) <span class="keyword">return</span> <span class="literal">true</span>;        </span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(findPath(root-&gt;left, target)) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(findPath(root-&gt;right, target)) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        </span><br><span class="line">        path.pop_back();</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">findK</span><span class="params">(TreeNode* root, <span class="keyword">int</span> K)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="literal">NULL</span> <span class="keyword">or</span> K &lt; <span class="number">0</span>) <span class="keyword">return</span>;</span><br><span class="line">        <span class="keyword">if</span>(K == <span class="number">0</span>)&#123;</span><br><span class="line">            res.push_back(root-&gt;val);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        findK(root-&gt;left, K<span class="number">-1</span>);</span><br><span class="line">        findK(root-&gt;right, K<span class="number">-1</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125; </span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">distanceK</span><span class="params">(TreeNode* root, TreeNode* target, <span class="keyword">int</span> K)</span> </span>&#123;</span><br><span class="line">        findPath(root, target);</span><br><span class="line">        <span class="keyword">int</span> len = path.<span class="built_in">size</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(len-K<span class="number">-1</span> &gt;= <span class="number">0</span>) res.push_back(path[len-K<span class="number">-1</span>]-&gt;val);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=len-K; i&lt;len<span class="number">-1</span>; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(i &lt; <span class="number">0</span>) <span class="keyword">continue</span>;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span>(path[i+<span class="number">1</span>] == path[i]-&gt;left) findK(path[i]-&gt;right, K-len+i);</span><br><span class="line">            <span class="keyword">else</span> findK(path[i]-&gt;left, K-len+i);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(K != <span class="number">0</span>)findK(path[len<span class="number">-1</span>], K);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>BitBrave，2019-10-10</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(865.%20Smallest%20Subtree%20with%20all%20the%20Deepest%20Nodes)%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -700,356 +1023,6 @@ Output: false</code></pre><h2 id="解题思路"><a href="#解题思路" class="h
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(875.%20Koko%20Eating%20Bananas)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(875.%20Koko%20Eating%20Bananas)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(875. Koko Eating Bananas)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-875-Koko-Eating-Bananas-题解"><a href="#LeetCode-875-Koko-Eating-Bananas-题解" class="headerlink" title="LeetCode(875. Koko Eating Bananas)题解"></a>LeetCode(875. Koko Eating Bananas)题解</h1><p>Koko loves to eat bananas.  There are <code>N</code> piles of bananas, the <code>i</code>-th pile has <code>piles[i]</code> bananas.  The guards have gone and will come back in <code>H</code> hours.</p>
-<p>Koko can decide her bananas-per-hour eating speed of <code>K</code>.  Each hour, she chooses some pile of bananas, and eats K bananas from that pile.  If the pile has less than <code>K</code> bananas, she eats all of them instead, and won’t eat any more bananas during this hour.</p>
-<p>Koko likes to eat slowly, but still wants to finish eating all the bananas before the guards come back.</p>
-<p>Return the minimum integer <code>K</code> such that she can eat all the bananas within <code>H</code> hours.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: piles &#x3D; [3,6,7,11], H &#x3D; 8</span><br><span class="line">Output: 4</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: piles &#x3D; [30,11,23,4,20], H &#x3D; 5</span><br><span class="line">Output: 30</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 3:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: piles &#x3D; [30,11,23,4,20], H &#x3D; 6</span><br><span class="line">Output: 23</span><br></pre></td></tr></table></figure>
-
-<p><strong>Note:</strong></p>
-<ul>
-<li><code>1 &lt;= piles.length &lt;= 10^4</code></li>
-<li><code>piles.length &lt;= H &lt;= 10^9</code></li>
-<li><code>1 &lt;= piles[i] &lt;= 10^9</code></li>
-</ul>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>Koko喜欢吃香蕉。有N堆香蕉，第i堆有成堆的香蕉。守卫走了，将在H小时后回来。Koko可以决定她每小时的香蕉进食速度K.她每小时选择一堆香蕉，然后从那一堆中吃K根香蕉。如果堆中的香蕉少于K个，她将全部吃掉，并且在此小时内不再吃香蕉。Koko喜欢慢慢吃东西，但仍想在警卫回来之前吃完所有香蕉。返回最小整数K，以便她可以在H小时内吃掉所有香蕉。</p>
-<p>因为Koko每小时最多吃一堆香蕉，H一定大于等于香蕉的堆数。如果要在H个小时之内吃完所有的香蕉，最基本的只要保证每小时Koko都吃掉一堆就可以了，因此K的答案一定小于等于Max(piles[i])。同时K&gt;=1。</p>
-<p>确定了K的范围，就可以进行二分搜索了，得到上下界，如果上下界相同，表示得到了界。否则就没有，然后取中间数，查看是否满足H个小时的限制，如果满足，表示一定大于等于这个数，如果不满足，表示答案一定小于这个数。直接找左区间、右区间即可。</p>
-<p>代码如下，设最大的香蕉数为N，香蕉堆数为M，则时间复杂度为O(MlogN)。空间复杂度O(1)。</p>
-<p><code>Runtime: 68 ms, faster than 45.77% of C++ online submissions for Koko Eating Bananas.</code></p>
-<p><code>Memory Usage: 10.2 MB, less than 100.00% of C++ online submissions for Koko Eating Bananas.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minEatingSpeed</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; piles, <span class="keyword">int</span> H)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> spend_time, len = piles.<span class="built_in">size</span>(), sta = <span class="number">1</span>, <span class="built_in">end</span> = <span class="number">0</span>, mid;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> p : piles) <span class="built_in">end</span> = <span class="built_in">max</span>(p, <span class="built_in">end</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span>(sta &lt; <span class="built_in">end</span>)&#123;</span><br><span class="line">            mid = (sta + <span class="built_in">end</span>) / <span class="number">2</span>;</span><br><span class="line">            spend_time = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> p : piles) spend_time += <span class="built_in">ceil</span>(<span class="number">1.0</span> * p / mid);</span><br><span class="line">            <span class="keyword">if</span>(spend_time &gt; H) sta = mid + <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="built_in">end</span> = mid;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">end</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2019-10-22</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(881.%20Boats%20to%20Save%20People)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(881.%20Boats%20to%20Save%20People)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(881. Boats to Save People)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-881-Boats-to-Save-People-题解"><a href="#LeetCode-881-Boats-to-Save-People-题解" class="headerlink" title="LeetCode(881. Boats to Save People)题解"></a>LeetCode(881. Boats to Save People)题解</h1><p>The <code>i</code>-th person has weight <code>people[i]</code>, and each boat can carry a maximum weight of <code>limit</code>.</p>
-<p>Each boat carries at most 2 people at the same time, provided the sum of the weight of those people is at most <code>limit</code>.</p>
-<p>Return the minimum number of boats to carry every given person.  (It is guaranteed each person can be carried by a boat.)</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: people &#x3D; [1,2], limit &#x3D; 3</span><br><span class="line">Output: 1</span><br><span class="line">Explanation: 1 boat (1, 2)</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: people &#x3D; [3,2,2,1], limit &#x3D; 3</span><br><span class="line">Output: 3</span><br><span class="line">Explanation: 3 boats (1, 2), (2) and (3)</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 3:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: people &#x3D; [3,5,3,4], limit &#x3D; 5</span><br><span class="line">Output: 4</span><br><span class="line">Explanation: 4 boats (3), (3), (4), (5)</span><br></pre></td></tr></table></figure>
-
-<p><strong>Note</strong>:</p>
-<ul>
-<li><code>1 &lt;= people.length &lt;= 50000</code></li>
-<li><code>1 &lt;= people[i] &lt;= limit &lt;= 30000</code></li>
-</ul>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>有一些人倍困在岛上，每个人有不同的体重，现在有一条船，每条船最多可以装两个人，且两个人的体重之和不能超过一定的限制。要求计算出最少的船只，可以将这些人都运走。</p>
-<p>最暴力的办法就是求出所有人两两组合的情况，但是这样时间复杂度肯定不能接受。因此我们可以考虑使用贪心的办法。</p>
-<p>假设有N个人，并且已经组好了对就是最优解，a1和a2，b1和b2等等。不妨假设a1&lt;=a2，b1&lt;=b2，a2&lt;=b2。这时候如果a1&lt;=b1，我们肯定可以将a1和b1相交换，因为max(b1+a2, a1+b2)&lt;=max(a1+a2, b1+b2)。因此对于任意两个队，如果存在一个船上的人每个人的体重都比另一个船的人轻，那这个可以进行交换，同时不必增加船的数目。</p>
-<p>因此，我们可以使用这样一种策略，每次最重和最轻的人组队，如果能上一条船就分配到一条船，否则就给最大的单独一条船。然后在剩下的人中执行相同的策略。这样得出来的船的数量一定是最少的。因为假设有一个最优解，那么按照之前的描述，也一定可以转变成我们的这种分配方式从而不用增加船的数目。</p>
-<p>代码如下，因为需要排序，时间复杂度O(nlogn)，空间复杂度O(1)。</p>
-<p><code>Runtime: 116 ms, faster than 58.98% of C++ online submissions for Boats to Save People.</code></p>
-<p><code>Memory Usage: 13.7 MB, less than 100.00% of C++ online submissions for Boats to Save People.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">numRescueBoats</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; people, <span class="keyword">int</span> limit)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> sta = <span class="number">0</span>, <span class="built_in">end</span> = people.<span class="built_in">size</span>() - <span class="number">1</span>, ret = <span class="number">0</span>;</span><br><span class="line">        sort(people.<span class="built_in">begin</span>(), people.<span class="built_in">end</span>());</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span>(sta &lt; <span class="built_in">end</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(people[sta] + people[<span class="built_in">end</span>] &lt;= limit) sta++;</span><br><span class="line">            <span class="built_in">end</span>--;</span><br><span class="line">            ret++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(sta == <span class="built_in">end</span>) <span class="keyword">return</span> ret + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2019-10-30</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(873.%20Length%20of%20Longest%20Fibonacci%20Subsequence)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(873.%20Length%20of%20Longest%20Fibonacci%20Subsequence)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(873. Length of Longest Fibonacci Subsequence)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-873-Length-of-Longest-Fibonacci-Subsequence-题解"><a href="#LeetCode-873-Length-of-Longest-Fibonacci-Subsequence-题解" class="headerlink" title="LeetCode(873. Length of Longest Fibonacci Subsequence)题解"></a>LeetCode(873. Length of Longest Fibonacci Subsequence)题解</h1><p>A sequence <code>X_1, X_2, ..., X_n</code> is <em>fibonacci-like</em> if:</p>
-<ul>
-<li><code>n &gt;= 3</code></li>
-<li><code>X_i + X_{i+1} = X_{i+2}</code> for all <code>i + 2 &lt;= n</code></li>
-</ul>
-<p>Given a <strong>strictly increasing</strong> array <code>A</code> of positive integers forming a sequence, find the <strong>length</strong> of the longest fibonacci-like subsequence of <code>A</code>.  If one does not exist, return 0.</p>
-<p>(<em>Recall that a subsequence is derived from another sequence A by deleting any number of elements (including none) from A, without changing the order of the remaining elements.  For example, [3, 5, 8] is a subsequence of [3, 4, 5, 6, 7, 8].</em>)</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Input: [1,2,3,4,5,6,7,8]</span><br><span class="line">Output: 5</span><br><span class="line">Explanation:</span><br><span class="line">The longest subsequence that is fibonacci-like: [1,2,3,5,8].</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Input: [1,3,7,11,12,14,18]</span><br><span class="line">Output: 3</span><br><span class="line">Explanation:</span><br><span class="line">The longest subsequence that is fibonacci-like:</span><br><span class="line">[1,11,12], [3,11,14] or [7,11,18].</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>Note:</strong></p>
-<ul>
-<li><code>3 &lt;= A.length &lt;= 1000</code></li>
-<li><code>1 &lt;= A[0] &lt; A[1] &lt; ... &lt; A[A.length - 1] &lt;= 10^9</code></li>
-<li><em>(The time limit has been reduced by 50% for submissions in Java, C, and C++.)</em></li>
-</ul>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>给一个递增的数字序列，求出其中最长的斐波那契子序列。</p>
-<p>子序列不要求数据是挨着的，只要数据是保持顺序即可，因此我们可以首先使用最简单的办法。</p>
-<p>使用一个set，记录数组中每个数字。然后依次从头到尾随便选两个数，然后作为斐波那契数列的前两个，开始向后寻找，因为数据是递增的，所以只需要向后找即可。每次计算两个数相加，查看在不在set内，在就继续往下找，不在就再另外选一对，这个过程中记住最长的合法数列。</p>
-<p>一个小trick是，如果两个数相加大于A中最后一个数也就是最大的数，就没有必要再计算了，因为数据只会越来越大。</p>
-<p>这样时间复杂度是O(n3)，空间复杂度O(n)，代码如下。</p>
-<p><code>Runtime: 288 ms, faster than 17.09% of C++ online submissions for Length of Longest Fibonacci Subsequence.</code></p>
-<p><code>Memory Usage: 9.7 MB, less than 42.86% of C++ online submissions for Length of Longest Fibonacci Subsequence.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">lenLongestFibSubseq</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = A.<span class="built_in">size</span>(), ret = <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">set</span>&lt;<span class="keyword">int</span>&gt; S;</span><br><span class="line">        <span class="built_in">set</span>&lt;pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt;&gt; S_P;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> a : A) S.insert(a);</span><br><span class="line">        <span class="keyword">int</span> a, b, s;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=i+<span class="number">1</span>; j&lt;len; j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(A[i] + A[j] &gt; A[len<span class="number">-1</span>]) <span class="keyword">break</span>;</span><br><span class="line">                a = A[i];</span><br><span class="line">                b = A[j];</span><br><span class="line">                s = <span class="number">2</span>;</span><br><span class="line">                <span class="keyword">while</span>(b &lt;= A[len<span class="number">-1</span>] &amp;&amp; S.<span class="built_in">find</span>(a+b) != S.<span class="built_in">end</span>())&#123;</span><br><span class="line">                    s++;</span><br><span class="line">                    <span class="keyword">int</span> tmp = a;</span><br><span class="line">                    a = b;</span><br><span class="line">                    b = tmp + b;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span>(s &gt;= <span class="number">3</span>) ret = <span class="built_in">max</span>(ret, s);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>还有一种使用DP的办法，用一个二维数组DC,DC[i][j]表示以A[i]和A[j]j结尾的最长的斐波那契数列长度，那么久很容易构造一个DP方程出来。这样的时间复杂度就是O(n2)，但是也有一个小Trick就是如果A[j]-A[i]大于等于A[i]的话，第二层循环就不用再寻找了，因为我们要找的值必须要比A[i]小。</p>
-<p>代码如下，时间和空间复杂度理论上均为O(n2)，但加上Trick之后，效果提升很多。</p>
-<p><code>Runtime: 132 ms, faster than 76.28% of C++ online submissions for Length of Longest Fibonacci Subsequence.</code></p>
-<p><code>Memory Usage: 62.5 MB, less than 14.29% of C++ online submissions for Length of Longest Fibonacci Subsequence.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">lenLongestFibSubseq</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = A.<span class="built_in">size</span>(), ret = <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">map</span>&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; M;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">DC</span><span class="params">(len, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(len, <span class="number">0</span>))</span></span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++) M[A[i]] = i;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;len; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=i+<span class="number">1</span>; j&lt;len; j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(A[j]-A[i] &gt;= A[i]) <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">if</span>(M.<span class="built_in">find</span>(A[j]-A[i]) == M.<span class="built_in">end</span>() || M[A[j]-A[i]]&gt;=i) <span class="keyword">continue</span>;</span><br><span class="line">                DC[i][j] = <span class="built_in">max</span>(<span class="number">3</span>, DC[M[A[j]-A[i]]][i] + <span class="number">1</span>);</span><br><span class="line">                ret = <span class="built_in">max</span>(ret, DC[i][j]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave，2019-11-04</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/24/LeetCode(885.%20Spiral%20Matrix%20III)%E9%A2%98%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="XJ">
-      <meta itemprop="description" content="幸福总是相通的，不幸则各有各的不幸。寂寞好像是世人的共性，众生都是我，也都不是我。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BitBrave">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/24/LeetCode(885.%20Spiral%20Matrix%20III)%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">LeetCode(885. Spiral Matrix III)题解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-24 18:05:21" itemprop="dateCreated datePublished" datetime="2020-01-24T18:05:21+08:00">2020-01-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="LeetCode-885-Spiral-Matrix-III-题解"><a href="#LeetCode-885-Spiral-Matrix-III-题解" class="headerlink" title="LeetCode(885. Spiral Matrix III)题解"></a>LeetCode(885. Spiral Matrix III)题解</h1><p>On a 2 dimensional grid with <code>R</code> rows and <code>C</code> columns, we start at <code>(r0, c0)</code> facing east.</p>
-<p>Here, the north-west corner of the grid is at the first row and column, and the south-east corner of the grid is at the last row and column.</p>
-<p>Now, we walk in a clockwise spiral shape to visit every position in this grid. </p>
-<p>Whenever we would move outside the boundary of the grid, we continue our walk outside the grid (but may return to the grid boundary later.) </p>
-<p>Eventually, we reach all <code>R * C</code> spaces of the grid.</p>
-<p>Return a list of coordinates representing the positions of the grid in the order they were visited.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: R &#x3D; 1, C &#x3D; 4, r0 &#x3D; 0, c0 &#x3D; 0</span><br><span class="line">Output: [[0,0],[0,1],[0,2],[0,3]]</span><br></pre></td></tr></table></figure>
-
-<p>  <img src="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/08/24/example_1.png" alt=""></p>
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: R &#x3D; 5, C &#x3D; 6, r0 &#x3D; 1, c0 &#x3D; 4</span><br><span class="line">Output: [[1,4],[1,5],[2,5],[2,4],[2,3],[1,3],[0,3],[0,4],[0,5],[3,5],[3,4],[3,3],[3,2],[2,2],[1,2],[0,2],[4,5],[4,4],[4,3],[4,2],[4,1],[3,1],[2,1],[1,1],[0,1],[4,0],[3,0],[2,0],[1,0],[0,0]]</span><br></pre></td></tr></table></figure>
-
-<p> <img src="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/08/24/example_2.png" alt=""></p>
-<p><strong>Note:</strong></p>
-<ol>
-<li><code>1 &lt;= R &lt;= 100</code></li>
-<li><code>1 &lt;= C &lt;= 100</code></li>
-<li><code>0 &lt;= r0 &lt; R</code></li>
-<li><code>0 &lt;= c0 &lt; C</code></li>
-</ol>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>在具有R行和C列的二维网格上，我们从（r0，c0）面向东开始。在这里，网格的西北角位于第一行和第一列，网格的东南角位于最后一行和最后一列。现在，我们以顺时针螺旋形状行走，以访问此网格中的每个位置。每当我们要移出网格边界时，我们都会继续走出网格边界（但稍后可能会返回到网格边界）。最终，我们到达了网格的所有R * C空间。返回以访问网格的顺序表示网格位置的坐标列表。返回这样走的顺序。</p>
-<p>这个题需要思考的难度倒是没有多大，主要是有点麻烦。</p>
-<p>首先就是如何进行遍历，一开始是给定的原点，然后就是顺时针螺旋遍历。分析可以发现，若不考虑原点，第一次是向右向下走一步，然后向上向右走两步，然后向左向下走三步，向上向右走4步···。即依次递增。而出界的情况可以判断。我们可以取max(R, C)*2的循环圈数，就一定可以遍历完整个数组，对于遍历到的每个位置，判断是否在原数组内，在就加入，否则放弃。</p>
-<p>代码如下，时间复杂度O(n2)，空间复杂度O(n2)。</p>
-<p><code>Runtime: 52 ms, faster than 97.29% of C++ online submissions for Spiral Matrix III.</code></p>
-<p><code>Memory Usage: 13.7 MB, less than 42.86% of C++ online submissions for Spiral Matrix III.</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isValid</span><span class="params">(<span class="keyword">int</span> R, <span class="keyword">int</span> C, <span class="keyword">int</span> r, <span class="keyword">int</span> c)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> r&lt;R <span class="keyword">and</span> c&lt;C <span class="keyword">and</span> r&gt;=<span class="number">0</span> <span class="keyword">and</span> c&gt;=<span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">spiralMatrixIII</span><span class="params">(<span class="keyword">int</span> R, <span class="keyword">int</span> C, <span class="keyword">int</span> r0, <span class="keyword">int</span> c0)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = <span class="built_in">max</span>(R, C) * <span class="number">2</span>;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; res;</span><br><span class="line">        res.push_back(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(&#123;r0, c0&#125;));</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;=len; i++)&#123;</span><br><span class="line">            <span class="comment">// 向右向下走</span></span><br><span class="line">            <span class="keyword">int</span> j;</span><br><span class="line">            <span class="keyword">for</span>(j=<span class="number">1</span>; j&lt;=i; j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(<span class="built_in">isValid</span>(R, C, r0, c0+j)) res.push_back(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(&#123;r0, c0+j&#125;));</span><br><span class="line">            &#125;</span><br><span class="line">            c0 = c0 + j - <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">for</span>(j=<span class="number">1</span>; j&lt;=i; j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(<span class="built_in">isValid</span>(R, C, r0+j, c0)) res.push_back(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(&#123;r0+j, c0&#125;));</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// 向左向上走</span></span><br><span class="line">            r0 = r0 + j - <span class="number">1</span>;</span><br><span class="line">            i++;</span><br><span class="line">            <span class="keyword">for</span>(j=<span class="number">1</span>; j&lt;=i; j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(<span class="built_in">isValid</span>(R, C, r0, c0-j)) res.push_back(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(&#123;r0, c0-j&#125;));</span><br><span class="line">            &#125;</span><br><span class="line">            c0 = c0 - j + <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">for</span>(j=<span class="number">1</span>; j&lt;=i; j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(<span class="built_in">isValid</span>(R, C, r0-j, c0)) res.push_back(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(&#123;r0-j, c0&#125;));</span><br><span class="line">            &#125;</span><br><span class="line">            r0 = r0 - j + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>BitBrave, 2019-09-29</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1120,12 +1093,12 @@ Output: false</code></pre><h2 id="解题思路"><a href="#解题思路" class="h
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">393</span>
+          <span class="site-state-item-count">397</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-count">60</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
